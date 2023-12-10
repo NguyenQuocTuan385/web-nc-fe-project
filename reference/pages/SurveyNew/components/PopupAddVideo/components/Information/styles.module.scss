@@ -1,0 +1,101 @@
+.form {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.root {
+    display: flex;
+    padding: 16px 24px 24px 24px;
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    @media only screen and (max-width: 767px) {
+        display: block;
+    }
+}
+
+.containerInformation {
+    padding-right: 16px;
+    @media only screen and (max-width: 767px) {
+        padding-right: 0;
+    }
+}
+
+.boxMarketingStage {
+    display: flex;
+    align-items: center;
+}
+.radioGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 82px;
+    @media only screen and (max-width: 767px) {
+        flex-direction: column;
+        gap: 0;
+        .boxRadio {
+            margin-bottom: 16px
+        }
+    }
+    .checkRadio {
+        color: var(--cimigo-green) !important;
+      }
+    .rootRadio {
+        color: #a5a5a5;
+        padding: 0px;
+        margin-right: 16px; 
+    }
+    [class~=MuiFormControlLabel-root] {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+      }
+}
+.containerInput {
+    margin-top: -8px;
+}
+.boxInputName {
+    display: flex;
+    margin-top: 8px;
+}
+.boxKeyMessage {
+    display: flex;  
+    align-items: center;
+}
+.boxInputTextArea {
+    padding-bottom: 24px;
+    p {
+        margin-left: auto;
+    }
+    @media only screen and (max-width: 767px) {
+        padding-bottom: 0;
+    }
+}
+
+
+.iframeVideo {
+    border-radius: 4px;
+    @media only screen and (max-width: 767px) {
+        display: none;
+    }
+}
+
+.boxAction {
+    padding-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #D2D2D2;
+    padding-right: 16px;
+    padding-bottom: 24px;
+    background-color: #fff;
+    .btnNext {
+        padding: 8px 38px;
+    }
+    @media only screen and (max-width: 767px) {
+        padding-left: 24px;
+        .btnNext {
+            width: 100%;          
+        }
+    }
+}

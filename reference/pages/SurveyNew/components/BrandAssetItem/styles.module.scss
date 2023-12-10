@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--gray-10);
+  border-radius: 4px;
+  padding: 12px 8px;
+  width: 256px;
+}
+
+.logoWrapper {
+  width: 56px;
+  height: 56px;
+  background-color: var(--gray-5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.assetImage {
+  width: 40px;
+}
+
+.menuActionItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

@@ -1,0 +1,94 @@
+.mainBrandTitle,
+.competingBrandTitle {
+  display: flex;
+  align-items: center;
+}
+.mainBrand {
+  display: flex;
+  align-items: center;
+  background-color: var(--cimigo-blue-light-4);
+  border-radius: 8px;
+  margin-left: 24px;
+  margin-bottom: 24px;
+  padding: 0 16px;
+  justify-content: space-between;
+  height: 80px;
+  &:hover {
+    cursor: pointer;
+    p {
+      text-decoration: underline;
+    }
+  }
+  @media only screen and (min-width: 576px) {
+    width: 360px;
+  }
+}
+.disabled {
+  &:hover {
+    cursor: unset;
+    p {
+      text-decoration: unset;
+    }
+  }
+}
+.btnDeleteMainBrand {
+  border-radius: 8px;
+  margin-right: 0;
+  &:hover {
+    background-color: rgba(31, 97, 169, 0.08);
+  }
+}
+.btnAddMainBrand {
+  margin-left: 24px;
+  width: -webkit-fill-available;
+  height: 80px;
+  border: dashed 1px var(--cimigo-blue-light-2);
+  &:hover {
+    border: dashed 1px var(--cimigo-blue-dark-1);
+    background-color: var(--cimigo-blue-light-3);
+    svg, p {
+      color: var(--cimigo-blue-dark-1);
+    }
+  }
+  @media only screen and (min-width: 576px) {
+    width: 360px;
+  }
+}
+
+.btnAddBrand {
+  margin: 16px 0 0 24px;
+  min-width: 218px;
+  @media only screen and (max-width: 767px) {
+    min-width: unset;
+    width: calc(100% - 24px);
+  }
+}
+.rootListItem {
+  .btnAction {
+    width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    visibility: hidden;
+    .iconAction {
+      width: 32px;
+      height: 32px;
+      margin-left: 10px;
+    }
+  }
+  &:hover {
+    background: rgba(28, 28, 28, 0.05);
+    .btnAction {
+      visibility: visible !important;
+    }
+  }
+  &:first-child {
+    margin-top: 16px;
+  }
+}
+.listItem {
+  border-bottom: 1px solid #dddddd;
+}
+.notDisplayed {
+  display: none;
+}

@@ -1,0 +1,31 @@
+.root {
+  width: fit-content;
+  background: #fff;
+  padding: 4px 12px;
+  height: 32px;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.015em;
+  border-radius: 50px;
+}
+.red {
+  color: #AF1C10;
+  border: 1px solid #AF1C10;
+}
+.gray {
+  border: 1px solid rgba(28, 28, 28, 0.2);
+  color: #1c1c1c;
+}
+.yellow {
+  color: #AF814D;
+  border: 1px solid #AF814D;
+}
+.green {
+  color: #7C9911;
+  border: 1px solid #7C9911;
+}

@@ -1,0 +1,12 @@
+.body {
+  background-color: #FFFFFF;
+  padding: 30px 48px;
+  border-radius: 4px;
+  @media only screen and (max-width: 1024px) {
+    padding: 22px 19px;
+  }
+  @media only screen and (max-width: 767px) {
+    padding: 0px;
+    position: relative;
+  } 
+}

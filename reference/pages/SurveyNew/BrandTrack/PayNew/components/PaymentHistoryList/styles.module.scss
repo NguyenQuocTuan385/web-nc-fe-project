@@ -1,0 +1,50 @@
+.paymentHistory {
+    min-height: 600px;
+    margin-top: 40px;
+}
+
+.itemPayment{
+    border-bottom: 1px solid var(--gray-10);
+    padding: 16px 23px;
+    cursor: pointer;
+    .money,.date{
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 32px;
+    }
+    .moneyAndDate{
+        display: flex;
+        @media only screen and (max-width: 767px) {
+            display: block;
+        }
+        .money,.date{
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        span{
+            display:inline-block;
+            margin-left: 8px;
+            color: var(--gray-80);
+        }
+    }
+    .linkDownload{
+        float: right;
+        padding-top: 16px;
+        @media only screen and (max-width: 768px) {
+            float: left;
+            padding-top:0px;
+        }
+    }
+}
+.itemPayment:hover{
+    background: var(--gray-2);
+}
+
+.iconDolar{
+    position: relative;
+    top: 5px;
+    padding-right: 10px;
+}

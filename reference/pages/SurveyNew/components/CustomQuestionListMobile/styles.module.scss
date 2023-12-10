@@ -1,0 +1,72 @@
+.container {
+  margin: 8px 0;
+  border: 0.5px solid #dddddd;
+  display: none;
+  @media only screen and (max-width: 767px) {
+    display: block;
+  }
+}
+
+.item {
+  border: 0.5px solid #dddddd;
+  padding: 15px 10px;
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(28, 28, 28, 0.05);
+  }
+}
+
+.expand {
+  padding: 15px 10px 5px;
+  background-color: rgba(28, 28, 28, 0.05);
+}
+
+.uneditable {
+  padding: 15px 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  p {
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+}
+
+.price {
+  margin-top: 10px;
+  padding-left: 30px;
+  > span {
+    font-weight: 400;
+    font-size: 12px;
+    color: #53660c;
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 4px 8px;
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  margin-top: 5px;
+  > button {
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: capitalize;
+  }
+}
+
+.editButton {
+  color: #1f61a9;
+}
+
+.deleteButton {
+  color: #af1c10;
+}

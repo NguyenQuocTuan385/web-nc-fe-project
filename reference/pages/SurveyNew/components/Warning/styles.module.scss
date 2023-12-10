@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  .content {
+    background: #f8e8bf;
+    border: 1px solid #f5bf32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.015em;
+    color: #9e5400;
+    text-align: center;
+    padding: 16px 30px;
+    width: 100%;
+    max-width: 946px;
+  }
+}

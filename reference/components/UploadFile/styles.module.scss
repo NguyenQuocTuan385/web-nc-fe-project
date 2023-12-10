@@ -1,0 +1,117 @@
+.root {
+  min-width: 250px;
+  min-height: 180px;
+  max-width: 700px;
+  border: 1px dashed rgba(145, 158, 171, 0.32);
+  margin: auto;
+  padding: 8px;
+  border-radius: 5px;
+  display: flex;
+}
+.square {
+  border-radius: unset;
+}
+.left {
+  margin: 0 16px;
+}
+.dropZone {
+  width: 100%;
+  display: flex;
+  outline: none;
+  z-index: 0;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  & > * {
+    width: 100%;
+    height: 100%;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.loading {
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.17);
+}
+
+.isDragDisabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+.isDragReject {
+  .content {
+    border-color: var(--cimigo-danger);
+  }
+}
+.caption {
+  color: rgb(99, 115, 129);
+  margin: 10px 16px 20px;
+  display: block;
+}
+
+.iconAdd {
+  margin-bottom: 8px;
+  width: 24px;
+  height: 24px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px dashed rgba(145, 158, 171, 0.32);
+}
+.preview {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.previewItem {
+  position: relative;
+  padding: 10px;
+  width: 90px;
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+.boxImgFile {
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+.imgFile {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+.fileName {
+  margin-top: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.deleteFile {
+  top: 5px;
+  right: 5px;
+  position: absolute;
+  color: var(--cimigo-danger);
+  &:hover {
+    color: white;
+    background: var(--cimigo-danger);
+  }
+}
+.placeholder {
+  margin-top: 20px;
+  color: rgba(28, 28, 28, 0.65);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}

@@ -1,0 +1,10 @@
+
+@media only screen and (max-width: 767px) {
+    .pageTitle{
+        display: flex !important; 
+        flex-direction: row;
+    }
+    .boxOutline {
+     max-height: 350px;   
+    }
+  }

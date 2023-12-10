@@ -1,0 +1,71 @@
+.root {
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+  }
+}
+.box {
+  max-width: unset;
+  width: 300px;
+  border: 1px solid var(--gray-10);
+  border-radius: 12px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  .iconAction {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    padding: 6px;
+    background: var(--eerie-black-40);
+    svg {
+      color: #ffffff;
+      font-size: 20px;
+    }
+    &:hover {
+      background: var(--eerie-black-40);
+    }
+  }
+  .img {
+    height: 248px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+    width: 100%;
+  }
+  .itemInfor {
+    display: none;
+    bottom: 0;
+    width: 100%;
+    padding: 16px 24px;
+    position: absolute;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, #ffffff 100%);
+    [class~="MuiTypography-root"] {
+      white-space: nowrap;
+    }
+  }
+  &:hover {
+    .itemInfor {
+      display: block;
+    }
+  }
+}
+
+.footer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 24px;
+  border-top: 1px solid var(--gray-10);
+  > p {
+    flex: 1;
+  }
+}

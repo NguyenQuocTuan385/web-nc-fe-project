@@ -1,0 +1,50 @@
+.root {
+  display: flex;
+  align-items: center;
+  div {
+    width: 8px;
+    height: 8px;
+    margin-right: 4px;
+  }
+  p {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+  }
+}
+.red {
+  div {
+    background: #af1c10;
+  }
+  p {
+    color: #af1c10;
+  }
+}
+.gray {
+  div {
+    background: rgba(28, 28, 28, 0.65);
+  }
+  p {
+    color: rgba(28, 28, 28, 0.65);
+  }
+}
+.yellow {
+  div {
+    background: #af814d;
+  }
+  p {
+    color: #af814d;
+  }
+}
+.green {
+  div {
+    background: #7c9911;
+  }
+  p {
+    color: #7c9911;
+  }
+}

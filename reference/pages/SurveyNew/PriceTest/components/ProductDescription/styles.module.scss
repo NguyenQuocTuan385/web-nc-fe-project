@@ -1,0 +1,53 @@
+.quoteIcon {
+    font-size: 32px;
+    color: var(--gray-20);
+}
+.flip {
+    transform: rotateY(180deg);
+}
+.endQuoteWrapper {
+    display: flex;
+    align-items: flex-end;
+}
+.descriptionForm {
+    display: flex;
+    flex-direction: column;
+    width: 0;
+    flex: 1;
+    flex-wrap: wrap;
+}
+.introduceSection {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+}
+.viewExampleBtn {
+    text-transform: none;
+    padding: 4px 8px 4px 12px;
+    border-radius: 4px;
+    background: var(--gray-2);
+    svg {
+        font-size: 24px !important;
+        color: var(--gray-60);
+    }
+    &:hover {
+        background: var(--gray-10);
+    }
+}
+.formWrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 16px;
+    margin-bottom: 16px;
+    gap: 8px;
+    @media only screen and (max-width: 767px) {
+       padding: 0;
+    }
+}
+.inputWrapper {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+}

@@ -1,0 +1,28 @@
+
+.inputWraper {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+}
+
+.borderBottom {
+    border-bottom: 1px solid var(--gray-5);
+}
+
+.editText {
+    cursor: pointer;
+    width: fit-content;
+}
+.priceLabel {
+    min-width: 200px;
+    height: 34px;
+    align-self: flex-start  ;
+    flex-direction: row;
+    align-items: center;
+    > svg {
+        font-size: 20px;
+        color: var(--gray-40);
+    }
+}

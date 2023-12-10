@@ -1,0 +1,75 @@
+.root {
+    display: flex;
+    gap: 4px;
+}
+
+.dashedInputField {
+    margin-left: auto;
+    outline: none;
+    border-radius: 0;
+    border-bottom: 2px solid var(--cimigo-blue-light-1, #3b87db) !important;
+    padding: 4px 8px;
+    > fieldset {
+        border: none;
+    }
+    > input,
+    textarea {
+        padding: 0;
+        color: var(--eerie-black) !important;
+    }
+    &.error {
+        border-color: transparent !important;
+        border-bottom: 2px solid var(--red-error) !important;
+    }
+}
+
+.menuShow {
+    display: block !important;
+}
+
+.selectCurrencyBtn {
+    padding: 0 8px;
+    min-width: unset;
+    text-transform: none;
+    color: var(--cimigo-blue-light-1);
+    text-decoration: underline !important;
+}
+.menuItem:hover {
+    background: var(--cimigo-blue-light-4);
+
+    > p {
+        color: var(--cimigo-blue-light-1, #3b87db);
+    }
+}
+.actionBtnWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+}
+.menuCurrencyWrapper {
+    margin-left: 8px;
+    height: 24px;
+}
+.currencySymbol {
+    flex: 1;
+    text-align: center;
+}
+
+.actionBtn {
+    width: 32px;
+    height: 32px;
+}
+
+.saveBtn {
+    color: var(--cimigo-blue);
+}
+
+.actionBtnWrapper {
+    margin-left: 8px;
+}
+
+.errorMessage {
+    font-style: italic;
+    text-align: right;
+}

@@ -1,0 +1,10 @@
+.paper {
+  width: 100%;
+  margin: 10px !important;
+}
+
+.rowItem {
+  &:not(:first-child) {
+    margin-top: 24px;
+  }
+}

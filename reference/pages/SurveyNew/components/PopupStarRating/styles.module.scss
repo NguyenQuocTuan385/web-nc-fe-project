@@ -1,0 +1,286 @@
+.paper {
+    width: 790px;
+    max-width: 790px;
+    border-radius: 8px;
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+      max-width: 100%;
+      margin: 0px 8px !important;
+      overflow: hidden;
+    }
+  }
+  
+  .titleAdvice {
+    margin-bottom: 24px;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  .classForm {
+    background-color: white;
+    min-height: 100px;
+    position: relative;
+  }
+  
+  .addList {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 44px;
+    margin-top: 16px;
+    @media only screen and (max-width: 500px) {
+      padding-left: 0;
+    }
+  }
+
+  .addOptions {
+    display: flex;
+    cursor: pointer;
+  }
+  
+  .rowInputAttributeControl {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding-left: 35px;
+    position: relative;
+    cursor: grab;
+    &:hover {
+      .iconDotsDrag {
+        visibility: visible;
+      }
+    }
+  }
+  .rowInputAttribute {
+    width: 90%;
+    margin-right: auto;
+    .attributeTitle {
+      display: none;
+    }
+
+    @media only screen and (max-width: 500px) {
+      .attributeTitle {
+        display: block;
+      }
+    }
+  }
+  
+  .closeInputAttribute {
+    position:absolute;
+    top:0;
+    right:0;
+    color: var(--eerie-black-65);
+    cursor: pointer;
+    @media only screen and (max-width: 500px) {
+        right: -12px;
+      }
+  }
+
+  .inputContainer {
+    [class~="MuiTypography-root"]{
+      margin-left: 9px;
+    }
+  }
+  
+  .iconDotsDrag {
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    top: -9px;
+    left: 0;
+    visibility: hidden;
+    color: var(--eerie-black-65);
+    @media only screen and (max-width: 767px) {
+      visibility: visible;
+      color: var(--eerie-black-40);
+    }
+  }
+  
+  .IconListAdd {
+    width: 40px;
+    height: 25px;
+    margin-right: 10px;
+    margin-left: -20px;
+    color: var(--eerie-black-65);
+    @media only screen and (max-width: 500px) {
+      margin-left: 10px;
+      margin-right: 0;
+     }
+  }
+  
+  .inputQuestion {
+    border-bottom: none;
+    position: relative;
+    width: 100%;
+    min-height: 42px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+
+    .iconLanguage {
+      color: var(--eerie-black-65);
+      background-color: rgba(221, 221, 221, 1);
+      font-weight: 500;
+      font-size: 12px;
+      border-radius: 5px;
+      width: 29px;
+      height: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 14.6px;
+      text-transform: uppercase;
+    }
+  
+    input {
+      padding: 0px;
+    }
+  }
+
+  @media only screen and (max-width: 500px) {
+
+    .inputQuestion {
+      font-size: 14px;
+    }
+  
+    .inputAttribute {
+      font-size: 14px;
+    }
+  }
+
+  .numberStarContainer {
+    margin-top:32px;
+    display: flex;
+    @media only screen and (max-width: 500px) {
+        display: block;
+    }
+  }
+
+  .numberStarControl {
+    display: flex;
+    flex-direction: column;
+    @media only screen and (max-width: 500px) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+  }
+  
+  .contentNumberStar {
+    width: 114px;
+    height: 48px;
+    display: flex;
+    margin-top: 8px;
+    padding: 12px 8px;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    background: var(--eerie-black-5);
+    @media only screen and (max-width: 500px) {
+      width: 122px;
+      height: 42px;
+      margin-top: 0;
+  }
+  }
+
+  .numberStarValue {
+    input {
+      width: 20px;
+      border: none;
+      background: none;
+      font-size: 16px !important;
+      font-weight: 600; 
+      text-align: center;
+      &:focus-visible {
+        outline:none;
+      }
+    }
+
+  }
+
+  .rowStar {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 3px;
+    padding: 12px 0;
+    justify-content: center;
+    align-items: center;
+    @media only screen and (max-width: 500px) {
+        display: block;
+        margin-top: 0;
+        margin-left: 0;
+        padding: 0;
+        margin-top: 6px;
+        svg:first-child {
+            margin-left: 0;
+        }
+    }
+  }
+
+  .iconStar {
+    width: 30px;
+    height: 28.5px;
+    color: var(--cimigo-green);
+    margin: 0 3px;
+    @media only screen and (max-width: 500px) {
+      margin: 0;
+  }
+  }
+
+  .multiAttributeControl {
+    margin-top: 40px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggleMultipleAttributes {
+    margin-left:24px;
+    @media only screen and (max-width: 500px) {
+      margin-left: auto;
+    }
+  }
+  
+  .btnSave {
+    @media only screen and (max-width: 1024px) {
+      margin-right: 0;
+    }
+  }
+
+  .inputAttribute:focus-visible {
+    outline: none;
+  }
+  
+  .footer {
+    @media only screen and (max-width: 767px) {
+      display:flex;
+      flex-direction: column;
+      align-items: flex-end;
+      .btnSave {
+        width: 100%;
+        margin-right:0;
+        margin-top:16px; 
+      }
+    }
+  }
+  
+  .costContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 16px;
+    margin-top: 8px;
+    @media only screen and (max-width: 767px) {
+      margin-right:0;
+    }
+  }

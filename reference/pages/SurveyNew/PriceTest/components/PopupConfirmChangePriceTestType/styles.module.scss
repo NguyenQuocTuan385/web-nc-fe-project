@@ -1,0 +1,32 @@
+.paper {
+  width: 576px;
+  max-width: 576px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 !important;
+    overflow: hidden;
+  }
+}
+
+.infoIcon {
+  font-size: 32px;
+  margin-right: 15px;
+  color: var(--warning);
+}
+.closeBtn {
+  margin-left: auto;
+  background-color: rgba(28, 28, 28, 0.05) !important;
+}
+
+.cancelBtn {
+  background: var(--cimigo-blue-light-4) !important;
+  color: var(--cimigo-blue);
+}
+
+.content {
+  > span {
+    font-weight: 700;
+    text-transform: lowercase;
+  }
+}

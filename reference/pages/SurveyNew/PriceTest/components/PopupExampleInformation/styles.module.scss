@@ -1,0 +1,41 @@
+.paper {
+    width: 576px;
+    max-width: 576px;
+    @media only screen and (max-width: 767px) {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 !important;
+    }
+}
+.lightBulb {
+    font-size: 32px;
+    margin-right: 16px;
+    color: var(--gray-60);
+}
+.closeBtn {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    background: var(--gray-2);
+}
+.quoteIcon {
+    font-size: 32px;
+    color: var(--gray-20);
+}
+.flip {
+    transform: rotateY(180deg);
+}
+.endQuoteWrapper {
+    display: flex;
+    align-items: flex-end;
+}
+.contentWrapper {
+    flex: 1;
+    padding: 16px 0;
+}
+.content {
+    font-style: italic !important;
+    span {
+        color: var(--cimigo-blue-light-1);
+    }
+}

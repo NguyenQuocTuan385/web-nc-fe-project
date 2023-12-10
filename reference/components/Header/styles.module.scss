@@ -1,0 +1,558 @@
+
+.listItem {
+  display: flex;
+  padding-right: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+// new
+.root {
+  width: 100%;
+  margin: 0 auto;
+  top: 0;
+  position: sticky;
+  background: #fff;
+  z-index: 99;
+  box-shadow: 0 1px 4px rgb(28 28 28 / 20%);
+}
+
+.container.container {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-left: 24px;
+  padding-right: 24px;
+  height: 48px;
+
+  @media only screen and (max-width: 1024px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @media only screen and (max-width: 767px) {
+    padding-left: 10px;
+    padding-right: 19px;
+    height: 58px;
+  }
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    max-width: 200px;
+    min-width: 96px;
+
+    @media only screen and (max-width: 1024px) {
+      max-width: 150px;
+      // min-width: 60px;
+    }
+
+    @media only screen and (max-width: 767px) {
+      max-width: 85px;
+      // min-width: 50px;
+    }
+  }
+}
+
+.navBar {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  margin-left: 10px;
+}
+
+.listMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  > .item {
+    &:not(:last-child) {
+      margin-right: 10px;
+      @media only screen and (max-width: 767px) {
+        &.clearMargin {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+.item {
+  list-style: none inside;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.routerItem {
+  padding: 10px 20px;
+  outline: none;
+  font-weight: 600;
+  color: #1f61a9;
+  transition: all 0.2s ease-out;
+  outline: none;
+  white-space: nowrap;
+  font-family: Montserrat, sans-serif;
+  font-size: 1rem;
+  line-height: 1.25;
+  cursor: pointer;
+  text-decoration: unset;
+
+  &:hover {
+    color: #a6cc17;
+    outline: none;
+    background: transparent;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    padding: 5px 7px !important;
+  }
+
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
+
+.btnLogin {
+  margin-right: 10px;
+  white-space: nowrap;
+  button {
+    white-space: nowrap;
+  }
+  @media only screen and (max-width: 767px) {
+    button {
+      border: unset;
+      background-image: url("../../assets/img/icon/ic-profile-blue.svg");
+      background-repeat: no-repeat;
+      background-position: left 11px;
+      padding: 6px 0px 0px 18px;
+
+      &:not(.disable):hover {
+        background: none;
+        background-image: url("../../assets/img/icon/ic-profile-blue.svg");
+        background-repeat: no-repeat;
+        background-position: left 11px;
+      }
+    }
+  }
+}
+
+.btnLogout {
+  button {
+    white-space: nowrap;
+  }
+  @media only screen and (max-width: 767px) {
+    button {
+      border: unset;
+      background: transparent;
+      color: #7c9911;
+      padding: 6px 0px 0px 0px;
+
+      &:not(.disable):hover {
+        background: none;
+      }
+    }
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  margin-left: 20px;
+  background: transparent;
+
+  @media only screen and (max-width: 767px) {
+    margin-left: 10px !important;
+  }
+}
+
+.btnSearch {
+  display: flex;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  img {
+    min-width: 16px;
+    width: 30px;
+
+    @media only screen and (max-width: 767px) {
+      width: 14px !important;
+      height: 14px !important;
+      min-width: 14px !important;
+    }
+  }
+}
+
+.rootMenu {
+  width: 227px;
+  max-width: 227px;
+  top: 45px !important;
+}
+
+.menuAction {
+  display: none;
+  margin: 0 10px;
+  align-items: center;
+  justify-content: center;
+
+  @media only screen and (max-width: 767px) {
+    display: flex;
+  }
+
+  button {
+    padding: 0;
+  }
+}
+
+.menuItem {
+  display: flex;
+  padding: 0;
+  border-bottom: 0.5px solid #fff;
+
+  a {
+    font-size: 1.1666rem;
+    color: #fff;
+    padding: 1rem 2rem;
+    line-height: 1.25;
+    font-weight: 500;
+    width: 100%;
+  }
+}
+
+.menuItemLast {
+  border: none;
+}
+
+.itemBtn {
+  background-color: rgba(28, 28, 28, 0.05);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  &:not(:first-child) {
+    margin-left: 10px;
+  }
+}
+
+.menuProfile {
+  min-width: 192px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.menuLang {
+  ul {
+    padding: 0;
+
+    li {
+      padding: 12px 15px;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 22px;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0.015em;
+      color: rgba(28, 28, 28, 0.9);
+
+      &.active,
+      &:hover {
+        background: #e8f1fb;
+      }
+    }
+  }
+}
+
+.itemAciton {
+  img {
+    padding-right: 10px;
+    width: 24px;
+    height: 24px;
+  }
+
+  p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 12px;
+    color: rgba(28, 28, 28, 0.65);
+    white-space: pre-wrap;
+  }
+}
+
+.linkProject {
+  display: flex;
+  align-items: center;
+  left: 250px;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-left: 64px;
+  margin-right: 5px;
+  @media only screen and (max-width: 1024px) {
+    left: 200px;
+  }
+
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
+
+.linkTextHome {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  cursor: pointer;
+  margin-top: 4px;
+  img {
+    margin-right: 5px;
+  }
+
+  span {
+    white-space: nowrap;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.015em;
+    color: #1f61a9;
+    margin-top: 5px;
+  }
+}
+
+.linkTexDetail {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+  overflow: hidden;
+  flex: 1;
+  > img {
+    margin-right: 15px;
+  }
+
+  .detail {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.015em;
+    color: var(--gray-80);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .detail:hover{
+    text-decoration: underline;
+    text-underline-position: under;
+  }
+}
+
+.btnChangeLang {
+  margin-right: 16px;
+  border: none;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--gray-90);
+  white-space: nowrap;
+  padding: 4px 8px 4px 8px;
+  .desktop {
+    display: inline-block;
+  }
+  .mobile {
+    display: none;
+  }
+  @media only screen and (max-width: 1024px) {
+    .desktop {
+      display: none;
+    }
+    .mobile {
+      display: inline-block;
+      text-transform: uppercase !important;
+    }
+    [class~="MuiButton-endIcon"] {
+      margin-left: 0px !important;
+    }
+  }
+}
+
+.itemsOfToggle {
+  margin-left: 8px;
+  background-color: transparent !important;
+  width: 100%;
+  a {
+    width: 100%;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    color: rgba(28, 28, 28, 0.9);
+    p {
+      white-space: pre-wrap;
+      border-left: 4px solid rgba(166, 204, 23, 1);
+      padding: 7px 10px 7px 14px;
+      transition: 0.4s;
+    }
+    p:not(:active, :hover) {
+      padding-left: 0px;
+      border: none;
+      font-weight: 500;
+    }
+  }
+}
+
+.buttonOfToggle {
+  display: flex;
+  align-items: center;
+  color: var(--cimigo-blue);
+  margin-left: 24px;
+  margin-bottom: 32px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.icButtonOfToggle {
+  width: 20px;
+  height: 18px;
+  margin-right: 17px;
+}
+
+.lineOfToggle {
+  margin: 3px 24px 17px 24px;
+  border-bottom: 1px solid rgba(28, 28, 28, 0.2);
+}
+
+@media only screen and (max-width: 1024px) {
+  .btnLogin {
+    white-space: nowrap;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .item > .routerItem {
+    padding: 5px 20px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .listItem {
+    padding-right: 10px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .itemBtn:first-child {
+    .icHelp {
+      display: none;
+    }
+  }
+
+  .btnLogin,
+  .btnLogout,
+  .itKey {
+    display: none;
+  }
+
+  .itName,
+  .btnChangeLang {
+    display: flex;
+    margin-right: 0;
+  }
+
+  .container.container {
+    display: flex;
+  }
+
+  .navBar {
+    margin-left: auto;
+  }
+
+  .imgContainer img {
+    margin-left: 13px;
+    min-width: 119px;
+  }
+}
+.buttonOfToggle:last-child {
+  margin-bottom: 15px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+.editBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  [class~="MuiFormControl-root"] {
+    max-width: 350px;
+    padding: 0px;
+    margin-right: 15px;
+    input {
+      padding: 5px 5px 5px 10px;
+    }
+  }
+  button {
+    max-width: unset;
+    min-width: unset;
+    img {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+.avatarEmpty {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+.iconFolderProject{
+  margin-right: 6.5px;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  svg{
+    color: var(--gray-80);
+  }
+}
+.btnLoginOrRegister{
+  background-color: var(--cimigo-green);
+}
+.btnLoginOrRegister:hover{
+  background-color: var(--cimigo-green);
+}
+.btnLoginOrRegister{
+  p{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+}
+.headerLogin{
+  .container{
+    padding-top: 16px;
+    padding-bottom: 16px;
+    height: 64px;
+  }
+}

@@ -1,0 +1,77 @@
+.userWrapper {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    @media only screen and (max-width: 500px) {
+        height: fit-content;
+        margin: 6px 0;
+    }
+}
+.userImageWrapper {
+    min-width: 56px;
+    width: 56px;
+    height: 56px;
+    margin-right: 8px;
+    border-radius: 50%;
+    @media only screen and (max-width: 500px) {
+        min-width: 24px;
+        width: 24px;
+        height: 24px;
+    }
+}
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+}
+.userFakeAvatar {
+    border: 1px dashed var(--gray-40);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: capitalize;
+}
+.userInfo {
+    overflow: hidden;
+    .textEmail{
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .textFullName{
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+.updateRole {
+    color: var(--gray-90);
+    cursor: pointer;
+    height: fit-content;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+        color: var(--gray-80);
+        path {
+            width: 9px;
+            height: 4px;
+        }
+    }
+    border-radius: 8px;
+}
+
+.updateRole:hover {
+    background: var(--gray-5);
+}
+.checkIcon {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        color: var(--gray-80);
+    }
+}

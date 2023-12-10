@@ -1,0 +1,74 @@
+.container {
+  padding: 16px 0 20px 16px;
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
+}
+.listItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 15px;
+  border-left: 3px solid #c4c4c4;
+  margin-top:5px;
+  > [class~="MuiListItemButton-root"] {
+    display: block;
+    padding-right: calc(70px + 16px);
+    padding-left: 16px;
+    min-height: 40px;
+    &:hover {
+      background: transparent;
+    }
+  }
+  &:hover, &:active {
+    background: #EEF0F2;
+    img, span, .btnAction {
+      visibility: visible !important;
+    }
+  }
+}
+.listItemContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.question {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-left: 10px;
+  > p {
+    font-weight: 500;
+    font-size: 14px;
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+  > span {
+    font-weight: 400;
+    font-size: 12px;
+    color: #53660c;
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 4px 8px;
+    margin-left: 10px;
+  }
+}
+.btnAction {
+  width: 70px;
+  visibility: hidden;
+}
+.iconAction {
+  width: 32px;
+  height: 32px;
+  margin-left: 10px;
+  &:hover {
+    background-color: #ffffff !important;
+  }
+}
+.hide {
+  visibility: hidden;
+}

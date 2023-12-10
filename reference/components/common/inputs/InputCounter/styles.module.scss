@@ -1,0 +1,42 @@
+.contentNumber {
+    width: 114px;
+    height: 48px;
+    display: flex;
+    margin-top: 8px;
+    padding: 12px 8px;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    background: var(--eerie-black-5);
+    @media only screen and (max-width: 500px) {
+      width: 122px;
+      height: 42px;
+      margin-top: 0;
+  }
+}
+.btnAction {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--ghost-white);
+    border-radius: 100%;
+    cursor: pointer;
+    color: #323232;
+    border: none;
+}
+
+.numberValue {
+    input {
+      width: 20px;
+      border: none;
+      background: none;
+      font-size: 16px !important;
+      font-weight: 600; 
+      text-align: center;
+      &:focus-visible {
+        outline:none;
+      }
+    }
+}

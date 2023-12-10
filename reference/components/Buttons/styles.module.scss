@@ -1,0 +1,48 @@
+.root {
+  text-transform: none;
+  font-size: 14px;
+  font-weight: 600;
+  &[class~=Mui-disabled] {
+    opacity: 0.5;
+  }
+  img {
+    padding-right: 9px;
+  }
+}
+.btnBlue {
+  background: var(--cimigo-blue);
+  border: 1px solid transparent;
+  color: white;
+  &:hover {
+    background: var(--cimigo-blue-light);
+  }
+}
+.btnRed {
+  background: #af1c10;
+  border: 1px solid transparent;
+  color: white;
+  &:hover {
+    background: #af1d1080;
+  }
+}
+.btnTransparentBlue {
+  background: transparent;
+  color: var(--cimigo-blue);
+  border: 1px solid var(--cimigo-blue);
+  &:hover {
+    background: #eef0f2;
+  }
+}
+.btndisabled {
+  background: rgba(28, 28, 28, 0.2);
+  color: rgba(28, 28, 28, 0.2);
+  font-weight: 600;
+}
+.btnGreen {
+  background: #7C9911;
+  border: none;
+  color: white;
+  &:hover {
+    background: #7C9911;
+  }
+}

@@ -1,0 +1,73 @@
+.bodyContent{
+    max-width: 624px;
+}
+.title{
+    text-align: center;
+    font-weight: 600 !important;
+    font-size: 32px !important;
+    line-height: 48px !important;
+  }
+.handleLink {
+    display: grid;
+    padding-top: 32px;
+    @media only screen and (max-width: 767px) {
+        padding-top: 16px;
+    }
+}
+.note {
+    span{
+        font-weight: 600;
+    }
+}
+.form{
+    padding-top: 16px;
+    .buttonSubmit{
+        padding-left: 15px;
+        padding-top: 32px;
+        padding-bottom: 200px;
+        width: 239px;
+        @media only screen and (max-width: 767px) {
+            width: 100%;
+        }
+        button{
+            min-height: 48px;
+        }
+    }
+    .selectLeaguage{
+        width: 100%;
+    }
+}
+.accordion{
+    padding-left: 15px;
+    padding-top: 20px;
+    width: 100%;
+    
+    .accordionContent{
+        background-color: var(--gray-5);
+        box-shadow: 0 0 transparent;
+    }
+    [class~="MuiAccordionSummary-content"] {
+        margin-bottom: 8px;
+    }
+}
+.inputAccordion {
+    background-color: var(--white);
+}
+
+.handleLink{
+    .link{
+        color: var(--cimigo-blue);
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 400;
+    }
+    .handleLinkFormat {
+        display: flex;
+    }
+}
+
+.contentPriceTest {
+    padding: 24px 0px 0px 15px;
+}

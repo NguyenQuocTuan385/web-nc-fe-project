@@ -1,0 +1,19 @@
+.title {
+  font-weight: 500;
+}
+.buttonCancel {
+  margin-right: 5px;
+}
+.buttonConfirm {
+  background-color: var(--cimigo-danger);
+  color: 'white';
+  font-weight: 'bold';
+  &:hover {
+    background-color: var(--cimigo-danger);
+  }
+}
+.icon {
+  font-size: 3rem;
+  color: var(--cimigo-danger);
+  margin-right: 5px;
+}

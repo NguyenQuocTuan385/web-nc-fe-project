@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  background: #f8e8bf;
+  border: 1px solid #f5bf32;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.015em;
+  color: #9e5400;
+  margin: auto;
+  text-align: center;
+  a {
+    color: #1f61a9;
+    text-decoration: underline !important;
+    text-underline-position: under;
+  }
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+  }
+}

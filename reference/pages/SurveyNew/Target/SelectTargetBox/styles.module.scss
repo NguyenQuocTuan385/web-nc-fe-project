@@ -1,0 +1,266 @@
+.root {
+}
+
+.badge {
+  border: 1px solid #ffffff;
+  width: 10px;
+  height: 10px;
+  top: 1px;
+  right: 5px;
+  border-radius: 100%;
+  background: var(--cimigo-green);
+}
+.customSizeBox {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: -8px;
+  margin-top: -8px;
+  > * {
+    margin-top: 8px;
+    margin-left: 8px;
+  }
+}
+.customSizeInputBox {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: var(--cimigo-blue-light-2);
+  border: 1px solid var(--cimigo-blue-light-2);
+  border-radius: 50px;
+  max-height: 32px;
+  [class~="MuiFormControl-root"] {
+    width: 152px;
+    background-color: #ffffff;
+    [class~="MuiInputBase-root"] {
+      [class~="MuiInputBase-input"] {
+        padding: 5px 12px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px !important;
+        line-height: 20px;
+        letter-spacing: 0.015em;
+        color: var(--eerie-black-90);
+        &::placeholder {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px !important;
+          line-height: 20px;
+          letter-spacing: 0.015em;
+          color: var(--eerie-black-40);
+        }
+      }
+      [class~="MuiOutlinedInput-notchedOutline"] {
+        border: none !important;
+      }
+    }
+  }
+  .btnSize {
+    border: none !important;
+    border-left: 1px solid var(--cimigo-blue-light-2) !important;
+  }
+}
+
+.popularSampleSize {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.015em;
+  color: var(--gray-80);
+  .iconPopular {
+    width: 10px;
+    height: 10px;
+    background: var(--cimigo-green);
+    border-radius: 50%;
+    margin-right: 4px;
+  }
+}
+
+.targetBox {
+  .targetTabs {
+    margin-top: 16px;
+    display: flex;
+    .targetTab {
+      flex: 1;
+      padding-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      border-bottom: none;
+      .tabHeader {
+        border: 2px solid var(--gray-10);
+        border-bottom: none;
+        border-radius: 4px 4px 0px 0px;
+        height: 150px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--cultured-gray);
+        .tabBoxTitle {
+          position: absolute;
+          left: 0;
+          top: 12px;
+          padding: 4px 8px;
+          background: #ffffff;
+          box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+          border-radius: 0px 4px 4px 0px;
+          margin-right: 8px;
+        }
+        .tabImg {
+          width: 100px;
+          height: 100px;
+          object-fit: cover;
+        }
+      }
+      .tabBody {
+        flex: 1;
+        border: 2px solid var(--gray-10);
+        border-top: none;
+        min-height: 112px;
+        border-radius: 0px 0px 4px 4px;
+        .tabBodySelected {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          padding: 8px 16px;
+        }
+        .tabBodyDefault {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          > p {
+            text-align: center;
+          }
+        }
+      }
+      &.tabError {
+        .tabHeader {
+          .tabBoxTitle {
+            > * {
+              color: var(--red-error);
+            }
+          }
+          border-color: var(--red-error);
+        }
+        .tabBody {
+          .tabBodyDefault {
+            > * {
+              color: var(--red-error);
+            }
+          }
+          border-color: var(--red-error);
+        }
+      }
+      &.targetTabActive {
+        position: relative;
+        border-color: var(--cimigo-blue-light-3);
+        border-radius: 4px 4px 0px 0px;
+        .tabHeader {
+          border-color: var(--cultured-gray);
+        }
+        .tabBody {
+          border-color: #ffffff;
+          border-radius: unset;
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: 4px;
+          background: #ffffff;
+          left: 0;
+          bottom: -3px;
+          z-index: 999;
+        }
+        &:first-child {
+          &::before {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 4px;
+            background: var(--cimigo-blue-light-3);
+            left: -2px;
+            bottom: -3px;
+          }
+        }
+        &:last-child {
+          &::before {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 4px;
+            background: var(--cimigo-blue-light-3);
+            right: -2px;
+            bottom: -3px;
+          }
+        }
+        &.tabError {
+          border-color: var(--red-error);
+          &:first-child,
+          &:last-child {
+            &::before {
+              background: var(--red-error);
+            }
+          }
+        }
+      }
+    }
+    .tabIconBox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0px 6px;
+      svg {
+        font-size: 24px;
+        color: var(--gray-40);
+      }
+    }
+    @media only screen and (max-width: 1200px) {
+      .tabIconBox {
+        padding: 0px;
+        svg {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+  .tabPanel {
+    border: 2px solid var(--cimigo-blue-light-3);
+    border-radius: 4px;
+    padding: 32px 24px;
+    &.error {
+      border-color: var(--red-error);
+    }
+    @media only screen and (max-width: 1024px) {
+      display: none;
+    }
+  }
+  @media only screen and (max-width: 1024px) {
+    .targetTabs {
+      flex-direction: column;
+      .targetTab {
+        padding: 0px;
+        .tabHeader {
+          border-width: 1px;
+        }
+        .tabBody {
+          border-width: 1px;
+        }
+        &:not(:first-child) {
+          margin-top: 16px;
+        }
+      }
+      .tabIconBox {
+        display: none;
+      }
+    }
+  }
+}

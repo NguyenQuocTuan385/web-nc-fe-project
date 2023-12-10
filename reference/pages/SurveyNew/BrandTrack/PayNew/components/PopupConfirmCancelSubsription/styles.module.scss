@@ -1,0 +1,42 @@
+.paper {
+    width: 576px;
+    max-width: 576px;
+    @media only screen and (max-width: 767px) {
+        width: 100%;
+        max-width: 100%;
+        margin: 0px 8px !important;
+        overflow: hidden;
+    }
+
+}
+.headerDialog{
+    border-bottom: 1px solid var(--gray-40);
+}
+.itemText {
+    span {
+        color: var(--warning-dark);
+    }
+}
+.description {
+    white-space: pre-wrap;
+    span {
+        font-weight: 800;
+    }
+}
+.inputTextarea {
+  font-family: 'Montserrat';
+  font-size: 16px !important;
+  line-height: 24px;
+  &::placeholder {
+    color: var(--gray-50) !important;
+    opacity: 1;
+  }
+}
+.btnStopMySubscription{
+    color: var(--gray-10);
+    background: var(--cimigo-danger);
+}
+.btnStopMySubscription:hover{
+    background: var(--cimigo-danger);
+    color: var(--gray-10);
+}

@@ -1,0 +1,22 @@
+.root {
+}
+.content {
+}
+.iframe {
+  border: none;
+}
+
+.noSetup {
+  margin: auto !important;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  padding: 83px 0px;
+  max-width: 546px;
+  img {
+    width: 128px;
+    height: 128px;
+    object-fit: contain;
+    margin-bottom: 48px;
+  }
+}

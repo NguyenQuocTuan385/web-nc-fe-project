@@ -1,0 +1,75 @@
+.editor {
+  width: 100%;
+  > * {
+    font-family: 'Montserrat' !important;
+  }
+  [class~="ql-toolbar"] {
+    border-radius: 5px 5px 0px 0px;
+    [class~="ql-formats"] {
+      [class~="ql-size"] {
+        [class~="ql-picker-item"] {
+          &::before {
+            font-size: 14px;
+          }
+          &[data-value=small] {
+            &::before {
+              font-size: 12px !important;
+            }
+          }
+          &[data-value=large] {
+            &::before {
+              font-size: 16px !important;
+            }
+          }
+          &[data-value=huge] {
+            &::before {
+              font-size: 18px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+  [class~="ql-container"] {
+    border-radius: 0px 0px 5px 5px;
+  }
+  [class~="ql-editor"] {
+    min-height: 150px;
+    > * {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.015em;
+      color: #1c1c1c;
+    }
+    
+    [class~="ql-size-small"] {
+      font-size: 12px;
+      line-height: unset;
+    }
+    [class~="ql-size-large"] {
+      font-size: 16px;
+      line-height: 20px;
+    }
+    [class~="ql-size-huge"] {
+      font-size: 18px;
+      line-height: unset;
+    }
+    ul, ol {
+      padding: 0;
+    }
+    ul {
+      li::before {
+        text-align: center;
+      }
+    }
+  }
+}
+.editorError {
+  [class~="ql-toolbar"] {
+    border-color: var(--cimigo-danger) !important;
+  }
+  [class~="ql-container"] {
+    border-color: var(--cimigo-danger) !important;
+  }
+}

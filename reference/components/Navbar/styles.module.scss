@@ -1,0 +1,89 @@
+.appBar {
+  color: #555555;
+  width: 100%;
+  border: 0;
+  display: block;
+  padding: 10px 0;
+  z-index: 1029;
+  position: absolute;
+  box-shadow: none;
+  min-height: 50px;
+  transition: all 150ms ease 0s;
+  padding-top: 10px;
+  border-bottom: 0;
+  border-radius: 3px;
+  margin-bottom: 0;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.72);
+}
+
+.container {
+  min-height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.flex {
+  flex: 1
+}
+
+.title {
+  color: inherit;
+  margin: 0;
+  font-size: 18px;
+  font-family: Montserrat;
+  font-weight: 300;
+  line-height: 30px;
+  border-radius: 3px;
+  letter-spacing: unset;
+  text-transform: none;
+}
+
+.boxRight {
+  display: flex;
+  align-items: center;
+}
+.item {
+  margin-left: 8px;
+}
+
+.itemBtn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background-color: rgba(28, 28, 28, 0.05);
+  margin-left: 15px;
+}
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+.avatarEmpty {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+.menuProfile {
+  width: 140px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+.itemAciton {
+  img {
+    padding-right: 10px;
+    width: 24px;
+    height: 24px;
+  }
+  p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 12px;
+    color: rgba(28, 28, 28, 0.65);
+  }
+}

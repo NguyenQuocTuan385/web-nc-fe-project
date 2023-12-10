@@ -1,0 +1,84 @@
+.paper {
+  width: 800px;
+  max-width: 800px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 !important;
+    overflow: hidden;
+  }
+}
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #08182a;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #17497f;
+  padding: 12px 24px;
+  p {
+    font-weight: 600;
+    font-size: 22px;
+    color: #fafaff;
+  }
+  button {
+    background-color: #ffffff !important;
+  }
+}
+.body {
+  min-height: 200px;
+  padding: 24px;
+  @media only screen and (max-width: 767px) {
+    padding: 24px 24px 0px 24px;
+  }
+}
+
+.btn {
+  margin: 24px;
+  display: flex;
+  justify-content: flex-end;
+  button {
+    width: 25%;
+  }
+  @media only screen and (max-width: 767px) {
+    button {
+      width: 100%;
+    }
+  }
+}
+.filterOption {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.filterOptionItem {
+  height: 34px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  background: #f0f0f0;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  color: #000000;
+  border-radius: 20px;
+  cursor: pointer;
+  &:hover {
+    background: #1f61a9;
+    color: #ffffff;
+  }
+}
+.filterOptionItemActive {
+  background: #1f61a9;
+  color: #ffffff;
+}
+.filterValue {
+}
+.filterValueItem {
+  margin-top: 20px;
+}

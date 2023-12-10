@@ -1,0 +1,8 @@
+.progress {
+    background-color: var(--gray-10);
+    border-radius: 4px;
+    width: 400px;
+    [class~=MuiLinearProgress-bar] {
+      background-color: var(--cimigo-blue-light-1);
+    }
+  }

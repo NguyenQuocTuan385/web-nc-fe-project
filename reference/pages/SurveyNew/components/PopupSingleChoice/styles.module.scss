@@ -1,0 +1,155 @@
+.paper {
+  width: 790px;
+  max-width: 790px;
+  border-radius: 8px;
+  @media only screen and (max-width: 767px) {
+    width: 100%;
+    max-width: 100%;
+    margin: 0px 8px !important;
+    overflow: hidden;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.footer {
+  @media only screen and (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    .btnSave {
+      width: 100%;
+      margin-top: 16px;
+    }
+  }
+}
+
+.costContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 16px;
+  margin-top: 8px;
+  @media only screen and (max-width: 767px) {
+    margin-right: 8px;
+  }
+}
+
+.classForm {
+  background-color: white;
+  min-height: 100px;
+  position: relative;
+}
+
+.addList {
+  padding-left: 44px;
+  margin-top: 20px;
+}
+
+.rowInputAnswer {
+  margin-top: 20px;
+  padding-left: 35px;
+  position: relative;
+  &:hover {
+    .iconDotsDrag {
+      visibility: visible;
+    }
+  }
+}
+
+.closeInputAnswer {
+  cursor: pointer;
+  color: var(--eerie-black-65);
+  margin-left: 12px;
+  @media only screen and (max-width: 767px) {
+    color: var(--eerie-black-40);
+  } 
+}
+
+.choiceAnswer {
+  height: 20px;
+  width: 20px;
+  margin-right: 12px;
+}
+
+.iconDotsDrag {
+  width: 25px;
+  height: 40px;
+  position: absolute;
+  top: -9px;
+  left: 0;
+  visibility: hidden;
+  color: var(--eerie-black-65);
+  @media only screen and (max-width: 767px) {
+    visibility: visible;
+    color: var(--eerie-black-40);
+  } 
+}
+
+.addOptions {
+  display: flex;
+  align-items: center;
+  color: var(--eerie-black-65); 
+  cursor: pointer;
+}
+
+.IconListAdd {
+  width: 40px;
+  height: 25px;
+  margin-right: 10px;
+  margin-left: -17px;
+}
+
+.inputQuestion {
+  width: 100%;
+  min-height: 42px;
+  border-radius: 5px;
+  padding-left: 10px;
+  margin-top: 8px;
+
+  .iconLanguage {
+    color: var(--eerie-black-65);
+    background-color: rgba(221, 221, 221, 1);
+    font-weight: 500;
+    font-size: 12px;
+    border-radius: 5px;
+    width: 29px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 14.6px;
+    text-transform: uppercase;
+  }
+
+  input {
+    padding: 0px !important;
+  }
+}
+.errAns { 
+  margin-left: 40px;
+  @media only screen and (max-width: 600px) {
+    margin-left: 10px;
+  }
+}
+@media only screen and (max-width: 500px) {
+
+  .addOptions {
+    font-size: 14px;
+    margin-left: -27px;
+  }
+
+  .IconListAdd {
+    margin-left: -11px;
+    margin-right: 13px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .choiceAnswer {
+    display: none;
+  }
+}

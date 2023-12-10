@@ -1,0 +1,121 @@
+.root {
+  text-transform: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+}
+.btnPrimary {
+  background: var(--cimigo-blue);
+  border: 1px solid transparent;
+  color: #FFFFFF;
+  &:hover {
+    background: var(--cimigo-blue-light-1);
+  }
+  &:active {
+    background: var(--cimigo-blue-dark-1);
+  }
+  &[class~=Mui-disabled] {
+    background: var(--eerie-black-5);
+    p {
+      color: var(--eerie-black-40);
+    }  
+  }
+}
+.btnSecondary {
+  background: var(--cimigo-blue-light-4);
+  border: 1px solid transparent;
+  p {
+    color: var(--cimigo-blue);
+  }
+  &:hover {
+    background: var(--cimigo-blue-light-4);
+    p {
+      color: var(--cimigo-blue-light-1);
+    }
+  }
+  &:active {
+    background: var(--cimigo-blue-light-4);
+    p {
+      color: var(--cimigo-blue-dark-1);
+    }
+  }
+  &[class~=Mui-disabled] {
+    background: var(--eerie-black-5);
+    p {
+      color: var(--eerie-black-40);
+    } 
+  }
+}
+.btnOutlined {
+  background: var(--cimigo-blue-light-4);
+  border: 1px solid var(--cimigo-blue-light-2);
+  p {
+    color: var(--cimigo-blue);
+  }
+  &:hover {
+    background: var(--cimigo-blue-light-4);
+    p { 
+      color: var(--cimigo-blue-light-1);
+    }
+  }
+  &:active {
+    color: var(--cimigo-blue-dark-1);
+    background: var(--cimigo-blue-light-4);
+    p { 
+      color: var(--cimigo-blue-dark-1);
+    }
+  }
+  &[class~=Mui-disabled] {
+    background: var(--eerie-black-5);
+    border: 1px solid var(--eerie-black-20);
+    p {
+      color: var(--eerie-black-40);
+    } 
+  }
+}
+
+.btnText {
+  background: transparent;
+  border: 1px solid transparent;
+  span{
+    margin: 0;
+  }
+  p {
+    color: var(--cimigo-blue);
+  }
+  &:hover {
+    background: transparent;
+    p {
+      color: var(--cimigo-blue-light-1);
+    }
+  }
+  &:active {
+    background: transparent;
+    p {
+      color: var(--cimigo-blue-dark-1);
+    }
+  }
+  &[class~=Mui-disabled] {
+    background: transparent;
+    p {
+      color: var(--eerie-black-40);
+    }
+  }
+}
+
+.btnRaised {
+  background: var(--cimigo-blue);
+  border: 1px solid transparent;
+  color: #FFFFFF;
+  &:hover {
+    background: var(--cimigo-blue-light-1);
+  }
+  &:active{
+    background: var(--cimigo-blue-dark-1);
+  }
+  &[class~=Mui-disabled] {
+    background: var(--eerie-black-5);
+    p {
+      color: var(--eerie-black-40);
+    }
+  }
+}
