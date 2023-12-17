@@ -12,13 +12,12 @@ import "./styles.module.scss";
 import ReactDOM from "react-dom";
 import Popup from "../../../components/client/PopupHover";
 import LocationSidebar from "../../../components/client/LocationSidebar";
-import AnyLocationSidebar from "../../../components/client/AnyLocationSidebar";
+import RandomLocationSidebar from "../../../components/client/RandomLocationSidebar";
 import * as maptilersdk from "@maptiler/sdk";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import { MapController } from "@maptiler/geocoding-control/types";
 import { Feature } from "../../../models/geojson";
-import { Location } from "../../../models/location";
-import { Advertise } from "../../../models/advertise";
+import { Location, RandomLocation } from "../../../models/location";
 
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -27,9 +26,12 @@ const MapAdsManagement = () => {
   const [lat] = useState<number>(10.807035);
   const [zoom] = useState<number>(14);
   const [API_KEY] = useState<string>("MijgZpLFV2J9ejlH3Ot2");
-  const [isOpenAdsSidebar, setIsOpenAdsSideBar] = useState<boolean>(false);
+  const [OpenLocationSidebar, setOpenLocationSidebar] =
+    useState<boolean>(false);
   const [location, setLocationData] = useState<Location | null>(null);
-  const [isOpenAddressSidebar, setIsOpenAddressSideBar] =
+  const [randomLocation, setRandomLocationData] =
+    useState<RandomLocation | null>(null);
+  const [openRandomLocationSidebar, setOpenRandomLocationSidebar] =
     useState<boolean>(false);
   const marker = useRef<Marker | null>(null);
   maptilersdk.config.apiKey = API_KEY;
@@ -40,11 +42,11 @@ const MapAdsManagement = () => {
   });
 
   const closeAdsSidebar = () => {
-    setIsOpenAdsSideBar(false);
+    setOpenLocationSidebar(false);
   };
 
   const closeAddressSidebar = () => {
-    setIsOpenAddressSideBar(false);
+    setOpenRandomLocationSidebar(false);
   };
 
   const locations: Feature[] = [
@@ -53,8 +55,10 @@ const MapAdsManagement = () => {
       properties: {
         planning: true,
         address: "227 Nguyễn Văn Cừ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
+        ads_form_name: "Cổ động chính trị",
         location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
+        longitude: 106.696002,
+        latitude: 10.806579,
         advertises: [
           {
             lisencing: true,
@@ -84,8 +88,10 @@ const MapAdsManagement = () => {
       properties: {
         planning: false,
         address: "114 Nguyễn Văn Cừ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
+        ads_form_name: "Cổ động chính trị",
         location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
+        longitude: 106.69282625956525,
+        latitude: 10.808360001977254,
         advertises: [
           {
             lisencing: true,
@@ -115,8 +121,10 @@ const MapAdsManagement = () => {
       properties: {
         planning: true,
         address: "100 Lê Văn Sỹ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
+        ads_form_name: "Cổ động chính trị",
         location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
+        longitude: 106.69212623062919,
+        latitude: 10.80612598101489,
         advertises: [
           {
             lisencing: true,
@@ -224,6 +232,8 @@ const MapAdsManagement = () => {
           imgUrl,
           location_type_name,
           planning,
+          longitude,
+          latitude,
         } = features[0].properties;
 
         const locationTemp: Location = {
@@ -233,9 +243,11 @@ const MapAdsManagement = () => {
           imgUrl,
           location_type_name,
           planning,
+          longitude,
+          latitude,
         };
         setLocationData(locationTemp);
-        setIsOpenAdsSideBar(true);
+        setOpenLocationSidebar(true);
       }
     });
 
@@ -245,14 +257,28 @@ const MapAdsManagement = () => {
       if (features.length > 0) {
         return;
       } else {
-        closeAdsSidebar();
-        setIsOpenAddressSideBar(true);
         const { lng, lat } = e.lngLat;
         const results: any = await maptilersdk.geocoding.reverse([lng, lat]);
+        closeAdsSidebar();
+        setOpenRandomLocationSidebar(true);
         if (marker.current) {
           marker.current.setLngLat([lng, lat]);
+          const { place_name_vi } = results.features[0];
+          const randomLocationTemp: RandomLocation = {
+            address: place_name_vi,
+            longitude: lng,
+            latitude: lat,
+          };
+          setRandomLocationData(randomLocationTemp);
         } else {
+          const { place_name_vi } = results.features[0];
           const coordinates = results.features[0].geometry.coordinates.slice();
+          const randomLocationTemp: RandomLocation = {
+            address: place_name_vi,
+            longitude: coordinates[0],
+            latitude: coordinates[1],
+          };
+          setRandomLocationData(randomLocationTemp);
           marker.current = new MapLibreGL.Marker()
             .setLngLat(coordinates)
             .addTo(map);
@@ -272,13 +298,14 @@ const MapAdsManagement = () => {
       </div>
       <div ref={mapContainer} className={classes.map} />
       <LocationSidebar
-        isOpen={isOpenAdsSidebar}
+        isOpen={OpenLocationSidebar}
         closeSidebar={closeAdsSidebar}
         location={location}
       />
-      <AnyLocationSidebar
-        isOpen={isOpenAddressSidebar}
+      <RandomLocationSidebar
+        isOpen={openRandomLocationSidebar}
         closeSidebar={closeAddressSidebar}
+        randomLocation={randomLocation}
       />
     </div>
   );

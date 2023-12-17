@@ -1,21 +1,22 @@
+import { Box } from "@mui/material";
+import ParagraphSmall from "../../common/text/ParagraphSmall";
 import classes from "./styles.module.scss";
+import ParagraphExtraSmall from "../../common/text/ParagraphExtraSmall";
 
 const PopupHover = ({ properties }: any) => {
   return (
-    <div className={classes.popup}>
-      <div style={{ fontWeight: "bold", fontSize: "13px" }}>
+    <Box className={classes.popup}>
+      <ParagraphExtraSmall $fontWeight={"bold"}>
         {properties.ads_form_name}
-      </div>
-      <div style={{ fontSize: "13px" }}>{properties.address}</div>
-      <div style={{ fontSize: "13px" }}>{properties.location_type_name}</div>
+      </ParagraphExtraSmall>
+      <ParagraphExtraSmall>{properties.address}</ParagraphExtraSmall>
+      <ParagraphExtraSmall>{properties.location_type_name}</ParagraphExtraSmall>
       {properties.planning ? (
-        <div style={{ fontWeight: "bold", fontSize: "14px" }}>ĐÃ QUY HOẠCH</div>
+        <ParagraphSmall $fontWeight={"bold"}>ĐÃ QUY HOẠCH</ParagraphSmall>
       ) : (
-        <div style={{ fontWeight: "bold", fontSize: "14px" }}>
-          CHƯA QUY HOẠCH
-        </div>
+        <ParagraphSmall $fontWeight={"bold"}>CHƯA QUY HOẠCH</ParagraphSmall>
       )}
-    </div>
+    </Box>
   );
 };
 

@@ -7,4 +7,13 @@ export interface Location {
   location_type_name: string;
   advertises: Advertise[];
   imgUrl: string;
+  longitude: number;
+  latitude: number;
+  status_edit?: boolean;
+}
+
+export interface RandomLocation {
+  address: string;
+  longitude: number;
+  latitude: number;
 }

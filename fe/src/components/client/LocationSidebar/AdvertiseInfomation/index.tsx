@@ -1,9 +1,9 @@
 import { Error, InfoOutlined } from "@mui/icons-material";
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import React from "react";
-import ParagraphBody from "../../common/text/ParagraphBody";
+import ParagraphBody from "../../../common/text/ParagraphBody";
 import classes from "./styles.module.scss";
-import { Advertise } from "../../../models/advertise";
+import { Advertise } from "../../../../models/advertise";
 
 interface AdvertiseInfoProps {
   address: string;
@@ -44,7 +44,9 @@ const AdvertiseInfo = ({
         Trạng thái: <b>{advertise.lisencing ? "ĐÃ ĐƯỢC ĐẶT" : "CHƯA ĐẶT"}</b>
       </ParagraphBody>
       <Box className={classes.btnContainer}>
-        <InfoOutlined color="primary" />
+        <IconButton>
+          <InfoOutlined color="primary" />
+        </IconButton>
         <Button variant="outlined" color="error" startIcon={<Error />}>
           Báo cáo vi phạm
         </Button>

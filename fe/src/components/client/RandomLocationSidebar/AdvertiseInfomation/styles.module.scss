@@ -1,0 +1,13 @@
+.boxContainer {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  gap: 15px;
+  border-bottom: 1px solid var(--gray-50);
+  background-color: #e5f6fd;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: flex-end;
+}

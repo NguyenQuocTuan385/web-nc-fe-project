@@ -3,23 +3,22 @@
   flex-direction: column;
   width: 408px;
 
-  .imgContainer {
-    width: 100%;
-    height: 306px;
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-
   .iconBack {
     display: flex;
     justify-content: right;
   }
 }
 
-.adsContainer {
+.boxContainer {
   display: flex;
+  padding: 20px;
   flex-direction: column;
+  gap: 15px;
+  border-bottom: 1px solid var(--gray-50);
+  background-color: #edf7ed;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: flex-end;
 }
