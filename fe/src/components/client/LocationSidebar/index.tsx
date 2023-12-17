@@ -1,64 +1,44 @@
-import {
-  Box,
-  Button,
-  Drawer,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import {
-  ChevronLeft,
-  InfoOutlined,
-  Error as ErrorIcon,
-} from "@mui/icons-material";
+import { Box, Drawer, IconButton } from "@mui/material";
+import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
-import AdvertiseInfo from "../AdvertiseInfo";
+import AdvertiseInfo from "../AdvertiseInfomation";
+import { Location } from "../../../models/location";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
   closeSidebar: () => void;
+  location: Location | null;
 }
 
-const Sidebar = ({ isOpen, closeSidebar }: LocalAddressPopoverProps) => {
-  const location = {
-    planning: true,
-    address: "100 Lê Văn Sỹ, Phường 16, Q.5",
-    ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
-    location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
-    advertises: [
-      {
-        lisencing: true,
-        height: 2.5,
-        width: 10,
-        ads_type_name: "Trụ bảng hiflex",
-        pillar_quantity: 1,
-      },
-      {
-        lisencing: false,
-        height: 2,
-        width: 10,
-        ads_type_name: "Trụ màn hình điện tử LED",
-        pillar_quantity: 2,
-      },
-    ],
-  };
-
+const Sidebar = ({
+  isOpen,
+  closeSidebar,
+  location,
+}: LocalAddressPopoverProps) => {
   return (
     <Drawer variant="persistent" hideBackdrop={true} open={isOpen}>
-      <Box display={"flex"} flexDirection={"column"} width={"408px"}>
-        <Box display={"flex"} justifyContent={"right"}>
+      <Box
+        className={classes.sidebarContainer}
+        display={"flex"}
+        flexDirection={"column"}
+        width={"408px"}
+      >
+        <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
             <ChevronLeft fontSize="small" />
           </IconButton>
         </Box>
         <Box className={classes.imgContainer}>
-          <img
-            src="https://quangcaongoaitroi.com/wp-content/uploads/2020/02/Unique-OOH-bien-quang-cao-billboard-tren-duong-cao-toc-10.jpg"
-            alt="anhqc"
-          />
+          <img src={location?.imgUrl} alt="anhqc" />
         </Box>
-        {location.advertises.map((item) => (
-          <AdvertiseInfo address={location.address} advertise={item} />
+        {location?.advertises.map((item, index) => (
+          <AdvertiseInfo
+            address={location?.address}
+            key={index}
+            advertise={item}
+            ads_form_name={location?.ads_form_name}
+            location_type_name={location.location_type_name}
+          />
         ))}
       </Box>
     </Drawer>

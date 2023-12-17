@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
 
 interface Props {
   $colorName?: string;
@@ -12,7 +12,6 @@ const ParagraphSmall = styled(Typography)<Props>`
   font-weight: ${(props) => props.$fontWeight || 400};
   font-size: 14px;
   line-height: 24px;
-  color: ${(props) => `var(${props.$colorName || "--eerie-black-65"})`};
 `;
 
 export default ParagraphSmall;

@@ -1,5 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
-import MapLibreGL, { Map as MapLibre, Marker } from "maplibre-gl";
+import MapLibreGL, {
+  MapGeoJSONFeature,
+  Map as MapLibre,
+  Marker,
+} from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import "@maptiler/geocoding-control/style.css";
@@ -7,11 +11,14 @@ import classes from "./styles.module.scss";
 import "./styles.module.scss";
 import ReactDOM from "react-dom";
 import Popup from "../../../components/client/PopupHover";
-import AdsSidebar from "../../../components/client/LocationSidebar";
-import AddressSidebar from "../../../components/client/AnyLocationSidebar";
+import LocationSidebar from "../../../components/client/LocationSidebar";
+import AnyLocationSidebar from "../../../components/client/AnyLocationSidebar";
 import * as maptilersdk from "@maptiler/sdk";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import { MapController } from "@maptiler/geocoding-control/types";
+import { Feature } from "../../../models/geojson";
+import { Location } from "../../../models/location";
+import { Advertise } from "../../../models/advertise";
 
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -21,6 +28,7 @@ const MapAdsManagement = () => {
   const [zoom] = useState<number>(14);
   const [API_KEY] = useState<string>("MijgZpLFV2J9ejlH3Ot2");
   const [isOpenAdsSidebar, setIsOpenAdsSideBar] = useState<boolean>(false);
+  const [location, setLocationData] = useState<Location | null>(null);
   const [isOpenAddressSidebar, setIsOpenAddressSideBar] =
     useState<boolean>(false);
   const marker = useRef<Marker | null>(null);
@@ -38,6 +46,102 @@ const MapAdsManagement = () => {
   const closeAddressSidebar = () => {
     setIsOpenAddressSideBar(false);
   };
+
+  const locations: Feature[] = [
+    {
+      type: "Feature",
+      properties: {
+        planning: true,
+        address: "227 Nguyễn Văn Cừ, Phường 16, Q.5",
+        ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
+        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
+        advertises: [
+          {
+            lisencing: true,
+            height: 2.5,
+            width: 10,
+            ads_type_name: "Trụ bảng hiflex",
+            pillar_quantity: 1,
+          },
+          {
+            lisencing: false,
+            height: 2,
+            width: 10,
+            ads_type_name: "Trụ màn hình điện tử LED",
+            pillar_quantity: 2,
+          },
+        ],
+        imgUrl:
+          "https://goldsungroup.com.vn/wp-content/uploads/2019/11/bien-quang-cao-mot-cot-tren-duong-quoc-lo.jpg",
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [106.696002, 10.806579],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        planning: false,
+        address: "114 Nguyễn Văn Cừ, Phường 16, Q.5",
+        ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
+        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
+        advertises: [
+          {
+            lisencing: true,
+            height: 2.5,
+            width: 10,
+            ads_type_name: "Trụ bảng hiflex",
+            pillar_quantity: 1,
+          },
+          {
+            lisencing: false,
+            height: 2,
+            width: 10,
+            ads_type_name: "Trụ màn hình điện tử LED",
+            pillar_quantity: 2,
+          },
+        ],
+        imgUrl:
+          "https://quangcaongoaitroi.com/wp-content/uploads/2020/02/Unique-OOH-bien-quang-cao-billboard-tren-duong-cao-toc-16.jpg",
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [106.69282625956525, 10.808360001977254],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        planning: true,
+        address: "100 Lê Văn Sỹ, Phường 16, Q.5",
+        ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
+        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
+        advertises: [
+          {
+            lisencing: true,
+            height: 2.5,
+            width: 10,
+            ads_type_name: "Trụ bảng hiflex",
+            pillar_quantity: 1,
+          },
+          {
+            lisencing: false,
+            height: 2,
+            width: 10,
+            ads_type_name: "Trụ màn hình điện tử LED",
+            pillar_quantity: 2,
+          },
+        ],
+        imgUrl:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAXpcpxWHcMfZCIH177N18yzSxt6wdU5L-Og&usqp=CAU",
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [106.69212623062919, 10.80612598101489],
+      },
+    },
+  ];
 
   function showPopup(e: any) {
     if (!map.current) return;
@@ -85,50 +189,7 @@ const MapAdsManagement = () => {
         type: "geojson",
         data: {
           type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {
-                planning: true,
-                address: "227 Nguyễn Văn Cừ, Phường 16, Q.5",
-                ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
-                location_type_name:
-                  "Đất công/Công viên/Hành lang an toàn giao thông",
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [106.696002, 10.806579],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                planning: false,
-                address: "114 Nguyễn Văn Cừ, Phường 16, Q.5",
-                ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
-                location_type_name:
-                  "Đất công/Công viên/Hành lang an toàn giao thông",
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [106.69282625956525, 10.808360001977254],
-              },
-            },
-            {
-              type: "Feature",
-              properties: {
-                planning: true,
-                address: "100 Lê Văn Sỹ, Phường 16, Q.5",
-                ads_form_name: "Cổ động chính trị, Quảng cáo thương mại",
-                location_type_name:
-                  "Đất công/Công viên/Hành lang an toàn giao thông",
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [106.69212623062919, 10.80612598101489],
-              },
-            },
-          ],
+          features: locations,
         },
       });
 
@@ -151,9 +212,29 @@ const MapAdsManagement = () => {
     });
     map.current.on("click", "ads", (e) => {
       const map = e.target;
-      const features = map.queryRenderedFeatures(e.point, { layers: ["ads"] });
+      const features: MapGeoJSONFeature[] = map.queryRenderedFeatures(e.point, {
+        layers: ["ads"],
+      });
       if (features.length > 0) {
         closeAddressSidebar();
+        const {
+          advertises,
+          address,
+          ads_form_name,
+          imgUrl,
+          location_type_name,
+          planning,
+        } = features[0].properties;
+
+        const locationTemp: Location = {
+          address,
+          advertises: JSON.parse(advertises),
+          ads_form_name,
+          imgUrl,
+          location_type_name,
+          planning,
+        };
+        setLocationData(locationTemp);
         setIsOpenAdsSideBar(true);
       }
     });
@@ -190,8 +271,12 @@ const MapAdsManagement = () => {
         />
       </div>
       <div ref={mapContainer} className={classes.map} />
-      <AdsSidebar isOpen={isOpenAdsSidebar} closeSidebar={closeAdsSidebar} />
-      <AddressSidebar
+      <LocationSidebar
+        isOpen={isOpenAdsSidebar}
+        closeSidebar={closeAdsSidebar}
+        location={location}
+      />
+      <AnyLocationSidebar
         isOpen={isOpenAddressSidebar}
         closeSidebar={closeAddressSidebar}
       />

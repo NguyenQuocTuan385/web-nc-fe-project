@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
 
 interface Props {
   $colorName?: string;
@@ -10,11 +10,9 @@ const ParagraphBody = styled(Typography)<Props>`
   font-family: "Inter";
   font-style: normal;
   font-weight: ${(props) => props.$fontWeight || 400};
+  color: ${(props) => `var(${props.$colorName || "--eerie-black-00"})`};
   font-size: 16px;
   line-height: 24px;
-  @media only screen and (max-width: 767px) {
-    font-size: 14px;
-  }
 `;
 
 export default ParagraphBody;
