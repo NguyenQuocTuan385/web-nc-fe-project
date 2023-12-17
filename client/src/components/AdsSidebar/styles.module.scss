@@ -1,0 +1,34 @@
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.imgContainer {
+  width: 408px;
+  height: 306px;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  [class~=MuiTextField-root] {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 80%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 5px 15px 10px 15px;
+    border-radius: 15px;
+    label {
+      padding-left: 15px;
+    }
+    [class~=MuiInputBase-root] {
+      padding-left: 15px;
+      font-weight: 500;
+    }
+  }
+}
