@@ -1,0 +1,25 @@
+.lowOpacity{
+    opacity: 0.5;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.divider{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.detailGroup{
+    margin: 20px;
+}
+
+.detailItem{
+    display: flex;
+    justify-content: space-between;
+}
+
+.detailContainer{
+    padding: 0;
+}
