@@ -6,9 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import classes from "./styles.module.scss";
 import { Box } from "@mui/material";
-import { Advertise } from "../../../../../../models/advertise";
-import Heading4 from "../../../../../../components/common/text/Heading4";
-import ParagraphBody from "../../../../../../components/common/text/ParagraphBody";
+import { Advertise } from "models/advertise";
+import Heading4 from "components/common/text/Heading4";
+import ParagraphBody from "components/common/text/ParagraphBody";
 
 const AdvertisePopup = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {

@@ -11,9 +11,9 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
 import { Error } from "@mui/icons-material";
-import Heading4 from "../../../../../../components/common/text/Heading4";
-import InputTextfield from "../../../../../../components/common/inputs/InputTextField";
-import TextTitle from "../../../../../../components/common/text/TextTitle";
+import Heading4 from "components/common/text/Heading4";
+import InputTextfield from "components/common/inputs/InputTextField";
+import TextTitle from "components/common/text/TextTitle";
 
 const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {

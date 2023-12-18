@@ -1,8 +1,7 @@
 import { Error } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
-import React from "react";
 import classes from "./styles.module.scss";
-import ParagraphBody from "../../../../../../components/common/text/ParagraphBody";
+import ParagraphBody from "components/common/text/ParagraphBody";
 
 interface AdvertiseInfoProps {}
 const AdvertiseInfo = ({}: AdvertiseInfoProps) => {

@@ -1,11 +1,11 @@
 import { Error, InfoOutlined } from "@mui/icons-material";
 import { Box, Button, IconButton } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import classes from "./styles.module.scss";
 import ReportPopup from "../ReportPopup";
 import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
-import ParagraphBody from "../../../../../../components/common/text/ParagraphBody";
-import { Advertise } from "../../../../../../models/advertise";
+import ParagraphBody from "components/common/text/ParagraphBody";
+import { Advertise } from "models/advertise";
 
 interface AdvertiseInfoProps {
   address: string;

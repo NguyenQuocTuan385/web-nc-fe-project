@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import classes from "./styles.module.scss";
-import ParagraphExtraSmall from "../../../../../components/common/text/ParagraphExtraSmall";
-import ParagraphSmall from "../../../../../components/common/text/ParagraphSmall";
+import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 
 const PopoverHover = ({ properties }: any) => {
   return (

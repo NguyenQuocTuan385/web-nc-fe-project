@@ -2,7 +2,7 @@ import { Box, Drawer, IconButton } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfo";
-import { Location } from "../../../../../models/location";
+import { Location } from "models/location";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
