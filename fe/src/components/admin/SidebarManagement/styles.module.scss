@@ -1,0 +1,20 @@
+.itemIcon{
+  color: rgba(37, 43, 54, 0.38);
+}
+.selectedIcon{
+  color: black;
+}
+.item {
+  &:hover {
+    background-color: #e0e0e0;
+    .itemIcon {
+      color: black;
+    }
+  }
+  &:active,&.selected {
+    background-color: #e0e0e0 !important;
+    .itemIcon {
+      color: black;
+    }
+  }
+}
