@@ -1,3 +1,8 @@
+.boxContainer{
+  display: flex;
+  flex-direction: column;
+}
+
 .tableContainer{
   margin-top: 20px;
 }
@@ -20,6 +25,7 @@
 
 .dataTable{
   padding: 5px;
+  width: 20%;
 }
 .pagination
 {

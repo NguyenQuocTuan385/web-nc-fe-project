@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import SidebarManagement from "../../../components/admin/SidebarManagement";
-import TabPanel from "../../../components/admin/TabPanel";
+import TabPanel from "./TabPanel";
 import classes from "./styles.module.scss";
 
 export default function UserManagement() {
