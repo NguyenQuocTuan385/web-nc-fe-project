@@ -1,0 +1,40 @@
+.lowOpacity{
+    opacity: 0.5;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 0;
+    line-height: normal;
+}
+
+.formGroup{
+    margin: 20px;
+}
+
+.cardContainer{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.datePickGroup{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.errorText{
+    color: red;
+}
+
+.datePickField:first-of-type{
+    margin-bottom: 20px !important;
+}
+
+.dropzone{
+    text-align: center;
+    margin: 0px 20px 20px 20px;
+    border: 2px var(--gray-20) dashed;
+    width: 100%;
+    height: 200px;
+}

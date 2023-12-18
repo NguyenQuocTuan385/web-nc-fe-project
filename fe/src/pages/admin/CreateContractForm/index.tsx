@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import FormTopTab from "../../../components/admin/FormTopTab";
+import FormTopTab from "./components/FormTopTab";
 import { Box, Card, Paper } from "@mui/material";
 import classes from "./styles.module.scss";
-import AdDetails from "../../../components/admin/AdvertiseDetails";
+import AdDetails from "./components/AdvertiseDetails";
+import ContractDetailForm from "pages/admin/CreateContractForm/components/ContractDetailForm";
 
 function ContractForm() {
   return (
@@ -21,6 +22,7 @@ function ContractForm() {
       <Card>
         <AdDetails />
       </Card>
+      <ContractDetailForm />
     </Box>
   );
 }

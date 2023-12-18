@@ -2,9 +2,9 @@ import React from "react";
 import { Tab, Tabs, Box, Link } from "@mui/material";
 import classes from "./style.module.scss";
 import clsx from "clsx";
-import Heading4 from "../../common/text/Heading4";
-import Heading5 from "../../common/text/Heading5";
-import Heading6 from "../../common/text/Heading6";
+import Heading4 from "../../../../../components/common/text/Heading4";
+import Heading5 from "../../../../../components/common/text/Heading5";
+import Heading6 from "../../../../../components/common/text/Heading6";
 
 function FormTopTab() {
   const [value, setValue] = React.useState(0);

@@ -1,9 +1,9 @@
 import { Box, Divider, Icon } from "@mui/material";
 import React from "react";
-import Heading6 from "../../common/text/Heading6";
+import Heading6 from "../../../../../components/common/text/Heading6";
 import classes from "./style.module.scss";
-import ParagraphBody from "../../common/text/ParagraphBody";
-import ParagraphSmall from "../../common/text/ParagraphSmall";
+import ParagraphBody from "../../../../../components/common/text/ParagraphBody";
+import ParagraphSmall from "../../../../../components/common/text/ParagraphSmall";
 
 interface advertiseDetailProp {}
 

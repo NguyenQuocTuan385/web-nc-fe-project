@@ -18,8 +18,15 @@
 .detailItem{
     display: flex;
     justify-content: space-between;
+    margin: 20px 0px 20px 0px;
 }
 
 .detailContainer{
     padding: 0;
+}
+
+.textFieldGroup{
+    width: 60%;
+        height: 500px;
+   
 }
