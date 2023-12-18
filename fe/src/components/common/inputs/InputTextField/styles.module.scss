@@ -1,0 +1,20 @@
+.optional {
+  color: var(--blue-700);
+}
+.textInfor {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--gray-80);
+  margin: 0;
+}
+
+.titleRequired {
+  color: var(--cimigo-danger);
+}
+
+[class~="MuiFormControl-root"] {
+  flex-direction: row !important;
+  gap: 20px;
+  align-items: center;
+}

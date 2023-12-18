@@ -8,16 +8,15 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import "@maptiler/geocoding-control/style.css";
 import classes from "./styles.module.scss";
-import "./styles.module.scss";
 import ReactDOM from "react-dom";
-import Popup from "../../../components/client/PopupHover";
-import LocationSidebar from "../../../components/client/LocationSidebar";
-import RandomLocationSidebar from "../../../components/client/RandomLocationSidebar";
 import * as maptilersdk from "@maptiler/sdk";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import { MapController } from "@maptiler/geocoding-control/types";
 import { Feature } from "../../../models/geojson";
 import { Location, RandomLocation } from "../../../models/location";
+import PopoverHover from "./components/PopoverHover";
+import LocationSidebar from "./components/LocationSidebar";
+import RandomLocationSidebar from "./components/RandomLocationSidebar";
 
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -26,7 +25,7 @@ const MapAdsManagement = () => {
   const [lat] = useState<number>(10.807035);
   const [zoom] = useState<number>(14);
   const [API_KEY] = useState<string>("MijgZpLFV2J9ejlH3Ot2");
-  const [OpenLocationSidebar, setOpenLocationSidebar] =
+  const [openLocationSidebar, setOpenLocationSidebar] =
     useState<boolean>(false);
   const [location, setLocationData] = useState<Location | null>(null);
   const [randomLocation, setRandomLocationData] =
@@ -53,6 +52,7 @@ const MapAdsManagement = () => {
     {
       type: "Feature",
       properties: {
+        id: 1,
         planning: true,
         address: "227 Nguyễn Văn Cừ, Phường 16, Q.5",
         ads_form_name: "Cổ động chính trị",
@@ -61,18 +61,28 @@ const MapAdsManagement = () => {
         latitude: 10.806579,
         advertises: [
           {
+            id: 1,
             lisencing: true,
             height: 2.5,
             width: 10,
             ads_type_name: "Trụ bảng hiflex",
             pillar_quantity: 1,
+            imgUrl:
+              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
+            companyImgUrl:
+              "https://assets.unileversolutions.com/v1/52397810.jpg",
           },
           {
+            id: 2,
             lisencing: false,
             height: 2,
             width: 10,
             ads_type_name: "Trụ màn hình điện tử LED",
             pillar_quantity: 2,
+            imgUrl:
+              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
+            companyImgUrl:
+              "https://assets.unileversolutions.com/v1/52397810.jpg",
           },
         ],
         imgUrl:
@@ -86,6 +96,7 @@ const MapAdsManagement = () => {
     {
       type: "Feature",
       properties: {
+        id: 2,
         planning: false,
         address: "114 Nguyễn Văn Cừ, Phường 16, Q.5",
         ads_form_name: "Cổ động chính trị",
@@ -94,18 +105,26 @@ const MapAdsManagement = () => {
         latitude: 10.808360001977254,
         advertises: [
           {
+            id: 3,
             lisencing: true,
             height: 2.5,
             width: 10,
             ads_type_name: "Trụ bảng hiflex",
             pillar_quantity: 1,
+            imgUrl:
+              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
+            companyImgUrl:
+              "https://assets.unileversolutions.com/v1/52397810.jpg",
           },
           {
+            id: 4,
             lisencing: false,
             height: 2,
             width: 10,
             ads_type_name: "Trụ màn hình điện tử LED",
             pillar_quantity: 2,
+            imgUrl:
+              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
           },
         ],
         imgUrl:
@@ -119,6 +138,7 @@ const MapAdsManagement = () => {
     {
       type: "Feature",
       properties: {
+        id: 3,
         planning: true,
         address: "100 Lê Văn Sỹ, Phường 16, Q.5",
         ads_form_name: "Cổ động chính trị",
@@ -127,18 +147,24 @@ const MapAdsManagement = () => {
         latitude: 10.80612598101489,
         advertises: [
           {
+            id: 5,
             lisencing: true,
             height: 2.5,
             width: 10,
             ads_type_name: "Trụ bảng hiflex",
             pillar_quantity: 1,
+            imgUrl:
+              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
           },
           {
+            id: 6,
             lisencing: false,
             height: 2,
             width: 10,
             ads_type_name: "Trụ màn hình điện tử LED",
             pillar_quantity: 2,
+            imgUrl:
+              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
           },
         ],
         imgUrl:
@@ -163,7 +189,7 @@ const MapAdsManagement = () => {
     }
 
     const popupNode = document.createElement("div");
-    ReactDOM.render(<Popup properties={properties} />, popupNode);
+    ReactDOM.render(<PopoverHover properties={properties} />, popupNode);
     popup
       .setLngLat(coordinates)
       .setHTML(popupNode.innerHTML)
@@ -226,6 +252,7 @@ const MapAdsManagement = () => {
       if (features.length > 0) {
         closeAddressSidebar();
         const {
+          id,
           advertises,
           address,
           ads_form_name,
@@ -237,6 +264,7 @@ const MapAdsManagement = () => {
         } = features[0].properties;
 
         const locationTemp: Location = {
+          id,
           address,
           advertises: JSON.parse(advertises),
           ads_form_name,
@@ -298,7 +326,7 @@ const MapAdsManagement = () => {
       </div>
       <div ref={mapContainer} className={classes.map} />
       <LocationSidebar
-        isOpen={OpenLocationSidebar}
+        isOpen={openLocationSidebar}
         closeSidebar={closeAdsSidebar}
         location={location}
       />

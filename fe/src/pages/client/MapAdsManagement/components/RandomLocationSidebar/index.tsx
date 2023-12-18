@@ -2,8 +2,8 @@ import { Box, Button, Drawer, IconButton } from "@mui/material";
 import { ChevronLeft, Error } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfomation";
-import ParagraphBody from "../../common/text/ParagraphBody";
-import { RandomLocation } from "../../../models/location";
+import ParagraphBody from "../../../../../components/common/text/ParagraphBody";
+import { RandomLocation } from "../../../../../models/location";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -26,7 +26,7 @@ const RandomLocationSidebar = ({
       >
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
-            <ChevronLeft fontSize="small" />
+            <ChevronLeft fontSize="large" />
           </IconButton>
         </Box>
         <AdvertiseInfo />

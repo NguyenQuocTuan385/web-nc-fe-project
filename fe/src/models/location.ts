@@ -1,6 +1,7 @@
 import { Advertise } from "./advertise";
 
 export interface Location {
+  id: number;
   planning: boolean;
   address: string;
   ads_form_name: string;

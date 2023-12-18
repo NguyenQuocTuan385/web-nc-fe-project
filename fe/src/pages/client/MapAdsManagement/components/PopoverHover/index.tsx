@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
-import ParagraphSmall from "../../common/text/ParagraphSmall";
 import classes from "./styles.module.scss";
-import ParagraphExtraSmall from "../../common/text/ParagraphExtraSmall";
+import ParagraphExtraSmall from "../../../../../components/common/text/ParagraphExtraSmall";
+import ParagraphSmall from "../../../../../components/common/text/ParagraphSmall";
 
-const PopupHover = ({ properties }: any) => {
+const PopoverHover = ({ properties }: any) => {
   return (
     <Box className={classes.popup}>
       <ParagraphExtraSmall $fontWeight={"bold"}>
@@ -20,4 +20,4 @@ const PopupHover = ({ properties }: any) => {
   );
 };
 
-export default PopupHover;
+export default PopoverHover;

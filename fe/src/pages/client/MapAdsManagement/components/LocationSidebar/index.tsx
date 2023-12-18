@@ -1,8 +1,8 @@
 import { Box, Drawer, IconButton } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
-import AdvertiseInfo from "./AdvertiseInfomation";
-import { Location } from "../../../models/location";
+import AdvertiseInfo from "./AdvertiseInfo";
+import { Location } from "../../../../../models/location";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -10,7 +10,7 @@ interface LocalAddressPopoverProps {
   location: Location | null;
 }
 
-const Sidebar = ({
+const LocationSidebar = ({
   isOpen,
   closeSidebar,
   location,
@@ -20,7 +20,7 @@ const Sidebar = ({
       <Box className={classes.sidebarContainer}>
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
-            <ChevronLeft fontSize="small" />
+            <ChevronLeft fontSize="large" />
           </IconButton>
         </Box>
         <Box className={classes.imgContainer}>
@@ -42,4 +42,4 @@ const Sidebar = ({
   );
 };
 
-export default Sidebar;
+export default LocationSidebar;

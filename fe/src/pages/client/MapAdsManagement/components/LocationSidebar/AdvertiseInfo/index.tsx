@@ -1,9 +1,11 @@
 import { Error, InfoOutlined } from "@mui/icons-material";
 import { Box, Button, IconButton } from "@mui/material";
-import React from "react";
-import ParagraphBody from "../../../common/text/ParagraphBody";
+import React, { useState } from "react";
 import classes from "./styles.module.scss";
-import { Advertise } from "../../../../models/advertise";
+import ReportPopup from "../ReportPopup";
+import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
+import ParagraphBody from "../../../../../../components/common/text/ParagraphBody";
+import { Advertise } from "../../../../../../models/advertise";
 
 interface AdvertiseInfoProps {
   address: string;
@@ -17,6 +19,15 @@ const AdvertiseInfo = ({
   location_type_name,
   advertise,
 }: AdvertiseInfoProps) => {
+  const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
+  const [openAdvertiseInfoPopup, setOpenAdvertiseInfoPopup] =
+    useState<boolean>(false);
+  const closeReportPopup = () => {
+    setOpenReportPopup(false);
+  };
+  const closeAdvertiseInfoPopup = () => {
+    setOpenAdvertiseInfoPopup(false);
+  };
   return (
     <Box className={classes.boxContainer}>
       <ParagraphBody $fontWeight={"bold"}>
@@ -44,13 +55,24 @@ const AdvertiseInfo = ({
         Trạng thái: <b>{advertise.lisencing ? "ĐÃ ĐƯỢC ĐẶT" : "CHƯA ĐẶT"}</b>
       </ParagraphBody>
       <Box className={classes.btnContainer}>
-        <IconButton>
-          <InfoOutlined color="primary" />
+        <IconButton onClick={() => setOpenAdvertiseInfoPopup(true)}>
+          <InfoOutlined fontSize="large" color="primary" />
         </IconButton>
-        <Button variant="outlined" color="error" startIcon={<Error />}>
+        <Button
+          variant="outlined"
+          color="error"
+          startIcon={<Error />}
+          onClick={() => setOpenReportPopup(true)}
+        >
           Báo cáo vi phạm
         </Button>
       </Box>
+      <AdvertiseInfoPopup
+        advertise={advertise}
+        open={openAdvertiseInfoPopup}
+        onClose={closeAdvertiseInfoPopup}
+      />
+      <ReportPopup open={openReportPopup} onClose={closeReportPopup} />
     </Box>
   );
 };
