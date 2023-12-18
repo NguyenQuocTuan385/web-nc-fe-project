@@ -16,10 +16,7 @@ import {
     faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
-import UserManagement from "../../../pages/admin/UserManagement";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-
-const drawerWidth = "20%";
 
 interface SidebarItem {
     name: string;
@@ -38,7 +35,7 @@ export default function SidebarManagement() {
         childIndex: null,
     });
 
-    const sidebar: SidebarItem[] = [
+    const sideBarItem: SidebarItem[] = [
         {
             name: "Quản lý",
             icon: (
@@ -103,7 +100,7 @@ export default function SidebarManagement() {
             ),
         },
     ];
-    const [sideBar, setSidebar] = useState<SidebarItem[]>(sidebar);
+    const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItem);
 
     const handleClick = (index: number, child: Array<{ name: string }>) => {
         if (openItems === index) {
@@ -116,7 +113,7 @@ export default function SidebarManagement() {
             }
         } else {
             setOpenItems(index);
-            setSidebar(sidebar);
+            setSidebar(sideBarItem);
             if (child.length === 0) {
                 setSelectedItem({
                     parentIndex: index,
@@ -154,36 +151,21 @@ export default function SidebarManagement() {
 
     return (
         <Box
-            sx={{
-                display: "flex",
-                justifyContent: "center",
-            }}
+            className={classes.boxContainer}
         >
             <Drawer
                 variant="permanent"
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    [`& .MuiDrawer-paper`]: {
-                        width: drawerWidth,
-                        boxSizing: "border-box",
-                    },
-                }}
+                className={classes.sideBar}
             >
-                <Box sx={{ overflow: "auto" }}>
+                <Box className={classes.sideBar}>
                     <List>
                         {sideBar.map((list, index) => (
                             <React.Fragment key={list.name}>
                                 <ListItem disablePadding>
                                     <ListItemButton
                                         onClick={() => handleClick(index, list.children || [])}
-                                        className={`${classes.item}`}
-                                        sx={{
-                                            backgroundColor:
-                                                selectedItem.parentIndex === index && list.children === null
-                                                    ? "#f0f0f0"
-                                                    : "transparent",
-                                        }}
+                                        className={classes.item}
+                                        selected={selectedItem.parentIndex === index && list.children === undefined}
                                     >
                                         <ListItemIcon>{list.icon}</ListItemIcon>
                                         <ListItemText
@@ -205,17 +187,8 @@ export default function SidebarManagement() {
                                                 <ListItemButton
                                                     key={item.name}
                                                     onClick={() => handleClickChild(index, childIndex)}
-                                                    sx={{
-                                                        backgroundColor:
-                                                            selectedItem.parentIndex === index &&
-                                                                selectedItem.childIndex === childIndex
-                                                                ? "#f0f0f0"
-                                                                : "transparent",
-                                                        "&:hover": {
-                                                            backgroundColor: "#e0e0e0", // Customize hover background color if needed
-                                                        },
-                                                        pl: 9,
-                                                    }}
+                                                    className={classes.childItem}
+                                                    selected={selectedItem.parentIndex === index && selectedItem.childIndex === childIndex}
                                                 >
                                                     <ListItemText secondary={item.name} />
                                                 </ListItemButton>
