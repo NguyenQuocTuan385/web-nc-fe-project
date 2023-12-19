@@ -14,7 +14,7 @@ import classes from './styles.module.scss';
 import user from '../../../../user.json';
 
 const rows = [...user]
-const rowsPerPage = 6;
+const rowsPerPage = 7;
 interface FilterProps{
     role: number,
     fieldSearch: string,
@@ -46,7 +46,7 @@ export default function UserManagementTable({role, fieldSearch}: FilterProps){
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, filterRole.length - (page - 1) * rowsPerPage);
 
     return (
-        <Box className={classes.box}>
+        <Box className={classes.boxContainer}>
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <Table className={classes.sizeTable} aria-label="simple table">
                     <TableHead>
@@ -82,8 +82,8 @@ export default function UserManagementTable({role, fieldSearch}: FilterProps){
                             )
                         )}
                         {emptyRows > 0 && (
-                            <TableRow style={{ height: 53 * emptyRows }}>
-                                <TableCell colSpan={5} />
+                            <TableRow style={{ height: 73 * emptyRows }}>
+                                <TableCell colSpan={6} />
                             </TableRow>
                         )}
                     </TableBody>
