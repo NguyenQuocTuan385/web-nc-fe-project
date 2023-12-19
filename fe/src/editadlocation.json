@@ -1,0 +1,41 @@
+[
+    {
+        "id": 1,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-1.jpg",
+        "address": "Đồng Khởi - Nguyễn Du (Sở Văn hóa và Thể thao), Phường Bến Nghé, Quận 1",
+        "adsType": "Cổ động chính trị",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": false,
+        "timeEdit": "25/12/2023",
+        "district": "1",
+        "ward": "Bến Nghé",
+        "reason": " Biển quảng cáo quá nhỏ khách hàng yêu cầu thay đổi địa điểm để biển quảng cáo được mở rộng hơn.",
+        "edit": {
+            "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-2-1.jpg",
+            "address": "Đồng Khởi - Nguyễn Du (Sở Văn hóa và Thể thao), Phường Bến Nghé, Quận 1",
+            "adsType": "Quảng cáo thương mại",
+            "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+            "planning": true
+        }
+    },
+    {
+        "id": 2,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-3.jpg",
+        "address": "Trần Hưng Đạo - Lê Lợi (Bến Thành), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo thương mại",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": true,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "25/11/2023",
+        "reason": "Biển quảng cáo bị hư",
+        "edit": {
+            "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-3.jpg",
+            "address": "Trần Hưng Đạo - Lê Lợi (Bến Thành), Phường Bến Thành, Quận 1",
+            "adsType": "Quảng cáo thương mại",
+            "location": " Công viên",
+            "planning": true
+        }
+      }
+      
+]

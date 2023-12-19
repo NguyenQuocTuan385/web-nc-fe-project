@@ -160,7 +160,7 @@ export default function SidebarManagement() {
                 <Box className={classes.sideBar}>
                     <List>
                         {sideBar.map((list, index) => (
-                            <React.Fragment key={list.name}>
+                            <React.Fragment key={index}>
                                 <ListItem disablePadding>
                                     <ListItemButton
                                         onClick={() => handleClick(index, list.children || [])}
@@ -185,7 +185,7 @@ export default function SidebarManagement() {
                                         <List component="div" disablePadding>
                                             {list.children.map((item, childIndex) => (
                                                 <ListItemButton
-                                                    key={item.name}
+                                                    key={childIndex}
                                                     onClick={() => handleClickChild(index, childIndex)}
                                                     className={classes.childItem}
                                                     selected={selectedItem.parentIndex === index && selectedItem.childIndex === childIndex}

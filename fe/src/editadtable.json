@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-5.jpg",
+        "address": "Đồng Khởi - Nguyễn Du (Sở Văn hóa và Thể thao), Phường Bến Nghé, Quận 1",
+        "width": 100,
+        "height": 100,
+        "amount": 1,
+        "district": "1",
+        "ward": "Bến Nghé",
+        "adType": "Quảng cáo sản phẩm",
+        "tableType": "Trụ đèn led",
+        "location": "Trung tâm",
+        "editTime": "29/12/2023",
+        "reason": "Bảng quá nhỏ cần phải làm thêm bảng khác",
+        "edit": {
+            "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-5.jpg",
+            "address": "Đồng Khởi - Nguyễn Du (Sở Văn hóa và Thể thao), Phường Bến Nghé, Quận 1",
+            "width": 100,
+            "height": 100,
+            "amount": 1,
+            "adType": "Quảng cáo sản phẩm",
+            "tableType": "Trụ đèn led",
+            "location": "Trung tâm"
+        }
+    },
+    {
+        "id": 2,
+        "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-6.jpg",
+        "address": "Nguyễn Văn Cừ - Hùng Vương, Phường Nguyễn Thái Bình, Quận 1",
+        "width": 200,
+        "height": 200,
+        "amount": 2,
+        "district": "1",
+        "ward": "Nguyễn Thái Bình",
+        "adType": "Quảng cáo dịch vụ",
+        "tableType": "Trụ đèn led",
+        "location": "Quận 1",
+        "editTime": "30/12/2023",
+        "reason": "Thay đổi nội dung quảng cáo",
+        "edit": {
+            "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-6.jpg",
+            "address": "Nguyễn Văn Cừ - Hùng Vương (Công viên Lê Văn Tám), Phường Nguyễn Thái Bình, Quận 1",
+            "width": 200,
+            "height": 200,
+            "amount": 2,
+            "adType": "Quảng cáo dịch vụ",
+            "tableType": "Trụ đèn led",
+            "location": "Quận 1"
+        }
+    },
+    {
+        "id": 3,
+        "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-7.jpg",
+        "address": "Đinh Tiên Hoàng - Lê Lai (Công viên 23/9), Phường Bến Thành, Quận 1",
+        "width": 300,
+        "height": 300,
+        "amount": 3,
+        "district": "1",
+        "ward": "Bến Thành",
+        "adType": "Quảng cáo sự kiện",
+        "tableType": "Biển quảng cáo ngoài trời",
+        "location": "Quận 1",
+        "editTime": "31/12/2023",
+        "reason": "Thay đổi kích thước bảng",
+        "edit": {
+            "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-7.jpg",
+            "address": "Đinh Tiên Hoàng - Lê Lai (Công viên 23/9), Phường Bến Thành, Quận 1",
+            "width": 400,
+            "height": 400,
+            "amount": 3,
+            "adType": "Quảng cáo sự kiện",
+            "tableType": "Biển quảng cáo ngoài trời",
+            "location": "Quận 1"
+        }
+    },
+    {
+        "id": 4,
+        "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-8.jpg",
+        "address": "Công trường Lam Sơn (Công viên Tao Đàn), Phường Bến Nghé, Quận 1",
+        "width": 500,
+        "height": 500,
+        "amount": 4,
+        "district": "1",
+        "ward": "Bến Nghé",
+        "adType": "Quảng cáo thương hiệu",
+        "tableType": "Màn hình LED",
+        "location": "Quận 1",
+        "editTime": "01/01/2024",
+        "reason": "Thay đổi nội dung quảng cáo",
+        "edit": {
+            "imgUrl": "https://panoquangcao.net/wp-content/uploads/2020/09/tru-bien-quang-cao-8.jpg",
+            "address": "Công trường Lam Sơn (Công viên Tao Đàn), Phường Bến Nghé, Quận 1",
+            "width": 500,
+            "height": 500,
+            "amount": 4,
+            "adType": "Quảng cáo thương hiệu",
+            "tableType": "Màn hình LED",
+            "location": "Quận 1"
+        }
+    }
+]
