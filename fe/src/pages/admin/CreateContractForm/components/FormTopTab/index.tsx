@@ -2,9 +2,7 @@ import React from "react";
 import { Tab, Tabs, Box, Link } from "@mui/material";
 import classes from "./style.module.scss";
 import clsx from "clsx";
-import Heading4 from "../../../../../components/common/text/Heading4";
-import Heading5 from "../../../../../components/common/text/Heading5";
-import Heading6 from "../../../../../components/common/text/Heading6";
+import useNavigate from "react-router-dom";
 
 function FormTopTab() {
   const [value, setValue] = React.useState(0);
@@ -12,6 +10,7 @@ function FormTopTab() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  // const navigate = useNavigate();
 
   return (
     <Box className={clsx(classes.borderBottom, classes.TabContainer)}>
