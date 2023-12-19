@@ -1,16 +1,17 @@
 import React from "react";
 import "./App.scss";
 import MapAdsManagement from "./pages/client/MapAdsManagement";
-import LocationManagement from "pages/admin/ward/pages/LocationsManagement";
-import AdvertiseManagement from "pages/admin/ward/pages/AdvertisesManagement";
+import UserManagement from "./pages/admin/UserManagement";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      {/* <MapAdsManagement /> */}
-      {/* <LocationManagement/> */}
-      <AdvertiseManagement></AdvertiseManagement>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin" Component={UserManagement} />
+        <Route path="/" Component={MapAdsManagement} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

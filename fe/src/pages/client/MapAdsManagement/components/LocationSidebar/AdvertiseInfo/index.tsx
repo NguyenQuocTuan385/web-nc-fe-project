@@ -42,7 +42,7 @@ const AdvertiseInfo = ({
           </b>
         </ParagraphBody>
         <ParagraphBody>
-          Số lượng: <b>{advertise.pillar_quantity} trụ/bảng</b>
+          Số lượng: <b>{advertise.pillarQuantity} trụ/bảng</b>
         </ParagraphBody>
         <ParagraphBody>
           Hình thức: <b>{ads_form_name}</b>
