@@ -1,0 +1,23 @@
+$pacing-main: 15px;
+
+.location-management-container {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: $pacing-main;
+}
+
+.container-body {
+  width: calc(100% - 300px);
+}
+
+.table-container {
+  margin-top: calc($pacing-main * 2);
+}
+
+.pagination-custom {
+  margin-top: $pacing-main;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
