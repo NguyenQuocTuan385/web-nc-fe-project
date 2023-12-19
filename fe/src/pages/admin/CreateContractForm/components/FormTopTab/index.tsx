@@ -1,8 +1,8 @@
 import React from "react";
-import { Tab, Tabs, Box, Link } from "@mui/material";
+import { Tab, Tabs, Box } from "@mui/material";
 import classes from "./style.module.scss";
 import clsx from "clsx";
-import useNavigate from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 
 function FormTopTab() {
   const [value, setValue] = React.useState(0);
@@ -10,7 +10,6 @@ function FormTopTab() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  // const navigate = useNavigate();
 
   return (
     <Box className={clsx(classes.borderBottom, classes.TabContainer)}>
@@ -22,17 +21,20 @@ function FormTopTab() {
       >
         <Tab
           label={<span className={classes.tabItemTitle}>Thông tin chung</span>}
-          onClick={() => window.location.replace("/#general")}
           wrapped
+          component={HashLink}
+          to="#general"
         />
+
         <Tab
           label={
             <Box display="flex" alignItems="center">
               <span className={classes.tabItemTitle}>Thông tin chi tiết</span>
             </Box>
           }
-          onClick={() => window.location.replace("/#details")}
           wrapped
+          component={HashLink}
+          to="#details"
         />
         <Tab
           label={
@@ -40,8 +42,9 @@ function FormTopTab() {
               <span className={classes.tabItemTitle}>Vị trí trên bản đồ </span>
             </Box>
           }
-          onClick={() => window.location.replace("/#mapLocation")}
           wrapped
+          component={HashLink}
+          to="#mapLocation"
         />
         <Tab
           label={
@@ -49,8 +52,9 @@ function FormTopTab() {
               <span className={classes.tabItemTitle}>Thông tin hợp đồng</span>
             </Box>
           }
-          onClick={() => window.location.replace("/#contract")}
           wrapped
+          component={HashLink}
+          to="#contract"
         />
         <Tab
           label={
@@ -58,8 +62,9 @@ function FormTopTab() {
               <span className={classes.tabItemTitle}>Thông tin công ty</span>
             </Box>
           }
-          onClick={() => window.location.replace("/#company")}
           wrapped
+          component={HashLink}
+          to="#company"
         />
         <Tab
           label={
@@ -67,8 +72,9 @@ function FormTopTab() {
               <span className={classes.tabItemTitle}>Ảnh bảng quảng cáo</span>
             </Box>
           }
-          onClick={() => window.location.replace("/#image")}
           wrapped
+          component={HashLink}
+          to={"#image"}
         />
       </Tabs>
     </Box>

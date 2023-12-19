@@ -3,10 +3,9 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: end;
-    width: 1400;
 
    & > :not(style) {
     margin: 20px;
-    width: 1073px;
+    width: 82%;
   }
 }

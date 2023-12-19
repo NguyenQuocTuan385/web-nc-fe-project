@@ -1,9 +1,10 @@
 .lowOpacity{
-    color: var(--gray-30) !important;
     font-size: 15px;
     font-style: normal;
     font-weight: 0;
     line-height: normal;
+    filter: invert(77%) sepia(64%) saturate(0%) hue-rotate(269deg) brightness(91%) contrast(80%);;
+    
 }
 
 .formGroup{
@@ -15,6 +16,7 @@
     justify-content: space-between;
     flex-direction: row;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .datePickGroup{
@@ -62,18 +64,24 @@
     border-top: 1px solid #E7E7E7;
     text-align: center;
     padding: 20px;
-    position: relative;
+    position: fixed;
     left: 0;
     bottom: 0;
     height: 60px;
     width: 100%;
-    margin-top: 20px;
 
     display: flex;
     justify-content: end;
     align-items: center;
+
+    z-index: 10;
 }
 
+.phantom  {
+  display: block;
+  height: 60px;
+  width: 100%;
+}
 
 .stickyFooterContainer{
     position: relative;

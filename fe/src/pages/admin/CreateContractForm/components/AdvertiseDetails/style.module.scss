@@ -1,9 +1,10 @@
 .lowOpacity{
-    opacity: var(--gray-30);
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    filter: invert(77%) sepia(64%) saturate(0%) hue-rotate(269deg) brightness(91%) contrast(80%);;
+
 }
 
 .divider{
@@ -23,10 +24,15 @@
 
 .detailContainer{
     padding: 0;
+    margin-bottom: 20px ;
 }
 
 .textFieldGroup{
     width: 60%;
-        height: 500px;
-   
+    height: 500px;
+}
+
+.iconItem{
+    width: 13px;
+   margin-right: 5px;
 }

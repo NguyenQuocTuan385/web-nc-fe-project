@@ -1,20 +1,29 @@
 import { Box, Divider, Icon } from "@mui/material";
 import React from "react";
 import Heading6 from "../../../../../components/common/text/Heading6";
-import classes from "./style.module.scss";
 import ParagraphBody from "../../../../../components/common/text/ParagraphBody";
 import ParagraphSmall from "../../../../../components/common/text/ParagraphSmall";
+import images from "config/images";
+import classes from "./style.module.scss";
 
-interface advertiseDetailProp {}
+import clsx from "clsx";
+
+interface advertiseDetailProp {
+  adType: string;
+  address: string;
+  width: number;
+  height: number;
+  quantity: number;
+  adForm: string;
+  locationType: string;
+}
 
 function AdDetails(adDetail: advertiseDetailProp) {
   return (
-    <Box className={classes.detailContainer}>
+    <Box className={clsx(classes.detailContainer)}>
       <Box className={classes.detailGroup}>
-        <Heading6>Bảng Pano Cột Trụ</Heading6>
-        <Heading6 className={classes.lowOpacity}>
-          227 Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh
-        </Heading6>
+        <Heading6>{adDetail.adType}</Heading6>
+        <Heading6 className={classes.lowOpacity}>{adDetail.address}</Heading6>
       </Box>
       <Divider className={classes.divider} variant="middle" />
       <Box className={classes.detailGroup}>
@@ -22,40 +31,43 @@ function AdDetails(adDetail: advertiseDetailProp) {
         <Box className={classes.detailItem}>
           <div>
             <Heading6 className={classes.lowOpacity}>
-              <Icon />
+              <img src={images.sizeIcon} className={classes.iconItem} />
               Kích thước
             </Heading6>
           </div>
-          <ParagraphSmall>2.5m x 10m</ParagraphSmall>
+          <ParagraphSmall>
+            {adDetail.width}m x {adDetail.height}m
+          </ParagraphSmall>
         </Box>
         <Box className={classes.detailItem}>
           <div>
             <Heading6 className={classes.lowOpacity}>
-              <Icon />
+              <img src={images.quantityIcon} className={classes.iconItem} />
               Số lượng
             </Heading6>
           </div>
-          <ParagraphSmall>1 trụ / bảng</ParagraphSmall>
+          <ParagraphSmall>{adDetail.quantity} trụ / bảng</ParagraphSmall>
         </Box>
         <Box className={classes.detailItem}>
           <div>
             <Heading6 className={classes.lowOpacity}>
-              <Icon />
+              <img
+                src={images.categoryIcon}
+                className={clsx(classes.iconItem, classes.lowOpacity)}
+              />
               Hình thức
             </Heading6>
           </div>
-          <ParagraphSmall>Quảng cáo sản phẩm</ParagraphSmall>
+          <ParagraphSmall>{adDetail.adForm}</ParagraphSmall>
         </Box>
         <Box className={classes.detailItem}>
           <div>
             <Heading6 className={classes.lowOpacity}>
-              <Icon />
+              <img src={images.sortIcon} className={classes.iconItem} />
               Phân loại
             </Heading6>
           </div>
-          <ParagraphSmall>
-            Đất công / công viên / Hành lang an toàn giao thông
-          </ParagraphSmall>
+          <ParagraphSmall>{adDetail.locationType}</ParagraphSmall>
         </Box>
       </Box>
       <Divider className={classes.divider} variant="middle" />

@@ -132,6 +132,7 @@ function ContractDetailForm() {
 
         <Box className={clsx(classes.formGroup)}>
           <TextField
+            key={"Tên công ty"}
             className={classes.textField}
             fullWidth
             margin="normal"
