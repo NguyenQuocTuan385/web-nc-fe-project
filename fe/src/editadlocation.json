@@ -36,6 +36,158 @@
             "location": " Công viên",
             "planning": true
         }
+      },
+      {
+        "id": 3,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-4.jpg",
+        "address": "Lê Lai - Nguyễn Huệ (Sở Thông tin và Truyền thông), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo sự kiện",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": false,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "15/12/2023",
+        "reason": "Thay đổi nội dung quảng cáo",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-4.jpg",
+          "address": "Lê Lai - Nguyễn Huệ (Sở Thông tin và Truyền thông), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo sản phẩm mới",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": false
+        }
+      },
+      {
+        "id": 4,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-5.jpg",
+        "address": "Nguyễn Huệ (Dinh Thống Nhất), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo du lịch",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": true,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "02/11/2023",
+        "reason": "Cần điều chỉnh vị trí để thu hút nhiều người nhìn hơn",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-5.jpg",
+          "address": "Nguyễn Huệ (Dinh Thống Nhất), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo du lịch",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": true
+        }
+      },
+      {
+        "id": 5,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-6.jpg",
+        "address": "Phạm Ngọc Thạch - Hai Bà Trưng (Sở Y tế), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo y tế",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": false,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "25/10/2023",
+        "reason": "Nâng cấp nội dung quảng cáo",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-6.jpg",
+          "address": "Phạm Ngọc Thạch - Hai Bà Trưng (Sở Y tế), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo y tế",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": false
+        }
+      },
+      {
+        "id": 6,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-7.jpg",
+        "address": "Nguyễn Bỉnh Khiêm - Lê Duẩn (Sở Tài chính), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo tài chính",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": true,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "15/09/2023",
+        "reason": "Thiết kế mới cho quảng cáo",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-7.jpg",
+          "address": "Nguyễn Bỉnh Khiêm - Lê Duẩn (Sở Tài chính), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo tài chính",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": true
+        }
+      },
+      {
+        "id": 7,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-8.jpg",
+        "address": "Lê Thánh Tôn - Nguyễn Huệ (Sở Ngoại vụ), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo ngoại giao",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": false,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "10/08/2023",
+        "reason": "Cần thay đổi nội dung quảng cáo để phản ánh đúng thông điệp",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-8.jpg",
+          "address": "Lê Thánh Tôn - Nguyễn Huệ (Sở Ngoại vụ), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo ngoại giao",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": false
+        }
+      },
+      {
+        "id": 8,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-9.jpg",
+        "address": "Hai Bà Trưng - Nguyễn Đình Chiểu (Sở Văn hóa và Thể thao), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo văn hóa",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": true,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "05/07/2023",
+        "reason": "Cần thay đổi nội dung quảng cáo để phản ánh đúng chủ đề sự kiện",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-9.jpg",
+          "address": "Hai Bà Trưng - Nguyễn Đình Chiểu (Sở Văn hóa và Thể thao), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo văn hóa",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": true
+        }
+      },
+      {
+        "id": 9,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-10.jpg",
+        "address": "Lê Lợi - Pasteur (Sở Y tế), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo y tế",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": false,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "20/06/2023",
+        "reason": "Cần thay đổi nội dung quảng cáo để phản ánh đúng thông điệp y tế",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-10.jpg",
+          "address": "Lê Lợi - Pasteur (Sở Y tế), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo y tế",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": false
+        }
+      },
+      {
+        "id": 10,
+        "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-11.jpg",
+        "address": "Nguyễn Bỉnh Khiêm - Phạm Ngọc Thạch (Sở Giáo dục và Đào tạo), Phường Bến Thành, Quận 1",
+        "adsType": "Quảng cáo giáo dục",
+        "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+        "planning": true,
+        "district": "1",
+        "ward": "Bến Thành",
+        "timeEdit": "15/04/2023",
+        "reason": "Thiết kế mới cho quảng cáo",
+        "edit": {
+          "imgUrl": "http://quangcaoxuanminh.com/wp-content/uploads/2020/04/pano-quang-cao-11.jpg",
+          "address": "Nguyễn Bỉnh Khiêm - Phạm Ngọc Thạch (Sở Giáo dục và Đào tạo), Phường Bến Thành, Quận 1",
+          "adsType": "Quảng cáo giáo dục",
+          "location": " Đất công/Công viên/Hành lang an toàn giao thông",
+          "planning": true
+        }
       }
       
 ]

@@ -20,6 +20,10 @@
   &:last-child, &:last-child th{
     border: 0;
   }
+  &:hover{
+    background-color: #F5F5F5;
+  }
+  cursor: pointer;
 }
 
 

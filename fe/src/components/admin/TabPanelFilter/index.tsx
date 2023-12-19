@@ -8,7 +8,7 @@ import Autocomplete, {
   createFilterOptions,
 } from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
-import district from "../../../../../district.json";
+import district from "../../../district.json";
 
 interface District {
   id: number;

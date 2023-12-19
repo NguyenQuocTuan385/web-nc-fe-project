@@ -3,6 +3,7 @@ import "./App.scss";
 import MapAdsManagement from "./pages/client/MapAdsManagement";
 import UserManagement from "./pages/admin/UserManagement";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AdLicense from "pages/admin/AdLicense";
 import EditAdLicense from "pages/admin/EditAdLicense";
 
 function App() {
@@ -11,7 +12,10 @@ function App() {
       <Routes>
         <Route path="/admin" Component={UserManagement} />
         <Route path="/" Component={MapAdsManagement} />
-        <Route path="/admin/license" Component={EditAdLicense} />
+        <Route path="/admin/license/edit" Component={EditAdLicense} />
+        <Route path="/admin/license" Component={AdLicense} />
+
+
       </Routes>
     </BrowserRouter>
   );

@@ -5,7 +5,7 @@ import TabPanelAdvertise from "./components/TabPanelAdvertise";
 
 
 export default function EditAdLicense() {
- 
+
   return (
     <div>
       <Box className={classes.boxContainer} >
