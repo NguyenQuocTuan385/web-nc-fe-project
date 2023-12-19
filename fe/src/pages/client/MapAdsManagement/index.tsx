@@ -17,12 +17,12 @@ import { Location, RandomLocation } from "models/location";
 import PopoverHover from "./components/PopoverHover";
 import LocationSidebar from "./components/LocationSidebar";
 import RandomLocationSidebar from "./components/RandomLocationSidebar";
-
+import LocationService from "services/location";
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<MapLibre | null>(null);
-  const [lng] = useState<number>(106.715167);
-  const [lat] = useState<number>(10.807035);
+  const [lng] = useState<number>(106.68207417234699);
+  const [lat] = useState<number>(10.764659325041498);
   const [zoom] = useState<number>(14);
   const [API_KEY] = useState<string>("MijgZpLFV2J9ejlH3Ot2");
   const [openLocationSidebar, setOpenLocationSidebar] =
@@ -35,11 +35,9 @@ const MapAdsManagement = () => {
   const marker = useRef<Marker | null>(null);
   maptilersdk.config.apiKey = API_KEY;
   const [mapController, setMapController] = useState<MapController>();
-
   const popup = new MapLibreGL.Popup({
     closeOnClick: false,
   });
-
   const closeAdsSidebar = () => {
     setOpenLocationSidebar(false);
   };
@@ -47,135 +45,38 @@ const MapAdsManagement = () => {
   const closeAddressSidebar = () => {
     setOpenRandomLocationSidebar(false);
   };
-
-  const locations: Feature[] = [
-    {
-      type: "Feature",
-      properties: {
-        id: 1,
-        planning: true,
-        address: "227 Nguyễn Văn Cừ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị",
-        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
-        longitude: 106.696002,
-        latitude: 10.806579,
-        advertises: [
-          {
-            id: 1,
-            lisencing: true,
-            height: 2.5,
-            width: 10,
-            ads_type_name: "Trụ bảng hiflex",
-            pillar_quantity: 1,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-            companyImgUrl:
-              "https://assets.unileversolutions.com/v1/52397810.jpg",
-          },
-          {
-            id: 2,
-            lisencing: false,
-            height: 2,
-            width: 10,
-            ads_type_name: "Trụ màn hình điện tử LED",
-            pillar_quantity: 2,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-            companyImgUrl:
-              "https://assets.unileversolutions.com/v1/52397810.jpg",
-          },
-        ],
-        imgUrl:
-          "https://goldsungroup.com.vn/wp-content/uploads/2019/11/bien-quang-cao-mot-cot-tren-duong-quoc-lo.jpg",
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [106.696002, 10.806579],
-      },
-    },
-    {
-      type: "Feature",
-      properties: {
-        id: 2,
-        planning: false,
-        address: "114 Nguyễn Văn Cừ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị",
-        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
-        longitude: 106.69282625956525,
-        latitude: 10.808360001977254,
-        advertises: [
-          {
-            id: 3,
-            lisencing: true,
-            height: 2.5,
-            width: 10,
-            ads_type_name: "Trụ bảng hiflex",
-            pillar_quantity: 1,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-            companyImgUrl:
-              "https://assets.unileversolutions.com/v1/52397810.jpg",
-          },
-          {
-            id: 4,
-            lisencing: false,
-            height: 2,
-            width: 10,
-            ads_type_name: "Trụ màn hình điện tử LED",
-            pillar_quantity: 2,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-          },
-        ],
-        imgUrl:
-          "https://quangcaongoaitroi.com/wp-content/uploads/2020/02/Unique-OOH-bien-quang-cao-billboard-tren-duong-cao-toc-16.jpg",
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [106.69282625956525, 10.808360001977254],
-      },
-    },
-    {
-      type: "Feature",
-      properties: {
-        id: 3,
-        planning: true,
-        address: "100 Lê Văn Sỹ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị",
-        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
-        longitude: 106.69212623062919,
-        latitude: 10.80612598101489,
-        advertises: [
-          {
-            id: 5,
-            lisencing: true,
-            height: 2.5,
-            width: 10,
-            ads_type_name: "Trụ bảng hiflex",
-            pillar_quantity: 1,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-          },
-          {
-            id: 6,
-            lisencing: false,
-            height: 2,
-            width: 10,
-            ads_type_name: "Trụ màn hình điện tử LED",
-            pillar_quantity: 2,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-          },
-        ],
-        imgUrl:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAXpcpxWHcMfZCIH177N18yzSxt6wdU5L-Og&usqp=CAU",
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [106.69212623062919, 10.80612598101489],
-      },
-    },
-  ];
+  const locations: Feature[] = [];
+  useEffect(() => {
+    const getAllLocations = async () => {
+      LocationService.getLocations({ pageSize: 9999 })
+        .then((res) => {
+          const locations_temp: Location[] = res.content.map(
+            (location: any) => ({
+              ...location,
+              images: JSON.parse(location.images as string),
+            })
+          );
+          locations_temp.map((location: Location) => {
+            const feature: Feature = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [location.longitude, location.latitude],
+              },
+              properties: {
+                ...location,
+              },
+            };
+            locations.push(feature);
+            return feature;
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getAllLocations();
+  }, []);
 
   function showPopup(e: any) {
     if (!map.current) return;
@@ -183,7 +84,6 @@ const MapAdsManagement = () => {
 
     const coordinates = e.features[0].geometry.coordinates.slice();
     const properties = e.features[0].properties;
-
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
@@ -255,24 +155,26 @@ const MapAdsManagement = () => {
           id,
           advertises,
           address,
-          ads_form_name,
-          imgUrl,
-          location_type_name,
+          adsForm,
+          images,
+          locationType,
           planning,
           longitude,
           latitude,
+          property,
         } = features[0].properties;
 
         const locationTemp: Location = {
           id,
           address,
           advertises: JSON.parse(advertises),
-          ads_form_name,
-          imgUrl,
-          location_type_name,
+          adsForm: JSON.parse(adsForm),
+          images: JSON.parse(images),
+          locationType: JSON.parse(locationType),
           planning,
           longitude,
           latitude,
+          property: JSON.parse(property),
         };
         setLocationData(locationTemp);
         setOpenLocationSidebar(true);

@@ -24,7 +24,7 @@ const LocationSidebar = ({
           </IconButton>
         </Box>
         <Box className={classes.imgContainer}>
-          <img src={location?.imgUrl} alt="anhqc" />
+          <img src={location?.images[0]} alt="anhqc" />
         </Box>
         <Box className={classes.adsContainer}>
           {location?.advertises.map((item, index) => (
@@ -32,8 +32,8 @@ const LocationSidebar = ({
               address={location?.address}
               key={index}
               advertise={item}
-              ads_form_name={location?.ads_form_name}
-              location_type_name={location.location_type_name}
+              ads_form_name={location?.adsForm.name}
+              location_type_name={location?.locationType.name}
             />
           ))}
         </Box>

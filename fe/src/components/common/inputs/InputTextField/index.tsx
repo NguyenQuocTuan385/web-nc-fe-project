@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  InputProps,
-  OutlinedInput,
-  OutlinedInputProps,
-} from "@mui/material";
+import { FormControl, OutlinedInput, OutlinedInputProps } from "@mui/material";
 import TextTitle from "../../text/TextTitle";
 import classes from "./styles.module.scss";
 interface InputsProps extends OutlinedInputProps {
