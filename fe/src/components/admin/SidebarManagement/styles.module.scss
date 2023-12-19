@@ -1,0 +1,48 @@
+
+.sideBar{
+  width: 300px;
+  overflow: auto;
+  flex-shrink: 0;
+  & .MuiDrawer-paper{
+    width: 300px;
+    box-sizing: border-box;
+  }
+}
+
+.boxContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.selectedItem {
+  background-color: #f0f0f0;
+}
+
+.unselectedItem {
+  background-color: transparent;
+}
+
+.itemIcon{
+  color: rgba(37, 43, 54, 0.38);
+}
+.selectedIcon{
+  color: black;
+}
+.item {
+  &:hover {
+    background-color: #e0e0e0;
+    .itemIcon {
+      color: black;
+    }
+  }
+}
+
+.childItem {
+  &:hover {
+    background-color: #e0e0e0;
+    .itemIcon {
+      color: black;
+    }
+  }
+}

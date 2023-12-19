@@ -1,0 +1,36 @@
+.boxContainer{
+  display: flex;
+  flex-direction: column;
+}
+
+.tableContainer{
+  margin-top: 20px;
+}
+
+.sizeTable{
+  min-width: 1050px;
+}
+
+.headerTable{
+  font-weight: bold;
+  padding: 5px;
+}
+
+.rowTable{
+  &:last-child, &:last-child th{
+    border: 0;
+  }
+}
+
+
+.dataTable{
+  padding: 5px;
+  width: 20%;
+}
+.pagination
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
