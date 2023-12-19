@@ -70,22 +70,23 @@ function ContractDetailForm() {
               field: { ref, ...field },
               fieldState: { invalid, error },
             }) => (
-              <DateTimePicker
-                inputRef={ref}
-                className={classes.datePickField}
-                label="Thời gian ký hợp đồng"
-                {...field}
-                slotProps={
-                  invalid
-                    ? {
-                        textField: {
-                          error: invalid, // Bolean
-                          helperText: String("Vui lòng điền ngày ký hợp đồng"), // String
-                        },
-                      }
-                    : {}
-                }
-              />
+              <>
+                <DateTimePicker
+                  inputRef={ref}
+                  className={classes.datePickField}
+                  label="Thời gian ký hợp đồng"
+                  {...field}
+                />
+                <>
+                  {invalid ? (
+                    <span className={classes.errorText}>
+                      Vui lòng điền ngày ký hợp đồng
+                    </span>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              </>
             )}
           />
 
@@ -98,24 +99,23 @@ function ContractDetailForm() {
               field: { ref, ...field },
               fieldState: { invalid, error },
             }) => (
-              <DateTimePicker
-                inputRef={ref}
-                className={classes.datePickField}
-                label="Thời gian hết hạn hợp đồng"
-                {...field}
-                slotProps={
-                  invalid
-                    ? {
-                        textField: {
-                          error: invalid, // Bolean
-                          helperText: String(
-                            "Vui lòng điền ngày hết hạn hợp đồng"
-                          ), // String
-                        },
-                      }
-                    : {}
-                }
-              />
+              <>
+                <DateTimePicker
+                  inputRef={ref}
+                  className={classes.datePickField}
+                  label="Thời gian hết hạn hợp đồng"
+                  {...field}
+                />
+                <>
+                  {invalid ? (
+                    <span className={classes.errorText}>
+                      Vui lòng điền ngày hết hạn hợp đồng
+                    </span>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              </>
             )}
           />
         </Box>
@@ -137,72 +137,62 @@ function ContractDetailForm() {
             margin="normal"
             label="Tên công ty"
             {...register("name", { required: true, maxLength: 50 })}
-            helperText={
-              <>
-                {errors.name && errors.name.type === "required" && (
-                  <span className={classes.errorText}>This is required</span>
-                )}
-                {errors.name && errors.name.type === "maxLength" && (
-                  <span className={classes.errorText}>Max length exceeded</span>
-                )}
-              </>
-            }
             aria-invalid={errors.name ? "true" : "false"}
           />
+          <>
+            {errors.name && errors.name.type === "required" && (
+              <p className={classes.errorText}>This is required</p>
+            )}
+            {errors.name && errors.name.type === "maxLength" && (
+              <span className={classes.errorText}>Max length exceeded</span>
+            )}
+          </>
           <TextField
             className={classes.textField}
             fullWidth
             label="Email công ty"
             margin="normal"
             {...register("email", { required: true, maxLength: 50 })}
-            helperText={
-              <>
-                {errors.name && errors.name.type === "required" && (
-                  <span className={classes.errorText}>This is required</span>
-                )}
-                {errors.name && errors.name.type === "maxLength" && (
-                  <span className={classes.errorText}>Max length exceeded</span>
-                )}
-              </>
-            }
           />
+          <>
+            {errors.email && errors.email.type === "required" && (
+              <span className={classes.errorText}>This is required</span>
+            )}
+            {errors.email && errors.email.type === "maxLength" && (
+              <span className={classes.errorText}>Max length exceeded</span>
+            )}
+          </>
           <TextField
             className={classes.textField}
             fullWidth
             label="Số điện thoại công ty"
             margin="normal"
             {...register("phone", { required: true, maxLength: 50 })}
-            helperText={
-              <>
-                {errors.name && errors.name.type === "required" && (
-                  <span className={classes.errorText}>This is required</span>
-                )}
-                {errors.name && errors.name.type === "maxLength" && (
-                  <span className={classes.errorText}>Max length exceeded</span>
-                )}
-              </>
-            }
           />
+          <>
+            {errors.phone && errors.phone.type === "required" && (
+              <span className={classes.errorText}>This is required</span>
+            )}
+            {errors.phone && errors.phone.type === "maxLength" && (
+              <span className={classes.errorText}>Max length exceeded</span>
+            )}
+          </>
           <TextField
             className={classes.textField}
             fullWidth
             label="Địa chỉ công ty"
             margin="normal"
             {...register("address", { required: true, maxLength: 50 })}
-            helperText={
-              <>
-                {errors.name && errors.name.type === "required" && (
-                  <span className={classes.errorText}>This is required</span>
-                )}
-                {errors.name && errors.name.type === "maxLength" && (
-                  <span className={classes.errorText}>Max length exceeded</span>
-                )}
-              </>
-            }
           />
+          <>
+            {errors.address && errors.address.type === "required" && (
+              <span className={classes.errorText}>This is required</span>
+            )}
+            {errors.address && errors.address.type === "maxLength" && (
+              <span className={classes.errorText}>Max length exceeded</span>
+            )}
+          </>
         </Box>
-
-        <Button type="submit">submit</Button>
       </Card>
 
       <Card>
@@ -268,6 +258,18 @@ function ContractDetailForm() {
           </Box>
         </Box>
       </Card>
+
+      <div className={classes.stickyFooterContainer}>
+        <div className={classes.phantom} />
+        <div className={classes.stickyFooterItem}>
+          <Button variant="contained" className={classes.cancelButton}>
+            Hủy bỏ
+          </Button>
+          <Button variant="contained" type="submit">
+            Tạo hợp đồng
+          </Button>
+        </div>
+      </div>
     </form>
   );
 }

@@ -25,10 +25,11 @@
 
 .errorText{
     color: red;
+    font-size: 12px;
 }
 
-.datePickField:first-of-type{
-    margin-bottom: 20px !important;
+.datePickField{
+    margin-top: 20px !important;
 }
 
 .dropzone{
@@ -54,4 +55,31 @@
 
 .uploadImageIcon{
     width: 10%;
+}
+
+.stickyFooterItem {
+    background-color: #ffffff;
+    border-top: 1px solid #E7E7E7;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+
+.stickyFooterContainer{
+    position: relative;
+}
+
+.cancelButton {
+    background-color: var(--gray-50) !important;
+    margin-right: 10px !important;
 }
