@@ -1,0 +1,11 @@
+.pageContainer{
+    background-color: var(--blue-50);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+
+   & > :not(style) {
+    margin: 0px 20px 20px 20px;
+    width: 83%;
+  }
+}
