@@ -1,23 +1,49 @@
-import { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Box, Button, Card, TextField } from "@mui/material";
 import Heading6 from "components/common/text/Heading6";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useDropzone } from "react-dropzone";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import clsx from "clsx";
 import classes from "./styles.module.scss";
 import images from "config/images";
 
+interface FormData {
+  signDate: string;
+  endDate: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  file: any[];
+}
+
 function ContractDetailForm() {
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      signDate: yup.string().required("Vui lòng nhập ngày ký hợp đồng"),
+      endDate: yup.string().required("Vui lòng nhập ngày hết hạn hợp đồng"),
+      name: yup.string().required("Vui lòng nhập tên công ty"),
+      email: yup.string().required("Vui lòng nhập email công ty"),
+      phone: yup.string().required("Vui lòng nhập số điện thoại công ty"),
+      address: yup.string().required("Vui lòng nhập địa chỉ công ty"),
+      file: yup.array().required("Thêm ảnh"),
+    });
+  }, []);
+
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<FormData>({ resolver: yupResolver(schema) });
+
   const [preview, setPreview] = useState<string>();
   const [isFileUploaded, setIsFileUploaded] = useState<Boolean>(false);
+  const [defaultValue, setDefaultValue] = React.useState("");
 
   const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
     useDropzone({
@@ -25,13 +51,12 @@ function ContractDetailForm() {
       accept: {
         "image/*": [],
       },
-      onDrop: (files) => {
+      onDrop: (files: any) => {
         setValue("file", files);
         setPreview(URL.createObjectURL(files[0]));
         setIsFileUploaded(true);
       },
     });
-
   const contractSubmitHandler = async (data: any) => {
     console.log(data);
     const formData = new FormData();
@@ -59,9 +84,9 @@ function ContractDetailForm() {
             Thêm các thông tin về ngày ký và thời hạn của hợp đồng
           </Heading6>
         </Box>
-
         <Box className={clsx(classes.formGroup, classes.datePickGroup)}>
           <Controller
+            defaultValue=""
             control={control}
             name="signDate"
             aria-invalid={errors.signDate ? "true" : "false"}
@@ -76,21 +101,19 @@ function ContractDetailForm() {
                   className={classes.datePickField}
                   label="Thời gian ký hợp đồng"
                   {...field}
+                  slotProps={{
+                    textField: {
+                      required: true,
+                      error: invalid,
+                    },
+                  }}
                 />
-                <>
-                  {invalid ? (
-                    <span className={classes.errorText}>
-                      Vui lòng điền ngày ký hợp đồng
-                    </span>
-                  ) : (
-                    <></>
-                  )}
-                </>
+                <span className={classes.errorText}>{error?.message}</span>
               </>
             )}
           />
-
           <Controller
+            defaultValue=""
             control={control}
             name="endDate"
             aria-invalid={errors.endDate ? "true" : "false"}
@@ -105,16 +128,14 @@ function ContractDetailForm() {
                   className={classes.datePickField}
                   label="Thời gian hết hạn hợp đồng"
                   {...field}
+                  slotProps={{
+                    textField: {
+                      required: true,
+                      error: invalid,
+                    },
+                  }}
                 />
-                <>
-                  {invalid ? (
-                    <span className={classes.errorText}>
-                      Vui lòng điền ngày hết hạn hợp đồng
-                    </span>
-                  ) : (
-                    <></>
-                  )}
-                </>
+                <span className={classes.errorText}>{error?.message}</span>
               </>
             )}
           />
@@ -137,76 +158,40 @@ function ContractDetailForm() {
             fullWidth
             margin="normal"
             label="Tên công ty"
-            {...register("name", { required: true, maxLength: 50 })}
+            {...register("name")}
             aria-invalid={errors.name ? "true" : "false"}
+            error={Boolean(errors?.name)}
           />
-          <>
-            {errors.name && errors.name.type === "required" && (
-              <p className={classes.errorText}>Vui lòng điền tên công ty</p>
-            )}
-            {errors.name && errors.name.type === "maxLength" && (
-              <span className={classes.errorText}>
-                Vượt quá chiều dài tối đa (50 ký tự)
-              </span>
-            )}
-          </>
+          <p className={classes.errorText}>{errors?.name?.message}</p>
           <TextField
             className={classes.textField}
             fullWidth
             label="Email công ty"
             margin="normal"
-            {...register("email", { required: true, maxLength: 50 })}
+            {...register("email")}
+            error={Boolean(errors?.email)}
           />
-          <>
-            {errors.email && errors.email.type === "required" && (
-              <span className={classes.errorText}>
-                Vui lòng điền email của công ty
-              </span>
-            )}
-            {errors.email && errors.email.type === "maxLength" && (
-              <span className={classes.errorText}>
-                Vượt quá chiều dài tối đa (50 ký tự)
-              </span>
-            )}
-          </>
+          <p className={classes.errorText}>{errors?.email?.message}</p>
+
           <TextField
             className={classes.textField}
             fullWidth
             label="Số điện thoại công ty"
             margin="normal"
-            {...register("phone", { required: true, maxLength: 50 })}
+            {...register("phone")}
+            error={Boolean(errors?.phone)}
           />
-          <>
-            {errors.phone && errors.phone.type === "required" && (
-              <span className={classes.errorText}>
-                Vui lòng điền số điện thoại của công ty
-              </span>
-            )}
-            {errors.phone && errors.phone.type === "maxLength" && (
-              <span className={classes.errorText}>
-                Vượt quá chiều dài tối đa (50 ký tự)
-              </span>
-            )}
-          </>
+          <p className={classes.errorText}>{errors?.phone?.message}</p>
+
           <TextField
             className={classes.textField}
             fullWidth
             label="Địa chỉ công ty"
             margin="normal"
-            {...register("address", { required: true, maxLength: 50 })}
+            {...register("address")}
+            error={Boolean(errors?.address)}
           />
-          <>
-            {errors.address && errors.address.type === "required" && (
-              <span className={classes.errorText}>
-                Vui lòng điền địa chỉ của công ty
-              </span>
-            )}
-            {errors.address && errors.address.type === "maxLength" && (
-              <span className={classes.errorText}>
-                Vượt quá chiều dài tối đa (50 ký tự)
-              </span>
-            )}
-          </>
+          <p className={classes.errorText}>{errors?.address?.message}</p>
         </Box>
       </Card>
 
@@ -220,7 +205,7 @@ function ContractDetailForm() {
           </Box>
           <Box className={classes.dropZone}>
             <Controller
-              name="fileUpload"
+              name="file"
               control={control}
               render={() => (
                 <div {...getRootProps({ className: classes.dropzone })}>
@@ -228,7 +213,6 @@ function ContractDetailForm() {
                     className="input-zone"
                     {...getInputProps()}
                     type="file"
-                    name="fileUpload"
                   />
                   <div className={classes.dropzoneContent}>
                     {isDragActive ? (
