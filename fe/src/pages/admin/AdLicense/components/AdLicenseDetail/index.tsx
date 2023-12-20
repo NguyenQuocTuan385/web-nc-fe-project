@@ -136,25 +136,25 @@ export default function AdLicenseDetail() {
                 height={"400px"}
               />
             </Box>
-            <Box className={classes.editHistoryContainer}>
-              <Box className={classes.actionButtons}>
-                <Button
-                  className={classes.approveButton}
-                  variant="contained"
-                  color="primary"
-                >
-                  Duyệt
-                </Button>
-                <Button
-                  className={classes.skipButton}
-                  variant="contained"
-                  color="error"
-                >
-                  Bỏ qua
-                </Button>
-              </Box>
-            </Box>
           </Box>
+        </Box>
+      </Box>
+      <Box className={classes.editHistoryContainer}>
+        <Box className={classes.actionButtons}>
+          <Button
+            className={classes.approveButton}
+            variant="contained"
+            color="primary"
+          >
+            Duyệt
+          </Button>
+          <Button
+            className={classes.skipButton}
+            variant="contained"
+            color="error"
+          >
+            Bỏ qua
+          </Button>
         </Box>
       </Box>
     </Box>
