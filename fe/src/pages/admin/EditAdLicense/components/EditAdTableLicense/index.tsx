@@ -29,7 +29,7 @@ export default function EditAdTableLicense({
   const [filterDistrict, setFilterDistrict] = useState(rows);
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
-    value: number,
+    value: number
   ) => {
     setPage(value);
   };
@@ -46,7 +46,7 @@ export default function EditAdTableLicense({
 
     if (fieldSearch !== "") {
       filteredRows = filteredRows.filter((row) =>
-        row.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? ""),
+        row.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? "")
       );
     }
 
@@ -54,8 +54,7 @@ export default function EditAdTableLicense({
   }, [district, ward, fieldSearch, rows]);
 
   const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
 
   return (
     <Box className={classes.boxContainer}>
@@ -82,15 +81,13 @@ export default function EditAdTableLicense({
             {filterDistrict
               .slice(
                 (page - 1) * rowsPerPage,
-                (page - 1) * rowsPerPage + rowsPerPage,
+                (page - 1) * rowsPerPage + rowsPerPage
               )
               .map((row) => (
                 <TableRow key={row.id} className={classes.rowTable}>
-                  <TableCell component="th" scope="row" className={classes.dataTable}>
-                    {row.id}
-                  </TableCell>
+                  <TableCell scope="row">{row.id}</TableCell>
                   <TableCell align="left" className={classes.dataTable}>
-                    {row.address}
+                    <div className={classes.textOverflow}>{row.address}</div>{" "}
                   </TableCell>
                   <TableCell align="left" className={classes.dataTable}>
                     {row.editTime}

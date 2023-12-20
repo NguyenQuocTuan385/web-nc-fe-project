@@ -12,6 +12,7 @@ import classes from "./styles.module.scss";
 import ads from "../../../../../editadlocation.json";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const rows = [...ads];
 const rowsPerPage = 6;
@@ -29,9 +30,26 @@ export default function EditAdLocationLicense({
   const [filterDistrict, setFilterDistrict] = useState(rows);
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
-    value: number,
+    value: number
   ) => {
     setPage(value);
+  };
+  const navigate = useNavigate();
+
+  const handleClick = (row: any) => {
+    navigate(`/admin/review/edit/${row.id}`, {
+      state: {
+        id: row.id,
+        address: row.address,
+        timeEdit: row.timeEdit,
+        planning: row.planning,
+        imgUrl: row.imgUrl,
+        adsType: row.adsType,
+        position: row.location,
+        edit: row.edit,
+        reason: row.reason,
+      },
+    });
   };
   useEffect(() => {
     let filteredRows = rows;
@@ -46,15 +64,14 @@ export default function EditAdLocationLicense({
 
     if (fieldSearch !== "") {
       filteredRows = filteredRows.filter((row) =>
-        row.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? ""),
+        row.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? "")
       );
     }
 
     setFilterDistrict(filteredRows);
   }, [district, ward, fieldSearch, rows]);
   const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
 
   return (
     <Box className={classes.boxContainer}>
@@ -81,15 +98,19 @@ export default function EditAdLocationLicense({
             {filterDistrict
               .slice(
                 (page - 1) * rowsPerPage,
-                (page - 1) * rowsPerPage + rowsPerPage,
+                (page - 1) * rowsPerPage + rowsPerPage
               )
               .map((row) => (
-                <TableRow key={row.id} className={classes.rowTable}>
-                  <TableCell component="th" scope="row" className={classes.dataTable}>
-                    {row.id}
-                  </TableCell>
+                <TableRow
+                  key={row.id}
+                  className={classes.rowTable}
+                  onClick={() => {
+                    handleClick(row);
+                  }}
+                >
+                  <TableCell scope="row">{row.id}</TableCell>
                   <TableCell align="left" className={classes.dataTable}>
-                    {row.address}
+                    <div className={classes.textOverflow}>{row.address}</div>
                   </TableCell>
                   <TableCell align="left" className={classes.dataTable}>
                     {row.timeEdit}
