@@ -1,0 +1,111 @@
+.boxContainer {
+  display: flex;
+  align-items: center;
+}
+
+.boxContent {
+  background-color: white;
+}
+
+.backPage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  color: var(--blue-500);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--blue-600);
+
+    .iconBack {
+      color: var(--blue-600);
+    }
+  }
+}
+
+.iconBack {
+  color: var(--blue-500);
+}
+
+.boxContent {
+  width: 100%;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 20px;
+
+  .boxContentDetail {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.boxTitle {
+  padding: 10px 0;
+}
+.infoContent {
+  span {
+    font-weight: bold;
+  }
+  .error {
+    color: var(--red-error);
+  }
+  .edit {
+    color: var(--green-600);
+  }
+}
+.boxArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .iconArrow {
+    font-size: 60px;
+  }
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.imageInfoContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.image {
+  width: 428px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.boxInfo {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.editHistoryContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  margin-bottom: 10px;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.approveButton {
+  width: 100px;
+}
+
+.skipButton {
+  width: 100px;
+}
