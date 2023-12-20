@@ -26,5 +26,9 @@
 .iconItem{
     width: 13px;
     margin-right: 5px;
-    filter: invert(77%) sepia(64%) saturate(0%) hue-rotate(269deg) brightness(91%) contrast(80%);
+    filter: brightness(0) saturate(100%)
+}
+
+.topGroup{
+    padding: 20px;
 }
