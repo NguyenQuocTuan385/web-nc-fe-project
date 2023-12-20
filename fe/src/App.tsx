@@ -5,23 +5,29 @@ import UserManagement from "./pages/admin/UserManagement";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdLicense from "pages/admin/AdLicense";
 import EditAdLicense from "pages/admin/EditAdLicense";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import ContractForm from "pages/admin/CreateContractForm";
 import EditAdLocationLicenseDetail from "pages/admin/EditAdLicense/components/EditAdLocationLicense/EditAdLocationLicenseDetail";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/admin" Component={UserManagement} />
-        <Route path="/" Component={MapAdsManagement} />
-        <Route path="/admin/review/edit" Component={EditAdLicense} />
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/admin" Component={UserManagement} />
+          <Route path="/" Component={MapAdsManagement} />
+          <Route path="/admin/review/edit" Component={EditAdLicense} />
 
-        <Route
-          path="/admin/review/edit/:id"
-          Component={EditAdLocationLicenseDetail}
-        />
-        <Route path="/admin/review/license" Component={AdLicense} />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/admin/review/edit/:id"
+            Component={EditAdLocationLicenseDetail}
+          />
+          <Route path="/admin/review/license" Component={AdLicense} />
+          <Route path="/contracts/createForm" element={<ContractForm />} />
+        </Routes>
+      </BrowserRouter>
+    </LocalizationProvider>
   );
 }
 
