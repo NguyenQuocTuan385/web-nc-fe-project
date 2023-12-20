@@ -18,3 +18,46 @@
   gap: 20px;
   align-items: center;
 }
+
+.inputInvalid {
+  fieldset {
+    border: 1px solid var(--red-error) !important;
+  }
+}
+
+.inputTextfield {
+  &[class~="Mui-disabled"] {
+    background: var(--gray-5);
+    ::placeholder {
+      color: var(--gray-20);
+    }
+    .iconErrorOutline {
+      display: none;
+    }
+  }
+  ::placeholder {
+    color: var(--gray-50);
+    font-weight: 400;
+    font-size: 16px;
+    opacity: 1;
+  }
+
+  :focus {
+    caret-color: var(--blue-500);
+  }
+
+  input {
+    padding: 8px 16px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px !important;
+    line-height: 24px;
+    letter-spacing: 0.015em;
+    color: var(--eerie-black);
+  }
+
+  fieldset {
+    border-width: 1px !important;
+    border-color: var(--gray-40);
+  }
+}

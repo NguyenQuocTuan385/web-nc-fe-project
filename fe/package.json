@@ -11,6 +11,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@hookform/resolvers": "^3.3.2",
     "@maptiler/geocoding-control": "^1.1.1",
     "@maptiler/sdk": "^1.2.0",
     "@mui/icons-material": "^5.14.19",
@@ -30,6 +31,7 @@
     "maplibre-gl": "^3.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-recaptcha": "^3.1.0",
     "react-hook-form": "^7.49.0",
     "react-map-gl": "^7.1.6",
     "react-map-gl-geocoder": "^2.2.0",
@@ -67,6 +69,7 @@
     ]
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.8"
+    "@types/leaflet": "^1.9.8",
+    "@types/react-google-recaptcha": "^2.1.8"
   }
 }

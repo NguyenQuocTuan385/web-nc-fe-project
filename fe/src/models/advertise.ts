@@ -3,7 +3,6 @@ export interface Advertise {
   lisencing: boolean;
   height: number;
   width: number;
-  ads_type_name?: string;
   pillarQuantity?: number;
   images: string;
   companyImgUrl?: string;
