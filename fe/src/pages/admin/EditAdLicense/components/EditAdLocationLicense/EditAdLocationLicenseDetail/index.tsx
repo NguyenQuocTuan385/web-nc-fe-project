@@ -1,6 +1,5 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import SidebarManagement from "components/admin/SidebarManagement";
 import classes from "./styles.module.scss";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ParagraphBody from "components/common/text/ParagraphBody";
@@ -8,6 +7,7 @@ import Button from "@mui/material/Button";
 import SouthIcon from "@mui/icons-material/South";
 import { useLocation, useNavigate } from "react-router-dom";
 import Heading3 from "components/common/text/Heading3";
+import SideBarSVH from "components/admin/SidebarDCMS";
 
 export default function EditAdLocationLicenseDetail() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function EditAdLocationLicenseDetail() {
   } = location.state;
   return (
     <Box className={classes.boxContainer}>
-      <SidebarManagement />
+      <SideBarSVH />
       <Box className={classes.boxContent}>
         <Box className={classes.backPage} onClick={() => navigate(-1)}>
           <ArrowBackIcon className={classes.iconBack} />
