@@ -1,12 +1,3 @@
-.lowOpacity{
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 0;
-    line-height: normal;
-    filter: invert(77%) sepia(64%) saturate(0%) hue-rotate(269deg) brightness(91%) contrast(80%);;
-    
-}
-
 .formGroup{
     margin: 20px;
 }
@@ -40,7 +31,7 @@
     border: 2px var(--gray-20) dashed;
     height: 200px;
     margin: 20px !important;
-
+    
 }
 
 .imagePreviewCardContainer{
@@ -55,8 +46,19 @@
     object-fit: fill;
 }
 
+.dropzoneContent{
+    margin-bottom: 20px !important;
+    display: flex;
+    justify-content: center;
+}
+.dropzoneText{
+    font-size: 20px;
+    color: var(--gray-30);
+}
+
 .uploadImageIcon{
     width: 10%;
+    filter: invert(77%) sepia(64%) saturate(0%) hue-rotate(269deg) brightness(91%) contrast(80%);
 }
 
 .stickyFooterItem {
@@ -90,4 +92,11 @@
 .cancelButton {
     background-color: var(--gray-50) !important;
     margin-right: 10px !important;
+}
+
+.textFieldGroup {
+    display: flex; 
+    flex-direction: column ;
+    justify-content: end;
+    width: 800px;
 }

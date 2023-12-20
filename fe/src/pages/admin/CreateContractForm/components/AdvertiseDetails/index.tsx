@@ -22,15 +22,17 @@ function AdDetails(adDetail: advertiseDetailProp) {
   return (
     <Box className={clsx(classes.detailContainer)}>
       <Box className={classes.detailGroup}>
-        <Heading6>{adDetail.adType}</Heading6>
-        <Heading6 className={classes.lowOpacity}>{adDetail.address}</Heading6>
+        <Heading6 id="general">{adDetail.adType}</Heading6>
+        <Heading6 fontWeight={100} $colorName="--gray-20">
+          {adDetail.address}
+        </Heading6>
       </Box>
       <Divider className={classes.divider} variant="middle" />
       <Box className={classes.detailGroup}>
-        <Heading6>Thông tin chi tiết bảng quảng cáo</Heading6>
+        <Heading6 id="details">Thông tin chi tiết bảng quảng cáo</Heading6>
         <Box className={classes.detailItem}>
           <div>
-            <Heading6 className={classes.lowOpacity}>
+            <Heading6 fontWeight={100} $colorName="--gray-20">
               <img src={images.sizeIcon} className={classes.iconItem} />
               Kích thước
             </Heading6>
@@ -41,7 +43,7 @@ function AdDetails(adDetail: advertiseDetailProp) {
         </Box>
         <Box className={classes.detailItem}>
           <div>
-            <Heading6 className={classes.lowOpacity}>
+            <Heading6 fontWeight={100} $colorName="--gray-20">
               <img src={images.quantityIcon} className={classes.iconItem} />
               Số lượng
             </Heading6>
@@ -50,10 +52,10 @@ function AdDetails(adDetail: advertiseDetailProp) {
         </Box>
         <Box className={classes.detailItem}>
           <div>
-            <Heading6 className={classes.lowOpacity}>
+            <Heading6 fontWeight={100} $colorName="--gray-20">
               <img
                 src={images.categoryIcon}
-                className={clsx(classes.iconItem, classes.lowOpacity)}
+                className={clsx(classes.iconItem)}
               />
               Hình thức
             </Heading6>
@@ -62,7 +64,7 @@ function AdDetails(adDetail: advertiseDetailProp) {
         </Box>
         <Box className={classes.detailItem}>
           <div>
-            <Heading6 className={classes.lowOpacity}>
+            <Heading6 fontWeight={100} $colorName="--gray-20">
               <img src={images.sortIcon} className={classes.iconItem} />
               Phân loại
             </Heading6>
@@ -73,7 +75,9 @@ function AdDetails(adDetail: advertiseDetailProp) {
       <Divider className={classes.divider} variant="middle" />
 
       <Box className={classes.detailGroup}>
-        <Heading6>Vị trí đặt bảng quảng cáo trên bản đồ</Heading6>
+        <Heading6 id="mapLocation">
+          Vị trí đặt bảng quảng cáo trên bản đồ
+        </Heading6>
       </Box>
     </Box>
   );

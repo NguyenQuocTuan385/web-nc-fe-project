@@ -55,7 +55,7 @@ function ContractDetailForm() {
       <Card className={classes.cardContainer}>
         <Box className={classes.formGroup}>
           <Heading6 id="contract">Thông tin về hợp đồng</Heading6>
-          <Heading6 className={classes.lowOpacity}>
+          <Heading6 fontWeight={100} $colorName="--gray-20">
             Thêm các thông tin về ngày ký và thời hạn của hợp đồng
           </Heading6>
         </Box>
@@ -124,13 +124,13 @@ function ContractDetailForm() {
       <Card className={classes.cardContainer}>
         <Box className={classes.formGroup}>
           <Heading6 id="company">Thông tin về công ty</Heading6>
-          <Heading6 className={classes.lowOpacity}>
+          <Heading6 fontWeight={100} $colorName="--gray-20">
             Thêm các thông tin chi tiết về công ty muốn ký hợp đồng với bảng
             quảng cáo này
           </Heading6>
         </Box>
 
-        <Box className={clsx(classes.formGroup)}>
+        <Box className={clsx(classes.formGroup, classes.textFieldGroup)}>
           <TextField
             key={"Tên công ty"}
             className={classes.textField}
@@ -142,10 +142,12 @@ function ContractDetailForm() {
           />
           <>
             {errors.name && errors.name.type === "required" && (
-              <p className={classes.errorText}>This is required</p>
+              <p className={classes.errorText}>Vui lòng điền tên công ty</p>
             )}
             {errors.name && errors.name.type === "maxLength" && (
-              <span className={classes.errorText}>Max length exceeded</span>
+              <span className={classes.errorText}>
+                Vượt quá chiều dài tối đa (50 ký tự)
+              </span>
             )}
           </>
           <TextField
@@ -157,10 +159,14 @@ function ContractDetailForm() {
           />
           <>
             {errors.email && errors.email.type === "required" && (
-              <span className={classes.errorText}>This is required</span>
+              <span className={classes.errorText}>
+                Vui lòng điền email của công ty
+              </span>
             )}
             {errors.email && errors.email.type === "maxLength" && (
-              <span className={classes.errorText}>Max length exceeded</span>
+              <span className={classes.errorText}>
+                Vượt quá chiều dài tối đa (50 ký tự)
+              </span>
             )}
           </>
           <TextField
@@ -172,10 +178,14 @@ function ContractDetailForm() {
           />
           <>
             {errors.phone && errors.phone.type === "required" && (
-              <span className={classes.errorText}>This is required</span>
+              <span className={classes.errorText}>
+                Vui lòng điền số điện thoại của công ty
+              </span>
             )}
             {errors.phone && errors.phone.type === "maxLength" && (
-              <span className={classes.errorText}>Max length exceeded</span>
+              <span className={classes.errorText}>
+                Vượt quá chiều dài tối đa (50 ký tự)
+              </span>
             )}
           </>
           <TextField
@@ -187,10 +197,14 @@ function ContractDetailForm() {
           />
           <>
             {errors.address && errors.address.type === "required" && (
-              <span className={classes.errorText}>This is required</span>
+              <span className={classes.errorText}>
+                Vui lòng điền địa chỉ của công ty
+              </span>
             )}
             {errors.address && errors.address.type === "maxLength" && (
-              <span className={classes.errorText}>Max length exceeded</span>
+              <span className={classes.errorText}>
+                Vượt quá chiều dài tối đa (50 ký tự)
+              </span>
             )}
           </>
         </Box>
@@ -200,7 +214,7 @@ function ContractDetailForm() {
         <Box>
           <Box className={classes.formGroup}>
             <Heading6 id="image">Hình ảnh bảng quảng cáo</Heading6>
-            <Heading6 className={classes.lowOpacity}>
+            <Heading6 fontWeight={100} $colorName="--gray-20">
               Thêm ảnh của bảng quảng cáo tại đây
             </Heading6>
           </Box>
@@ -216,7 +230,7 @@ function ContractDetailForm() {
                     type="file"
                     name="fileUpload"
                   />
-                  <div className="text-center">
+                  <div className={classes.dropzoneContent}>
                     {isDragActive ? (
                       <div>
                         <img
@@ -224,7 +238,7 @@ function ContractDetailForm() {
                           alt="upload icon"
                           className={classes.uploadImageIcon}
                         />
-                        <p className="dropzone-content">Thả ở đây</p>
+                        <p className={classes.dropzoneText}>Thả ở đây</p>
                       </div>
                     ) : (
                       <div>
@@ -233,7 +247,7 @@ function ContractDetailForm() {
                           alt="upload icon"
                           className={classes.uploadImageIcon}
                         />
-                        <p className="dropzone-content">
+                        <p className={classes.dropzoneText}>
                           Kéo ảnh vào đây hoặc nhấn vào đây để chọn ảnh
                         </p>
                       </div>
