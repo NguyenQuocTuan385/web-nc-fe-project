@@ -5,4 +5,10 @@ export const API = {
   ADVERTISE: {
     DEFAULT: "/api/location/:id/advertises",
   },
+  DISTRICT: {
+    DEFAULT: "/api/properties",
+  },
+  WARD: {
+    DEFAULT: "/api/properties",
+  },
 };

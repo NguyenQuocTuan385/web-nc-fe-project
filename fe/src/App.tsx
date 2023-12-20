@@ -9,6 +9,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ContractForm from "pages/admin/CreateContractForm";
 import EditAdLocationLicenseDetail from "pages/admin/EditAdLicense/components/EditAdLocationLicense/EditAdLocationLicenseDetail";
+import DistrictManagement from "pages/admin/DistrictManagement";
+import WardManagement from "pages/admin/WardManagement";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           />
           <Route path="/admin/review/license" Component={AdLicense} />
           <Route path="/contracts/createForm" element={<ContractForm />} />
+          <Route path="/admin/districts" Component={DistrictManagement} />
+          <Route path="/admin/districts/:id" Component={WardManagement} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

@@ -1,6 +1,18 @@
 export interface Property {
   id: number;
-  properties: Property[];
+  propertyParentId?: number;
   name: string;
-  created_at: Date;
+  code: string;
+}
+
+export interface Pageable {
+  totalElements?: number;
+  totalPages?: number;
+  size?: number;
+}
+
+export interface GetProperties {
+  search?: string;
+  pageSize?: number;
+  current?: number;
 }
