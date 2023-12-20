@@ -76,8 +76,8 @@ const sideBarItemListData = [
   },
 ];
 
-function SideBarSVH() {
+function SideBarDCMS() {
   return <SidebarManagement sideBarItem={sideBarItemListData} />;
 }
 
-export default SideBarSVH;
+export default SideBarDCMS;

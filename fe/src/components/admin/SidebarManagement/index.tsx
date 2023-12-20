@@ -92,7 +92,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
 
   return (
     <Box className={classes.boxContainer}>
-      <Drawer variant="permanent" className={classes.sideBar}>
+      <Drawer variant="permanent" anchor="left" className={classes.sideBar}>
         <Box className={classes.sideBar}>
           <List>
             {sideBar.map((list, index) => (

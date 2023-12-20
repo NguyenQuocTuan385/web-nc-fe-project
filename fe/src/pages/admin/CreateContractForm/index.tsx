@@ -5,12 +5,13 @@ import classes from "./styles.module.scss";
 import AdDetails from "./components/AdvertiseDetails";
 import ContractDetailForm from "pages/admin/CreateContractForm/components/ContractDetailForm";
 import SidebarManagement from "components/admin/SidebarManagement";
+import SideBarWard from "components/admin/SidebarWard";
 
 function ContractForm() {
   return (
     <Box className={classes.pageContainer}>
-      <SidebarManagement />
-      <Box>
+      <SideBarWard />
+      <Box style={{ marginLeft: "320px" }}>
         <AdDetails
           address="227 Nguyễn Văn Cừ, Phường 11, Quận 5 Thành phố Hồ Chí Minh"
           adType="Bảng Pano cột trụ"
