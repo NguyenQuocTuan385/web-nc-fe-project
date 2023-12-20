@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import MapLibreGL, {
   MapGeoJSONFeature,
   Map as MapLibre,
@@ -17,12 +17,14 @@ import { Location, RandomLocation } from "models/location";
 import PopoverHover from "./components/PopoverHover";
 import LocationSidebar from "./components/LocationSidebar";
 import RandomLocationSidebar from "./components/RandomLocationSidebar";
-
+import LocationService from "services/location";
+import { Box, Switch } from "@mui/material";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<MapLibre | null>(null);
-  const [lng] = useState<number>(106.715167);
-  const [lat] = useState<number>(10.807035);
+  const [lng] = useState<number>(106.68207417234699);
+  const [lat] = useState<number>(10.764659325041498);
   const [zoom] = useState<number>(14);
   const [API_KEY] = useState<string>("MijgZpLFV2J9ejlH3Ot2");
   const [openLocationSidebar, setOpenLocationSidebar] =
@@ -35,11 +37,9 @@ const MapAdsManagement = () => {
   const marker = useRef<Marker | null>(null);
   maptilersdk.config.apiKey = API_KEY;
   const [mapController, setMapController] = useState<MapController>();
-
-  const popup = new MapLibreGL.Popup({
-    closeOnClick: false,
-  });
-
+  const popup = new MapLibreGL.Popup({});
+  const locationsIsPlanning: Feature[] = [];
+  const locationsIsNotPlanning: Feature[] = [];
   const closeAdsSidebar = () => {
     setOpenLocationSidebar(false);
   };
@@ -48,142 +48,98 @@ const MapAdsManagement = () => {
     setOpenRandomLocationSidebar(false);
   };
 
-  const locations: Feature[] = [
-    {
-      type: "Feature",
-      properties: {
-        id: 1,
-        planning: true,
-        address: "227 Nguyễn Văn Cừ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị",
-        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
-        longitude: 106.696002,
-        latitude: 10.806579,
-        advertises: [
-          {
-            id: 1,
-            lisencing: true,
-            height: 2.5,
-            width: 10,
-            ads_type_name: "Trụ bảng hiflex",
-            pillar_quantity: 1,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-            companyImgUrl:
-              "https://assets.unileversolutions.com/v1/52397810.jpg",
-          },
-          {
-            id: 2,
-            lisencing: false,
-            height: 2,
-            width: 10,
-            ads_type_name: "Trụ màn hình điện tử LED",
-            pillar_quantity: 2,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-            companyImgUrl:
-              "https://assets.unileversolutions.com/v1/52397810.jpg",
-          },
-        ],
-        imgUrl:
-          "https://goldsungroup.com.vn/wp-content/uploads/2019/11/bien-quang-cao-mot-cot-tren-duong-quoc-lo.jpg",
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [106.696002, 10.806579],
-      },
-    },
-    {
-      type: "Feature",
-      properties: {
-        id: 2,
-        planning: false,
-        address: "114 Nguyễn Văn Cừ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị",
-        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
-        longitude: 106.69282625956525,
-        latitude: 10.808360001977254,
-        advertises: [
-          {
-            id: 3,
-            lisencing: true,
-            height: 2.5,
-            width: 10,
-            ads_type_name: "Trụ bảng hiflex",
-            pillar_quantity: 1,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-            companyImgUrl:
-              "https://assets.unileversolutions.com/v1/52397810.jpg",
-          },
-          {
-            id: 4,
-            lisencing: false,
-            height: 2,
-            width: 10,
-            ads_type_name: "Trụ màn hình điện tử LED",
-            pillar_quantity: 2,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-          },
-        ],
-        imgUrl:
-          "https://quangcaongoaitroi.com/wp-content/uploads/2020/02/Unique-OOH-bien-quang-cao-billboard-tren-duong-cao-toc-16.jpg",
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [106.69282625956525, 10.808360001977254],
-      },
-    },
-    {
-      type: "Feature",
-      properties: {
-        id: 3,
-        planning: true,
-        address: "100 Lê Văn Sỹ, Phường 16, Q.5",
-        ads_form_name: "Cổ động chính trị",
-        location_type_name: "Đất công/Công viên/Hành lang an toàn giao thông",
-        longitude: 106.69212623062919,
-        latitude: 10.80612598101489,
-        advertises: [
-          {
-            id: 5,
-            lisencing: true,
-            height: 2.5,
-            width: 10,
-            ads_type_name: "Trụ bảng hiflex",
-            pillar_quantity: 1,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-          },
-          {
-            id: 6,
-            lisencing: false,
-            height: 2,
-            width: 10,
-            ads_type_name: "Trụ màn hình điện tử LED",
-            pillar_quantity: 2,
-            imgUrl:
-              "https://bianviet.com/uploads/images/4/images/Bi%E1%BB%83n%20qu%E1%BA%A3ng%20c%C3%A1o%281%29.jpg",
-          },
-        ],
-        imgUrl:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAXpcpxWHcMfZCIH177N18yzSxt6wdU5L-Og&usqp=CAU",
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [106.69212623062919, 10.80612598101489],
-      },
-    },
-  ];
+  useEffect(() => {
+    const getAllLocations = async () => {
+      LocationService.getLocations({ pageSize: 9999 })
+        .then((res) => {
+          const locations_temp: Location[] = res.content.map(
+            (location: any) => ({
+              ...location,
+              images: JSON.parse(location.images as string),
+            })
+          );
+          locations_temp.map((location: Location) => {
+            const feature: Feature = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [location.longitude, location.latitude],
+              },
+              properties: {
+                ...location,
+              },
+            };
+            if (location.planning) {
+              locationsIsPlanning.push(feature);
+            } else {
+              locationsIsNotPlanning.push(feature);
+            }
+            return feature;
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getAllLocations();
+  }, []);
 
-  function showPopup(e: any) {
+  const changeHandleLocationIsPlanning = () => {
+    const visibility = map.current?.getLayoutProperty(
+      "locations_is_planning",
+      "visibility"
+    );
+    if (visibility === undefined) {
+      map.current?.setLayoutProperty(
+        "locations_is_planning",
+        "visibility",
+        "none"
+      );
+    } else if (visibility === "visible") {
+      map.current?.setLayoutProperty(
+        "locations_is_planning",
+        "visibility",
+        "none"
+      );
+    } else {
+      map.current?.setLayoutProperty(
+        "locations_is_planning",
+        "visibility",
+        "visible"
+      );
+    }
+  };
+  const changeHandleLocationIsNotPlanning = () => {
+    const visibility = map.current?.getLayoutProperty(
+      "locations_is_not_planning",
+      "visibility"
+    );
+    if (visibility === undefined) {
+      map.current?.setLayoutProperty(
+        "locations_is_not_planning",
+        "visibility",
+        "none"
+      );
+    } else if (visibility === "visible") {
+      map.current?.setLayoutProperty(
+        "locations_is_not_planning",
+        "visibility",
+        "none"
+      );
+    } else {
+      map.current?.setLayoutProperty(
+        "locations_is_not_planning",
+        "visibility",
+        "visible"
+      );
+    }
+  };
+  const showPopup = (e: any) => {
     if (!map.current) return;
     map.current.getCanvas().style.cursor = "pointer";
 
     const coordinates = e.features[0].geometry.coordinates.slice();
     const properties = e.features[0].properties;
-
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
@@ -194,7 +150,49 @@ const MapAdsManagement = () => {
       .setLngLat(coordinates)
       .setHTML(popupNode.innerHTML)
       .addTo(map.current);
-  }
+  };
+  const hidePopup = () => {
+    if (!map.current) return;
+    map.current.getCanvas().style.cursor = "";
+    popup.remove();
+  };
+
+  const clickHandler = (e: any, layer_id: string) => {
+    const map = e.target;
+    const features: MapGeoJSONFeature[] = map.queryRenderedFeatures(e.point, {
+      layers: [layer_id],
+    });
+    if (features.length > 0) {
+      closeAddressSidebar();
+      const {
+        id,
+        advertises,
+        address,
+        adsForm,
+        images,
+        locationType,
+        planning,
+        longitude,
+        latitude,
+        property,
+      } = features[0].properties;
+
+      const locationTemp: Location = {
+        id,
+        address,
+        advertises: JSON.parse(advertises),
+        adsForm: JSON.parse(adsForm),
+        images: JSON.parse(images),
+        locationType: JSON.parse(locationType),
+        planning,
+        longitude,
+        latitude,
+        property: JSON.parse(property),
+      };
+      setLocationData(locationTemp);
+      setOpenLocationSidebar(true);
+    }
+  };
 
   useEffect(() => {
     if (map.current) return; // stops map from initializing more than once
@@ -219,112 +217,120 @@ const MapAdsManagement = () => {
     setMapController(createMapLibreGlMapController(map.current, MapLibreGL));
     map.current.on("load", () => {
       if (!map.current) return;
-      map.current.addSource("ads", {
+      map.current.addSource("locations_is_planning", {
         type: "geojson",
         data: {
           type: "FeatureCollection",
-          features: locations,
+          features: locationsIsPlanning,
+        },
+      });
+      map.current.addSource("locations_is_not_planning", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: locationsIsNotPlanning,
         },
       });
 
       map.current.addLayer({
-        id: "ads",
+        id: "locations_is_not_planning",
         type: "circle",
-        source: "ads",
+        source: "locations_is_not_planning",
+        paint: {
+          "circle-color": "red",
+          "circle-radius": 8,
+        },
+      });
+
+      map.current.addLayer({
+        id: "locations_is_planning",
+        type: "circle",
+        source: "locations_is_planning",
         paint: {
           "circle-color": "#4264fb",
           "circle-radius": 8,
         },
       });
-    });
-
-    map.current.on("mouseenter", "ads", (e) => showPopup(e));
-    map.current.on("mouseleave", "ads", () => {
-      if (!map.current) return;
-      map.current.getCanvas().style.cursor = "";
-      popup.remove();
-    });
-    map.current.on("click", "ads", (e) => {
-      const map = e.target;
-      const features: MapGeoJSONFeature[] = map.queryRenderedFeatures(e.point, {
-        layers: ["ads"],
+      map.current.on("mouseenter", "locations_is_planning", (e) =>
+        showPopup(e)
+      );
+      map.current.on("mouseenter", "locations_is_not_planning", (e) =>
+        showPopup(e)
+      );
+      map.current.on("mouseleave", "locations_is_planning", () => {
+        hidePopup();
       });
-      if (features.length > 0) {
-        closeAddressSidebar();
-        const {
-          id,
-          advertises,
-          address,
-          ads_form_name,
-          imgUrl,
-          location_type_name,
-          planning,
-          longitude,
-          latitude,
-        } = features[0].properties;
+      map.current.on("mouseleave", "locations_is_not_planning", () => {
+        hidePopup();
+      });
 
-        const locationTemp: Location = {
-          id,
-          address,
-          advertises: JSON.parse(advertises),
-          ads_form_name,
-          imgUrl,
-          location_type_name,
-          planning,
-          longitude,
-          latitude,
-        };
-        setLocationData(locationTemp);
-        setOpenLocationSidebar(true);
-      }
-    });
+      map.current.on("click", "locations_is_planning", (e) => {
+        clickHandler(e, "locations_is_planning");
+      });
+      map.current.on("click", "locations_is_not_planning", (e) => {
+        clickHandler(e, "locations_is_not_planning");
+      });
 
-    map.current.on("click", async (e) => {
-      const map = e.target;
-      const features = map.queryRenderedFeatures(e.point, { layers: ["ads"] });
-      if (features.length > 0) {
-        return;
-      } else {
-        const { lng, lat } = e.lngLat;
-        const results: any = await maptilersdk.geocoding.reverse([lng, lat]);
-        closeAdsSidebar();
-        setOpenRandomLocationSidebar(true);
-        if (marker.current) {
-          marker.current.setLngLat([lng, lat]);
-          const { place_name_vi } = results.features[0];
-          const randomLocationTemp: RandomLocation = {
-            address: place_name_vi,
-            longitude: lng,
-            latitude: lat,
-          };
-          setRandomLocationData(randomLocationTemp);
+      map.current.on("click", async (e) => {
+        const map = e.target;
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ["locations_is_planning", "locations_is_not_planning"],
+        });
+        if (features.length > 0) {
+          return;
         } else {
-          const { place_name_vi } = results.features[0];
-          const coordinates = results.features[0].geometry.coordinates.slice();
-          const randomLocationTemp: RandomLocation = {
-            address: place_name_vi,
-            longitude: coordinates[0],
-            latitude: coordinates[1],
-          };
-          setRandomLocationData(randomLocationTemp);
-          marker.current = new MapLibreGL.Marker()
-            .setLngLat(coordinates)
-            .addTo(map);
+          const { lng, lat } = e.lngLat;
+          const results: any = await maptilersdk.geocoding.reverse([lng, lat]);
+          closeAdsSidebar();
+          setOpenRandomLocationSidebar(true);
+          if (marker.current) {
+            marker.current.setLngLat([lng, lat]);
+            const { place_name_vi } = results.features[0];
+            const randomLocationTemp: RandomLocation = {
+              address: place_name_vi,
+              longitude: lng,
+              latitude: lat,
+            };
+            setRandomLocationData(randomLocationTemp);
+          } else {
+            const { place_name_vi } = results.features[0];
+            const coordinates =
+              results.features[0].geometry.coordinates.slice();
+            const randomLocationTemp: RandomLocation = {
+              address: place_name_vi,
+              longitude: coordinates[0],
+              latitude: coordinates[1],
+            };
+            setRandomLocationData(randomLocationTemp);
+            marker.current = new MapLibreGL.Marker()
+              .setLngLat(coordinates)
+              .addTo(map);
+          }
         }
-      }
+      });
     });
   }, [API_KEY, lng, lat, zoom]);
 
   return (
-    <div className={classes.mapWrap}>
-      <div className={classes.geocoding}>
+    <Box className={classes.mapWrap}>
+      <Box className={classes.geocoding}>
         <GeocodingControl
           apiKey={API_KEY}
           language={"vi"}
           mapController={mapController}
         />
-      </div>
-      <div ref={mapContainer} className={classes.map} />
+      </Box>
+      <Box ref={mapContainer} className={classes.map} />
+      <Box className={classes.botNavbar}>
+        <Box className={classes.botNavbarItem}>
+          <ParagraphSmall>Các điểm đặt quảng cáo đã quy hoạch</ParagraphSmall>
+          <Switch defaultChecked onChange={changeHandleLocationIsPlanning} />
+        </Box>
+        <Box className={classes.botNavbarItem}>
+          <ParagraphSmall>Các điểm đặt quảng cáo chưa quy hoạch</ParagraphSmall>
+          <Switch defaultChecked onChange={changeHandleLocationIsNotPlanning} />
+        </Box>
+      </Box>
       <LocationSidebar
         isOpen={openLocationSidebar}
         closeSidebar={closeAdsSidebar}
@@ -335,7 +341,7 @@ const MapAdsManagement = () => {
         closeSidebar={closeAddressSidebar}
         randomLocation={randomLocation}
       />
-    </div>
+    </Box>
   );
 };
 

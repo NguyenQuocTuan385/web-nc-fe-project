@@ -8,6 +8,8 @@ import EditAdLicense from "pages/admin/EditAdLicense";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ContractForm from "pages/admin/CreateContractForm";
+import EditAdLocationLicenseDetail from "pages/admin/EditAdLicense/components/EditAdLocationLicense/EditAdLocationLicenseDetail";
+
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -15,8 +17,13 @@ function App() {
         <Routes>
           <Route path="/admin" Component={UserManagement} />
           <Route path="/" Component={MapAdsManagement} />
-          <Route path="/admin/license/edit" Component={EditAdLicense} />
-          <Route path="/admin/license" Component={AdLicense} />
+          <Route path="/admin/review/edit" Component={EditAdLicense} />
+
+          <Route
+            path="/admin/review/edit/:id"
+            Component={EditAdLocationLicenseDetail}
+          />
+          <Route path="/admin/review/license" Component={AdLicense} />
           <Route path="/contracts/createForm" element={<ContractForm />} />
         </Routes>
       </BrowserRouter>

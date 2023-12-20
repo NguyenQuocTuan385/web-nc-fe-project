@@ -4,13 +4,15 @@ import ParagraphExtraSmall from "components/common/text/ParagraphExtraSmall";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 
 const PopoverHover = ({ properties }: any) => {
+  const locationTypeName = JSON.parse(properties.locationType).name;
+  const adsFormName = JSON.parse(properties.adsForm).name;
   return (
     <Box className={classes.popup}>
       <ParagraphExtraSmall $fontWeight={"bold"}>
-        {properties.ads_form_name}
+        {adsFormName}
       </ParagraphExtraSmall>
       <ParagraphExtraSmall>{properties.address}</ParagraphExtraSmall>
-      <ParagraphExtraSmall>{properties.location_type_name}</ParagraphExtraSmall>
+      <ParagraphExtraSmall>{locationTypeName}</ParagraphExtraSmall>
       {properties.planning ? (
         <ParagraphSmall $fontWeight={"bold"}>ĐÃ QUY HOẠCH</ParagraphSmall>
       ) : (

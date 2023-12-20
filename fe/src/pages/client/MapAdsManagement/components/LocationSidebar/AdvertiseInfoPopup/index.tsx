@@ -58,7 +58,7 @@ export default function AdvertiseInfoPopup({
               Ảnh bảng quảng cáo
             </ParagraphBody>
             <Box className={classes.imgContainer}>
-              <img src={advertise.imgUrl} alt="ads-img" />
+              <img src={advertise.images} alt="ads-img" />
             </Box>
           </Box>
           {advertise.companyImgUrl && (

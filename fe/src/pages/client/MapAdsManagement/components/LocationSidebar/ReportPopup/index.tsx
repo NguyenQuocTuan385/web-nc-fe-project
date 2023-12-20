@@ -9,11 +9,17 @@ import classes from "./styles.module.scss";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { Error } from "@mui/icons-material";
 import Heading4 from "components/common/text/Heading4";
 import InputTextfield from "components/common/inputs/InputTextField";
 import TextTitle from "components/common/text/TextTitle";
+import ReCAPTCHA from "react-google-recaptcha";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import ErrorMessage from "components/common/text/ErrorMessage";
+import clsx from "clsx";
 
 const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -25,11 +31,46 @@ const ReportDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 interface ReportPopupProps {
-  onClose: () => void;
   open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
-export default function ReportPopup({ onClose, open }: ReportPopupProps) {
-  const [value, setValue] = useState("");
+interface FormData {
+  reportFormName: string;
+  fullname: string;
+  email: string;
+  phone: string;
+  content: string;
+}
+
+export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
+  const schema = useMemo(() => {
+    return yup.object().shape({
+      reportFormName: yup.string().required("Bắt buộc nhập hình thức báo cáo"),
+      fullname: yup.string().required("Bắt buộc nhập họ và tên"),
+      email: yup.string().required("Bắt buộc nhập email"),
+      phone: yup.string().required("Bắt buộc nhập số điện thoại"),
+      content: yup
+        .string()
+        .required("Bắt buộc nhập nội dung báo cáo")
+        .notOneOf(["<p><br></p>"], "Bắt buộc nhập nội dung báo cáo"),
+    });
+  }, []);
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+  });
+  const onClose = () => {
+    setOpen(false);
+    reset();
+    setVerified(false);
+  };
+  const [verified, setVerified] = useState(false);
   const myColors = [
     "green",
     "blue",
@@ -41,6 +82,16 @@ export default function ReportPopup({ onClose, open }: ReportPopupProps) {
     "red",
     "black",
   ];
+  const onSubmit = (data: FormData) => {
+    const formData: FormData = {
+      reportFormName: data.reportFormName,
+      fullname: data.fullname,
+      email: data.email,
+      phone: data.phone,
+      content: data.content,
+    };
+    console.log(formData);
+  };
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -59,6 +110,10 @@ export default function ReportPopup({ onClose, open }: ReportPopupProps) {
     ],
   };
 
+  function onChange(value: any) {
+    setVerified(true);
+  }
+
   return (
     <ReportDialog
       onClose={onClose}
@@ -69,7 +124,7 @@ export default function ReportPopup({ onClose, open }: ReportPopupProps) {
     >
       <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
         <Box className={classes.titleWrap}>
-          <Error color="error" />
+          <Error color="error" className={classes.errorIc} />
           <Heading4 $colorName="--red-error">Báo cáo vi phạm</Heading4>
         </Box>
       </DialogTitle>
@@ -86,30 +141,43 @@ export default function ReportPopup({ onClose, open }: ReportPopupProps) {
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <Box component="form" className={classes.formWrap}>
+        <Box
+          component="form"
+          className={classes.formWrap}
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <InputTextfield
             title="Hình thức báo cáo"
-            defaultValue="Tố giác sai phạm"
-            name="report_form_name"
+            inputRef={register("reportFormName")}
+            errorMessage={errors.reportFormName?.message}
+            name="reportFormName"
             type="text"
+            width="220px"
           />
           <InputTextfield
             title="Họ và tên"
-            defaultValue="Nguyễn Quốc Tuấn"
+            inputRef={register("fullname")}
+            errorMessage={errors.fullname?.message}
             name="fullname"
             type="text"
+            width="220px"
           />
           <InputTextfield
             title="Email"
-            defaultValue="nqt20@gmail.com"
+            inputRef={register("email")}
+            errorMessage={errors.email?.message}
             name="email"
             type="email"
+            width="220px"
           />
           <InputTextfield
             title="Số điện thoại"
-            defaultValue="0123456789"
+            inputRef={register("phone")}
+            errorMessage={errors.phone?.message}
             name="phone"
             type="text"
+            width="220px"
           />
           <Box className={classes.imagesmgAddWrap}>
             <TextTitle width={"170px"}>Ảnh báo cáo</TextTitle>
@@ -122,13 +190,35 @@ export default function ReportPopup({ onClose, open }: ReportPopupProps) {
           </Box>
           <Box className={classes.editor}>
             <TextTitle>Nội dung báo cáo</TextTitle>
-            <ReactQuill
-              theme="snow"
-              value={value}
-              onChange={setValue}
-              modules={modules}
+            <Controller
+              name="content"
+              control={control}
+              render={({ field }) => (
+                <ReactQuill
+                  value={field.value || ""}
+                  onBlur={() => field.onBlur}
+                  onChange={(value) => field.onChange(value)}
+                  modules={modules}
+                  className={clsx({
+                    [classes.editorError]: !!errors.content?.message,
+                  })}
+                />
+              )}
             />
           </Box>
+          {errors.content?.message && (
+            <ErrorMessage>{errors.content?.message}</ErrorMessage>
+          )}
+          <ReCAPTCHA
+            sitekey="6LdE9TYpAAAAABIEFjjcUoseZr-hCu0ssMWUDn7Y"
+            onChange={onChange}
+          />
+          <Button
+            disabled={!verified}
+            type="submit"
+            children="Nộp báo cáo"
+            variant="contained"
+          />
         </Box>
       </DialogContent>
     </ReportDialog>
