@@ -9,8 +9,15 @@ import classes from "./styles.module.scss";
 import Heading4 from "components/common/text/Heading4";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-export default function Popup(props: any) {
-  const { children, openPopup, setOpenPopup } = props;
+import EditProfileDetail from "../EditProfileDetail";
+
+interface PopupProps {
+  openPopup: boolean;
+  setOpenPopup: (value: boolean) => void;
+}
+
+export default function Popup(props: PopupProps) {
+  const { openPopup, setOpenPopup } = props;
   return (
     <Dialog open={openPopup}>
       <DialogTitle>
@@ -22,7 +29,9 @@ export default function Popup(props: any) {
         </Box>
       </DialogTitle>
       <DialogContent dividers>
-        <DialogContentText>{children}</DialogContentText>
+        <DialogContentText>
+          <EditProfileDetail />
+        </DialogContentText>
       </DialogContent>
     </Dialog>
   );

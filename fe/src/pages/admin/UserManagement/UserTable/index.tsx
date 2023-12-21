@@ -133,9 +133,7 @@ export default function UserManagementTable({
         onChange={handleChangePage}
         className={classes.pagination}
       />
-      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
-        <EditProfileDetail />
-      </Popup>
+      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
     </Box>
   );
 }
