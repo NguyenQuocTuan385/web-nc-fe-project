@@ -13,14 +13,12 @@ interface AdvertiseInfoProps {
 const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [openAdvertiseInfoPopup, setOpenAdvertiseInfoPopup] = useState<boolean>(false);
-  const closeAdvertiseInfoPopup = () => {
-    setOpenAdvertiseInfoPopup(false);
-  };
-  const location = advertise.location;
+  const closeAdvertiseInfoPopup = () => setOpenAdvertiseInfoPopup(false);
+
   return (
     <Box className={classes.boxContainer}>
       <ParagraphBody $fontWeight={"bold"}>{advertise.adsType.name}</ParagraphBody>
-      <ParagraphBody $colorName='--gray-50'>{location.address}</ParagraphBody>
+      <ParagraphBody $colorName='--gray-50'>{advertise.location.address}</ParagraphBody>
       <Box className={classes.advertiseInfo}>
         <ParagraphBody>
           Kích thước:{" "}
@@ -32,10 +30,10 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
           Số lượng: <b>{advertise.pillarQuantity} trụ/bảng</b>
         </ParagraphBody>
         <ParagraphBody>
-          Hình thức: <b>{location.adsForm.name}</b>
+          Hình thức: <b>{advertise.location.adsForm.name}</b>
         </ParagraphBody>
         <ParagraphBody>
-          Phân loại: <b>{location.locationType.name}</b>
+          Phân loại: <b>{advertise.location.locationType.name}</b>
         </ParagraphBody>
       </Box>
       <ParagraphBody>

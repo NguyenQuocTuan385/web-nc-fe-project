@@ -21,6 +21,7 @@ import ErrorMessage from "components/common/text/ErrorMessage";
 import clsx from "clsx";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import UploadImage from "components/common/UploadImage";
+import InputWysiwyg from "components/common/InputWysiwyg";
 
 const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -72,18 +73,15 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
     setOpen(false);
     reset();
     setVerified(false);
-    // setFilesPreview([]);
-    // setIsFileUploaded(false);
   };
   const [verified, setVerified] = useState(false);
-  const myColors = ["green", "blue", "gray", "purple", "pink", "yellow", "white", "red", "black"];
   const onSubmit = async (data: FormData) => {
     const files = data.images;
     const formSubmit: FormData = {
       ...data,
       images: []
     };
-    console.log(files);
+
     await Promise.all(
       files.map(async (file) => {
         const formData = new FormData();
@@ -101,23 +99,10 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
       })
     );
 
-    // Now formData has all uploaded image URLs
     console.log(formSubmit);
   };
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ font: [] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ align: ["right", "center", "justify"] }],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-      ["link"],
-      [{ color: myColors }],
-      [{ background: myColors }]
-    ]
-  };
 
-  function onChange(value: any) {
+  function onChange() {
     setVerified(true);
   }
 
@@ -197,25 +182,19 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
               </Box>
             </Grid>
           </Grid>
-          <Box className={classes.editor}>
-            <TextTitle>Nội dung báo cáo</TextTitle>
-            <Controller
-              name='content'
-              control={control}
-              render={({ field }) => (
-                <ReactQuill
-                  value={field.value || ""}
-                  onBlur={() => field.onBlur}
-                  onChange={(value) => field.onChange(value)}
-                  modules={modules}
-                  className={clsx({
-                    [classes.editorError]: !!errors.content?.message
-                  })}
-                />
-              )}
-            />
-          </Box>
-          {errors.content?.message && <ErrorMessage>{errors.content?.message}</ErrorMessage>}
+          <Controller
+            name='content'
+            control={control}
+            render={({ field }) => (
+              <InputWysiwyg
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
+                errorMessage={errors.content?.message}
+                title='Nội dung báo cáo'
+                onBlur={() => field.onBlur}
+              />
+            )}
+          />
           <ReCAPTCHA
             sitekey='6LdE9TYpAAAAABIEFjjcUoseZr-hCu0ssMWUDn7Y'
             onChange={onChange}

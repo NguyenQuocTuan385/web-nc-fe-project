@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import AdvertiseService from "services/advertise";
 import { Advertise } from "models/advertise";
 import ImagesGallery from "components/common/ImagesGallery";
+import ImagesSlider from "components/common/ImagesSlider";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -40,7 +41,7 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
             <ChevronLeft fontSize='large' />
           </IconButton>
         </Box>
-        <Box className={classes.imgContainer}>{!!images && <ImagesGallery images={images}></ImagesGallery>}</Box>
+        {!!images && <ImagesSlider images={images} />}
         <Box className={classes.adsContainer}>
           {!!advertises && advertises.map((item) => <AdvertiseInfo key={item.id} advertise={item} />)}
         </Box>
