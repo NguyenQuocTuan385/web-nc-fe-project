@@ -34,7 +34,7 @@ const schema: any = Yup.object().shape({
   images: Yup.mixed().test(
     "fileList",
     "Vui lòng chọn ít nhất một ảnh",
-    (value) => {
+    (value: any) => {
       let filesArray: File[] = [];
 
       if (value instanceof FileList) {
@@ -60,12 +60,13 @@ const schema: any = Yup.object().shape({
   ),
 });
 
-const ButtonSubmit = styled(Button)(() => ({
-  backgroundColor: "#389B42 !important",
-  padding: "10px 15px !important",
-  color: "#fff !important",
-  float: "right",
-}));
+const ButtonSubmit = styled(Button)(() => `
+  background-color: #389B42 !important;
+  padding: 10px 15px !important;
+  color: #fff !important;
+  float: right;
+`);
+
 
 const MyForm: React.FC = () => {
   const {
