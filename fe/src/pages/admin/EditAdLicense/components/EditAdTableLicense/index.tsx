@@ -12,6 +12,7 @@ import classes from "./styles.module.scss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
 import ads from "../../../../../editadtable.json";
+import { useNavigate } from "react-router-dom";
 
 const rows = [...ads];
 const rowsPerPage = 6;
@@ -32,6 +33,26 @@ export default function EditAdTableLicense({
     value: number
   ) => {
     setPage(value);
+  };
+  const navigate = useNavigate();
+
+  const handleClick = (row: any) => {
+    navigate(`/admin/review/edit/table/${row.id}`, {
+      state: {
+        id: row.id,
+        address: row.address,
+        editTime: row.editTime,
+        imgUrl: row.imgUrl,
+        width: row.width,
+        height: row.height,
+        amount: row.amount,
+        adType: row.adType,
+        tableType: row.tableType,
+        position: row.location,
+        edit: row.edit,
+        reason: row.reason,
+      },
+    });
   };
   useEffect(() => {
     let filteredRows = rows;
@@ -84,7 +105,11 @@ export default function EditAdTableLicense({
                 (page - 1) * rowsPerPage + rowsPerPage
               )
               .map((row) => (
-                <TableRow key={row.id} className={classes.rowTable}>
+                <TableRow
+                  key={row.id}
+                  className={classes.rowTable}
+                  onClick={() => handleClick(row)}
+                >
                   <TableCell scope="row">{row.id}</TableCell>
                   <TableCell align="left" className={classes.dataTable}>
                     <div className={classes.textOverflow}>{row.address}</div>{" "}
