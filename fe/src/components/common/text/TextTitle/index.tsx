@@ -1,12 +1,9 @@
 import { Typography, styled } from "@mui/material";
 
-interface TextTitleProps {
-  invalid?: string | null;
-}
+interface TextTitleProps {}
 
 const TextTitle = styled(Typography)<TextTitleProps>`
-  color: ${(props) =>
-    props.invalid ? "var(--red-error)" : "var(--eerie-black-00)"};
+  color: var(--eerie-black-00);
   font-size: 16px;
   font-weight: 600;
   font-family: "Inter";

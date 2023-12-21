@@ -34,3 +34,16 @@
   align-items: center;
   gap: 15px;
 }
+
+.errorIc {
+  color: var(--red-error);
+}
+
+.editorError {
+  [class~="ql-toolbar"] {
+    border-color: var(--red-error) !important;
+  }
+  [class~="ql-container"] {
+    border-color: var(--red-error) !important;
+  }
+}

@@ -31,7 +31,7 @@ const AdvertiseInfo = ({
   return (
     <Box className={classes.boxContainer}>
       <ParagraphBody $fontWeight={"bold"}>
-        {advertise.ads_type_name}
+        {advertise.adsType.name}
       </ParagraphBody>
       <ParagraphBody $colorName="--gray-50">{address}</ParagraphBody>
       <Box className={classes.advertiseInfo}>
@@ -72,7 +72,7 @@ const AdvertiseInfo = ({
         open={openAdvertiseInfoPopup}
         onClose={closeAdvertiseInfoPopup}
       />
-      <ReportPopup open={openReportPopup} onClose={closeReportPopup} />
+      <ReportPopup open={openReportPopup} setOpen={setOpenReportPopup} />
     </Box>
   );
 };

@@ -1,6 +1,9 @@
 import { FormControl, OutlinedInput, OutlinedInputProps } from "@mui/material";
 import TextTitle from "../../text/TextTitle";
 import classes from "./styles.module.scss";
+import { memo } from "react";
+import ErrorMessage from "components/common/text/ErrorMessage";
+import clsx from "clsx";
 interface InputsProps extends OutlinedInputProps {
   title?: string;
   titleRequired?: boolean;
@@ -12,9 +15,10 @@ interface InputsProps extends OutlinedInputProps {
   autoComplete?: string;
   errorMessage?: string | null;
   optional?: boolean;
+  width?: string;
 }
 
-const InputTextfield = (props: InputsProps) => {
+const InputTextfield = memo((props: InputsProps) => {
   const {
     title,
     placeholder,
@@ -24,39 +28,33 @@ const InputTextfield = (props: InputsProps) => {
     inputRef,
     errorMessage,
     autoComplete,
-    optional,
-    titleRequired,
+    width,
   } = props;
-
+  const { ref: refInput, ...inputProps } = inputRef || { ref: null };
   return (
-    <FormControl className={classes.inputContainer}>
-      {title && (
-        <TextTitle invalid={errorMessage} width={"220px"}>
-          {title}
-          {optional ? (
-            <span className={classes.optional}>Không bắt buộc</span>
-          ) : (
-            ""
-          )}
-          {titleRequired ? (
-            <span className={classes.titleRequired}> *</span>
-          ) : (
-            ""
-          )}
-        </TextTitle>
-      )}
-      <OutlinedInput
-        placeholder={placeholder}
-        fullWidth
-        size="small"
-        name={name}
-        defaultValue={defaultValue}
-        value={value}
-        autoComplete={autoComplete}
-        inputRef={inputRef}
-      />
-    </FormControl>
+    <>
+      <FormControl className={classes.inputContainer}>
+        {title && <TextTitle width={width}>{title}</TextTitle>}
+        <OutlinedInput
+          placeholder={placeholder}
+          fullWidth
+          size="small"
+          name={name}
+          classes={{
+            root: clsx(classes.inputTextfield, {
+              [classes.inputInvalid]: !!errorMessage,
+            }),
+          }}
+          defaultValue={defaultValue}
+          value={value}
+          autoComplete={autoComplete}
+          {...inputProps}
+          inputRef={refInput}
+        />
+      </FormControl>
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+    </>
   );
-};
+});
 
 export default InputTextfield;

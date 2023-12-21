@@ -30,7 +30,7 @@ function App() {
             Component={EditAdTableLicenseDetail}
           />
           <Route path="/admin/review/license" Component={AdLicense} />
-          <Route path="/admin/review/license/:id" Component={AdLicenseDetail} />
+          <Route path="/admin/review/license/:id" Component={AdLicenseDetail} />  
           <Route path="/contracts/createForm" element={<ContractForm />} />
         </Routes>
       </BrowserRouter>
