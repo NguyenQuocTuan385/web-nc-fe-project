@@ -16,3 +16,9 @@ export interface GetProperties {
   pageSize?: number;
   current?: number;
 }
+
+export interface PropertyRequest {
+  id?: number;
+  name: string;
+  code: string;
+}

@@ -11,6 +11,8 @@ export const API = {
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
+    UPDATE: "/api/properties",
+    DELETE: "/api/properties"
   },
   WARD: {
     DEFAULT: "/api/properties",
