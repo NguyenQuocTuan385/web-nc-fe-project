@@ -11,7 +11,6 @@ import ContractForm from "pages/admin/CreateContractForm";
 import EditAdLocationLicenseDetail from "pages/admin/EditAdLicense/components/EditAdLocationLicense/EditAdLocationLicenseDetail";
 import EditAdTableLicenseDetail from "pages/admin/EditAdLicense/components/EditAdTableLicense/EditAdTableLicenseDetail";
 import AdLicenseDetail from "pages/admin/AdLicense/components/AdLicenseDetail";
-import EditProfileDetail from "pages/admin/UserManagement/EditProfileDetail";
 
 function App() {
   return (
