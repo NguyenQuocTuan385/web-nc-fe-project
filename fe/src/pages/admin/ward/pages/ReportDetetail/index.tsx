@@ -10,7 +10,7 @@ import reportDetail from "./report-detail.json";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
-  alignItems: "center",
+  alignItems: "center"
 }));
 
 export const ReportDetail = () => {
@@ -21,7 +21,7 @@ export const ReportDetail = () => {
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
           <Button>
-            <IconButton size="medium">
+            <IconButton size='medium'>
               <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
             </IconButton>
             Trở về
@@ -29,20 +29,25 @@ export const ReportDetail = () => {
           <Box>
             <h3>Hình ảnh báo cáo</h3>
             <BoxFlex justifyContent={"space-between"}>
-              { reportDetail.images.length > 0 && reportDetail.images.map((image: string) => {
-                return <img width={"48%"} height={"250px"} className={ classes['image'] } src={image} alt="Hình ảnh bảng QC"/>
-              }) }
+              {reportDetail.images.length > 0 &&
+                reportDetail.images.map((image: string) => {
+                  return (
+                    <img
+                      width={"48%"}
+                      height={"250px"}
+                      className={classes["image"]}
+                      src={image}
+                      alt='Hình ảnh bảng QC'
+                    />
+                  );
+                })}
             </BoxFlex>
           </Box>
           <Box>
             <h3>Thông tin báo cáo</h3>
             <BoxFlex>
-              <Box>
-
-              </Box>
-              <Box>
-                
-              </Box>
+              <Box></Box>
+              <Box></Box>
             </BoxFlex>
           </Box>
         </Box>
