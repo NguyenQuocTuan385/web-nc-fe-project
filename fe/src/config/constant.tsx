@@ -5,4 +5,8 @@ export const API = {
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
   },
+  CONTRACT: {
+    DEFAULT: "/api/contracts",
+    DELETE: "/api/contracts",
+  },
 };
