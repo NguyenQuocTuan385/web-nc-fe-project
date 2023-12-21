@@ -13,53 +13,55 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
 import { Contract } from "models/contract";
 import { Advertise } from "models/advertise";
+import ContractService from "services/contract";
+import { log } from "console";
+import Heading6 from "components/common/text/Heading6";
 
 // const rows = [...user];
-const rowsPerPage = 7;
 interface FilterProps {
-  totalPage: number;
-  currentPage: number;
-  pageSize: number;
-  numberOfElements: number;
   status: number;
   fieldSearch: string;
-  dataList: Contract[];
 }
 
-export default function ContractTable({
-  totalPage,
-  currentPage,
-  pageSize,
-  numberOfElements,
-  status,
-  fieldSearch,
-  dataList,
-}: FilterProps) {
-  const [page, setPage] = useState(currentPage);
+export default function ContractTable({ status, fieldSearch }: FilterProps) {
+  const [currentPage, setCurrentPage] = useState(1);
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    setPage(value);
+    setCurrentPage(value);
   };
-  const [filterContractStatus, setFilterContractStatus] = useState(dataList);
-  const emptyRows = pageSize - numberOfElements;
+  const pageSize = 5;
+  const [emptyRows, setEmptyRows] = useState(0);
+  const [dataList, setDataList] = useState<Contract[]>([]);
+  const [totalPage, setTotalPage] = useState(1);
 
   // filter contract's status for Tab Panel
   useEffect(() => {
     // not licensed
-    if (status === 1) {
-      setFilterContractStatus(
-        dataList.filter((contract) => contract.status === 0)
-      );
-    } else if (status === 2) {
-      // licensed
-      setFilterContractStatus(
-        dataList.filter((contract) => contract.status === 1)
-      );
-    } else {
-      setFilterContractStatus(dataList);
-    }
+    const getContractList = async () => {
+      ContractService.getContracts({
+        status: status,
+        pageSize: pageSize,
+        current: currentPage,
+      })
+        .then((res) => {
+          console.log(res.content);
+
+          setDataList(res.content);
+          setTotalPage(res.totalPages);
+          setEmptyRows(pageSize - res.numberOfElements);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+
+    getContractList();
+  }, [status, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
   }, [status]);
 
   // useEffect(() => {
@@ -102,7 +104,7 @@ export default function ContractTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {filterContractStatus.map((contract) => (
+            {dataList.map((contract) => (
               <TableRow key={contract.id} className={classes.rowTable}>
                 <TableCell component="th" scope="row">
                   {contract.id}
@@ -111,7 +113,7 @@ export default function ContractTable({
                   {contract.advertise.adsType.name}
                 </TableCell>
                 <TableCell align="left" className={classes.dataTable}>
-                  {contract.advertise.images}
+                  {contract.advertise.location.address}
                 </TableCell>
                 <TableCell align="left" className={classes.dataTable}>
                   {contract.companyName}
@@ -120,7 +122,13 @@ export default function ContractTable({
                   {contract.companyEmail}
                 </TableCell>
                 <TableCell align="left" className={classes.dataTable}>
-                  {contract.status}
+                  {contract.status == 1 ? (
+                    <Heading6 $colorName="--green-600">Đã cấp phép</Heading6>
+                  ) : contract.status == 2 ? (
+                    <Heading6 $colorName="--red-error">Chưa cấp phép</Heading6>
+                  ) : (
+                    <Heading6 $colorName="--gray-60">Đã hết hạn</Heading6>
+                  )}
                 </TableCell>
                 <TableCell align="center" className={classes.dataTable}>
                   <IconButton aria-label="edit" size="medium">
@@ -140,7 +148,7 @@ export default function ContractTable({
       <BasicPagination
         color="primary"
         count={totalPage}
-        page={page}
+        page={currentPage}
         onChange={handleChangePage}
         className={classes.pagination}
       />

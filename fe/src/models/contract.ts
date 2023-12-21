@@ -1,6 +1,6 @@
 import { Advertise } from "./advertise";
 
-export interface Welcome {
+export interface Contract {
   id:             number;
   companyName:    string;
   companyEmail:   string;
@@ -13,22 +13,9 @@ export interface Welcome {
   advertise:      Advertise;
 }
 
-export interface Advertise {
-    id:             number;
-    licensing:      boolean;
-    height:         number;
-    width:          number;
-    statusEdit:     null;
-    images:         string;
-    pillarQuantity: null;
-    location:       Location;
-    adsType:        AdsType;
-    createdAt:      Date;
-    updatedAt:      Date;
-}
-
 
 export interface GetContract {
+  status?: number;
   search?: string;
   pageSize?: number;
   current?: number;

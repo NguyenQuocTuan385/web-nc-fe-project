@@ -11,21 +11,9 @@ import { Contract } from "models/contract";
 import contractData from "../Contractdata.json";
 import ContractService from "services/contract";
 
-interface Pageable {
-  totalPage: number;
-  currentPage: number;
-  pageSize: number;
-  numberOfElements: number;
-}
-
 export default function TabPanel() {
   const [tabValue, setTabValue] = React.useState(0);
   const [searchValue, setSearchValue] = useState("");
-  const [tempDataList, setTempDataList] = useState([]);
-  const [totalPage, setTotalPage] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(0);
-  const [numberOfElements, setNumberOfElements] = useState(0);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -33,21 +21,6 @@ export default function TabPanel() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
-
-  useEffect(() => {
-    const getContractList = async () => {
-      ContractService.getContracts({ pageSize: 5, current: 2 })
-        .then((res) => {
-          console.log(res.content);
-          setTempDataList(res.content);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-
-    getContractList();
-  }, []);
 
   return (
     <>
@@ -57,6 +30,7 @@ export default function TabPanel() {
             <Tab label="Tất cả" />
             <Tab label="Đã cấp phép" />
             <Tab label="Chưa cấp phép" />
+            <Tab label="Đã hết hạn" />
           </Tabs>
 
           <TextField
@@ -74,15 +48,7 @@ export default function TabPanel() {
           />
         </Box>
 
-        <ContractTable
-          totalPage={totalPage}
-          numberOfElements={numberOfElements}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          dataList={tempDataList}
-          status={tabValue}
-          fieldSearch={searchValue}
-        />
+        <ContractTable status={tabValue} fieldSearch={searchValue} />
       </Box>
     </>
   );
