@@ -4,7 +4,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Button, Card, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import classes from "./styles.module.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -19,18 +19,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import ErrorMessage from "components/common/text/ErrorMessage";
 import clsx from "clsx";
-import { useDropzone } from "react-dropzone";
-import images from "config/images";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import UploadImage from "components/common/UploadImage";
 
 const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
+    padding: theme.spacing(1)
+  }
 }));
 
 interface ReportPopupProps {
@@ -57,7 +55,7 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
         .string()
         .required("Bắt buộc nhập nội dung báo cáo")
         .notOneOf(["<p><br></p>"], "Bắt buộc nhập nội dung báo cáo"),
-      images: yup.array().max(2, "Tối đa 2 ảnh"),
+      images: yup.array().max(2, "Tối đa 2 ảnh")
     });
   }, []);
   const {
@@ -65,11 +63,10 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
     handleSubmit,
     control,
     reset,
-    setValue,
-    formState: { errors },
+    formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schema),
-    mode: "onChange",
+    mode: "onChange"
   });
   const onClose = () => {
     setOpen(false);
@@ -79,22 +76,12 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
     // setIsFileUploaded(false);
   };
   const [verified, setVerified] = useState(false);
-  const myColors = [
-    "green",
-    "blue",
-    "gray",
-    "purple",
-    "pink",
-    "yellow",
-    "white",
-    "red",
-    "black",
-  ];
+  const myColors = ["green", "blue", "gray", "purple", "pink", "yellow", "white", "red", "black"];
   const onSubmit = async (data: FormData) => {
     const files = data.images;
     const formSubmit: FormData = {
       ...data,
-      images: [],
+      images: []
     };
     console.log(files);
     await Promise.all(
@@ -107,7 +94,7 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
         const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
         const uploadDataResult = await fetch(URL, {
           method: "POST",
-          body: formData,
+          body: formData
         }).then((res) => res.json());
 
         formSubmit.images.push(uploadDataResult.secure_url);
@@ -123,16 +110,11 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
       [{ font: [] }],
       ["bold", "italic", "underline", "strike"],
       [{ align: ["right", "center", "justify"] }],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
       ["link"],
       [{ color: myColors }],
-      [{ background: myColors }],
-    ],
+      [{ background: myColors }]
+    ]
   };
 
   function onChange(value: any) {
@@ -140,71 +122,60 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
   }
 
   return (
-    <ReportDialog
-      onClose={onClose}
-      aria-labelledby="customized-dialog-title"
-      open={open}
-      fullWidth
-      maxWidth="md"
-    >
-      <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+    <ReportDialog onClose={onClose} aria-labelledby='customized-dialog-title' open={open} fullWidth maxWidth='md'>
+      <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Box className={classes.titleWrap}>
-          <Error color="error" className={classes.errorIc} />
-          <Heading4 $colorName="--red-error">Báo cáo vi phạm</Heading4>
+          <Error color='error' className={classes.errorIc} />
+          <Heading4 $colorName='--red-error'>Báo cáo vi phạm</Heading4>
         </Box>
       </DialogTitle>
       <IconButton
-        aria-label="close"
+        aria-label='close'
         onClick={onClose}
         sx={{
           position: "absolute",
           right: 8,
           top: 8,
-          color: (theme) => theme.palette.grey[500],
+          color: (theme) => theme.palette.grey[500]
         }}
       >
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <Box
-          component="form"
-          className={classes.formWrap}
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <Box component='form' className={classes.formWrap} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
           <InputTextfield
-            title="Hình thức báo cáo"
+            title='Hình thức báo cáo'
             inputRef={register("reportFormName")}
             errorMessage={errors.reportFormName?.message}
-            name="reportFormName"
-            type="text"
+            name='reportFormName'
+            type='text'
           />
           <InputTextfield
-            title="Họ và tên"
+            title='Họ và tên'
             inputRef={register("fullname")}
             errorMessage={errors.fullname?.message}
-            name="fullname"
-            type="text"
+            name='fullname'
+            type='text'
           />
           <InputTextfield
-            title="Email"
+            title='Email'
             inputRef={register("email")}
             errorMessage={errors.email?.message}
-            name="email"
-            type="email"
+            name='email'
+            type='email'
           />
           <InputTextfield
-            title="Số điện thoại"
+            title='Số điện thoại'
             inputRef={register("phone")}
             errorMessage={errors.phone?.message}
-            name="phone"
-            type="text"
+            name='phone'
+            type='text'
           />
           <Grid container spacing={1} columns={12}>
             <Grid item xs={3}>
               <Box>
                 <TextTitle>Ảnh báo cáo</TextTitle>
-                <ParagraphSmall $colorName="--red-error" $fontWeight="bold">
+                <ParagraphSmall $colorName='--red-error' $fontWeight='bold'>
                   (*Tối đa 2 ảnh)
                 </ParagraphSmall>
               </Box>
@@ -212,7 +183,7 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
             <Grid item xs={9}>
               <Box className={classes.dropZone}>
                 <Controller
-                  name="images"
+                  name='images'
                   control={control}
                   render={({ field }) => (
                     <UploadImage
@@ -229,7 +200,7 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
           <Box className={classes.editor}>
             <TextTitle>Nội dung báo cáo</TextTitle>
             <Controller
-              name="content"
+              name='content'
               control={control}
               render={({ field }) => (
                 <ReactQuill
@@ -238,26 +209,19 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
                   onChange={(value) => field.onChange(value)}
                   modules={modules}
                   className={clsx({
-                    [classes.editorError]: !!errors.content?.message,
+                    [classes.editorError]: !!errors.content?.message
                   })}
                 />
               )}
             />
           </Box>
-          {errors.content?.message && (
-            <ErrorMessage>{errors.content?.message}</ErrorMessage>
-          )}
+          {errors.content?.message && <ErrorMessage>{errors.content?.message}</ErrorMessage>}
           <ReCAPTCHA
-            sitekey="6LdE9TYpAAAAABIEFjjcUoseZr-hCu0ssMWUDn7Y"
+            sitekey='6LdE9TYpAAAAABIEFjjcUoseZr-hCu0ssMWUDn7Y'
             onChange={onChange}
             onExpired={() => setVerified(false)}
           />
-          <Button
-            disabled={!verified}
-            type="submit"
-            children="Nộp báo cáo"
-            variant="contained"
-          />
+          <Button disabled={!verified} type='submit' children='Nộp báo cáo' variant='contained' />
         </Box>
       </DialogContent>
     </ReportDialog>

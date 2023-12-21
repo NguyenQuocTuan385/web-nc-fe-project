@@ -31,9 +31,12 @@
     "axios": "^1.6.2",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.0",
     "immutable": "^4.3.4",
     "lightgallery": "^2.7.2",
     "maplibre-gl": "^3.6.2",
+    "prettier": "^3.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
@@ -57,7 +60,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext ts,tsx src/",
+    "lint:fix": "eslint --fix --ext ts,tsx src/",
+    "prettier": "prettier --check \"src/**/(*.tsx|*.ts|*.scss|*.css)\"",
+    "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.scss|*.css)\""
   },
   "eslintConfig": {
     "extends": [

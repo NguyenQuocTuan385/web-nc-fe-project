@@ -14,11 +14,7 @@ interface LocalAddressPopoverProps {
   location: Location | null;
 }
 
-const LocationSidebar = ({
-  isOpen,
-  closeSidebar,
-  location,
-}: LocalAddressPopoverProps) => {
+const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopoverProps) => {
   const [advertises, setAdvertises] = useState<Advertise[]>([]);
   const [images, setImages] = useState<string[]>([]);
 
@@ -37,21 +33,16 @@ const LocationSidebar = ({
     getAllAdvertises();
   }, [location]);
   return (
-    <Drawer variant="persistent" hideBackdrop={true} open={isOpen}>
+    <Drawer variant='persistent' hideBackdrop={true} open={isOpen}>
       <Box className={classes.sidebarContainer}>
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
-            <ChevronLeft fontSize="large" />
+            <ChevronLeft fontSize='large' />
           </IconButton>
         </Box>
-        <Box className={classes.imgContainer}>
-          {!!images && <ImagesGallery images={images}></ImagesGallery>}
-        </Box>
+        <Box className={classes.imgContainer}>{!!images && <ImagesGallery images={images}></ImagesGallery>}</Box>
         <Box className={classes.adsContainer}>
-          {!!advertises &&
-            advertises.map((item) => (
-              <AdvertiseInfo key={item.id} advertise={item} />
-            ))}
+          {!!advertises && advertises.map((item) => <AdvertiseInfo key={item.id} advertise={item} />)}
         </Box>
       </Box>
     </Drawer>

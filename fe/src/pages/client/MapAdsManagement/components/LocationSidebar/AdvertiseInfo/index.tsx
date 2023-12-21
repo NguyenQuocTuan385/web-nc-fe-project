@@ -6,25 +6,21 @@ import ReportPopup from "../ReportPopup";
 import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Advertise } from "models/advertise";
-import { Location } from "models/location";
 
 interface AdvertiseInfoProps {
   advertise: Advertise;
 }
 const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
-  const [openAdvertiseInfoPopup, setOpenAdvertiseInfoPopup] =
-    useState<boolean>(false);
+  const [openAdvertiseInfoPopup, setOpenAdvertiseInfoPopup] = useState<boolean>(false);
   const closeAdvertiseInfoPopup = () => {
     setOpenAdvertiseInfoPopup(false);
   };
   const location = advertise.location;
   return (
     <Box className={classes.boxContainer}>
-      <ParagraphBody $fontWeight={"bold"}>
-        {advertise.adsType.name}
-      </ParagraphBody>
-      <ParagraphBody $colorName="--gray-50">{location.address}</ParagraphBody>
+      <ParagraphBody $fontWeight={"bold"}>{advertise.adsType.name}</ParagraphBody>
+      <ParagraphBody $colorName='--gray-50'>{location.address}</ParagraphBody>
       <Box className={classes.advertiseInfo}>
         <ParagraphBody>
           Kích thước:{" "}
@@ -47,22 +43,13 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
       </ParagraphBody>
       <Box className={classes.btnContainer}>
         <IconButton onClick={() => setOpenAdvertiseInfoPopup(true)}>
-          <InfoOutlined fontSize="large" color="primary" />
+          <InfoOutlined fontSize='large' color='primary' />
         </IconButton>
-        <Button
-          variant="outlined"
-          color="error"
-          startIcon={<Error />}
-          onClick={() => setOpenReportPopup(true)}
-        >
+        <Button variant='outlined' color='error' startIcon={<Error />} onClick={() => setOpenReportPopup(true)}>
           Báo cáo vi phạm
         </Button>
       </Box>
-      <AdvertiseInfoPopup
-        advertise={advertise}
-        open={openAdvertiseInfoPopup}
-        onClose={closeAdvertiseInfoPopup}
-      />
+      <AdvertiseInfoPopup advertise={advertise} open={openAdvertiseInfoPopup} onClose={closeAdvertiseInfoPopup} />
       <ReportPopup open={openReportPopup} setOpen={setOpenReportPopup} />
     </Box>
   );

@@ -12,11 +12,11 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 
 const AdvertisePopup = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
+    padding: theme.spacing(1)
+  }
 }));
 
 interface AdvertisePopupProps {
@@ -24,29 +24,20 @@ interface AdvertisePopupProps {
   open: boolean;
   advertise: Advertise;
 }
-export default function AdvertiseInfoPopup({
-  onClose,
-  open,
-  advertise,
-}: AdvertisePopupProps) {
+export default function AdvertiseInfoPopup({ onClose, open, advertise }: AdvertisePopupProps) {
   return (
-    <AdvertisePopup
-      onClose={onClose}
-      aria-labelledby="customized-dialog-title"
-      open={open}
-      maxWidth="lg"
-    >
-      <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+    <AdvertisePopup onClose={onClose} aria-labelledby='customized-dialog-title' open={open} maxWidth='lg'>
+      <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Heading4>Thông tin chi tiết bảng quảng cáo</Heading4>
       </DialogTitle>
       <IconButton
-        aria-label="close"
+        aria-label='close'
         onClick={onClose}
         sx={{
           position: "absolute",
           right: 8,
           top: 8,
-          color: (theme) => theme.palette.grey[500],
+          color: (theme) => theme.palette.grey[500]
         }}
       >
         <CloseIcon />
@@ -54,23 +45,19 @@ export default function AdvertiseInfoPopup({
       <DialogContent dividers>
         <Box className={classes.boxContainer}>
           <Box className={classes.boxWrapInfo}>
-            <ParagraphBody $fontWeight={"bold"}>
-              Ảnh bảng quảng cáo
-            </ParagraphBody>
+            <ParagraphBody $fontWeight={"bold"}>Ảnh bảng quảng cáo</ParagraphBody>
             <Box className={classes.imgContainer}>
-              <img src={advertise.images} alt="ads-img" />
+              <img src={advertise.images} alt='ads-img' />
             </Box>
           </Box>
           {advertise.companyImgUrl && (
             <Box className={classes.boxWrapInfo}>
-              <ParagraphBody $fontWeight={"bold"}>
-                Ảnh bảng quảng cáo công ty
-              </ParagraphBody>
+              <ParagraphBody $fontWeight={"bold"}>Ảnh bảng quảng cáo công ty</ParagraphBody>
               <ParagraphBody>
                 Ngày hết hạn hợp đồng: <b>30/04/2024</b>
               </ParagraphBody>
               <Box className={classes.imgContainer}>
-                <img src={advertise.companyImgUrl} alt="ads-img" />
+                <img src={advertise.companyImgUrl} alt='ads-img' />
               </Box>
             </Box>
           )}

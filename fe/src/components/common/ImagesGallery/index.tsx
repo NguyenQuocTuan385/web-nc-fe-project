@@ -21,7 +21,7 @@ const ImagesGallery = memo(({ images }: ImagesGalleryProps) => {
     >
       {images.map((image, index) => (
         <a className={classes.imageWrapper} key={index} href={image}>
-          <img src={image} alt="Location images" />
+          <img src={image} alt='Location images' />
         </a>
       ))}
     </LightGallery>
