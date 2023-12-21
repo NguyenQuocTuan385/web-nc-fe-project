@@ -6,34 +6,25 @@ import ReportPopup from "../ReportPopup";
 import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Advertise } from "models/advertise";
+import { Location } from "models/location";
 
 interface AdvertiseInfoProps {
-  address: string;
-  ads_form_name: string;
-  location_type_name: string;
   advertise: Advertise;
 }
-const AdvertiseInfo = ({
-  address,
-  ads_form_name,
-  location_type_name,
-  advertise,
-}: AdvertiseInfoProps) => {
+const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [openAdvertiseInfoPopup, setOpenAdvertiseInfoPopup] =
     useState<boolean>(false);
-  const closeReportPopup = () => {
-    setOpenReportPopup(false);
-  };
   const closeAdvertiseInfoPopup = () => {
     setOpenAdvertiseInfoPopup(false);
   };
+  const location = advertise.location;
   return (
     <Box className={classes.boxContainer}>
       <ParagraphBody $fontWeight={"bold"}>
         {advertise.adsType.name}
       </ParagraphBody>
-      <ParagraphBody $colorName="--gray-50">{address}</ParagraphBody>
+      <ParagraphBody $colorName="--gray-50">{location.address}</ParagraphBody>
       <Box className={classes.advertiseInfo}>
         <ParagraphBody>
           Kích thước:{" "}
@@ -45,10 +36,10 @@ const AdvertiseInfo = ({
           Số lượng: <b>{advertise.pillarQuantity} trụ/bảng</b>
         </ParagraphBody>
         <ParagraphBody>
-          Hình thức: <b>{ads_form_name}</b>
+          Hình thức: <b>{location.adsForm.name}</b>
         </ParagraphBody>
         <ParagraphBody>
-          Phân loại: <b>{location_type_name}</b>
+          Phân loại: <b>{location.locationType.name}</b>
         </ParagraphBody>
       </Box>
       <ParagraphBody>

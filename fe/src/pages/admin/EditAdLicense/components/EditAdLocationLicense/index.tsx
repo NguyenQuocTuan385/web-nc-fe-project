@@ -37,7 +37,7 @@ export default function EditAdLocationLicense({
   const navigate = useNavigate();
 
   const handleClick = (row: any) => {
-    navigate(`/admin/review/edit/${row.id}`, {
+    navigate(`/admin/review/edit/location/${row.id}`, {
       state: {
         id: row.id,
         address: row.address,

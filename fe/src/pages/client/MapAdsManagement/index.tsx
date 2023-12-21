@@ -26,7 +26,9 @@ const MapAdsManagement = () => {
   const [lng] = useState<number>(106.68207417234699);
   const [lat] = useState<number>(10.764659325041498);
   const [zoom] = useState<number>(14);
-  const [API_KEY] = useState<string>("MijgZpLFV2J9ejlH3Ot2");
+  const [API_KEY] = useState<string>(
+    process.env.REACT_APP_API_KEY_MAPTILER as string
+  );
   const [openLocationSidebar, setOpenLocationSidebar] =
     useState<boolean>(false);
   const [location, setLocationData] = useState<Location | null>(null);
@@ -52,12 +54,7 @@ const MapAdsManagement = () => {
     const getAllLocations = async () => {
       LocationService.getLocations({ pageSize: 9999 })
         .then((res) => {
-          const locations_temp: Location[] = res.content.map(
-            (location: any) => ({
-              ...location,
-              images: JSON.parse(location.images as string),
-            })
-          );
+          const locations_temp: Location[] = res.content;
           locations_temp.map((location: Location) => {
             const feature: Feature = {
               type: "Feature",
@@ -166,7 +163,6 @@ const MapAdsManagement = () => {
       closeAddressSidebar();
       const {
         id,
-        advertises,
         address,
         adsForm,
         images,
@@ -180,9 +176,8 @@ const MapAdsManagement = () => {
       const locationTemp: Location = {
         id,
         address,
-        advertises: JSON.parse(advertises),
         adsForm: JSON.parse(adsForm),
-        images: JSON.parse(images),
+        images: images,
         locationType: JSON.parse(locationType),
         planning,
         longitude,

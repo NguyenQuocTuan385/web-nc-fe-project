@@ -1,0 +1,42 @@
+.dropzone {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  border: 2px var(--gray-20) dashed;
+  height: 200px;
+}
+
+.imagePreviewCardContainer {
+  stroke-width: 1px var(--gray-20) dashed;
+  width: 200px;
+  height: 150px;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.dropzoneContent {
+  margin-bottom: 20px !important;
+  display: flex;
+  justify-content: center;
+}
+.dropzoneText {
+  font-size: 20px;
+  color: var(--gray-30);
+}
+
+.uploadImageIcon {
+  width: 10%;
+  filter: invert(77%) sepia(64%) saturate(0%) hue-rotate(269deg) brightness(91%)
+    contrast(80%);
+}
+
+.uploadImage {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

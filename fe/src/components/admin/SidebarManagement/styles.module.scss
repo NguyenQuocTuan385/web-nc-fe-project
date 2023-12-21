@@ -1,15 +1,14 @@
-
-.sideBar{
+.sideBar {
   width: 300px;
   overflow: auto;
   flex-shrink: 0;
-  & .MuiDrawer-paper{
+  & .MuiDrawer-paper {
     width: 300px;
     box-sizing: border-box;
   }
 }
 
-.boxContainer{
+.boxContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,10 +22,10 @@
   background-color: transparent;
 }
 
-.itemIcon{
+.itemIcon {
   color: rgba(37, 43, 54, 0.38);
 }
-.selectedIcon{
+.selectedIcon {
   color: black;
 }
 .item {

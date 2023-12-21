@@ -3,6 +3,10 @@ import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfo";
 import { Location } from "models/location";
+import { useEffect, useState } from "react";
+import AdvertiseService from "services/advertise";
+import { Advertise } from "models/advertise";
+import ImagesGallery from "components/common/ImagesGallery";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -15,6 +19,23 @@ const LocationSidebar = ({
   closeSidebar,
   location,
 }: LocalAddressPopoverProps) => {
+  const [advertises, setAdvertises] = useState<Advertise[]>([]);
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getAllAdvertises = async () => {
+      if (!location) return;
+      setImages(JSON.parse(location.images));
+      AdvertiseService.getAdvertises(location.id, { pageSize: 999 })
+        .then((res) => {
+          setAdvertises(res.content);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getAllAdvertises();
+  }, [location]);
   return (
     <Drawer variant="persistent" hideBackdrop={true} open={isOpen}>
       <Box className={classes.sidebarContainer}>
@@ -24,18 +45,13 @@ const LocationSidebar = ({
           </IconButton>
         </Box>
         <Box className={classes.imgContainer}>
-          <img src={location?.images[0]} alt="anhqc" />
+          {!!images && <ImagesGallery images={images}></ImagesGallery>}
         </Box>
         <Box className={classes.adsContainer}>
-          {location?.advertises.map((item, index) => (
-            <AdvertiseInfo
-              address={location?.address}
-              key={index}
-              advertise={item}
-              ads_form_name={location?.adsForm.name}
-              location_type_name={location?.locationType.name}
-            />
-          ))}
+          {!!advertises &&
+            advertises.map((item) => (
+              <AdvertiseInfo key={item.id} advertise={item} />
+            ))}
         </Box>
       </Box>
     </Drawer>
