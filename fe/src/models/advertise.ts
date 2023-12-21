@@ -1,13 +1,15 @@
+import { Location } from "./location";
+
 export interface Advertise {
   id: number;
   lisencing: boolean;
   height: number;
   width: number;
-  ads_type_name?: string;
   pillarQuantity?: number;
   images: string;
   companyImgUrl?: string;
   statusEdit?: boolean;
+  location: Location;
   adsType: AdvertiseType;
   createdAt: Date;
   updatedAt: Date;

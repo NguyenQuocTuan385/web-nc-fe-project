@@ -8,32 +8,17 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 import { Advertise } from "models/advertise";
 
 interface AdvertiseInfoProps {
-  address: string;
-  ads_form_name: string;
-  location_type_name: string;
   advertise: Advertise;
 }
-const AdvertiseInfo = ({
-  address,
-  ads_form_name,
-  location_type_name,
-  advertise,
-}: AdvertiseInfoProps) => {
+const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
-  const [openAdvertiseInfoPopup, setOpenAdvertiseInfoPopup] =
-    useState<boolean>(false);
-  const closeReportPopup = () => {
-    setOpenReportPopup(false);
-  };
-  const closeAdvertiseInfoPopup = () => {
-    setOpenAdvertiseInfoPopup(false);
-  };
+  const [openAdvertiseInfoPopup, setOpenAdvertiseInfoPopup] = useState<boolean>(false);
+  const closeAdvertiseInfoPopup = () => setOpenAdvertiseInfoPopup(false);
+
   return (
     <Box className={classes.boxContainer}>
-      <ParagraphBody $fontWeight={"bold"}>
-        {advertise.ads_type_name}
-      </ParagraphBody>
-      <ParagraphBody $colorName="--gray-50">{address}</ParagraphBody>
+      <ParagraphBody $fontWeight={"bold"}>{advertise.adsType.name}</ParagraphBody>
+      <ParagraphBody $colorName='--gray-50'>{advertise.location.address}</ParagraphBody>
       <Box className={classes.advertiseInfo}>
         <ParagraphBody>
           Kích thước:{" "}
@@ -45,10 +30,10 @@ const AdvertiseInfo = ({
           Số lượng: <b>{advertise.pillarQuantity} trụ/bảng</b>
         </ParagraphBody>
         <ParagraphBody>
-          Hình thức: <b>{ads_form_name}</b>
+          Hình thức: <b>{advertise.location.adsForm.name}</b>
         </ParagraphBody>
         <ParagraphBody>
-          Phân loại: <b>{location_type_name}</b>
+          Phân loại: <b>{advertise.location.locationType.name}</b>
         </ParagraphBody>
       </Box>
       <ParagraphBody>
@@ -56,23 +41,14 @@ const AdvertiseInfo = ({
       </ParagraphBody>
       <Box className={classes.btnContainer}>
         <IconButton onClick={() => setOpenAdvertiseInfoPopup(true)}>
-          <InfoOutlined fontSize="large" color="primary" />
+          <InfoOutlined fontSize='large' color='primary' />
         </IconButton>
-        <Button
-          variant="outlined"
-          color="error"
-          startIcon={<Error />}
-          onClick={() => setOpenReportPopup(true)}
-        >
+        <Button variant='outlined' color='error' startIcon={<Error />} onClick={() => setOpenReportPopup(true)}>
           Báo cáo vi phạm
         </Button>
       </Box>
-      <AdvertiseInfoPopup
-        advertise={advertise}
-        open={openAdvertiseInfoPopup}
-        onClose={closeAdvertiseInfoPopup}
-      />
-      <ReportPopup open={openReportPopup} onClose={closeReportPopup} />
+      <AdvertiseInfoPopup advertise={advertise} open={openAdvertiseInfoPopup} onClose={closeAdvertiseInfoPopup} />
+      <ReportPopup open={openReportPopup} setOpen={setOpenReportPopup} />
     </Box>
   );
 };

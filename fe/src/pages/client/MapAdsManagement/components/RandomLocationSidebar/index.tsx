@@ -11,37 +11,26 @@ interface LocalAddressPopoverProps {
   randomLocation: RandomLocation | null;
 }
 
-const RandomLocationSidebar = ({
-  isOpen,
-  closeSidebar,
-  randomLocation,
-}: LocalAddressPopoverProps) => {
+const RandomLocationSidebar = ({ isOpen, closeSidebar, randomLocation }: LocalAddressPopoverProps) => {
   return (
-    <Drawer variant="persistent" hideBackdrop={true} open={isOpen}>
-      <Box
-        className={classes.sidebarContainer}
-        display={"flex"}
-        flexDirection={"column"}
-        width={"408px"}
-      >
+    <Drawer variant='persistent' hideBackdrop={true} open={isOpen}>
+      <Box className={classes.sidebarContainer} display={"flex"} flexDirection={"column"} width={"408px"}>
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
-            <ChevronLeft fontSize="large" />
+            <ChevronLeft fontSize='large' />
           </IconButton>
         </Box>
         <AdvertiseInfo />
         <Box className={classes.boxContainer}>
-          <ParagraphBody $fontWeight={"bold"} $colorName="--green-500">
+          <ParagraphBody $fontWeight={"bold"} $colorName='--green-500'>
             Thông tin địa điểm
           </ParagraphBody>
           {/* <ParagraphBody $fontWeight={"bold"} $colorName="--green-500">
             Bệnh viện Quận Bình Thạnh
           </ParagraphBody> */}
-          <ParagraphBody $colorName="--green-500">
-            {randomLocation?.address}
-          </ParagraphBody>
+          <ParagraphBody $colorName='--green-500'>{randomLocation?.address}</ParagraphBody>
           <Box className={classes.btnContainer}>
-            <Button variant="outlined" color="error" startIcon={<Error />}>
+            <Button variant='outlined' color='error' startIcon={<Error />}>
               Báo cáo vi phạm
             </Button>
           </Box>

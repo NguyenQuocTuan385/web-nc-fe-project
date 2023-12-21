@@ -1,0 +1,74 @@
+.formGroup {
+  margin: 20px;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.datePickGroup {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.errorText {
+  color: red;
+  font-size: 12px;
+}
+
+.datePickField {
+  margin-top: 20px !important;
+}
+
+.dropzone {
+  text-align: center;
+  padding: 20px;
+  border: 2px var(--gray-20) dashed;
+  height: 200px;
+  margin: 20px !important;
+}
+
+.stickyFooterItem {
+  background-color: #ffffff;
+  border-top: 1px solid #e7e7e7;
+  text-align: center;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 60px;
+  width: 100%;
+
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  z-index: 10;
+}
+
+.phantom {
+  display: block;
+  height: 60px;
+  width: 100%;
+}
+
+.stickyFooterContainer {
+  position: relative;
+}
+
+.cancelButton {
+  background-color: var(--gray-50) !important;
+  margin-right: 10px !important;
+}
+
+.textFieldGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  width: 600px;
+}

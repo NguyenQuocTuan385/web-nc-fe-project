@@ -3,6 +3,10 @@ export const API = {
     DEFAULT: "/api/locations",
   },
   ADVERTISE: {
-    DEFAULT: "/api/location/:id/advertises",
+    DEFAULT: "/api/locations/:id/advertises",
+  },
+  CONTRACT: {
+    DEFAULT: "/api/contracts",
+    DELETE: "/api/contracts",
   },
 };

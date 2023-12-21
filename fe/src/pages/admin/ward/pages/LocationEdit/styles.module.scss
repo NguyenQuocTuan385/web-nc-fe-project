@@ -1,0 +1,47 @@
+$pacing-main: 15px;
+
+.location-edit-container {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: $pacing-main;
+  margin-top: 60px;
+  background-color: var(--blue-50);
+}
+
+.container-body {
+  width: calc(100% - 300px);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: $pacing-main;
+}
+
+form {
+  margin-top: $pacing-main;
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $pacing-main;
+}
+
+.input-error-container {
+  width: 70%;
+}
+
+input, select {
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 0 $pacing-main;
+}
+
+.error-text {
+  color: rgb(246, 22, 22);
+}
+
+label {
+  font-weight: 800;
+}

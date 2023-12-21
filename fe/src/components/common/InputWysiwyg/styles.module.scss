@@ -1,0 +1,28 @@
+.editorError {
+  [class~="ql-toolbar"] {
+    border-color: var(--red-error) !important;
+  }
+  [class~="ql-container"] {
+    border-color: var(--red-error) !important;
+  }
+}
+
+.editor {
+  height: 300px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  [class~="quill"] {
+    height: calc(100% - 19.2px);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border: 1px solid var(--gray-50);
+    [class~="ql-container"] {
+      height: calc(100% - 41.6px);
+      [class~="ql-tooltip"] {
+        left: 0% !important;
+        top: 0% !important;
+      }
+    }
+  }
+}

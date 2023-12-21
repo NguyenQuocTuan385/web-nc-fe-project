@@ -1,4 +1,4 @@
-import { Advertise, AdvertiseForm } from "./advertise";
+import { AdvertiseForm } from "./advertise";
 import { Property } from "./property";
 
 export interface RandomLocation {
@@ -12,9 +12,8 @@ export interface Location {
   planning: boolean;
   longitude: number;
   latitude: number;
-  advertises: Advertise[];
   address: string;
-  images: string[];
+  images: string;
   status_edit?: boolean;
   adsForm: AdvertiseForm;
   locationType: LocationType;

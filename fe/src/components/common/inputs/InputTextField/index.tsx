@@ -1,6 +1,9 @@
-import { FormControl, OutlinedInput, OutlinedInputProps } from "@mui/material";
+import { FormControl, Grid, OutlinedInput, OutlinedInputProps } from "@mui/material";
 import TextTitle from "../../text/TextTitle";
 import classes from "./styles.module.scss";
+import { memo } from "react";
+import ErrorMessage from "components/common/text/ErrorMessage";
+import clsx from "clsx";
 interface InputsProps extends OutlinedInputProps {
   title?: string;
   titleRequired?: boolean;
@@ -14,49 +17,39 @@ interface InputsProps extends OutlinedInputProps {
   optional?: boolean;
 }
 
-const InputTextfield = (props: InputsProps) => {
-  const {
-    title,
-    placeholder,
-    name,
-    defaultValue,
-    value,
-    inputRef,
-    errorMessage,
-    autoComplete,
-    optional,
-    titleRequired,
-  } = props;
-
+const InputTextfield = memo((props: InputsProps) => {
+  const { title, placeholder, name, defaultValue, value, inputRef, errorMessage, autoComplete } = props;
+  const { ref: refInput, ...inputProps } = inputRef || { ref: null };
   return (
-    <FormControl className={classes.inputContainer}>
-      {title && (
-        <TextTitle invalid={errorMessage} width={"220px"}>
-          {title}
-          {optional ? (
-            <span className={classes.optional}>Không bắt buộc</span>
-          ) : (
-            ""
-          )}
-          {titleRequired ? (
-            <span className={classes.titleRequired}> *</span>
-          ) : (
-            ""
-          )}
-        </TextTitle>
-      )}
-      <OutlinedInput
-        placeholder={placeholder}
-        fullWidth
-        size="small"
-        name={name}
-        defaultValue={defaultValue}
-        value={value}
-        autoComplete={autoComplete}
-        inputRef={inputRef}
-      />
-    </FormControl>
+    <>
+      <FormControl className={classes.inputContainer}>
+        <Grid container spacing={1} columns={12}>
+          <Grid item xs={3}>
+            {title && <TextTitle>{title}</TextTitle>}
+          </Grid>
+          <Grid item xs={9}>
+            <OutlinedInput
+              placeholder={placeholder}
+              fullWidth
+              size='small'
+              name={name}
+              classes={{
+                root: clsx(classes.inputTextfield, {
+                  [classes.inputInvalid]: !!errorMessage
+                })
+              }}
+              defaultValue={defaultValue}
+              value={value}
+              autoComplete={autoComplete}
+              {...inputProps}
+              inputRef={refInput}
+            />
+          </Grid>
+        </Grid>
+      </FormControl>
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+    </>
   );
-};
+});
 
 export default InputTextfield;

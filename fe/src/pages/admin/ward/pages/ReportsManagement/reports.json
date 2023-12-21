@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "fullName": "Nguyễn Hữu Lộc",
+        "email": "nhloc@gmail.com",
+        "phone": "0909080807",
+        "content": "<p>Bảng quảng cáo đặt trước nhà tôi</p>",
+        "status": false,
+        "reportTypeName": null,
+        "reply": null,
+        "createdAt": "2023-12-20T15:39:05",
+        "images": null
+    },
+    {
+        "id": 2,
+        "fullName": "Nguyễn Cái Thị Minh Thư",
+        "email": "nctmthu@gmail.com",
+        "phone": "0123456789",
+        "content": "<p>Bảng quảng cáo làm mất mỹ quang đô thị</p>",
+        "status": true,
+        "reportTypeName": null,
+        "reply": null,
+        "createdAt": "2023-12-20T15:40:08",
+        "images": null
+    }
+]
