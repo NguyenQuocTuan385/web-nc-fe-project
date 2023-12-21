@@ -54,12 +54,7 @@ const MapAdsManagement = () => {
     const getAllLocations = async () => {
       LocationService.getLocations({ pageSize: 9999 })
         .then((res) => {
-          const locations_temp: Location[] = res.content.map(
-            (location: any) => ({
-              ...location,
-              images: JSON.parse(location.images as string),
-            })
-          );
+          const locations_temp: Location[] = res.content;
           locations_temp.map((location: Location) => {
             const feature: Feature = {
               type: "Feature",
@@ -168,7 +163,6 @@ const MapAdsManagement = () => {
       closeAddressSidebar();
       const {
         id,
-        advertises,
         address,
         adsForm,
         images,
@@ -182,9 +176,8 @@ const MapAdsManagement = () => {
       const locationTemp: Location = {
         id,
         address,
-        advertises: JSON.parse(advertises),
         adsForm: JSON.parse(adsForm),
-        images: JSON.parse(images),
+        images: images,
         locationType: JSON.parse(locationType),
         planning,
         longitude,
