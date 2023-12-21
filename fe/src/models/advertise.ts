@@ -1,3 +1,5 @@
+import { Location } from "./location";
+
 export interface Advertise {
   id: number;
   lisencing: boolean;
@@ -7,6 +9,7 @@ export interface Advertise {
   images: string;
   companyImgUrl?: string;
   statusEdit?: boolean;
+  location: Location;
   adsType: AdvertiseType;
   createdAt: Date;
   updatedAt: Date;

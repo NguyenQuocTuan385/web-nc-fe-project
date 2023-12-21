@@ -12,6 +12,7 @@ import classes from "./styles.module.scss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
 import ads from "../../../../../adslicense.json";
+import { useNavigate } from "react-router-dom";
 
 const rows = [...ads];
 const rowsPerPage = 7;
@@ -29,10 +30,25 @@ export default function AdTableLicense({
   const [filterDistrict, setFilterDistrict] = useState(rows);
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
-    value: number,
+    value: number
   ) => {
     setPage(value);
   };
+  const navigate = useNavigate();
+
+  const handleClick = (row: any) => {
+    navigate(`/admin/review/license/${row.id}`, {
+      state: {
+        id: row.id,
+        imgUrl: row.imgUrl,
+        table: row.table,
+        company: row.company,
+        startDate: row.startDate,
+        endDate: row.endDate,
+      },
+    });
+  };
+
   useEffect(() => {
     let filteredRows = rows;
 
@@ -46,7 +62,9 @@ export default function AdTableLicense({
 
     if (fieldSearch !== "") {
       filteredRows = filteredRows.filter((row) =>
-        row.table.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? ""),
+        row.table.address
+          .toLowerCase()
+          .includes(fieldSearch?.toLowerCase() ?? "")
       );
     }
 
@@ -54,8 +72,7 @@ export default function AdTableLicense({
   }, [district, ward, fieldSearch, rows]);
 
   const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
 
   return (
     <Box className={classes.boxContainer}>
@@ -82,10 +99,14 @@ export default function AdTableLicense({
             {filterDistrict
               .slice(
                 (page - 1) * rowsPerPage,
-                (page - 1) * rowsPerPage + rowsPerPage,
+                (page - 1) * rowsPerPage + rowsPerPage
               )
               .map((row) => (
-                <TableRow key={row.id} className={classes.rowTable}>
+                <TableRow
+                  key={row.id}
+                  className={classes.rowTable}
+                  onClick={() => handleClick(row)}
+                >
                   <TableCell component="th" scope="row">
                     {row.id}
                   </TableCell>

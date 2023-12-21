@@ -1,0 +1,40 @@
+.boxContainer{
+  display: flex;
+  flex-direction: column;
+}
+
+.tableContainer{
+  margin-top: 20px;
+}
+
+.sizeTable{
+  max-height: 50px;
+}
+
+.headerTable{
+  font-weight: bold;
+  padding: 5px;
+}
+
+.rowTable{
+  &:last-child, &:last-child th{
+    border: 0;
+  }
+}
+
+.dataTable{
+  padding-top: 10px;
+}
+.pagination
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.dataIcon{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

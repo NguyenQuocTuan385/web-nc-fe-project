@@ -1,102 +1,74 @@
-.formGroup{
-    margin: 20px;
+.formGroup {
+  margin: 20px;
 }
 
-.cardContainer{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    margin-bottom: 20px;
-    margin-top: 20px;
+.cardContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
-.datePickGroup{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
+.datePickGroup {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
-.errorText{
-    color: red;
-    font-size: 12px;
+.errorText {
+  color: red;
+  font-size: 12px;
 }
 
-.datePickField{
-    margin-top: 20px !important;
+.datePickField {
+  margin-top: 20px !important;
 }
 
-.dropzone{
-    text-align: center;
-    padding: 20px;
-    border: 2px var(--gray-20) dashed;
-    height: 200px;
-    margin: 20px !important;
-    
-}
-
-.imagePreviewCardContainer{
-    stroke-width: 1px var(--gray-20) dashed;
-    width: 200px;
-    height: 150px;
-}
-
-.imagePreview{
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-}
-
-.dropzoneContent{
-    margin-bottom: 20px !important;
-    display: flex;
-    justify-content: center;
-}
-.dropzoneText{
-    font-size: 20px;
-    color: var(--gray-30);
-}
-
-.uploadImageIcon{
-    width: 10%;
-    filter: invert(77%) sepia(64%) saturate(0%) hue-rotate(269deg) brightness(91%) contrast(80%);
+.dropzone {
+  text-align: center;
+  padding: 20px;
+  border: 2px var(--gray-20) dashed;
+  height: 200px;
+  margin: 20px !important;
 }
 
 .stickyFooterItem {
-    background-color: #ffffff;
-    border-top: 1px solid #E7E7E7;
-    text-align: center;
-    padding: 20px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    height: 60px;
-    width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #e7e7e7;
+  text-align: center;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 60px;
+  width: 100%;
 
-    display: flex;
-    justify-content: end;
-    align-items: center;
+  display: flex;
+  justify-content: end;
+  align-items: center;
 
-    z-index: 10;
+  z-index: 10;
 }
 
-.phantom  {
+.phantom {
   display: block;
   height: 60px;
   width: 100%;
 }
 
-.stickyFooterContainer{
-    position: relative;
+.stickyFooterContainer {
+  position: relative;
 }
 
 .cancelButton {
-    background-color: var(--gray-50) !important;
-    margin-right: 10px !important;
+  background-color: var(--gray-50) !important;
+  margin-right: 10px !important;
 }
 
 .textFieldGroup {
-    display: flex; 
-    flex-direction: column ;
-    justify-content: end;
-    width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  width: 600px;
 }

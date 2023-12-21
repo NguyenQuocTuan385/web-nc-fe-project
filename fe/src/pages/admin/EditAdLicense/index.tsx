@@ -1,15 +1,13 @@
 import { Box } from "@mui/material";
-import SidebarManagement from "../../../components/admin/SidebarManagement";
 import classes from "./styles.module.scss";
 import TabPanelAdvertise from "./components/TabPanelAdvertise";
-
+import SideBarDCMS from "components/admin/SidebarDCMS";
 
 export default function EditAdLicense() {
-
   return (
     <div>
-      <Box className={classes.boxContainer} >
-        <SidebarManagement />
+      <Box className={classes.boxContainer}>
+        <SideBarDCMS />
         <TabPanelAdvertise />
       </Box>
     </div>

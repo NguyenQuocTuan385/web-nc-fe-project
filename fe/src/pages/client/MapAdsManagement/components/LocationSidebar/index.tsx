@@ -3,6 +3,11 @@ import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfo";
 import { Location } from "models/location";
+import { useEffect, useState } from "react";
+import AdvertiseService from "services/advertise";
+import { Advertise } from "models/advertise";
+import ImagesGallery from "components/common/ImagesGallery";
+import ImagesSlider from "components/common/ImagesSlider";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -10,32 +15,35 @@ interface LocalAddressPopoverProps {
   location: Location | null;
 }
 
-const LocationSidebar = ({
-  isOpen,
-  closeSidebar,
-  location,
-}: LocalAddressPopoverProps) => {
+const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopoverProps) => {
+  const [advertises, setAdvertises] = useState<Advertise[]>([]);
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getAllAdvertises = async () => {
+      if (!location) return;
+      setImages(JSON.parse(location.images));
+      AdvertiseService.getAdvertises(location.id, { pageSize: 999 })
+        .then((res) => {
+          setAdvertises(res.content);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getAllAdvertises();
+  }, [location]);
   return (
-    <Drawer variant="persistent" hideBackdrop={true} open={isOpen}>
+    <Drawer variant='persistent' hideBackdrop={true} open={isOpen}>
       <Box className={classes.sidebarContainer}>
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
-            <ChevronLeft fontSize="large" />
+            <ChevronLeft fontSize='large' />
           </IconButton>
         </Box>
-        <Box className={classes.imgContainer}>
-          <img src={location?.images[0]} alt="anhqc" />
-        </Box>
+        {!!images && <ImagesSlider images={images} />}
         <Box className={classes.adsContainer}>
-          {location?.advertises.map((item, index) => (
-            <AdvertiseInfo
-              address={location?.address}
-              key={index}
-              advertise={item}
-              ads_form_name={location?.adsForm.name}
-              location_type_name={location?.locationType.name}
-            />
-          ))}
+          {!!advertises && advertises.map((item) => <AdvertiseInfo key={item.id} advertise={item} />)}
         </Box>
       </Box>
     </Drawer>
