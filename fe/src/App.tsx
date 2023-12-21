@@ -21,9 +21,6 @@ function App() {
           <Route path="/admin" Component={UserManagement} />
           <Route path="/" Component={MapAdsManagement} />
           <Route path="/admin/review/edit" Component={EditAdLicense} />
-
-          <Route path="/admin/test" Component={EditProfileDetail} />
-
           <Route
             path="/admin/review/edit/location/:id"
             Component={EditAdLocationLicenseDetail}
