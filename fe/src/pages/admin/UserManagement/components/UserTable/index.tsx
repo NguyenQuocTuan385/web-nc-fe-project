@@ -11,8 +11,8 @@ import { Box, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
-import user from "../../../../user.json";
-import Popup from "../Popup";
+import user from "../../../../../user.json";
+import Popup from "../PopupEditProfile";
 
 const rows = [...user];
 const rowsPerPage = 7;

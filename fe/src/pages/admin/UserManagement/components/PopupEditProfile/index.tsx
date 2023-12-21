@@ -19,7 +19,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import district from "../../../../district.json";
+import district from "../../../../../district.json";
 
 interface PopupProps {
   openPopup: boolean;
