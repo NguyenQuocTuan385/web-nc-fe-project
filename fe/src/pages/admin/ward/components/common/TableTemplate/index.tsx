@@ -19,30 +19,21 @@ interface TableTemplateProps {
   isActionColumn: boolean;
 }
 
-function TableTemplate({
-  data,
-  customHeading,
-  customColumns,
-  isActionColumn,
-}: TableTemplateProps) {
+function TableTemplate({ data, customHeading, customColumns, isActionColumn }: TableTemplateProps) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="custom table">
+      <Table sx={{ minWidth: 650 }} aria-label='custom table'>
         <TableHead className={classes["table-head"]}>
           <TableRow>
             {/* Custom heading */}
             {customHeading.map((heading, index) => (
-              <TableCell
-                key={index}
-                align="center"
-                className={classes["table-cell"]}
-              >
+              <TableCell key={index} align='center' className={classes["table-cell"]}>
                 {heading}
               </TableCell>
             ))}
             {/* Action column heading */}
             {isActionColumn && (
-              <TableCell align="center" className={classes["table-cell"]}>
+              <TableCell align='center' className={classes["table-cell"]}>
                 Hành động
               </TableCell>
             )}
@@ -54,28 +45,20 @@ function TableTemplate({
               {customColumns.map((column, colIndex) => (
                 <TableCell
                   key={colIndex}
-                  align="center"
-                  className={`${classes['col-table-body']} ${
-                    column === "planning"
-                      ? row[column]
-                        ? `${classes['active']}`
-                        : `${ classes['inactive']} }`
-                      : ""
+                  align='center'
+                  className={`${classes["col-table-body"]} ${
+                    column === "planning" ? (row[column] ? `${classes["active"]}` : `${classes["inactive"]} }`) : ""
                   }`}
                 >
-                  {column === "planning"
-                    ? row[column]
-                      ? "Đã quy hoạch"
-                      : "Chưa quy hoạch"
-                    : row[column]}
+                  {column === "planning" ? (row[column] ? "Đã quy hoạch" : "Chưa quy hoạch") : row[column]}
                 </TableCell>
               ))}
 
               {/* Action column */}
               {isActionColumn && (
-                <TableCell align="center">
-                  <IconButton aria-label="edit" size="medium">
-                    <FontAwesomeIcon icon={faEdit} color="var(--blue-500)" />
+                <TableCell align='center'>
+                  <IconButton aria-label='edit' size='medium'>
+                    <FontAwesomeIcon icon={faEdit} color='var(--blue-500)' />
                   </IconButton>
                 </TableCell>
               )}

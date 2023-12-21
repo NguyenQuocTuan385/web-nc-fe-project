@@ -5,14 +5,25 @@ $pacing-main: 15px;
   justify-content: center;
   background-color: #fff;
   padding: $pacing-main;
+  margin-top: 60px;
+  background-color: var(--blue-50);
 }
 
 .container-body {
   width: calc(100% - 300px);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: $pacing-main;
 }
 
 .table-container {
   margin-top: calc($pacing-main * 2);
+}
+
+.search-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .pagination-custom {

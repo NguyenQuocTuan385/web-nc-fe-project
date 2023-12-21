@@ -9,6 +9,8 @@ import React, { useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import advertises from "./advertises.json";
 import { Location } from "../../models/Location.model";
+import { Header } from "../../components/common/Header";
+import SearchAppBar from "../../components/common/Search";
 
 const AdvertiseManagement = () => {
   const itemsPerPage = 10;
@@ -20,19 +22,12 @@ const AdvertiseManagement = () => {
       id: ads.id,
       adsType: ads.adsType.name,
       adsForm: ads.location.adsForm.name,
-      size: ads.width + " x " + ads.heigth,
+      size: ads.width + "m x " + ads.height + "m",
       licensing: ads.licensing
     };
   });
 
-  const customHeading = [
-    "STT",
-    "Mã",
-    "Loại bảng quảng cáo",
-    "Tên loại hình",
-    "Kích thước",
-    "Trạng thái",
-  ];
+  const customHeading = ["STT", "Mã", "Loại bảng quảng cáo", "Tên loại hình", "Kích thước", "Trạng thái"];
   const customColumns = ["stt", "id", "adsType", "adsForm", "size", "licensing"];
 
   const dataInfoLocation: Location = advertises.map((ads: any, index: number) => {
@@ -51,43 +46,39 @@ const AdvertiseManagement = () => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-  const paginatedData = data.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  );
+  const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   return (
-    <div className={classes["advertise-management-container"]}>
-      <Sidebar></Sidebar>
-      <Box className={classes["container-body"]}>
-        <Box>
-          <InfoLocation data={dataInfoLocation}></InfoLocation>
-        </Box>
+    <Box>
+      <Header />
+      <div className={classes["advertise-management-container"]}>
+        <Sidebar></Sidebar>
+        <Box className={classes["container-body"]}>
+          <Box className={classes["search-container"]}>
+            <SearchAppBar />
+          </Box>
+          <Box>
+            <InfoLocation data={dataInfoLocation}></InfoLocation>
+          </Box>
 
-        <Box className={classes["table-container"]}>
           <Box className={classes["table-container"]}>
-            <TableTemplate
-              data={paginatedData}
-              customHeading={customHeading}
-              customColumns={customColumns}
-              isActionColumn={true}
-            />
-
-            <Box className={classes["pagination-custom"]}>
-              <span>{`Hiển thị ${Math.min(
-                page * itemsPerPage,
-                data.length
-              )} kết quả trên ${data.length}`}</span>
-              <Pagination
-                count={Math.ceil(data.length / itemsPerPage)}
-                page={page}
-                onChange={handleChange}
+            <Box className={classes["table-container"]}>
+              <TableTemplate
+                data={paginatedData}
+                customHeading={customHeading}
+                customColumns={customColumns}
+                isActionColumn={true}
               />
+
+              <Box className={classes["pagination-custom"]}>
+                <span>{`Hiển thị ${Math.min(page * itemsPerPage, data.length)} kết quả trên ${data.length}`}</span>
+                <Pagination count={Math.ceil(data.length / itemsPerPage)} page={page} onChange={handleChange} />
+              </Box>
             </Box>
           </Box>
         </Box>
-      </Box>
-    </div>
+      </div>
+    </Box>
   );
 };
 

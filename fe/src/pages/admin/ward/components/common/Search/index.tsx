@@ -19,13 +19,13 @@ const Search = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(theme.palette.common.white, 0.25)
   },
   marginLeft: 0,
   width: "100%",
   [theme.breakpoints.up("sm")]: {
-    width: "auto",
-  },
+    width: "auto"
+  }
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -35,7 +35,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   pointerEvents: "none",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "center"
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -49,9 +49,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     [theme.breakpoints.up("sm")]: {
       width: "12ch",
       "&:focus": {
-        width: "20ch",
-      },
-    },
+        width: "20ch"
+      }
+    }
   },
   border: "1px solid var(--blue-500)",
   borderRadius: "8px"
@@ -64,7 +64,7 @@ const ButtonDownload = styled(Button)(() => ({
   borderRadius: "8px",
   "&:hover": {
     backgroundColor: "var(--blue-600)",
-    color: "var(--blue-100)",
+    color: "var(--blue-100)"
   }
 }));
 
@@ -75,16 +75,13 @@ export default function SearchAppBar() {
         <SearchIconWrapper>
           <SearchIcon />
         </SearchIconWrapper>
-        <StyledInputBase
-          placeholder="Search…"
-          inputProps={{ "aria-label": "search" }}
-        />
+        <StyledInputBase placeholder='Search…' inputProps={{ "aria-label": "search" }} />
       </Search>
 
-      <ButtonDownload size="small">
+      <ButtonDownload size='small'>
         Download{" "}
-        <IconButton size="medium" aria-label="download">
-          <FontAwesomeIcon width={"15px"} height={"15px"} icon={faArrowDown} color="#fff"/>
+        <IconButton size='medium' aria-label='download'>
+          <FontAwesomeIcon width={"15px"} height={"15px"} icon={faArrowDown} color='#fff' />
         </IconButton>
       </ButtonDownload>
     </Box>
