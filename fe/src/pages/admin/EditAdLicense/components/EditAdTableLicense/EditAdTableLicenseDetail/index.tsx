@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import SouthIcon from "@mui/icons-material/South";
 import { useLocation, useNavigate } from "react-router-dom";
 import Heading3 from "components/common/text/Heading3";
+import SidebarDCMS from "components/admin/SidebarDCMS";
 
 export default function EditAdTableLicenseDetail() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function EditAdTableLicenseDetail() {
   } = location.state;
   return (
     <Box className={classes.boxContainer}>
-      <SidebarManagement />
+      <SidebarDCMS />
       <Box className={classes.boxContent}>
         <Box className={classes.backPage} onClick={() => navigate(-1)}>
           <ArrowBackIcon className={classes.iconBack} />

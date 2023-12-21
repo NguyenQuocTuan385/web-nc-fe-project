@@ -9,6 +9,7 @@ import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading3 from "components/common/text/Heading3";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
+import SidebarDCMS from "components/admin/SidebarDCMS";
 
 export default function AdLicenseDetail() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function AdLicenseDetail() {
   const { id, imgUrl, table, company, startDate, endDate } = location.state;
   return (
     <Box className={classes.boxContainer}>
-      <SidebarManagement />
+      <SidebarDCMS />
       <Box className={classes.boxContent}>
         <Box className={classes.backPage} onClick={() => navigate(-1)}>
           <ArrowBackIcon className={classes.iconBack} />

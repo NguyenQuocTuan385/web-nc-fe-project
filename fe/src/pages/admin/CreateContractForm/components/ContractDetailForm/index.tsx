@@ -3,12 +3,11 @@ import { useForm, Controller } from "react-hook-form";
 import { Box, Button, Card, TextField } from "@mui/material";
 import Heading6 from "components/common/text/Heading6";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { useDropzone } from "react-dropzone";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import clsx from "clsx";
 import classes from "./styles.module.scss";
-import images from "config/images";
+import UploadImage from "components/common/UploadImage";
 
 interface FormData {
   signDate: string;
@@ -17,7 +16,7 @@ interface FormData {
   email: string;
   phone: string;
   address: string;
-  file: any[];
+  images: any[];
 }
 
 function ContractDetailForm() {
@@ -29,7 +28,7 @@ function ContractDetailForm() {
       email: yup.string().required("Vui lòng nhập email công ty"),
       phone: yup.string().required("Vui lòng nhập số điện thoại công ty"),
       address: yup.string().required("Vui lòng nhập địa chỉ công ty"),
-      file: yup.array().required("Thêm ảnh"),
+      images: yup.array().required("Thêm ảnh"),
     });
   }, []);
 
@@ -38,41 +37,34 @@ function ContractDetailForm() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<FormData>({ resolver: yupResolver(schema) });
 
-  const [preview, setPreview] = useState<string>();
-  const [isFileUploaded, setIsFileUploaded] = useState<Boolean>(false);
-  const [defaultValue, setDefaultValue] = React.useState("");
-
-  const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
-    useDropzone({
-      maxFiles: 1,
-      accept: {
-        "image/*": [],
-      },
-      onDrop: (files: any) => {
-        setValue("file", files);
-        setPreview(URL.createObjectURL(files[0]));
-        setIsFileUploaded(true);
-      },
-    });
   const contractSubmitHandler = async (data: any) => {
-    console.log(data);
-    const formData = new FormData();
-    const file = data.file[0];
+    const files = data.images;
+    const formSubmit: FormData = {
+      ...data,
+      images: [],
+    };
+    console.log(files);
+    await Promise.all(
+      files.map(async (file: any) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "test-react-uploads-unsigned");
+        formData.append("api_key", "487343349115581");
 
-    formData.append("file", file);
-    formData.append("upload_preset", "test-react-uploads-unsigned");
-    formData.append("api_key", "487343349115581");
+        const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
+        const uploadDataResult = await fetch(URL, {
+          method: "POST",
+          body: formData,
+        }).then((res) => res.json());
 
-    const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
-    const uploadDataResult = await fetch(URL, {
-      method: "POST",
-      body: formData,
-    }).then((res) => res.json());
+        formSubmit.images.push(uploadDataResult.secure_url);
+      })
+    );
 
-    console.log(uploadDataResult.secure_url);
+    // Now formData has all uploaded image URLs
+    console.log(formSubmit);
   };
 
   return (
@@ -205,55 +197,18 @@ function ContractDetailForm() {
           </Box>
           <Box className={classes.dropZone}>
             <Controller
-              name="file"
+              name="images"
               control={control}
-              render={() => (
-                <div {...getRootProps({ className: classes.dropzone })}>
-                  <input
-                    className="input-zone"
-                    {...getInputProps()}
-                    type="file"
-                  />
-                  <div className={classes.dropzoneContent}>
-                    {isDragActive ? (
-                      <div>
-                        <img
-                          src={images.dropFileIcon}
-                          alt="upload icon"
-                          className={classes.uploadImageIcon}
-                        />
-                        <p className={classes.dropzoneText}>Thả ở đây</p>
-                      </div>
-                    ) : (
-                      <div>
-                        <img
-                          src={images.uploadImageIcon}
-                          alt="upload icon"
-                          className={classes.uploadImageIcon}
-                        />
-                        <p className={classes.dropzoneText}>
-                          Kéo ảnh vào đây hoặc nhấn vào đây để chọn ảnh
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
+              render={({ field }) => (
+                <UploadImage
+                  files={field.value}
+                  errorMessage={errors.images?.message}
+                  onChange={(value) => field.onChange(value)}
+                  maxFiles={1}
+                  padding={"20px"}
+                />
               )}
             />
-            {isFileUploaded ? (
-              <Box className={classes.formGroup}>
-                <Heading6>Ảnh đã thêm</Heading6>
-
-                <Card
-                  className={classes.imagePreviewCardContainer}
-                  variant="outlined"
-                >
-                  <img src={preview} className={classes.imagePreview} />
-                </Card>
-              </Box>
-            ) : (
-              <></>
-            )}
           </Box>
         </Box>
       </Card>

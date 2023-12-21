@@ -4,9 +4,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Card, Grid } from "@mui/material";
 import classes from "./styles.module.scss";
-import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
@@ -20,6 +19,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import ErrorMessage from "components/common/text/ErrorMessage";
 import clsx from "clsx";
+import { useDropzone } from "react-dropzone";
+import images from "config/images";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
+import UploadImage from "components/common/UploadImage";
 
 const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -40,6 +43,7 @@ interface FormData {
   email: string;
   phone: string;
   content: string;
+  images: string[] | File[];
 }
 
 export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
@@ -53,6 +57,7 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
         .string()
         .required("Bắt buộc nhập nội dung báo cáo")
         .notOneOf(["<p><br></p>"], "Bắt buộc nhập nội dung báo cáo"),
+      images: yup.array().max(2, "Tối đa 2 ảnh"),
     });
   }, []);
   const {
@@ -60,6 +65,7 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -69,6 +75,8 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
     setOpen(false);
     reset();
     setVerified(false);
+    // setFilesPreview([]);
+    // setIsFileUploaded(false);
   };
   const [verified, setVerified] = useState(false);
   const myColors = [
@@ -82,15 +90,32 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
     "red",
     "black",
   ];
-  const onSubmit = (data: FormData) => {
-    const formData: FormData = {
-      reportFormName: data.reportFormName,
-      fullname: data.fullname,
-      email: data.email,
-      phone: data.phone,
-      content: data.content,
+  const onSubmit = async (data: FormData) => {
+    const files = data.images;
+    const formSubmit: FormData = {
+      ...data,
+      images: [],
     };
-    console.log(formData);
+    console.log(files);
+    await Promise.all(
+      files.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "test-react-uploads-unsigned");
+        formData.append("api_key", "487343349115581");
+
+        const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
+        const uploadDataResult = await fetch(URL, {
+          method: "POST",
+          body: formData,
+        }).then((res) => res.json());
+
+        formSubmit.images.push(uploadDataResult.secure_url);
+      })
+    );
+
+    // Now formData has all uploaded image URLs
+    console.log(formSubmit);
   };
   const modules = {
     toolbar: [
@@ -153,7 +178,6 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
             errorMessage={errors.reportFormName?.message}
             name="reportFormName"
             type="text"
-            width="220px"
           />
           <InputTextfield
             title="Họ và tên"
@@ -161,7 +185,6 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
             errorMessage={errors.fullname?.message}
             name="fullname"
             type="text"
-            width="220px"
           />
           <InputTextfield
             title="Email"
@@ -169,7 +192,6 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
             errorMessage={errors.email?.message}
             name="email"
             type="email"
-            width="220px"
           />
           <InputTextfield
             title="Số điện thoại"
@@ -177,17 +199,33 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
             errorMessage={errors.phone?.message}
             name="phone"
             type="text"
-            width="220px"
           />
-          <Box className={classes.imagesmgAddWrap}>
-            <TextTitle width={"170px"}>Ảnh báo cáo</TextTitle>
-            <Button
-              variant="outlined"
-              startIcon={<AddPhotoAlternateOutlinedIcon />}
-            >
-              Thêm ảnh
-            </Button>
-          </Box>
+          <Grid container spacing={1} columns={12}>
+            <Grid item xs={3}>
+              <Box>
+                <TextTitle>Ảnh báo cáo</TextTitle>
+                <ParagraphSmall $colorName="--red-error" $fontWeight="bold">
+                  (*Tối đa 2 ảnh)
+                </ParagraphSmall>
+              </Box>
+            </Grid>
+            <Grid item xs={9}>
+              <Box className={classes.dropZone}>
+                <Controller
+                  name="images"
+                  control={control}
+                  render={({ field }) => (
+                    <UploadImage
+                      files={field.value}
+                      errorMessage={errors.images?.message}
+                      onChange={(value) => field.onChange(value)}
+                      maxFiles={2}
+                    />
+                  )}
+                />
+              </Box>
+            </Grid>
+          </Grid>
           <Box className={classes.editor}>
             <TextTitle>Nội dung báo cáo</TextTitle>
             <Controller
@@ -212,6 +250,7 @@ export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
           <ReCAPTCHA
             sitekey="6LdE9TYpAAAAABIEFjjcUoseZr-hCu0ssMWUDn7Y"
             onChange={onChange}
+            onExpired={() => setVerified(false)}
           />
           <Button
             disabled={!verified}

@@ -26,7 +26,9 @@ const MapAdsManagement = () => {
   const [lng] = useState<number>(106.68207417234699);
   const [lat] = useState<number>(10.764659325041498);
   const [zoom] = useState<number>(14);
-  const [API_KEY] = useState<string>("MijgZpLFV2J9ejlH3Ot2");
+  const [API_KEY] = useState<string>(
+    process.env.REACT_APP_API_KEY_MAPTILER as string
+  );
   const [openLocationSidebar, setOpenLocationSidebar] =
     useState<boolean>(false);
   const [location, setLocationData] = useState<Location | null>(null);
