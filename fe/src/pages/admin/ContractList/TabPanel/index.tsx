@@ -7,9 +7,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import ContractTable from "../ContractTable";
 import classes from "./styles.module.scss";
-import { Contract } from "models/contract";
-import contractData from "../Contractdata.json";
-import ContractService from "services/contract";
 
 export default function TabPanel() {
   const [tabValue, setTabValue] = React.useState(0);

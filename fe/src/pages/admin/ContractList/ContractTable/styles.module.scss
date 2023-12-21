@@ -8,7 +8,7 @@
 }
 
 .sizeTable{
-  min-width: 1050px;
+  max-height: 50px;
 }
 
 .headerTable{
@@ -22,10 +22,8 @@
   }
 }
 
-
 .dataTable{
-  padding: 5px;
-  width: 20%;
+  padding-top: 10px;
 }
 .pagination
 {
@@ -33,4 +31,10 @@
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+}
+
+.dataIcon{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }

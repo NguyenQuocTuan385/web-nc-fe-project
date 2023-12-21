@@ -7,5 +7,6 @@ export const API = {
   },
   CONTRACT: {
     DEFAULT: "/api/contracts",
+    DELETE: "/api/contracts",
   },
 };

@@ -13,6 +13,17 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
+
+   static async deleteContracts(id : number): Promise<any> {
+    return await api
+      .delete(`${API.CONTRACT.DEFAULT}/${id}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default ContractService;

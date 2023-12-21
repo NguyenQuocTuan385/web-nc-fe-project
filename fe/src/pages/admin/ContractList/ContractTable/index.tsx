@@ -7,15 +7,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import BasicPagination from "@mui/material/Pagination";
-import { Box, IconButton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
 import { Contract } from "models/contract";
-import { Advertise } from "models/advertise";
 import ContractService from "services/contract";
-import { log } from "console";
 import Heading6 from "components/common/text/Heading6";
+import clsx from "clsx";
 
 // const rows = [...user];
 interface FilterProps {
@@ -24,6 +32,8 @@ interface FilterProps {
 }
 
 export default function ContractTable({ status, fieldSearch }: FilterProps) {
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
@@ -35,19 +45,19 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const [emptyRows, setEmptyRows] = useState(0);
   const [dataList, setDataList] = useState<Contract[]>([]);
   const [totalPage, setTotalPage] = useState(1);
+  const [selectedForDelete, setSelectedForDelete] = useState(-1);
 
   // filter contract's status for Tab Panel
   useEffect(() => {
     // not licensed
     const getContractList = async () => {
       ContractService.getContracts({
+        search: fieldSearch,
         status: status,
         pageSize: pageSize,
         current: currentPage,
       })
         .then((res) => {
-          console.log(res.content);
-
           setDataList(res.content);
           setTotalPage(res.totalPages);
           setEmptyRows(pageSize - res.numberOfElements);
@@ -58,23 +68,32 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     };
 
     getContractList();
-  }, [status, currentPage]);
+  }, [status, currentPage, fieldSearch]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [status]);
 
-  // useEffect(() => {
-  //   if (fieldSearch !== "") {
-  //     setFilterContractStatus(
-  //       dataList.filter((contract) =>
-  //         contract.companyName.toLowerCase().includes(fieldSearch.toLowerCase())
-  //       )
-  //     );
-  //   } else {
-  //     setFilterContractStatus(dataList);
-  //   }
-  // }, [fieldSearch, status]);
+  const openDeleteDialogHandle = (id: number) => {
+    setOpenDeleteDialog(true);
+    setSelectedForDelete(id);
+  };
+
+  const closeDeleteDialogHandle = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const deleteContractHandle = () => {
+    ContractService.deleteContracts(selectedForDelete)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setOpenDeleteDialog(false);
+  };
 
   return (
     <Box className={classes.boxContainer}>
@@ -83,20 +102,26 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="left" className={classes.headerTable}>
+              <TableCell align="center" className={classes.headerTable}>
                 Loại bảng quảng cáo
               </TableCell>
-              <TableCell align="left" className={classes.headerTable}>
+              <TableCell align="center" className={classes.headerTable}>
                 Địa chỉ bảng
               </TableCell>
-              <TableCell align="left" className={classes.headerTable}>
+              <TableCell align="center" className={classes.headerTable}>
                 Tên công ty ký hợp đồng
               </TableCell>
-              <TableCell align="left" className={classes.headerTable}>
+              <TableCell align="center" className={classes.headerTable}>
                 Email công ty
               </TableCell>
               <TableCell align="center" className={classes.headerTable}>
-                Tình trạng cấp phép hợp đồng
+                Ngày ký
+              </TableCell>
+              <TableCell align="center" className={classes.headerTable}>
+                Ngày hết hạn
+              </TableCell>
+              <TableCell align="center" className={classes.headerTable}>
+                Tình trạng cấp phép
               </TableCell>
               <TableCell align="center" className={classes.headerTable}>
                 Thao tác
@@ -106,10 +131,14 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
           <TableBody>
             {dataList.map((contract) => (
               <TableRow key={contract.id} className={classes.rowTable}>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" align="center" scope="row">
                   {contract.id}
                 </TableCell>
-                <TableCell align="left" className={classes.dataTable}>
+                <TableCell
+                  align="left"
+                  className={classes.dataTable}
+                  scope="row"
+                >
                   {contract.advertise.adsType.name}
                 </TableCell>
                 <TableCell align="left" className={classes.dataTable}>
@@ -121,7 +150,13 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                 <TableCell align="left" className={classes.dataTable}>
                   {contract.companyEmail}
                 </TableCell>
-                <TableCell align="left" className={classes.dataTable}>
+                <TableCell align="center" className={classes.dataTable}>
+                  {contract.startAt.toLocaleString()}
+                </TableCell>
+                <TableCell align="center" className={classes.dataTable}>
+                  {contract.endAt.toLocaleString()}
+                </TableCell>
+                <TableCell align="center" className={classes.dataTable}>
                   {contract.status == 1 ? (
                     <Heading6 $colorName="--green-600">Đã cấp phép</Heading6>
                   ) : contract.status == 2 ? (
@@ -130,10 +165,27 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                     <Heading6 $colorName="--gray-60">Đã hết hạn</Heading6>
                   )}
                 </TableCell>
-                <TableCell align="center" className={classes.dataTable}>
+                <TableCell
+                  align="center"
+                  className={clsx(classes.dataTable, classes.dataIcon)}
+                >
                   <IconButton aria-label="edit" size="medium">
-                    <FontAwesomeIcon icon={faEdit} color="var(--blue-500)" />
+                    <FontAwesomeIcon icon={faEye} color="var(--blue-500)" />
                   </IconButton>
+                  {contract.status == 2 ? (
+                    <IconButton
+                      aria-label="edit"
+                      size="medium"
+                      onClick={() => openDeleteDialogHandle(contract.id)}
+                    >
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        color="var(--red-error)"
+                      />
+                    </IconButton>
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -152,6 +204,37 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
         onChange={handleChangePage}
         className={classes.pagination}
       />
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={closeDeleteDialogHandle}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Lưu ý"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Bạn có thật sự muốn xóa cấp phép này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={closeDeleteDialogHandle}
+          >
+            Hủy bỏ
+          </Button>
+          <Button
+            variant="contained"
+            onClick={deleteContractHandle}
+            autoFocus
+            color="success"
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
