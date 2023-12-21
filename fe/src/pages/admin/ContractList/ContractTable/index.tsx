@@ -86,7 +86,12 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const deleteContractHandle = () => {
     ContractService.deleteContracts(selectedForDelete)
       .then((res) => {
-        console.log(res);
+        const newList = dataList.filter(
+          (contract) => contract.id != selectedForDelete
+        );
+
+        setDataList(newList);
+        setSelectedForDelete(-1);
       })
       .catch((e) => {
         console.log(e);
