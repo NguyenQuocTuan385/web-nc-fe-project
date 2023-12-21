@@ -11,6 +11,7 @@ import ContractForm from "pages/admin/CreateContractForm";
 import EditAdLocationLicenseDetail from "pages/admin/EditAdLicense/components/EditAdLocationLicense/EditAdLocationLicenseDetail";
 import EditAdTableLicenseDetail from "pages/admin/EditAdLicense/components/EditAdTableLicense/EditAdTableLicenseDetail";
 import AdLicenseDetail from "pages/admin/AdLicense/components/AdLicenseDetail";
+import EditProfileDetail from "pages/admin/UserManagement/EditProfileDetail";
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
           <Route path="/" Component={MapAdsManagement} />
           <Route path="/admin/review/edit" Component={EditAdLicense} />
 
+          <Route path="/admin/test" Component={EditProfileDetail} />
+
           <Route
             path="/admin/review/edit/location/:id"
             Component={EditAdLocationLicenseDetail}
@@ -30,7 +33,7 @@ function App() {
             Component={EditAdTableLicenseDetail}
           />
           <Route path="/admin/review/license" Component={AdLicense} />
-          <Route path="/admin/review/license/:id" Component={AdLicenseDetail} />  
+          <Route path="/admin/review/license/:id" Component={AdLicenseDetail} />
           <Route path="/contracts/createForm" element={<ContractForm />} />
         </Routes>
       </BrowserRouter>

@@ -1,0 +1,20 @@
+.boxContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.imageContainer {
+  .image {
+    width: 100%; // or any specific value
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+.title {
+  margin-bottom: 10px;
+}
+.boxTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
