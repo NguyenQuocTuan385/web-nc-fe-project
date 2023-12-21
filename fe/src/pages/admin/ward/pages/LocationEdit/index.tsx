@@ -52,13 +52,14 @@ const schema: any = Yup.object().shape({
   })
 });
 
-
-const ButtonSubmit = styled(Button)(() => `
+const ButtonSubmit = styled(Button)(
+  () => `
   background-color: #389B42 !important;
   padding: 10px 15px !important;
   color: #fff !important;
   float: right;
-`);
+`
+);
 
 const MyForm: React.FC = () => {
   const {
