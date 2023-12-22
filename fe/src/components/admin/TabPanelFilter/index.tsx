@@ -24,6 +24,7 @@ interface ComponentProps {
 export default function TabPanelFilter({ props }: ComponentProps) {
   const [searchValue, setSearchValue] = useState("");
   const [selectedDistrict, setSelectedDistrict] = React.useState<District | null>(null);
+
   const [selectedWard, setSelectedWard] = React.useState<District | null>(null);
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -59,6 +60,8 @@ export default function TabPanelFilter({ props }: ComponentProps) {
           <Autocomplete
             id='filter-demo'
             options={districts.filter((district) => district.id === selectedDistrict?.id)[0]?.wards}
+
+           
             getOptionLabel={(option) => option.name}
             sx={{ width: 220 }}
             onChange={(event, newValue) => setSelectedWard(newValue as District | null)}

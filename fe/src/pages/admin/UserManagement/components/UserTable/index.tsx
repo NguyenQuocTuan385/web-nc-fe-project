@@ -6,6 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+
 import { Box, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +16,9 @@ import Popup from "../PopupEditProfile/index";
 import TablePagination from "@mui/material/TablePagination";
 
 const rows = [...user];
+
+
+
 interface FilterProps {
   role: number;
   fieldSearch: string;
@@ -34,6 +38,8 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
   const [openPopup, setOpenPopup] = useState(false);
   console.log(role);
 
+
+  
   const [filterRole, setFilterRole] = useState(rows);
   useEffect(() => {
     if (role === 1) {
@@ -53,6 +59,7 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
     }
   }, [fieldSearch]);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterRole.length) : 0;
+
   return (
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>
@@ -104,6 +111,7 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
                 </TableRow>
               )
             )}
+
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />

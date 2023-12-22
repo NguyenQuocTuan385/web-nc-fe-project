@@ -13,6 +13,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
 import ads from "../../../../../editadtable.json";
 import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 
 const rows = [...ads];
 interface FilterProps {
@@ -32,11 +33,12 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+
   };
   const navigate = useNavigate();
 
   const handleClick = (row: any) => {
-    navigate(`/admin/review/edit/table/${row.id}`, {
+    navigate(`${routes.admin.reviewEdit.advertise.replace(":id", `${row.id}`)}`, {
       state: {
         id: row.id,
         address: row.address,
@@ -119,6 +121,7 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
                 </TableRow>
               )
             )}
+
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />

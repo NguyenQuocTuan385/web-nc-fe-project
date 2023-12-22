@@ -13,6 +13,7 @@ import ads from "../../../../../editadlocation.json";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 
 const rows = [...ads];
 interface FilterProps {
@@ -32,11 +33,12 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+
   };
   const navigate = useNavigate();
 
   const handleClick = (row: any) => {
-    navigate(`/admin/review/edit/location/${row.id}`, {
+    navigate(`${routes.admin.reviewEdit.location.replace(":id", `${row.id}`)}`, {
       state: {
         id: row.id,
         address: row.address,
@@ -68,6 +70,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
     setFilterDistrict(filteredRows);
   }, [district, ward, fieldSearch]);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
 
   return (
     <Box className={classes.boxContainer}>
@@ -121,6 +124,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
                 </TableRow>
               )
             )}
+
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />
@@ -132,6 +136,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
       <TablePagination
         component='div'
         count={filterDistrict.length}
+
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}

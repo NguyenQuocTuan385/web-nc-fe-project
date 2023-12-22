@@ -13,6 +13,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
 import ads from "../../../../../adslicense.json";
 import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 
 const rows = [...ads];
 interface FilterProps {
@@ -36,7 +37,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
   const navigate = useNavigate();
 
   const handleClick = (row: any) => {
-    navigate(`/admin/review/license/${row.id}`, {
+    navigate(`${routes.admin.reviewLisence.detail.replace(":id", `${row.id}`)}`, {
       state: {
         id: row.id,
         imgUrl: row.imgUrl,
@@ -118,6 +119,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
                 </TableRow>
               )
             )}
+
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />

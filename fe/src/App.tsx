@@ -14,24 +14,26 @@ import EditAdTableLicenseDetail from "pages/admin/EditAdLicense/components/EditA
 import AdLicenseDetail from "pages/admin/AdLicense/components/AdLicenseDetail";
 import DistrictManagement from "pages/admin/DistrictManagement";
 import WardManagement from "pages/admin/WardManagement";
+import { routes } from "routes/routes";
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
         <Routes>
 
-          <Route path='/admin' Component={UserManagement} />
-          <Route path='/' Component={MapAdsManagement} />
-          <Route path='/admin/review/edit' Component={EditAdLicense} />
+        
+          <Route path={routes.admin.users.root} Component={UserManagement} />
+          <Route path={routes.client} Component={MapAdsManagement} />
+          <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
 
-          <Route path='/admin/review/edit/location/:id' Component={EditAdLocationLicenseDetail} />
-          <Route path='/admin/review/edit/table/:id' Component={EditAdTableLicenseDetail} />
-          <Route path='/admin/review/license' Component={AdLicense} />
-          <Route path='/admin/review/license/:id' Component={AdLicenseDetail} />
-          <Route path='/admin/districts' Component={DistrictManagement} />
-          <Route path='/admin/districts/:id' Component={WardManagement} />
-          <Route path='/admin/contracts/createForm' element={<ContractForm />} />
-          <Route path='/admin/contracts' Component={ContractList} />
+          <Route path={routes.admin.reviewEdit.location} Component={EditAdLocationLicenseDetail} />
+          <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
+          <Route path={routes.admin.reviewLisence.root} Component={AdLicense} />
+          <Route path={routes.admin.reviewLisence.detail} Component={AdLicenseDetail} />
+          <Route path={routes.admin.properties.district} Component={DistrictManagement} />
+          <Route path={routes.admin.properties.ward} Component={WardManagement} />
+          <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
+          <Route path={routes.admin.contracts.root} Component={ContractList} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>
