@@ -19,6 +19,7 @@ function App() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
         <Routes>
+
           <Route path='/admin' Component={UserManagement} />
           <Route path='/' Component={MapAdsManagement} />
           <Route path='/admin/review/edit' Component={EditAdLicense} />
