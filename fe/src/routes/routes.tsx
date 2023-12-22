@@ -3,7 +3,8 @@ export const routes = {
   admin: {
     root: "/admin",
     users: {
-      root: "/admin/users"
+      root: "/admin/users",
+      create: "/admin/users/create"
     },
     reviewEdit: {
       root: "/admin/review/edit",

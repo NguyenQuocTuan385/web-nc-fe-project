@@ -60,8 +60,6 @@ export default function TabPanelFilter({ props }: ComponentProps) {
           <Autocomplete
             id='filter-demo'
             options={districts.filter((district) => district.id === selectedDistrict?.id)[0]?.wards}
-
-           
             getOptionLabel={(option) => option.name}
             sx={{ width: 220 }}
             onChange={(event, newValue) => setSelectedWard(newValue as District | null)}

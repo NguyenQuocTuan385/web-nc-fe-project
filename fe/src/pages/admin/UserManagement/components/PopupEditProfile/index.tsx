@@ -35,7 +35,7 @@ interface Ward {
   id: number;
   name: string;
 }
-interface Profile {
+interface FormData {
   name: string;
   role: string;
   avatar: string;
@@ -72,7 +72,7 @@ export default function Popup(props: PopupProps) {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<Profile>({ resolver: yupResolver(schema) });
+  } = useForm<FormData>({ resolver: yupResolver(schema) });
   const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [fileImage, setFileImage] = useState<File | null>(null);
 
@@ -81,16 +81,16 @@ export default function Popup(props: PopupProps) {
     setFileImage(files[0]);
     setAvatarPreview(URL.createObjectURL(files[0]));
   };
-  const profileSubmitHandler = async (data: any) => {
-    const formSubmit: Profile = {
+  const FormDataSubmitHandler = async (data: any) => {
+    const formSubmit: FormData = {
       ...data,
       avatar: ""
     };
     const formData = new FormData();
     formData.append("file", fileImage as File);
     formData.append("upload_preset", "test-react-uploads-unsigned");
-    formData.append("api_key", "487343349115581");
-    const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
+    formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY as string);
+    const URL = process.env.REACT_APP_CLOUDINARY_URL as string;
     const uploadDataResult = await fetch(URL, {
       method: "POST",
       body: formData
@@ -117,7 +117,7 @@ export default function Popup(props: PopupProps) {
       </DialogTitle>
       <DialogContent dividers>
         <DialogContentText component='div'>
-          <form onSubmit={handleSubmit(profileSubmitHandler)}>
+          <form onSubmit={handleSubmit(FormDataSubmitHandler)}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={5}>
                 <Grid item xs={12}>
@@ -127,7 +127,7 @@ export default function Popup(props: PopupProps) {
                         avatarPreview ||
                         "https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/385780595_784340566826510_8513447287827069210_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=GAImUy0MBpQAX83N_Iw&_nc_ht=scontent.fsgn2-9.fna&oh=00_AfBvnNhzjKmg3twnhZCz_D5mFrCYVy85E0G1u0aimZURQg&oe=6588C1D0"
                       }
-                      alt='profile'
+                      alt='FormData'
                       className={classes.image}
                     />
                     <label htmlFor='icon-button-file'>
