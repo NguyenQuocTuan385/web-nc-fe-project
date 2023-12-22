@@ -1,7 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import classes from "./styles.module.scss";
-import Heading3 from "components/common/text/Heading3";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import Grid from "@mui/material/Grid";
 import Radio from "@mui/material/Radio";
@@ -26,7 +25,7 @@ interface Ward {
   id: number;
   name: string;
 }
-interface User {
+interface FormData {
   name: string;
   avatar: string;
   email: string;
@@ -71,27 +70,28 @@ export default function CreateAccount() {
       })
     });
   }, []);
+
   const {
     control,
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<User>({ resolver: yupResolver(schema) });
+  } = useForm<FormData>({ resolver: yupResolver(schema) });
   const handleClickAvatar = async (event: any) => {
     const files = event.target.files;
     setFileImage(files[0]);
     setAvatarPreview(URL.createObjectURL(files[0]));
   };
   const SubmitHandler = async (data: any) => {
-    const formSubmit: User = {
+    const formSubmit: FormData = {
       ...data,
       avatar: ""
     };
     const formData = new FormData();
     formData.append("file", fileImage as File);
     formData.append("upload_preset", "test-react-uploads-unsigned");
-    formData.append("api_key", "487343349115581");
-    const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
+    formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY as string);
+    const URL = process.env.REACT_APP_CLOUDINARY_URL as string;
     const uploadDataResult = await fetch(URL, {
       method: "POST",
       body: formData
