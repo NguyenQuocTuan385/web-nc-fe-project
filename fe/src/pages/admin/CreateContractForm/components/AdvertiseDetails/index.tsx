@@ -29,14 +29,14 @@ function AdDetails(adDetail: advertiseDetailProp) {
 
       <Box className={clsx(classes.detailContainer)}>
         <Box className={classes.detailGroup}>
-          <Heading6 id="general" fontSize={"20px"} fontWeight={500}>
+          <Heading6 id='general' fontSize={"20px"} fontWeight={500}>
             {adDetail.adType}
           </Heading6>
           <Heading6 fontWeight={50}>{adDetail.address}</Heading6>
         </Box>
-        <Divider className={classes.divider} variant="middle" />
+        <Divider className={classes.divider} variant='middle' />
         <Box className={classes.detailGroup}>
-          <Heading6 id="details">Thông tin chi tiết bảng quảng cáo</Heading6>
+          <Heading6 id='details'>Thông tin chi tiết bảng quảng cáo</Heading6>
           <Box className={classes.detailItem}>
             <div>
               <Heading6 fontWeight={100}>
@@ -60,10 +60,7 @@ function AdDetails(adDetail: advertiseDetailProp) {
           <Box className={classes.detailItem}>
             <div>
               <Heading6 fontWeight={100}>
-                <img
-                  src={images.categoryIcon}
-                  className={clsx(classes.iconItem)}
-                />
+                <img src={images.categoryIcon} className={clsx(classes.iconItem)} />
                 Hình thức
               </Heading6>
             </div>
@@ -79,12 +76,10 @@ function AdDetails(adDetail: advertiseDetailProp) {
             <Heading6 fontWeight={800}>{adDetail.locationType}</Heading6>
           </Box>
         </Box>
-        <Divider className={classes.divider} variant="middle" />
+        <Divider className={classes.divider} variant='middle' />
 
         <Box className={classes.detailGroup}>
-          <Heading6 id="mapLocation">
-            Vị trí đặt bảng quảng cáo trên bản đồ
-          </Heading6>
+          <Heading6 id='mapLocation'>Vị trí đặt bảng quảng cáo trên bản đồ</Heading6>
         </Box>
       </Box>
     </Card>

@@ -21,17 +21,10 @@ interface FilterProps {
   ward?: string;
   fieldSearch?: string;
 }
-export default function EditAdTableLicense({
-  district,
-  ward,
-  fieldSearch,
-}: FilterProps) {
+export default function EditAdTableLicense({ district, ward, fieldSearch }: FilterProps) {
   const [page, setPage] = useState(1);
   const [filterDistrict, setFilterDistrict] = useState(rows);
-  const handleChangePage = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
+  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
   const navigate = useNavigate();
@@ -50,8 +43,8 @@ export default function EditAdTableLicense({
         tableType: row.tableType,
         position: row.location,
         edit: row.edit,
-        reason: row.reason,
-      },
+        reason: row.reason
+      }
     });
   };
   useEffect(() => {
@@ -66,70 +59,58 @@ export default function EditAdTableLicense({
     }
 
     if (fieldSearch !== "") {
-      filteredRows = filteredRows.filter((row) =>
-        row.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? "")
-      );
+      filteredRows = filteredRows.filter((row) => row.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? ""));
     }
 
     setFilterDistrict(filteredRows);
-  }, [district, ward, fieldSearch, rows]);
+  }, [district, ward, fieldSearch]);
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
 
   return (
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>
-        <Table className={classes.sizeTable} aria-label="simple table">
+        <Table className={classes.sizeTable} aria-label='simple table'>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="left" className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Địa chỉ đặt quảng cáo
               </TableCell>
-              <TableCell align="left" className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Thời điểm chỉnh sửa
               </TableCell>
-              <TableCell align="left" className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Loại bảng quảng cáo
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Duyệt
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filterDistrict
-              .slice(
-                (page - 1) * rowsPerPage,
-                (page - 1) * rowsPerPage + rowsPerPage
-              )
-              .map((row) => (
-                <TableRow
-                  key={row.id}
-                  className={classes.rowTable}
-                  onClick={() => handleClick(row)}
-                >
-                  <TableCell scope="row">{row.id}</TableCell>
-                  <TableCell align="left" className={classes.dataTable}>
-                    <div className={classes.textOverflow}>{row.address}</div>{" "}
-                  </TableCell>
-                  <TableCell align="left" className={classes.dataTable}>
-                    {row.editTime}
-                  </TableCell>
-                  <TableCell align="left" className={classes.dataTable}>
-                    {row.tableType}
-                  </TableCell>
-                  <TableCell align="center" className={classes.dataTable}>
-                    <IconButton aria-label="edit" size="medium">
-                      <CheckCircleIcon className={classes.checkIcon} />
-                    </IconButton>
-                    <IconButton aria-label="edit" size="medium">
-                      <Cancel className={classes.cancelIcon} />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {filterDistrict.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage).map((row) => (
+              <TableRow key={row.id} className={classes.rowTable} onClick={() => handleClick(row)}>
+                <TableCell scope='row'>{row.id}</TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  <div className={classes.textOverflow}>{row.address}</div>{" "}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.editTime}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.tableType}
+                </TableCell>
+                <TableCell align='center' className={classes.dataTable}>
+                  <IconButton aria-label='edit' size='medium'>
+                    <CheckCircleIcon className={classes.checkIcon} />
+                  </IconButton>
+                  <IconButton aria-label='edit' size='medium'>
+                    <Cancel className={classes.cancelIcon} />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />
@@ -139,7 +120,7 @@ export default function EditAdTableLicense({
         </Table>
       </TableContainer>
       <BasicPagination
-        color="primary"
+        color='primary'
         count={Math.ceil(filterDistrict.length / rowsPerPage)}
         page={page}
         onChange={handleChangePage}

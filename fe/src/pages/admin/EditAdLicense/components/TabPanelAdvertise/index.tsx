@@ -22,14 +22,14 @@ export default function TabPanelAdvertise() {
       <TabContext value={value.toString()}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange}>
-            <Tab label="Điểm đặt" value="1" />
-            <Tab label="Bảng" value="2" />
+            <Tab label='Điểm đặt' value='1' />
+            <Tab label='Bảng' value='2' />
           </TabList>
         </Box>
-        <TabPanel value="1">
+        <TabPanel value='1'>
           <TabPanelFilter props={<EditAdLocationLicense />} />
         </TabPanel>
-        <TabPanel value="2">
+        <TabPanel value='2'>
           <TabPanelFilter props={<EditAdTableLicense />} />
         </TabPanel>
       </TabContext>
