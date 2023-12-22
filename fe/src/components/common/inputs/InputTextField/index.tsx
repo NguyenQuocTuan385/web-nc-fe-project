@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  Grid,
-  OutlinedInput,
-  OutlinedInputProps,
-} from "@mui/material";
+import { FormControl, Grid, OutlinedInput, OutlinedInputProps } from "@mui/material";
 import TextTitle from "../../text/TextTitle";
 import classes from "./styles.module.scss";
 import { memo } from "react";
@@ -23,16 +18,7 @@ interface InputsProps extends OutlinedInputProps {
 }
 
 const InputTextfield = memo((props: InputsProps) => {
-  const {
-    title,
-    placeholder,
-    name,
-    defaultValue,
-    value,
-    inputRef,
-    errorMessage,
-    autoComplete,
-  } = props;
+  const { title, placeholder, name, defaultValue, value, inputRef, errorMessage, autoComplete } = props;
   const { ref: refInput, ...inputProps } = inputRef || { ref: null };
   return (
     <>
@@ -45,12 +31,12 @@ const InputTextfield = memo((props: InputsProps) => {
             <OutlinedInput
               placeholder={placeholder}
               fullWidth
-              size="small"
+              size='small'
               name={name}
               classes={{
                 root: clsx(classes.inputTextfield, {
-                  [classes.inputInvalid]: !!errorMessage,
-                }),
+                  [classes.inputInvalid]: !!errorMessage
+                })
               }}
               defaultValue={defaultValue}
               value={value}

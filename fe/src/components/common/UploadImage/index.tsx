@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import ErrorMessage from "../text/ErrorMessage";
 import classes from "./styles.module.scss";
@@ -13,7 +13,7 @@ interface UploadImageProps {
 }
 
 const UploadImage = (props: UploadImageProps) => {
-  const { errorMessage, files, onChange, maxFiles, padding } = props;
+  const { errorMessage, onChange, maxFiles, padding } = props;
   const [filesPreview, setFilesPreview] = useState<string[]>([]);
 
   const handleDrop = useCallback(
@@ -31,34 +31,24 @@ const UploadImage = (props: UploadImageProps) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: maxFiles,
     accept: {
-      "image/*": [],
+      "image/*": []
     },
-    onDrop: handleDrop,
+    onDrop: handleDrop
   });
   return (
     <Box className={classes.uploadImage} padding={padding}>
       <div {...getRootProps({ className: classes.dropzone })}>
-        <input className="input-zone" {...getInputProps()} type="file" />
+        <input className='input-zone' {...getInputProps()} type='file' />
         <div className={classes.dropzoneContent}>
           {isDragActive ? (
             <div>
-              <img
-                src={images.dropFileIcon}
-                alt="upload icon"
-                className={classes.uploadImageIcon}
-              />
+              <img src={images.dropFileIcon} alt='upload icon' className={classes.uploadImageIcon} />
               <p className={classes.dropzoneText}>Thả ở đây</p>
             </div>
           ) : (
             <div>
-              <img
-                src={images.uploadImageIcon}
-                alt="upload icon"
-                className={classes.uploadImageIcon}
-              />
-              <p className={classes.dropzoneText}>
-                Kéo ảnh vào đây hoặc nhấn vào đây để chọn ảnh
-              </p>
+              <img src={images.uploadImageIcon} alt='upload icon' className={classes.uploadImageIcon} />
+              <p className={classes.dropzoneText}>Kéo ảnh vào đây hoặc nhấn vào đây để chọn ảnh</p>
             </div>
           )}
         </div>
@@ -68,16 +58,8 @@ const UploadImage = (props: UploadImageProps) => {
         <Box className={classes.formGroup}>
           <Box display={"flex"} gap={1}>
             {filesPreview.map((item, index) => (
-              <Card
-                key={index}
-                className={classes.imagePreviewCardContainer}
-                variant="outlined"
-              >
-                <img
-                  src={item}
-                  alt="file upload"
-                  className={classes.imagePreview}
-                />
+              <Card key={index} className={classes.imagePreviewCardContainer} variant='outlined'>
+                <img src={item} alt='file upload' className={classes.imagePreview} />
               </Card>
             ))}
           </Box>

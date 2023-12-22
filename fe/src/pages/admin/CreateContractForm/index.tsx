@@ -1,10 +1,7 @@
-import PropTypes from "prop-types";
-import FormTopTab from "./components/FormTopTab";
-import { Box, Card, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import classes from "./styles.module.scss";
 import AdDetails from "./components/AdvertiseDetails";
 import ContractDetailForm from "pages/admin/CreateContractForm/components/ContractDetailForm";
-import SidebarManagement from "components/admin/SidebarManagement";
 import SideBarWard from "components/admin/SidebarWard";
 
 function ContractForm() {

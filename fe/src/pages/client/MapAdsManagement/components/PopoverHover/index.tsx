@@ -8,9 +8,7 @@ const PopoverHover = ({ properties }: any) => {
   const adsFormName = JSON.parse(properties.adsForm).name;
   return (
     <Box className={classes.popup}>
-      <ParagraphExtraSmall $fontWeight={"bold"}>
-        {adsFormName}
-      </ParagraphExtraSmall>
+      <ParagraphExtraSmall $fontWeight={"bold"}>{adsFormName}</ParagraphExtraSmall>
       <ParagraphExtraSmall>{properties.address}</ParagraphExtraSmall>
       <ParagraphExtraSmall>{locationTypeName}</ParagraphExtraSmall>
       {properties.planning ? (

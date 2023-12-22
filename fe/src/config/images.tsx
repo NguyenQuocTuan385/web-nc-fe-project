@@ -13,7 +13,7 @@ const images = {
   categoryIcon,
   quantityIcon,
   sizeIcon,
-  sortIcon,
+  sortIcon
 };
 
 export default images;
