@@ -1,6 +1,5 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import SidebarManagement from "components/admin/SidebarManagement";
 import classes from "./styles.module.scss";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ParagraphBody from "components/common/text/ParagraphBody";
@@ -14,10 +13,8 @@ export default function EditAdTableLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const {
-    id,
     address,
     editTime,
-    imgUrl,
     width,
     height,
     amount,
@@ -46,7 +43,7 @@ export default function EditAdTableLicenseDetail() {
               <Box className={classes.imageContainer}>
                 <img
                   src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt="image"
+                  alt=""
                   className={classes.image}
                 />
               </Box>
@@ -121,7 +118,7 @@ export default function EditAdTableLicenseDetail() {
               <Box className={classes.imageContainer}>
                 <img
                   src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt="image"
+                  alt=""
                   className={classes.image}
                 />
               </Box>

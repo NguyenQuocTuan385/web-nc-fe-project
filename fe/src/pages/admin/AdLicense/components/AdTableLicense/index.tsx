@@ -69,7 +69,7 @@ export default function AdTableLicense({
     }
 
     setFilterDistrict(filteredRows);
-  }, [district, ward, fieldSearch, rows]);
+  }, [district, ward, fieldSearch]);
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);

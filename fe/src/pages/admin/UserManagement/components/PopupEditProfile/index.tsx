@@ -8,7 +8,7 @@ import Heading4 from "components/common/text/Heading4";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState, useMemo } from "react";
-import { useForm, Controller, set } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { Button, TextField } from "@mui/material";
 import Radio from "@mui/material/Radio";
@@ -99,7 +99,6 @@ export default function Popup(props: PopupProps) {
     console.log(formSubmit);
   };
   const { openPopup, setOpenPopup } = props;
-  const [searchValue, setSearchValue] = useState("");
   const [selectedDistrict, setSelectedDistrict] =
     React.useState<District | null>(null);
   const [selectedWard, setSelectedWard] = React.useState<Ward | null>(null);
