@@ -3,9 +3,9 @@ import api from "./configApi";
 import { GetAdvertises } from "models/advertise";
 
 export class AdvertiseService {
-  static async getAdvertises(data: GetAdvertises): Promise<any> {
+  static async getAdvertises(id: number, data: GetAdvertises): Promise<any> {
     return await api
-      .get(`${API.ADVERTISE.DEFAULT}`, { params: data })
+      .get(`${API.ADVERTISE.DEFAULT.replace(":id", `${id}`)}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })
