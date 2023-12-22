@@ -7,14 +7,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPeopleRoof,
-  faCircleCheck,
-  faChartSimple,
-  faUserPlus,
-  faUserPen,
-} from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 

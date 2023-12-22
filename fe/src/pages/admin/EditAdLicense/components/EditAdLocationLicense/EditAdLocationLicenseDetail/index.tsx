@@ -12,17 +12,8 @@ import SidebarDCMS from "components/admin/SidebarDCMS";
 export default function EditAdLocationLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    id,
-    address,
-    timeEdit,
-    planning,
-    imgUrl,
-    adsType,
-    position,
-    edit,
-    reason,
-  } = location.state;
+  const { address, timeEdit, planning, adsType, position, edit, reason } =
+    location.state;
   return (
     <Box className={classes.boxContainer}>
       <SidebarDCMS />
@@ -42,7 +33,7 @@ export default function EditAdLocationLicenseDetail() {
               <Box className={classes.imageContainer}>
                 <img
                   src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt="image"
+                  alt=""
                   className={classes.image}
                 />
               </Box>
@@ -98,7 +89,7 @@ export default function EditAdLocationLicenseDetail() {
               <Box className={classes.imageContainer}>
                 <img
                   src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt="image"
+                  alt=""
                   className={classes.image}
                 />
               </Box>
@@ -152,7 +143,7 @@ export default function EditAdLocationLicenseDetail() {
             <Box className={classes.boxMap}>
               <img
                 src="https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg"
-                alt="image"
+                alt=""
                 width={"100%"}
                 height={"400px"}
               />

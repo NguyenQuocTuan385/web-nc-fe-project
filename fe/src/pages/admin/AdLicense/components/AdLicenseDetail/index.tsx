@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import React from "react";
 import classes from "./styles.module.scss";
-import SidebarManagement from "components/admin/SidebarManagement";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -14,7 +13,7 @@ import SidebarDCMS from "components/admin/SidebarDCMS";
 export default function AdLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, imgUrl, table, company, startDate, endDate } = location.state;
+  const { table, company, startDate, endDate } = location.state;
   return (
     <Box className={classes.boxContainer}>
       <SidebarDCMS />
@@ -28,7 +27,7 @@ export default function AdLicenseDetail() {
             <Box className={classes.imageContainer}>
               <img
                 src="https://kenh14cdn.com/thumb_w/620/203336854389633024/2023/10/19/photo-6-16976830334011868785001.jpg"
-                alt="image"
+                alt=""
                 className={classes.image}
               />
             </Box>
@@ -132,7 +131,7 @@ export default function AdLicenseDetail() {
             <Box className={classes.boxMap}>
               <img
                 src="https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg"
-                alt="image"
+                alt=""
                 width={"100%"}
                 height={"400px"}
               />
