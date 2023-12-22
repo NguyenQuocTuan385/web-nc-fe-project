@@ -18,22 +18,16 @@ function App() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
         <Routes>
-          <Route path="/admin" Component={UserManagement} />
-          <Route path="/" Component={MapAdsManagement} />
-          <Route path="/admin/review/edit" Component={EditAdLicense} />
+          <Route path='/admin' Component={UserManagement} />
+          <Route path='/' Component={MapAdsManagement} />
+          <Route path='/admin/review/edit' Component={EditAdLicense} />
 
-          <Route
-            path="/admin/review/edit/location/:id"
-            Component={EditAdLocationLicenseDetail}
-          />
-          <Route
-            path="/admin/review/edit/table/:id"
-            Component={EditAdTableLicenseDetail}
-          />
-          <Route path="/admin/review/license" Component={AdLicense} />
-          <Route path="/admin/review/license/:id" Component={AdLicenseDetail} />
-          <Route path="/contracts/createForm" element={<ContractForm />} />
-          <Route path="/contracts" Component={ContractList} />
+          <Route path='/admin/review/edit/location/:id' Component={EditAdLocationLicenseDetail} />
+          <Route path='/admin/review/edit/table/:id' Component={EditAdTableLicenseDetail} />
+          <Route path='/admin/review/license' Component={AdLicense} />
+          <Route path='/admin/review/license/:id' Component={AdLicenseDetail} />
+          <Route path='/contracts/createForm' element={<ContractForm />} />
+          <Route path='/contracts' Component={ContractList} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

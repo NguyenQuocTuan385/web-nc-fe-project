@@ -37,6 +37,7 @@
     "lightgallery": "^2.7.2",
     "maplibre-gl": "^3.6.2",
     "prettier": "^3.1.1",
+    "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
