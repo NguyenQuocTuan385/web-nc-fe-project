@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
 import user from "../../../../../user.json";
-import Popup from "../PopupEditProfile";
+import Popup from "../PopupEditProfile/index";
 
 const rows = [...user];
 const rowsPerPage = 7;
