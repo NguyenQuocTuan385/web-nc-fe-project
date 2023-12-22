@@ -3,12 +3,9 @@ import api from "./configApi";
 import { GetProperties } from "models/property";
 
 export class WardService {
-  static async getAllWardBy(
-    propertyParentId: number,
-    data: GetProperties
-  ): Promise<any> {
+  static async getAllWardBy(propertyParentId: number, data: GetProperties): Promise<any> {
     return await api
-      .get(`${API.WARD.DEFAULT}/${propertyParentId}`, { params: data })
+      .get(`${API.WARD.DEFAULT.replace(":propertyParentId", `${propertyParentId}`)}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })

@@ -29,8 +29,8 @@ function App() {
           <Route path='/admin/review/license/:id' Component={AdLicenseDetail} />
           <Route path='/admin/districts' Component={DistrictManagement} />
           <Route path='/admin/districts/:id' Component={WardManagement} />
-          <Route path='/contracts/createForm' element={<ContractForm />} />
-          <Route path='/contracts' Component={ContractList} />
+          <Route path='/admin/contracts/createForm' element={<ContractForm />} />
+          <Route path='/admin/contracts' Component={ContractList} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

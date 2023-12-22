@@ -7,7 +7,6 @@ export class DistrictService {
     return await api
       .get(`${API.DISTRICT.DEFAULT}`, { params: data })
       .then((res) => {
-        //   console.log(res.data);
         return Promise.resolve(res.data);
       })
       .catch((e) => {
@@ -22,7 +21,7 @@ export class DistrictService {
     };
 
     return await api
-      .put(`${API.DISTRICT.UPDATE}/${id}`, updateData)
+      .put(`${API.DISTRICT.UPDATE.replace(":id", `${id}`)}`, updateData)
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -33,7 +32,7 @@ export class DistrictService {
 
   static async deleteDistrict(id: number): Promise<any> {
     try {
-      const response = await api.delete(`${API.DISTRICT.DELETE}/${id}`);
+      const response = await api.delete(`${API.DISTRICT.DELETE.replace(":id", `${id}`)}`);
       return Promise.resolve(response.data);
     } catch (error) {
       return Promise.reject(error);

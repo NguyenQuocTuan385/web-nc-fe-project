@@ -24,7 +24,7 @@ import { Property } from "models/property";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InfoIcon from "@mui/icons-material/Info";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EditForm from "../EditForm";
 
 interface FilterProps {
@@ -84,6 +84,7 @@ export default function DistrictTable({ fieldSearch }: FilterProps) {
   const handleDeleteCancel = () => {
     setDeleteConfirmationOpen(false);
   };
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getAllDistrict = async () => {
@@ -93,10 +94,9 @@ export default function DistrictTable({ fieldSearch }: FilterProps) {
           current: page.currentPage,
           pageSize: rowsPerPage
         });
-        const property: Property[] = res.content;
-        setDistrict(property);
+        const properties: Property[] = res.content;
+        setDistrict(properties);
         setPage({ ...page, totalPages: res.totalPages });
-        console.log(res.totalElements);
       } catch (error) {
         console.log(error);
       }
@@ -136,11 +136,15 @@ export default function DistrictTable({ fieldSearch }: FilterProps) {
                   {row.name}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
-                  <Link to={`/admin/districts/${row.id}`}>
-                    <IconButton aria-label='edit' size='medium'>
-                      <InfoIcon className={classes.infoIcon} />
-                    </IconButton>
-                  </Link>
+                  <IconButton
+                    onClick={() => {
+                      navigate(`/admin/districts/${row.id}`);
+                    }}
+                    aria-label='edit'
+                    size='medium'
+                  >
+                    <InfoIcon className={classes.infoIcon} />
+                  </IconButton>
                   <IconButton aria-label='edit' size='medium' onClick={() => handleEditClick(row)}>
                     <EditIcon className={classes.editIcon} />
                   </IconButton>

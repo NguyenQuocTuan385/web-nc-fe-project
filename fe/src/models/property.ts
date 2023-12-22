@@ -1,6 +1,6 @@
 export interface Property {
   id: number;
-  propertyParentId?: number;
+  propertyParent?: Property;
   name: string;
   code: string;
 }
