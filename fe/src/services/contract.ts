@@ -14,9 +14,9 @@ export class ContractService {
       });
   }
 
-   static async deleteContracts(id : number): Promise<any> {
+  static async deleteContracts(id: number): Promise<any> {
     return await api
-      .delete(`${API.CONTRACT.DEFAULT}/${id}`)
+      .delete(`${API.CONTRACT.DELETE.replace(":id", `${id}`)}}`)
       .then((res) => {
         return Promise.resolve(res.data);
       })

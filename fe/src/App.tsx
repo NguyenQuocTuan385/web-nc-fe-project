@@ -12,7 +12,8 @@ import EditAdLocationLicenseDetail from "pages/admin/EditAdLicense/components/Ed
 import ContractList from "pages/admin/ContractList";
 import EditAdTableLicenseDetail from "pages/admin/EditAdLicense/components/EditAdTableLicense/EditAdTableLicenseDetail";
 import AdLicenseDetail from "pages/admin/AdLicense/components/AdLicenseDetail";
-
+import DistrictManagement from "pages/admin/DistrictManagement";
+import WardManagement from "pages/admin/WardManagement";
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -26,8 +27,10 @@ function App() {
           <Route path='/admin/review/edit/table/:id' Component={EditAdTableLicenseDetail} />
           <Route path='/admin/review/license' Component={AdLicense} />
           <Route path='/admin/review/license/:id' Component={AdLicenseDetail} />
-          <Route path='/contracts/createForm' element={<ContractForm />} />
-          <Route path='/contracts' Component={ContractList} />
+          <Route path='/admin/districts' Component={DistrictManagement} />
+          <Route path='/admin/districts/:id' Component={WardManagement} />
+          <Route path='/admin/contracts/createForm' element={<ContractForm />} />
+          <Route path='/admin/contracts' Component={ContractList} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>
