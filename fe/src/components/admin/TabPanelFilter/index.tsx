@@ -4,9 +4,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import classes from "./styles.module.scss";
 import TextField from "@mui/material/TextField";
-import Autocomplete, {
-  createFilterOptions,
-} from "@mui/material/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import district from "../../../district.json";
 
@@ -24,18 +22,12 @@ interface ComponentProps {
   props: JSX.Element;
 }
 export default function TabPanelFilter({ props }: ComponentProps) {
-  const [value, setValue] = React.useState(0);
   const [searchValue, setSearchValue] = useState("");
   const [selectedDistrict, setSelectedDistrict] =
     React.useState<District | null>(null);
-  const [selectedWard, setSelectedWard] = React.useState<District | null>(
-    null,
-  );
+  const [selectedWard, setSelectedWard] = React.useState<District | null>(null);
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
-  };
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
   };
 
   const filterOptions = createFilterOptions({
@@ -69,7 +61,7 @@ export default function TabPanelFilter({ props }: ComponentProps) {
             id="filter-demo"
             options={
               districts.filter(
-                (district) => district.id === selectedDistrict?.id,
+                (district) => district.id === selectedDistrict?.id
               )[0]?.wards
             }
             getOptionLabel={(option) => option.name}

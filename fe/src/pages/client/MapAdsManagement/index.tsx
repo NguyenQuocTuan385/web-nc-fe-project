@@ -16,6 +16,7 @@ import RandomLocationSidebar from "./components/RandomLocationSidebar";
 import LocationService from "services/location";
 import { Box, Switch } from "@mui/material";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
+
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<MapLibre | null>(null);
@@ -161,89 +162,96 @@ const MapAdsManagement = () => {
     setMapController(createMapLibreGlMapController(map.current, MapLibreGL));
     map.current.on("load", () => {
       if (!map.current) return;
-      map.current.addSource("locations_is_planning", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: locationsIsPlanning
-        }
-      });
-      map.current.addSource("locations_is_not_planning", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: locationsIsNotPlanning
-        }
-      });
+      map.current.loadImage("https://i.ibb.co/5hWpBFR/icons8-circle-24-3.png", (error, image) => {
+        if (error) throw error;
+        if (!map.current) return;
+        map.current.addImage("marker-is-planning", image as HTMLImageElement);
+        map.current.addSource("locations_is_planning", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: locationsIsPlanning
+          }
+        });
 
-      map.current.addLayer({
-        id: "locations_is_not_planning",
-        type: "circle",
-        source: "locations_is_not_planning",
-        paint: {
-          "circle-color": "red",
-          "circle-radius": 8
-        }
-      });
+        map.current.addLayer({
+          id: "locations_is_planning",
+          type: "symbol",
+          source: "locations_is_planning",
+          layout: {
+            "icon-image": "marker-is-planning"
+          }
+        });
+        map.current.on("mouseenter", "locations_is_planning", (e) => showPopup(e));
+        map.current.on("mouseleave", "locations_is_planning", () => {
+          hidePopup();
+        });
 
-      map.current.addLayer({
-        id: "locations_is_planning",
-        type: "circle",
-        source: "locations_is_planning",
-        paint: {
-          "circle-color": "#4264fb",
-          "circle-radius": 8
-        }
+        map.current.on("click", "locations_is_planning", (e) => {
+          clickHandler(e, "locations_is_planning");
+        });
+
+        map.current.on("click", async (e) => {
+          const map = e.target;
+          const features = map.queryRenderedFeatures(e.point, {
+            layers: ["locations_is_planning", "locations_is_not_planning"]
+          });
+          if (features.length > 0) {
+            return;
+          } else {
+            const { lng, lat } = e.lngLat;
+            const results: any = await maptilersdk.geocoding.reverse([lng, lat]);
+            closeAdsSidebar();
+            setOpenRandomLocationSidebar(true);
+            if (marker.current) {
+              marker.current.setLngLat([lng, lat]);
+              const { place_name_vi } = results.features[0];
+              const randomLocationTemp: RandomLocation = {
+                address: place_name_vi,
+                longitude: lng,
+                latitude: lat
+              };
+              setRandomLocationData(randomLocationTemp);
+            } else {
+              const { place_name_vi } = results.features[0];
+              const coordinates = results.features[0].geometry.coordinates.slice();
+              const randomLocationTemp: RandomLocation = {
+                address: place_name_vi,
+                longitude: coordinates[0],
+                latitude: coordinates[1]
+              };
+              setRandomLocationData(randomLocationTemp);
+              marker.current = new MapLibreGL.Marker().setLngLat(coordinates).addTo(map);
+            }
+          }
+        });
       });
-      map.current.on("mouseenter", "locations_is_planning", (e) => showPopup(e));
+      map.current.loadImage("https://i.ibb.co/LvJJcmX/icons8-circle-24-4.png", (error, image) => {
+        if (!map.current) return;
+        map.current.addImage("marker-is-not-planning", image as HTMLImageElement);
+        map.current.addSource("locations_is_not_planning", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: locationsIsNotPlanning
+          }
+        });
+
+        map.current.addLayer({
+          id: "locations_is_not_planning",
+          type: "symbol",
+          source: "locations_is_not_planning",
+          layout: {
+            "icon-image": "marker-is-not-planning"
+          }
+        });
+      });
       map.current.on("mouseenter", "locations_is_not_planning", (e) => showPopup(e));
-      map.current.on("mouseleave", "locations_is_planning", () => {
-        hidePopup();
-      });
       map.current.on("mouseleave", "locations_is_not_planning", () => {
         hidePopup();
       });
-
-      map.current.on("click", "locations_is_planning", (e) => {
-        clickHandler(e, "locations_is_planning");
-      });
       map.current.on("click", "locations_is_not_planning", (e) => {
         clickHandler(e, "locations_is_not_planning");
-      });
-
-      map.current.on("click", async (e) => {
-        const map = e.target;
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: ["locations_is_planning", "locations_is_not_planning"]
-        });
-        if (features.length > 0) {
-          return;
-        } else {
-          const { lng, lat } = e.lngLat;
-          const results: any = await maptilersdk.geocoding.reverse([lng, lat]);
-          closeAdsSidebar();
-          setOpenRandomLocationSidebar(true);
-          if (marker.current) {
-            marker.current.setLngLat([lng, lat]);
-            const { place_name_vi } = results.features[0];
-            const randomLocationTemp: RandomLocation = {
-              address: place_name_vi,
-              longitude: lng,
-              latitude: lat
-            };
-            setRandomLocationData(randomLocationTemp);
-          } else {
-            const { place_name_vi } = results.features[0];
-            const coordinates = results.features[0].geometry.coordinates.slice();
-            const randomLocationTemp: RandomLocation = {
-              address: place_name_vi,
-              longitude: coordinates[0],
-              latitude: coordinates[1]
-            };
-            setRandomLocationData(randomLocationTemp);
-            marker.current = new MapLibreGL.Marker().setLngLat(coordinates).addTo(map);
-          }
-        }
       });
     });
   }, [API_KEY, lng, lat, zoom]);

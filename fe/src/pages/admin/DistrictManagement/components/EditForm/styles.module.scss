@@ -1,0 +1,31 @@
+.dialogContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dialogTitle {
+  text-align: center;
+  margin-bottom: 30px;
+
+}
+
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+.formControl {
+  margin-bottom: 20px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  margin-top: 20px;
+}
+
+

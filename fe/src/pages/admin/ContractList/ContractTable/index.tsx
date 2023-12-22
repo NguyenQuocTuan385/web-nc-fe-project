@@ -15,7 +15,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
+  IconButton
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +24,8 @@ import { Contract } from "models/contract";
 import ContractService from "services/contract";
 import Heading6 from "components/common/text/Heading6";
 import clsx from "clsx";
+import { Router, createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
+import queryString from "query-string";
 
 // const rows = [...user];
 interface FilterProps {
@@ -33,14 +35,24 @@ interface FilterProps {
 
 export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const handleChangePage = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setCurrentPage(value);
+  const navigate = useNavigate();
+  const locationHook = useLocation();
+  const match = useResolvedPath("").pathname;
+  const [currentPage, setCurrentPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.page || 1;
+  });
+  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
+    setCurrentPage(newPageValue);
+    navigate({
+      pathname: match,
+      search: createSearchParams({
+        status: status.toString(),
+        page: newPageValue.toString()
+      }).toString()
+    });
   };
+
   const pageSize = 5;
   const [emptyRows, setEmptyRows] = useState(0);
   const [dataList, setDataList] = useState<Contract[]>([]);
@@ -55,12 +67,20 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
         search: fieldSearch,
         status: status,
         pageSize: pageSize,
-        current: currentPage,
+        current: Number(currentPage)
       })
         .then((res) => {
           setDataList(res.content);
           setTotalPage(res.totalPages);
           setEmptyRows(pageSize - res.numberOfElements);
+
+          navigate({
+            pathname: match,
+            search: createSearchParams({
+              status: status.toString(),
+              page: currentPage.toString()
+            }).toString()
+          });
         })
         .catch((e) => {
           console.log(e);
@@ -68,7 +88,7 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     };
 
     getContractList();
-  }, [status, currentPage, fieldSearch]);
+  }, [status, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -86,9 +106,7 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const deleteContractHandle = () => {
     ContractService.deleteContracts(selectedForDelete)
       .then((res) => {
-        const newList = dataList.filter(
-          (contract) => contract.id != selectedForDelete
-        );
+        const newList = dataList.filter((contract) => contract.id != selectedForDelete);
 
         setDataList(newList);
         setSelectedForDelete(-1);
@@ -103,32 +121,32 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   return (
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>
-        <Table className={classes.sizeTable} aria-label="simple table">
+        <Table className={classes.sizeTable} aria-label='simple table'>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Loại bảng quảng cáo
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Địa chỉ bảng
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Tên công ty ký hợp đồng
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Email công ty
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Ngày ký
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Ngày hết hạn
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Tình trạng cấp phép
               </TableCell>
-              <TableCell align="center" className={classes.headerTable}>
+              <TableCell align='center' className={classes.headerTable}>
                 Thao tác
               </TableCell>
             </TableRow>
@@ -136,57 +154,43 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
           <TableBody>
             {dataList.map((contract) => (
               <TableRow key={contract.id} className={classes.rowTable}>
-                <TableCell component="th" align="center" scope="row">
+                <TableCell component='th' align='center' scope='row'>
                   {contract.id}
                 </TableCell>
-                <TableCell
-                  align="left"
-                  className={classes.dataTable}
-                  scope="row"
-                >
+                <TableCell align='left' className={classes.dataTable} scope='row'>
                   {contract.advertise.adsType.name}
                 </TableCell>
-                <TableCell align="left" className={classes.dataTable}>
+                <TableCell align='left' className={classes.dataTable}>
                   {contract.advertise.location.address}
                 </TableCell>
-                <TableCell align="left" className={classes.dataTable}>
+                <TableCell align='left' className={classes.dataTable}>
                   {contract.companyName}
                 </TableCell>
-                <TableCell align="left" className={classes.dataTable}>
+                <TableCell align='left' className={classes.dataTable}>
                   {contract.companyEmail}
                 </TableCell>
-                <TableCell align="center" className={classes.dataTable}>
+                <TableCell align='center' className={classes.dataTable}>
                   {contract.startAt.toLocaleString()}
                 </TableCell>
-                <TableCell align="center" className={classes.dataTable}>
+                <TableCell align='center' className={classes.dataTable}>
                   {contract.endAt.toLocaleString()}
                 </TableCell>
-                <TableCell align="center" className={classes.dataTable}>
+                <TableCell align='center' className={classes.dataTable}>
                   {contract.status == 1 ? (
-                    <Heading6 $colorName="--green-600">Đã cấp phép</Heading6>
+                    <Heading6 $colorName='--green-600'>Đã cấp phép</Heading6>
                   ) : contract.status == 2 ? (
-                    <Heading6 $colorName="--red-error">Chưa cấp phép</Heading6>
+                    <Heading6 $colorName='--red-error'>Chưa cấp phép</Heading6>
                   ) : (
-                    <Heading6 $colorName="--gray-60">Đã hết hạn</Heading6>
+                    <Heading6 $colorName='--gray-60'>Đã hết hạn</Heading6>
                   )}
                 </TableCell>
-                <TableCell
-                  align="center"
-                  className={clsx(classes.dataTable, classes.dataIcon)}
-                >
-                  <IconButton aria-label="edit" size="medium">
-                    <FontAwesomeIcon icon={faEye} color="var(--blue-500)" />
+                <TableCell align='center' className={clsx(classes.dataTable, classes.dataIcon)}>
+                  <IconButton aria-label='edit' size='medium'>
+                    <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
                   </IconButton>
                   {contract.status == 2 ? (
-                    <IconButton
-                      aria-label="edit"
-                      size="medium"
-                      onClick={() => openDeleteDialogHandle(contract.id)}
-                    >
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        color="var(--red-error)"
-                      />
+                    <IconButton aria-label='edit' size='medium' onClick={() => openDeleteDialogHandle(contract.id)}>
+                      <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                     </IconButton>
                   ) : (
                     <></>
@@ -203,9 +207,9 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
         </Table>
       </TableContainer>
       <BasicPagination
-        color="primary"
+        color='primary'
         count={totalPage}
-        page={currentPage}
+        page={Number(currentPage)}
         onChange={handleChangePage}
         className={classes.pagination}
       />
@@ -213,29 +217,18 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
       <Dialog
         open={openDeleteDialog}
         onClose={closeDeleteDialogHandle}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">{"Lưu ý"}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Bạn có thật sự muốn xóa cấp phép này ?
-          </DialogContentText>
+          <DialogContentText id='alert-dialog-description'>Bạn có thật sự muốn xóa cấp phép này ?</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={closeDeleteDialogHandle}
-          >
+          <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
             Hủy bỏ
           </Button>
-          <Button
-            variant="contained"
-            onClick={deleteContractHandle}
-            autoFocus
-            color="success"
-          >
+          <Button variant='contained' onClick={deleteContractHandle} autoFocus color='success'>
             Đồng ý
           </Button>
         </DialogActions>

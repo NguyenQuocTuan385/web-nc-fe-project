@@ -12,30 +12,60 @@ import EditAdLocationLicenseDetail from "pages/admin/EditAdLicense/components/Ed
 import ContractList from "pages/admin/ContractList";
 import EditAdTableLicenseDetail from "pages/admin/EditAdLicense/components/EditAdTableLicense/EditAdTableLicenseDetail";
 import AdLicenseDetail from "pages/admin/AdLicense/components/AdLicenseDetail";
+import DistrictManagement from "pages/admin/DistrictManagement";
+import WardManagement from "pages/admin/WardManagement";
 import LocationManagement from "pages/admin/ward/pages/LocationsManagement";
 import AdvertiseManagement from "pages/admin/ward/pages/AdvertisesManagement";
-import { AdvertiseDetail } from "pages/admin/ward/pages/AdvertiseDetail";
-import { LocationEdit } from "pages/admin/ward/pages/LocationEdit";
-import { AdvertiseEdit } from "pages/admin/ward/pages/AdvertiseEdit";
 import ReportsManagement from "pages/admin/ward/pages/ReportsManagement";
 import { ReportDetail } from "pages/admin/ward/pages/ReportDetail";
 import { ReportHandle } from "pages/admin/ward/pages/ReportHandle";
-
+import { AdvertiseDetail } from "pages/admin/ward/pages/AdvertiseDetail";
+import { LocationEdit } from "pages/admin/ward/pages/LocationEdit";
+import { AdvertiseEdit } from "pages/admin/ward/pages/AdvertiseEdit";
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
         <Routes>
-          <Route path='/admin' Component={ReportHandle} />
-          {/* <Route path='/' Component={MapAdsManagement} />
-          <Route path='/admin/review/edit' Component={EditAdLicense} />
+          <Route path='/' Component={MapAdsManagement} />
+          <Route path='/admin' Component={UserManagement} />
 
-          <Route path='/admin/review/edit/location/:id' Component={EditAdLocationLicenseDetail} />
-          <Route path='/admin/review/edit/table/:id' Component={EditAdTableLicenseDetail} />
-          <Route path='/admin/review/license' Component={AdLicense} />
-          <Route path='/admin/review/license/:id' Component={AdLicenseDetail} />
-          <Route path='/contracts/createForm' element={<ContractForm />} />
-          <Route path='/contracts' Component={ContractList} /> */}
+          <Route path='/admin'>
+            <Route path='review'>
+              <Route path='edit' Component={EditAdLicense} />
+              <Route path='edit/location/:id' Component={EditAdLocationLicenseDetail} />
+              <Route path='edit/table/:id' Component={EditAdTableLicenseDetail} />
+              <Route path='license' Component={AdLicense} />
+              <Route path='license/:id' Component={AdLicenseDetail} />
+            </Route>
+
+            <Route path='districts'>
+              <Route path='' Component={DistrictManagement} />
+              <Route path=':id' Component={WardManagement} />
+            </Route>
+
+            <Route path='contracts'>
+              <Route path='' Component={ContractList} />
+              <Route path='createForm' element={<ContractForm />} />
+            </Route>
+
+            <Route path='locations'>
+              <Route path='' Component={LocationManagement}></Route>
+              <Route path='edit/:id' Component={LocationEdit}></Route>
+            </Route>
+
+            <Route path='advertises'>
+              <Route path='' Component={AdvertiseManagement}></Route>
+              <Route path=':id' Component={AdvertiseDetail}></Route>
+              <Route path='edit/:id' Component={AdvertiseEdit}></Route>
+            </Route>
+
+            <Route path='reports'>
+              <Route path='' Component={ReportsManagement}></Route>
+              <Route path=':id' Component={ReportDetail}></Route>
+              <Route path='edit/:id' Component={ReportHandle}></Route>
+            </Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

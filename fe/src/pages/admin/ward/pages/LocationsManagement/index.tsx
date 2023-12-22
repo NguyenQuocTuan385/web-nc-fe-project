@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import Sidebar from "../../components/common/Sidebar";
+import SideBarWard from "components/admin/SidebarWard";
 import TableTemplate from "../../components/common/TableTemplate";
 import InfoAdvertise from "../AdvertisesManagement/components/InfoLocation";
 
@@ -42,7 +42,7 @@ const LocationManagement = () => {
     <Box>
       <Header />
       <div className={classes["location-management-container"]}>
-        <Sidebar></Sidebar>
+        <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <Box className={classes["search-container"]}>
             <SearchAppBar />

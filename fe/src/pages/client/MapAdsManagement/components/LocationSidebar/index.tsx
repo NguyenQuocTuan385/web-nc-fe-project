@@ -6,7 +6,6 @@ import { Location } from "models/location";
 import { useEffect, useState } from "react";
 import AdvertiseService from "services/advertise";
 import { Advertise } from "models/advertise";
-import ImagesGallery from "components/common/ImagesGallery";
 import ImagesSlider from "components/common/ImagesSlider";
 
 interface LocalAddressPopoverProps {
