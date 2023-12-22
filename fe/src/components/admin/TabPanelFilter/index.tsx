@@ -23,8 +23,7 @@ interface ComponentProps {
 }
 export default function TabPanelFilter({ props }: ComponentProps) {
   const [searchValue, setSearchValue] = useState("");
-  const [selectedDistrict, setSelectedDistrict] =
-    React.useState<District | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = React.useState<District | null>(null);
   const [selectedWard, setSelectedWard] = React.useState<District | null>(null);
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -32,12 +31,12 @@ export default function TabPanelFilter({ props }: ComponentProps) {
 
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: (option: District) => option.name,
+    stringify: (option: District) => option.name
   });
   const childrenWithProps = React.cloneElement(props, {
     district: selectedDistrict?.name,
     ward: selectedWard?.name,
-    fieldSearch: searchValue,
+    fieldSearch: searchValue
   });
 
   return (
@@ -45,7 +44,7 @@ export default function TabPanelFilter({ props }: ComponentProps) {
       <Box className={classes.boxContainer}>
         <Box className={classes.boxTabPanel}>
           <Autocomplete
-            id="filter-demo"
+            id='filter-demo'
             options={districts}
             getOptionLabel={(option) => option.name}
             filterOptions={filterOptions}
@@ -55,26 +54,20 @@ export default function TabPanelFilter({ props }: ComponentProps) {
               setSelectedWard(null);
             }}
             value={selectedDistrict}
-            renderInput={(params) => <TextField {...params} label="Quận" />}
+            renderInput={(params) => <TextField {...params} label='Quận' />}
           />
           <Autocomplete
-            id="filter-demo"
-            options={
-              districts.filter(
-                (district) => district.id === selectedDistrict?.id
-              )[0]?.wards
-            }
+            id='filter-demo'
+            options={districts.filter((district) => district.id === selectedDistrict?.id)[0]?.wards}
             getOptionLabel={(option) => option.name}
             sx={{ width: 220 }}
-            onChange={(event, newValue) =>
-              setSelectedWard(newValue as District | null)
-            }
-            renderInput={(params) => <TextField {...params} label="Phường" />}
+            onChange={(event, newValue) => setSelectedWard(newValue as District | null)}
+            renderInput={(params) => <TextField {...params} label='Phường' />}
             value={selectedWard}
             disabled={selectedDistrict === null}
           />
           <Button
-            variant="contained"
+            variant='contained'
             onClick={() => {
               setSelectedDistrict(null);
               setSelectedWard(null);
@@ -84,14 +77,14 @@ export default function TabPanelFilter({ props }: ComponentProps) {
           </Button>
 
           <TextField
-            placeholder="Tìm kiếm"
-            variant="outlined"
+            placeholder='Tìm kiếm'
+            variant='outlined'
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon color="primary" />
+                <InputAdornment position='start'>
+                  <SearchIcon color='primary' />
                 </InputAdornment>
-              ),
+              )
             }}
             onChange={handleSearchChange}
             className={classes.customTextField}

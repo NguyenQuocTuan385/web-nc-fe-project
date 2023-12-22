@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import BasicPagination from "@mui/material/Pagination";
+import TablePagination from "@mui/material/TablePagination";
 import { Box, IconButton } from "@mui/material";
 import classes from "./styles.module.scss";
 import ads from "../../../../../editadlocation.json";
@@ -15,17 +15,23 @@ import { Cancel } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const rows = [...ads];
-const rowsPerPage = 6;
 interface FilterProps {
   district?: string;
   ward?: string;
   fieldSearch?: string;
 }
 export default function EditAdLocationLicense({ district, ward, fieldSearch }: FilterProps) {
-  const [page, setPage] = useState(1);
   const [filterDistrict, setFilterDistrict] = useState(rows);
-  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
   const navigate = useNavigate();
 
@@ -61,7 +67,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
 
     setFilterDistrict(filteredRows);
   }, [district, ward, fieldSearch]);
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - (page - 1) * rowsPerPage);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Box className={classes.boxContainer}>
@@ -85,34 +91,36 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
             </TableRow>
           </TableHead>
           <TableBody>
-            {filterDistrict.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow
-                key={row.id}
-                className={classes.rowTable}
-                onClick={() => {
-                  handleClick(row);
-                }}
-              >
-                <TableCell scope='row'>{row.id}</TableCell>
-                <TableCell align='left' className={classes.dataTable}>
-                  <div className={classes.textOverflow}>{row.address}</div>
-                </TableCell>
-                <TableCell align='left' className={classes.dataTable}>
-                  {row.timeEdit}
-                </TableCell>
-                <TableCell align='left' className={classes.dataTable}>
-                  {row.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
-                </TableCell>
-                <TableCell align='center' className={classes.dataTable}>
-                  <IconButton aria-label='edit' size='medium'>
-                    <CheckCircleIcon className={classes.checkIcon} />
-                  </IconButton>
-                  <IconButton aria-label='edit' size='medium'>
-                    <Cancel className={classes.cancelIcon} />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {(rowsPerPage > 0 ? filterDistrict.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map(
+              (row) => (
+                <TableRow
+                  key={row.id}
+                  className={classes.rowTable}
+                  onClick={() => {
+                    handleClick(row);
+                  }}
+                >
+                  <TableCell scope='row'>{row.id}</TableCell>
+                  <TableCell align='left' className={classes.dataTable}>
+                    <div className={classes.textOverflow}>{row.address}</div>
+                  </TableCell>
+                  <TableCell align='left' className={classes.dataTable}>
+                    {row.timeEdit}
+                  </TableCell>
+                  <TableCell align='left' className={classes.dataTable}>
+                    {row.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
+                  </TableCell>
+                  <TableCell align='center' className={classes.dataTable}>
+                    <IconButton aria-label='edit' size='medium'>
+                      <CheckCircleIcon className={classes.checkIcon} />
+                    </IconButton>
+                    <IconButton aria-label='edit' size='medium'>
+                      <Cancel className={classes.cancelIcon} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              )
+            )}
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />
@@ -121,12 +129,14 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
           </TableBody>
         </Table>
       </TableContainer>
-      <BasicPagination
-        color='primary'
-        count={Math.ceil(filterDistrict.length / rowsPerPage)}
+      <TablePagination
+        component='div'
+        count={filterDistrict.length}
         page={page}
-        onChange={handleChangePage}
-        className={classes.pagination}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Box>
   );

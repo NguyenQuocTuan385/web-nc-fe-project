@@ -1,36 +1,33 @@
-.boxContainer{
+.boxContainer {
   display: flex;
   flex-direction: column;
 }
 
-.tableContainer{
+.tableContainer {
   margin-top: 20px;
 }
 
-.sizeTable{
+.sizeTable {
   min-width: 1050px;
 }
 
-.headerTable{
+.headerTable {
   font-weight: bold;
   padding: 5px;
 }
 
-.rowTable{
-  &:last-child, &:last-child th{
+.rowTable {
+  &:last-child,
+  &:last-child th {
     border: 0;
   }
 }
 
-
-.dataTable{
+.dataTable {
   padding: 5px;
   width: 20%;
 }
-.pagination
-{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
+.pagination {
+  width: 100%;
+  background-color: white;
 }
