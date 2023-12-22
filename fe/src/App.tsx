@@ -15,16 +15,17 @@ import AdLicenseDetail from "pages/admin/AdLicense/components/AdLicenseDetail";
 import DistrictManagement from "pages/admin/DistrictManagement";
 import WardManagement from "pages/admin/WardManagement";
 import { routes } from "routes/routes";
+import CreateAccount from "pages/admin/CreateAccount";
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
         <Routes>
-
-        
           <Route path={routes.admin.users.root} Component={UserManagement} />
           <Route path={routes.client} Component={MapAdsManagement} />
           <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
+
+          <Route path={routes.admin.users.create} Component={CreateAccount} />
 
           <Route path={routes.admin.reviewEdit.location} Component={EditAdLocationLicenseDetail} />
           <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
