@@ -24,20 +24,20 @@ export default function TabPanel() {
       <Box className={classes.boxContainer}>
         <Box className={classes.boxTabPanel}>
           <Tabs value={value} onChange={handleChange}>
-            <Tab label="Tất cả" />
-            <Tab label="Quận" />
-            <Tab label="Phường" />
+            <Tab label='Tất cả' />
+            <Tab label='Quận' />
+            <Tab label='Phường' />
           </Tabs>
 
           <TextField
-            placeholder="Tìm kiếm"
-            variant="outlined"
+            placeholder='Tìm kiếm'
+            variant='outlined'
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon color="primary" />
+                <InputAdornment position='start'>
+                  <SearchIcon color='primary' />
                 </InputAdornment>
-              ),
+              )
             }}
             onChange={handleSearchChange}
             className={classes.customTextField}

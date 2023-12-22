@@ -26,8 +26,8 @@ export default function AdLicenseDetail() {
           <Box className={classes.imageInfoContainer}>
             <Box className={classes.imageContainer}>
               <img
-                src="https://kenh14cdn.com/thumb_w/620/203336854389633024/2023/10/19/photo-6-16976830334011868785001.jpg"
-                alt=""
+                src='https://kenh14cdn.com/thumb_w/620/203336854389633024/2023/10/19/photo-6-16976830334011868785001.jpg'
+                alt=''
                 className={classes.image}
               />
             </Box>
@@ -36,38 +36,23 @@ export default function AdLicenseDetail() {
                 <Grid item xs={8}>
                   <Box className={classes.infoTable}>
                     <Heading3>Thông tin bảng</Heading3>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       {table.type}
                     </ParagraphBody>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       {table.address}
                     </ParagraphBody>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Kích thước:&nbsp;
                       <span>
                         {table.width} x {table.height}
                       </span>
                     </ParagraphBody>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Hình thức:&nbsp;
                       <span>{table.form}</span>
                     </ParagraphBody>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Phân loại:&nbsp;
                       <span>{table.location}</span>
                     </ParagraphBody>
@@ -76,31 +61,19 @@ export default function AdLicenseDetail() {
                 <Grid item xs={8}>
                   <Box className={classes.infoCompany}>
                     <Heading3>Thông tin công ty</Heading3>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Tên công ty:&nbsp;
                       <span>{company.name}</span>
                     </ParagraphBody>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Email:&nbsp;
                       <span>{company.email}</span>
                     </ParagraphBody>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Số điện thoại:&nbsp;
                       <span>{company.phone}</span>
                     </ParagraphBody>
-                    <ParagraphBody
-                      $colorName="--gray-60"
-                      className={classes.infoContent}
-                    >
+                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Địa chỉ:&nbsp;
                       <span>{company.address}</span>
                     </ParagraphBody>
@@ -122,7 +95,7 @@ export default function AdLicenseDetail() {
               <Box></Box>
             </Box>
           </Box>
-          <Divider variant="middle" />
+          <Divider variant='middle' />
 
           <Box className={classes.boxMapContainer}>
             <Box className={classes.boxTitle}>
@@ -130,8 +103,8 @@ export default function AdLicenseDetail() {
             </Box>
             <Box className={classes.boxMap}>
               <img
-                src="https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg"
-                alt=""
+                src='https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg'
+                alt=''
                 width={"100%"}
                 height={"400px"}
               />
@@ -141,18 +114,10 @@ export default function AdLicenseDetail() {
       </Box>
       <Box className={classes.editHistoryContainer}>
         <Box className={classes.actionButtons}>
-          <Button
-            className={classes.approveButton}
-            variant="contained"
-            color="primary"
-          >
+          <Button className={classes.approveButton} variant='contained' color='primary'>
             Duyệt
           </Button>
-          <Button
-            className={classes.skipButton}
-            variant="contained"
-            color="error"
-          >
+          <Button className={classes.skipButton} variant='contained' color='error'>
             Bỏ qua
           </Button>
         </Box>

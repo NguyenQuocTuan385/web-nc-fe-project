@@ -62,8 +62,8 @@ export default function Popup(props: PopupProps) {
       district: yup.object().required("Vui lòng chọn quận"),
       ward: yup.object().when("role", {
         is: (role: string) => role === "ward",
-        then: () => yup.object().required("Vui lòng chọn phường"),
-      }),
+        then: () => yup.object().required("Vui lòng chọn phường")
+      })
     });
   }, []);
 
@@ -71,7 +71,7 @@ export default function Popup(props: PopupProps) {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<Profile>({ resolver: yupResolver(schema) });
   const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [fileImage, setFileImage] = useState<File | null>(null);
@@ -84,7 +84,7 @@ export default function Popup(props: PopupProps) {
   const profileSubmitHandler = async (data: any) => {
     const formSubmit: Profile = {
       ...data,
-      avatar: "",
+      avatar: ""
     };
     const formData = new FormData();
     formData.append("file", fileImage as File);
@@ -93,18 +93,17 @@ export default function Popup(props: PopupProps) {
     const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
     const uploadDataResult = await fetch(URL, {
       method: "POST",
-      body: formData,
+      body: formData
     }).then((res) => res.json());
     formSubmit.avatar = uploadDataResult.secure_url;
     console.log(formSubmit);
   };
   const { openPopup, setOpenPopup } = props;
-  const [selectedDistrict, setSelectedDistrict] =
-    React.useState<District | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = React.useState<District | null>(null);
   const [selectedWard, setSelectedWard] = React.useState<Ward | null>(null);
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: (option: District) => option.name,
+    stringify: (option: District) => option.name
   });
   return (
     <Dialog open={openPopup}>
@@ -117,7 +116,7 @@ export default function Popup(props: PopupProps) {
         </Box>
       </DialogTitle>
       <DialogContent dividers>
-        <DialogContentText component="div">
+        <DialogContentText component='div'>
           <form onSubmit={handleSubmit(profileSubmitHandler)}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={5}>
@@ -128,16 +127,16 @@ export default function Popup(props: PopupProps) {
                         avatarPreview ||
                         "https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/385780595_784340566826510_8513447287827069210_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=GAImUy0MBpQAX83N_Iw&_nc_ht=scontent.fsgn2-9.fna&oh=00_AfBvnNhzjKmg3twnhZCz_D5mFrCYVy85E0G1u0aimZURQg&oe=6588C1D0"
                       }
-                      alt="profile"
+                      alt='profile'
                       className={classes.image}
                     />
-                    <label htmlFor="icon-button-file">
+                    <label htmlFor='icon-button-file'>
                       <Box className={classes.iconButton}>
                         <input
-                          accept="image/*"
+                          accept='image/*'
                           className={classes.input}
-                          id="icon-button-file"
-                          type="file"
+                          id='icon-button-file'
+                          type='file'
                           onChange={handleClickAvatar}
                           style={{ display: "none" }} // Hide the input
                         />
@@ -154,42 +153,35 @@ export default function Popup(props: PopupProps) {
                         <Box className={classes.title}>Họ và tên</Box>
                         <TextField
                           fullWidth
-                          variant="outlined"
+                          variant='outlined'
                           defaultValue={"Nguyễn Quốc Thịnh"}
                           {...register("name")}
                           aria-invalid={errors.name ? "true" : "false"}
                           error={Boolean(errors?.name)}
                         />
-                        <p className={classes.errorText}>
-                          {errors?.name?.message}
-                        </p>
+                        <p className={classes.errorText}>{errors?.name?.message}</p>
                       </Grid>
                       <Grid item xs={12}>
                         <Box className={classes.title}>Email</Box>
                         <TextField
                           fullWidth
-                          variant="outlined"
+                          variant='outlined'
                           defaultValue={"ngqt@gmail.com"}
                           {...register("email")}
                           aria-invalid={errors.email ? "true" : "false"}
                           error={Boolean(errors?.email)}
                         />
-                        <p className={classes.errorText}>
-                          {errors?.email?.message}
-                        </p>
+                        <p className={classes.errorText}>{errors?.email?.message}</p>
                       </Grid>
                       <Grid item xs={12}>
                         <Box className={classes.title}>Ngày sinh</Box>
                         <Controller
-                          defaultValue=""
+                          defaultValue=''
                           control={control}
-                          name="birthday"
+                          name='birthday'
                           aria-invalid={errors.birthday ? "true" : "false"}
                           rules={{ required: true }}
-                          render={({
-                            field: { ref, ...field },
-                            fieldState: { invalid, error },
-                          }) => (
+                          render={({ field: { ref, ...field }, fieldState: { invalid, error } }) => (
                             <>
                               <DateTimePicker
                                 inputRef={ref}
@@ -199,13 +191,11 @@ export default function Popup(props: PopupProps) {
                                 slotProps={{
                                   textField: {
                                     required: true,
-                                    error: invalid,
-                                  },
+                                    error: invalid
+                                  }
                                 }}
                               />
-                              <div className={classes.errorText}>
-                                {error?.message}
-                              </div>
+                              <div className={classes.errorText}>{error?.message}</div>
                             </>
                           )}
                         />
@@ -214,15 +204,13 @@ export default function Popup(props: PopupProps) {
                         <Box className={classes.title}>Số điện thoại</Box>
                         <TextField
                           fullWidth
-                          variant="outlined"
+                          variant='outlined'
                           defaultValue={"09083276462"}
                           {...register("phone")}
                           aria-invalid={errors.phone ? "true" : "false"}
                           error={Boolean(errors?.phone)}
                         />
-                        <p className={classes.errorText}>
-                          {errors?.phone?.message}
-                        </p>
+                        <p className={classes.errorText}>{errors?.phone?.message}</p>
                       </Grid>
 
                       <Grid item xs={12}>
@@ -230,39 +218,26 @@ export default function Popup(props: PopupProps) {
 
                         <Controller
                           control={control}
-                          name="role"
-                          defaultValue="district"
+                          name='role'
+                          defaultValue='district'
                           aria-invalid={errors.role ? "true" : "false"}
                           rules={{ required: true }}
-                          render={({
-                            field: { ref, value, ...field },
-                            fieldState: { invalid, error },
-                          }) => (
+                          render={({ field: { ref, value, ...field }, fieldState: { invalid, error } }) => (
                             <>
                               <RadioGroup
                                 value={value}
                                 row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
+                                aria-labelledby='demo-row-radio-buttons-group-label'
+                                name='row-radio-buttons-group'
                                 onChange={(e) => {
                                   field.onChange(e); // cần gọi để cập nhật giá trị trong form
                                   setSelectedRole(e.target.value); // cập nhật giá trị trong state
                                 }}
                               >
-                                <FormControlLabel
-                                  value="district"
-                                  control={<Radio />}
-                                  label="Quận"
-                                />
-                                <FormControlLabel
-                                  value="ward"
-                                  control={<Radio />}
-                                  label="Phường"
-                                />
+                                <FormControlLabel value='district' control={<Radio />} label='Quận' />
+                                <FormControlLabel value='ward' control={<Radio />} label='Phường' />
                               </RadioGroup>
-                              <div className={classes.errorText}>
-                                {error?.message}
-                              </div>
+                              <div className={classes.errorText}>{error?.message}</div>
                             </>
                           )}
                         />
@@ -272,16 +247,13 @@ export default function Popup(props: PopupProps) {
                           <Grid item xs={6}>
                             <Controller
                               control={control}
-                              name="district"
+                              name='district'
                               aria-invalid={errors.district ? "true" : "false"}
                               rules={{ required: true }}
-                              render={({
-                                field: { onChange, value },
-                                fieldState: { error },
-                              }) => (
+                              render={({ field: { onChange, value }, fieldState: { error } }) => (
                                 <>
                                   <Autocomplete
-                                    id="filter-demo"
+                                    id='filter-demo'
                                     options={districts}
                                     getOptionLabel={(option) => option.name}
                                     filterOptions={filterOptions}
@@ -292,16 +264,10 @@ export default function Popup(props: PopupProps) {
                                     }}
                                     value={selectedDistrict}
                                     renderInput={(params) => (
-                                      <TextField
-                                        {...params}
-                                        label="Quận"
-                                        error={Boolean(error)}
-                                      />
+                                      <TextField {...params} label='Quận' error={Boolean(error)} />
                                     )}
                                   />
-                                  <div className={classes.errorText}>
-                                    {error?.message}
-                                  </div>
+                                  <div className={classes.errorText}>{error?.message}</div>
                                 </>
                               )}
                             />
@@ -310,36 +276,26 @@ export default function Popup(props: PopupProps) {
                             {selectedRole === "ward" && (
                               <Controller
                                 control={control}
-                                name="ward"
+                                name='ward'
                                 aria-invalid={errors.ward ? "true" : "false"}
                                 rules={{ required: selectedRole === "ward" }}
-                                render={({
-                                  field: { onChange, value },
-                                  fieldState: { error },
-                                }) => (
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
                                   <>
                                     <Autocomplete
-                                      id="filter-demo"
+                                      id='filter-demo'
                                       options={
-                                        districts.filter(
-                                          (district) =>
-                                            district.id === selectedDistrict?.id
-                                        )[0]?.wards
+                                        districts.filter((district) => district.id === selectedDistrict?.id)[0]?.wards
                                       }
                                       getOptionLabel={(option) => option.name}
                                       onChange={(event, newValue) => {
                                         onChange(newValue); // cần gọi để cập nhật giá trị trong form
                                         setSelectedWard(newValue);
                                       }}
-                                      renderInput={(params) => (
-                                        <TextField {...params} label="Phường" />
-                                      )}
+                                      renderInput={(params) => <TextField {...params} label='Phường' />}
                                       value={selectedWard}
                                       disabled={selectedDistrict === null}
                                     />
-                                    <div className={classes.errorText}>
-                                      {error?.message}
-                                    </div>
+                                    <div className={classes.errorText}>{error?.message}</div>
                                   </>
                                 )}
                               />
@@ -348,7 +304,7 @@ export default function Popup(props: PopupProps) {
                         </Grid>
                       </Grid>
                       <Grid item xs={12}>
-                        <Button variant="contained" type="submit" fullWidth>
+                        <Button variant='contained' type='submit' fullWidth>
                           Lưu
                         </Button>
                       </Grid>

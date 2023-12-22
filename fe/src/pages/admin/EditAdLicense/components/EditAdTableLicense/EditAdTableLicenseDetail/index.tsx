@@ -12,18 +12,7 @@ import SidebarDCMS from "components/admin/SidebarDCMS";
 export default function EditAdTableLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    address,
-    editTime,
-    width,
-    height,
-    amount,
-    adType,
-    tableType,
-    position,
-    edit,
-    reason,
-  } = location.state;
+  const { address, editTime, width, height, amount, adType, tableType, position, edit, reason } = location.state;
   return (
     <Box className={classes.boxContainer}>
       <SidebarDCMS />
@@ -35,15 +24,13 @@ export default function EditAdTableLicenseDetail() {
         <Box className={classes.boxContentDetail}>
           <Box className={classes.boxCurrentContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>
-                TRƯỚC KHI THAY ĐỔI
-              </ParagraphBody>
+              <ParagraphBody $fontWeight={"bold"}>TRƯỚC KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
                 <img
-                  src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt=""
+                  src='https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg'
+                  alt=''
                   className={classes.image}
                 />
               </Box>
@@ -58,25 +45,12 @@ export default function EditAdTableLicenseDetail() {
                   )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
-                  {address === edit.address ? (
-                    <span>{address}</span>
-                  ) : (
-                    <span className={classes.error}>{address}</span>
-                  )}
+                  {address === edit.address ? <span>{address}</span> : <span className={classes.error}>{address}</span>}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Kích thước:&nbsp;
-                  {width === edit.width ? (
-                    <span>{width}</span>
-                  ) : (
-                    <span className={classes.error}>{width}</span>
-                  )}
-                  x
-                  {height === edit.height ? (
-                    <span>{height}</span>
-                  ) : (
-                    <span className={classes.error}>{height}</span>
-                  )}
+                  {width === edit.width ? <span>{width}</span> : <span className={classes.error}>{width}</span>}x
+                  {height === edit.height ? <span>{height}</span> : <span className={classes.error}>{height}</span>}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Số lượng:&nbsp;
@@ -88,11 +62,7 @@ export default function EditAdTableLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Hình thức:&nbsp;
-                  {adType === edit.adType ? (
-                    <span>{adType}</span>
-                  ) : (
-                    <span className={classes.error}>{adType}</span>
-                  )}
+                  {adType === edit.adType ? <span>{adType}</span> : <span className={classes.error}>{adType}</span>}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Phân loại:&nbsp;
@@ -110,15 +80,13 @@ export default function EditAdTableLicenseDetail() {
           </Box>
           <Box className={classes.boxHistoryContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>
-                SAU KHI THAY ĐỔI
-              </ParagraphBody>
+              <ParagraphBody $fontWeight={"bold"}>SAU KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
                 <img
-                  src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt=""
+                  src='https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg'
+                  alt=''
                   className={classes.image}
                 />
               </Box>
@@ -146,11 +114,7 @@ export default function EditAdTableLicenseDetail() {
                     <span className={classes.edit}>{edit.width}</span>
                   )}
                   x
-                  {height === edit.height ? (
-                    <span>{height}</span>
-                  ) : (
-                    <span className={classes.edit}>{edit.height}</span>
-                  )}
+                  {height === edit.height ? <span>{height}</span> : <span className={classes.edit}>{edit.height}</span>}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Số lượng:&nbsp;
@@ -162,11 +126,7 @@ export default function EditAdTableLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Hình thức:&nbsp;
-                  {adType === edit.adType ? (
-                    <span>{adType}</span>
-                  ) : (
-                    <span className={classes.edit}>{edit.adType}</span>
-                  )}
+                  {adType === edit.adType ? <span>{adType}</span> : <span className={classes.edit}>{edit.adType}</span>}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Phân loại:&nbsp;
@@ -195,18 +155,10 @@ export default function EditAdTableLicenseDetail() {
             </Box>
 
             <Box className={classes.actionButtons}>
-              <Button
-                className={classes.approveButton}
-                variant="contained"
-                color="primary"
-              >
+              <Button className={classes.approveButton} variant='contained' color='primary'>
                 Duyệt
               </Button>
-              <Button
-                className={classes.skipButton}
-                variant="contained"
-                color="error"
-              >
+              <Button className={classes.skipButton} variant='contained' color='error'>
                 Bỏ qua
               </Button>
             </Box>

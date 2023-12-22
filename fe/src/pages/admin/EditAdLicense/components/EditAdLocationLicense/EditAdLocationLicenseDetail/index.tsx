@@ -12,8 +12,7 @@ import SidebarDCMS from "components/admin/SidebarDCMS";
 export default function EditAdLocationLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { address, timeEdit, planning, adsType, position, edit, reason } =
-    location.state;
+  const { address, timeEdit, planning, adsType, position, edit, reason } = location.state;
   return (
     <Box className={classes.boxContainer}>
       <SidebarDCMS />
@@ -25,15 +24,13 @@ export default function EditAdLocationLicenseDetail() {
         <Box className={classes.boxContentDetail}>
           <Box className={classes.boxCurrentContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>
-                TRƯỚC KHI THAY ĐỔI
-              </ParagraphBody>
+              <ParagraphBody $fontWeight={"bold"}>TRƯỚC KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
                 <img
-                  src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt=""
+                  src='https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg'
+                  alt=''
                   className={classes.image}
                 />
               </Box>
@@ -42,11 +39,7 @@ export default function EditAdLocationLicenseDetail() {
 
                 <ParagraphBody className={classes.infoContent}>
                   Địa chỉ:&nbsp;
-                  {address === edit.address ? (
-                    <span>{address}</span>
-                  ) : (
-                    <span className={classes.error}>{address}</span>
-                  )}
+                  {address === edit.address ? <span>{address}</span> : <span className={classes.error}>{address}</span>}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Loại vị trí:&nbsp;
@@ -58,19 +51,13 @@ export default function EditAdLocationLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Hình thức quảng cáo:&nbsp;
-                  {adsType === edit.adsType ? (
-                    <span>{adsType}</span>
-                  ) : (
-                    <span className={classes.error}>{adsType}</span>
-                  )}
+                  {adsType === edit.adsType ? <span>{adsType}</span> : <span className={classes.error}>{adsType}</span>}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   {planning === edit.planning ? (
                     <span>{planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}</span>
                   ) : (
-                    <span className={classes.error}>
-                      {planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
-                    </span>
+                    <span className={classes.error}>{planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}</span>
                   )}
                 </ParagraphBody>
               </Box>
@@ -81,15 +68,13 @@ export default function EditAdLocationLicenseDetail() {
           </Box>
           <Box className={classes.boxHistoryContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>
-                SAU KHI THAY ĐỔI
-              </ParagraphBody>
+              <ParagraphBody $fontWeight={"bold"}>SAU KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
                 <img
-                  src="https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg"
-                  alt=""
+                  src='https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg'
+                  alt=''
                   className={classes.image}
                 />
               </Box>
@@ -122,13 +107,9 @@ export default function EditAdLocationLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   {planning === edit.planning ? (
-                    <span>
-                      {edit.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
-                    </span>
+                    <span>{edit.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}</span>
                   ) : (
-                    <span className={classes.edit}>
-                      {edit.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
-                    </span>
+                    <span className={classes.edit}>{edit.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}</span>
                   )}
                 </ParagraphBody>
               </Box>
@@ -136,14 +117,12 @@ export default function EditAdLocationLicenseDetail() {
           </Box>
           <Box className={classes.boxMapContainer}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>
-                VỊ TRÍ TRÊN BẢN ĐỒ
-              </ParagraphBody>
+              <ParagraphBody $fontWeight={"bold"}>VỊ TRÍ TRÊN BẢN ĐỒ</ParagraphBody>
             </Box>
             <Box className={classes.boxMap}>
               <img
-                src="https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg"
-                alt=""
+                src='https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg'
+                alt=''
                 width={"100%"}
                 height={"400px"}
               />
@@ -164,18 +143,10 @@ export default function EditAdLocationLicenseDetail() {
               </Box>
 
               <Box className={classes.actionButtons}>
-                <Button
-                  className={classes.approveButton}
-                  variant="contained"
-                  color="primary"
-                >
+                <Button className={classes.approveButton} variant='contained' color='primary'>
                   Duyệt
                 </Button>
-                <Button
-                  className={classes.skipButton}
-                  variant="contained"
-                  color="error"
-                >
+                <Button className={classes.skipButton} variant='contained' color='error'>
                   Bỏ qua
                 </Button>
               </Box>

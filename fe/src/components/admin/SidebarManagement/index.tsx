@@ -29,11 +29,9 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   const [openItems, setOpenItems] = useState<number | null>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedItem>({
     parentIndex: null,
-    childIndex: null,
+    childIndex: null
   });
-  const [sideBar, setSidebar] = useState<SidebarItem[]>(
-    sideBarItemList.sideBarItem
-  );
+  const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
 
   const handleClick = (index: number, child: Array<{ name: string }>) => {
     if (openItems === index) {
@@ -41,7 +39,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
       if (selectedItem.childIndex == null) {
         setSelectedItem({
           parentIndex: index,
-          childIndex: null,
+          childIndex: null
         });
       }
     } else {
@@ -50,7 +48,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
       if (child.length === 0) {
         setSelectedItem({
           parentIndex: index,
-          childIndex: null,
+          childIndex: null
         });
         setSidebar((prevSideBar) =>
           prevSideBar.map((item, i) =>
@@ -58,8 +56,8 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
               ? {
                   ...item,
                   icon: React.cloneElement(item.icon, {
-                    className: classes.selectedIcon,
-                  }),
+                    className: classes.selectedIcon
+                  })
                 }
               : item
           )
@@ -68,7 +66,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
         if (selectedItem.parentIndex === null) {
           setSelectedItem({
             parentIndex: index,
-            childIndex: null,
+            childIndex: null
           });
         }
       }
@@ -78,13 +76,13 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   const handleClickChild = (parentIndex: number, childIndex: number) => {
     setSelectedItem({
       parentIndex: parentIndex,
-      childIndex: childIndex,
+      childIndex: childIndex
     });
   };
 
   return (
     <Box className={classes.boxContainer}>
-      <Drawer variant="permanent" anchor="left" className={classes.sideBar}>
+      <Drawer variant='permanent' anchor='left' className={classes.sideBar}>
         <Box className={classes.sideBar}>
           <List>
             {sideBar.map((list, index) => (
@@ -93,36 +91,22 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
                   <ListItemButton
                     onClick={() => handleClick(index, list.children || [])}
                     className={classes.item}
-                    selected={
-                      selectedItem.parentIndex === index &&
-                      list.children === undefined
-                    }
+                    selected={selectedItem.parentIndex === index && list.children === undefined}
                   >
                     <ListItemIcon>{list.icon}</ListItemIcon>
-                    <ListItemText
-                      primary={list.name}
-                      className={classes.itemText}
-                    />
-                    {list.children &&
-                      (openItems === index ? <ExpandLess /> : <ExpandMore />)}
+                    <ListItemText primary={list.name} className={classes.itemText} />
+                    {list.children && (openItems === index ? <ExpandLess /> : <ExpandMore />)}
                   </ListItemButton>
                 </ListItem>
                 {list.children && (
-                  <Collapse
-                    in={openItems === index}
-                    timeout="auto"
-                    unmountOnExit
-                  >
-                    <List component="div" disablePadding>
+                  <Collapse in={openItems === index} timeout='auto' unmountOnExit>
+                    <List component='div' disablePadding>
                       {list.children.map((item, childIndex) => (
                         <ListItemButton
                           key={childIndex}
                           onClick={() => handleClickChild(index, childIndex)}
                           className={classes.childItem}
-                          selected={
-                            selectedItem.parentIndex === index &&
-                            selectedItem.childIndex === childIndex
-                          }
+                          selected={selectedItem.parentIndex === index && selectedItem.childIndex === childIndex}
                         >
                           <ListItemText secondary={item.name} />
                         </ListItemButton>
