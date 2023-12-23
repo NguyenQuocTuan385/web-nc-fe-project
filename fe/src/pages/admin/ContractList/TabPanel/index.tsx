@@ -19,7 +19,11 @@ export default function TabPanel() {
 
     return Number(params.status) || 0;
   });
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+
+    return params.searchKey || "";
+  });
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -54,7 +58,7 @@ export default function TabPanel() {
           />
         </Box>
 
-        <ContractTable propertyId={tempPropertyId} status={Number(tabValue)} fieldSearch={searchValue} />
+        <ContractTable propertyId={tempPropertyId} status={Number(tabValue)} fieldSearch={String(searchValue)} />
       </Box>
     </>
   );

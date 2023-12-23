@@ -20,7 +20,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
-import { Contract, EContractStatus } from "models/contract";
+import { Contract, DynamicObject, EContractStatus } from "models/contract";
 import ContractService from "services/contract";
 import Heading6 from "components/common/text/Heading6";
 import clsx from "clsx";
@@ -43,6 +43,10 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
     const params = queryString.parse(locationHook.search);
     return params.page || 1;
   });
+  const [rowsPerPage, setRowsPerPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.rowsNum || 5;
+  });
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPageValue: number) => {
     setCurrentPage(newPageValue + 1);
     navigate({
@@ -53,8 +57,11 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
       }).toString()
     });
   };
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+  };
 
-  const pageSize = 5;
   const [emptyRows, setEmptyRows] = useState(0);
   const [dataList, setDataList] = useState<Contract[]>([]);
   const [totalElements, setTotalElements] = useState(1);
@@ -68,7 +75,7 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
         {
           search: fieldSearch,
           status: Number(status) === 0 ? undefined : Number(status),
-          pageSize: pageSize,
+          pageSize: Number(rowsPerPage),
           current: Number(currentPage)
         },
         propertyId
@@ -76,12 +83,14 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
         .then((res) => {
           setDataList(res.content);
           setTotalElements(res.totalElements);
-          setEmptyRows(pageSize - res.numberOfElements);
+          setEmptyRows(Number(rowsPerPage) - res.numberOfElements);
 
-          let searchParams = {};
-          if (status === 0) {
-            searchParams = { page: currentPage.toString() };
-          } else searchParams = { status: status.toString(), page: currentPage.toString() };
+          var searchParams: DynamicObject = {};
+          if (status !== 0) searchParams["status"] = status.toString();
+          if (fieldSearch !== "") searchParams["searchKey"] = fieldSearch;
+
+          searchParams["page"] = currentPage.toString();
+          searchParams["rowsNum"] = rowsPerPage.toString();
 
           navigate({
             pathname: match,
@@ -94,11 +103,11 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
     };
 
     getContractList();
-  }, [status, currentPage]);
+  }, [status, currentPage, rowsPerPage, fieldSearch]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [status]);
+  }, [status, fieldSearch]);
 
   const openDeleteDialogHandle = (id: number) => {
     setOpenDeleteDialog(true);
@@ -219,9 +228,9 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
           count={totalElements}
           page={Number(currentPage) - 1}
           onPageChange={handleChangePage}
-          rowsPerPage={pageSize}
+          rowsPerPage={Number(rowsPerPage)}
           labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-          // onRowsPerPageChange={handleChangeRowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
 

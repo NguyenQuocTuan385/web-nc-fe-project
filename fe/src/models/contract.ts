@@ -25,3 +25,7 @@ export enum EContractStatus {
   notLicensed = 2,
   expired = 3
 }
+
+export interface DynamicObject {
+  [key: string]: any;
+}
