@@ -16,6 +16,7 @@ import DistrictManagement from "pages/admin/DistrictManagement";
 import WardManagement from "pages/admin/WardManagement";
 import { routes } from "routes/routes";
 import CreateAccount from "pages/admin/CreateAccount";
+import ContractDetail from "pages/admin/ContractDetail";
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -35,6 +36,7 @@ function App() {
           <Route path={routes.admin.properties.ward} Component={WardManagement} />
           <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
           <Route path={routes.admin.contracts.root} Component={ContractList} />
+          <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

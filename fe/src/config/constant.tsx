@@ -8,7 +8,8 @@ export const API = {
   CONTRACT: {
     DEFAULT: "/api/contracts",
     DELETE: "/api/contracts/:id",
-    ByAdvertiseId: "/api/advertises/:id/contracts"
+    ByAdvertiseId: "/api/advertises/:id/contracts",
+    ById: "/api/contracts/:id"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
