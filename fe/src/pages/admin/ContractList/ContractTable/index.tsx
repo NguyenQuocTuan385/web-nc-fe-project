@@ -81,6 +81,8 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
         propertyId
       )
         .then((res) => {
+          if (res.content.length === 0) setCurrentPage(1);
+
           setDataList(res.content);
           setTotalElements(res.totalElements);
           setEmptyRows(Number(rowsPerPage) - res.numberOfElements);
@@ -104,10 +106,6 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
 
     getContractList();
   }, [status, currentPage, rowsPerPage, fieldSearch]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [status, fieldSearch]);
 
   const openDeleteDialogHandle = (id: number) => {
     setOpenDeleteDialog(true);
