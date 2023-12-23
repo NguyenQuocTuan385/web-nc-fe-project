@@ -7,7 +7,8 @@ export const API = {
   },
   CONTRACT: {
     DEFAULT: "/api/contracts",
-    DELETE: "/api/contracts/:id"
+    DELETE: "/api/contracts/:id",
+    ByAdvertiseId: "/api/advertises/:id/contracts"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
@@ -16,5 +17,8 @@ export const API = {
   },
   WARD: {
     DEFAULT: "/api/properties/:propertyParentId"
+  },
+  REPORT: {
+    DEFAULT: "/api/reports"
   }
 };

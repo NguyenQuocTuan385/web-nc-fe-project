@@ -13,6 +13,16 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async getContractsByAdvertise(id: number, data: GetContract): Promise<any> {
+    return await api
+      .get(`${API.CONTRACT.ByAdvertiseId.replace(":id", `${id}`)}`, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 
   static async deleteContracts(id: number): Promise<any> {
     return await api
