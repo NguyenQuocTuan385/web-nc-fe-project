@@ -6,7 +6,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import BasicPagination from "@mui/material/Pagination";
 import {
   Box,
   Button,
@@ -15,25 +14,27 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton
+  IconButton,
+  TablePagination
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
-import { Contract } from "models/contract";
+import { Contract, EContractStatus } from "models/contract";
 import ContractService from "services/contract";
 import Heading6 from "components/common/text/Heading6";
 import clsx from "clsx";
-import { Router, createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import queryString from "query-string";
 
 // const rows = [...user];
 interface FilterProps {
+  propertyId: number;
   status: number;
   fieldSearch: string;
 }
 
-export default function ContractTable({ status, fieldSearch }: FilterProps) {
+export default function ContractTable({ propertyId, status, fieldSearch }: FilterProps) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const navigate = useNavigate();
   const locationHook = useLocation();
@@ -42,8 +43,8 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     const params = queryString.parse(locationHook.search);
     return params.page || 1;
   });
-  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
-    setCurrentPage(newPageValue);
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPageValue: number) => {
+    setCurrentPage(newPageValue + 1);
     navigate({
       pathname: match,
       search: createSearchParams({
@@ -56,30 +57,35 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const pageSize = 5;
   const [emptyRows, setEmptyRows] = useState(0);
   const [dataList, setDataList] = useState<Contract[]>([]);
-  const [totalPage, setTotalPage] = useState(1);
+  const [totalElements, setTotalElements] = useState(1);
   const [selectedForDelete, setSelectedForDelete] = useState(-1);
 
   // filter contract's status for Tab Panel
   useEffect(() => {
     // not licensed
     const getContractList = async () => {
-      ContractService.getContracts({
-        search: fieldSearch,
-        status: status,
-        pageSize: pageSize,
-        current: Number(currentPage)
-      })
+      ContractService.getContracts(
+        {
+          search: fieldSearch,
+          status: Number(status) === 0 ? undefined : Number(status),
+          pageSize: pageSize,
+          current: Number(currentPage)
+        },
+        propertyId
+      )
         .then((res) => {
           setDataList(res.content);
-          setTotalPage(res.totalPages);
+          setTotalElements(res.totalElements);
           setEmptyRows(pageSize - res.numberOfElements);
+
+          let searchParams = {};
+          if (status === 0) {
+            searchParams = { page: currentPage.toString() };
+          } else searchParams = { status: status.toString(), page: currentPage.toString() };
 
           navigate({
             pathname: match,
-            search: createSearchParams({
-              status: status.toString(),
-              page: currentPage.toString()
-            }).toString()
+            search: createSearchParams(searchParams).toString()
           });
         })
         .catch((e) => {
@@ -176,9 +182,9 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                   {contract.endAt.toLocaleString()}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
-                  {contract.status == 1 ? (
+                  {contract.status === EContractStatus.licensed ? (
                     <Heading6 $colorName='--green-600'>Đã cấp phép</Heading6>
-                  ) : contract.status == 2 ? (
+                  ) : contract.status === EContractStatus.notLicensed ? (
                     <Heading6 $colorName='--red-error'>Chưa cấp phép</Heading6>
                   ) : (
                     <Heading6 $colorName='--gray-60'>Đã hết hạn</Heading6>
@@ -188,7 +194,7 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                   <IconButton aria-label='edit' size='medium'>
                     <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
                   </IconButton>
-                  {contract.status == 2 ? (
+                  {contract.status === 2 ? (
                     <IconButton aria-label='edit' size='medium' onClick={() => openDeleteDialogHandle(contract.id)}>
                       <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                     </IconButton>
@@ -206,13 +212,18 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
           </TableBody>
         </Table>
       </TableContainer>
-      <BasicPagination
-        color='primary'
-        count={totalPage}
-        page={Number(currentPage)}
-        onChange={handleChangePage}
-        className={classes.pagination}
-      />
+      <Box className={classes.pagination}>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 100]}
+          component='div'
+          count={totalElements}
+          page={Number(currentPage) - 1}
+          onPageChange={handleChangePage}
+          rowsPerPage={pageSize}
+          labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+          // onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
 
       <Dialog
         open={openDeleteDialog}

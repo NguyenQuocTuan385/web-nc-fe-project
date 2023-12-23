@@ -10,6 +10,8 @@ import classes from "./styles.module.scss";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 
+const tempPropertyId = 3;
+
 export default function TabPanel() {
   const locationHook = useLocation();
   const [tabValue, setTabValue] = React.useState(() => {
@@ -52,7 +54,7 @@ export default function TabPanel() {
           />
         </Box>
 
-        <ContractTable status={Number(tabValue)} fieldSearch={searchValue} />
+        <ContractTable propertyId={tempPropertyId} status={Number(tabValue)} fieldSearch={searchValue} />
       </Box>
     </>
   );
