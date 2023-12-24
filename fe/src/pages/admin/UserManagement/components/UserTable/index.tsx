@@ -8,7 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Box, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
 import Popup from "../PopupEditProfile/index";
 import TablePagination from "@mui/material/TablePagination";
@@ -17,6 +17,8 @@ import { createSearchParams, useLocation } from "react-router-dom";
 import Userservice from "services/user";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
+import AlertDialog from "components/admin/ConfirmDialog";
+import Alert from "@mui/material/Alert";
 
 interface FilterProps {
   role: number;
@@ -33,6 +35,8 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
   const [dataList, setDataList] = useState<User[]>([]);
   const [user, setUser] = useState<User>();
   const [openPopup, setOpenPopup] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [id, setId] = useState(0);
   const handleClick = (id: number) => {
     const getUserById = async () => {
       Userservice.getUserbyId(id)
@@ -46,27 +50,32 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
     };
     getUserById();
   };
+  const handleClickDelete = (id: number) => {
+    setOpen(true);
+    console.log(id);
+    setId(id);
+  };
   const navigate = useNavigate();
-  console.log(locationHook);
+  const getUsers = async () => {
+    Userservice.getUsers({
+      search: fieldSearch,
+      role: role,
+      pageSize: rowsPerPage,
+      current: Number(page) + 1
+    })
+      .then((res) => {
+        setDataList(res.content);
+        setTotalPage(res.totalPages);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
-    const getUsers = async () => {
-      Userservice.getUsers({
-        search: fieldSearch,
-        role: role,
-        pageSize: rowsPerPage,
-        current: Number(page) + 1
-      })
-        .then((res) => {
-          setDataList(res.content);
-          setTotalPage(res.totalPages);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
     getUsers();
-  }, [role, rowsPerPage, page, fieldSearch, openPopup]);
+  }, [role, rowsPerPage, page, fieldSearch]);
+  console.log(dataList);
 
   useEffect(() => {
     setPage(0);
@@ -86,6 +95,19 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+  const confirmDelete = (id: number) => {
+    const deleteUser = async () => {
+      Userservice.deleteUser(id)
+        .then((res) => {
+          getUsers();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    setOpen(false);
+    deleteUser();
   };
   const emptyRows = rowsPerPage - dataList.length;
 
@@ -137,6 +159,9 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
                   <IconButton aria-label='edit' size='medium' onClick={() => handleClick(row.id)}>
                     <FontAwesomeIcon icon={faEdit} color='var(--blue-500)' />
                   </IconButton>
+                  <IconButton aria-label='delete' size='medium' onClick={() => handleClickDelete(row.id)}>
+                    <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
@@ -160,7 +185,15 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
-      {user && <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} user={user} />}
+      {user && <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} user={user} onUpdated={getUsers} />}
+      <AlertDialog
+        open={open}
+        setOpen={setOpen}
+        title='Xác nhận xóa?'
+        content='Bạn có chắc chắn muốn xóa tài khoản này?'
+        confirm={confirmDelete}
+        id={id}
+      />
     </Box>
   );
 }

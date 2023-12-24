@@ -33,6 +33,16 @@ export class Userservice {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async deleteUser(id: Number): Promise<any> {
+    return await api
+      .delete(`${API.USER.DELETE.replace(":id", `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default Userservice;

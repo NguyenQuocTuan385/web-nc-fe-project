@@ -8,7 +8,7 @@ import Heading4 from "components/common/text/Heading4";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState, useEffect, useMemo } from "react";
-import { useForm, Controller, set } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { Button, TextField } from "@mui/material";
 import Radio from "@mui/material/Radio";
@@ -31,6 +31,7 @@ interface PopupProps {
   openPopup: boolean;
   setOpenPopup: (value: boolean) => void;
   user: User;
+  onUpdated: () => void;
 }
 interface FormData {
   name: string;
@@ -58,7 +59,7 @@ const getSchema = () =>
   });
 
 export default function Popup(props: PopupProps) {
-  const { openPopup, setOpenPopup, user } = props;
+  const { openPopup, setOpenPopup, user, onUpdated } = props;
 
   const schema = useMemo(getSchema, []);
 
@@ -84,6 +85,7 @@ export default function Popup(props: PopupProps) {
       .then((res) => {
         setOpenPopup(false);
         resetForm();
+        onUpdated();
       })
       .catch((err) => {
         console.log(err);
