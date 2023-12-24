@@ -1,0 +1,31 @@
+.customTextField {
+  & input {
+    height: 10px;
+    width: 390px;
+  }
+
+  & fieldset {
+    border-radius: 40px;
+    border-color: var(--blue-500);
+  }
+}
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 100%;
+}
+
+.boxTabPanel {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  align-items: center;
+  padding: 0px 5px;
+  gap: 20px;
+  background-color: white;
+  padding-left: 20px;
+}
