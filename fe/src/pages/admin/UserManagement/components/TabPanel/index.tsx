@@ -14,6 +14,13 @@ export default function TabPanel() {
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   const locationHook = useLocation();
+  const params = new URLSearchParams(locationHook.search);
+  const role = params.get("role");
+  React.useEffect(() => {
+    if (role) {
+      setValue(Number(role));
+    }
+  }, [role]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);

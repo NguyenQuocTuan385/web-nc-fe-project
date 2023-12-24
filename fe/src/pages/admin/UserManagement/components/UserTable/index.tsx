@@ -18,7 +18,6 @@ import Userservice from "services/user";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import AlertDialog from "components/admin/ConfirmDialog";
-import Alert from "@mui/material/Alert";
 
 interface FilterProps {
   role: number;
@@ -30,6 +29,7 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
     const params = queryString.parse(locationHook.search);
     return params.page || 0;
   });
+  console.log(page);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [totalPage, setTotalPage] = useState(1);
   const [dataList, setDataList] = useState<User[]>([]);

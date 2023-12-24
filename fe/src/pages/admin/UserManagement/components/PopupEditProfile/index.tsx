@@ -178,13 +178,15 @@ export default function Popup(props: PopupProps) {
 
   useEffect(() => {
     const getAllDistrict = async () => {
-      DistrictService.getAll()
+      DistrictService.getAllDistrict({
+        search: "",
+        pageSize: 999
+      })
         .then((res) => {
-          setDistricts(res);
+          setDistricts(res.content);
+          return res.content;
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err: any) => console.log(err));
     };
     getAllDistrict();
   }, []);
