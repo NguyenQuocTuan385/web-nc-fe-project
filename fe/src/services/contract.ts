@@ -3,9 +3,9 @@ import api from "./configApi";
 import { GetContract } from "models/contract";
 
 export class ContractService {
-  static async getContracts(data: GetContract): Promise<any> {
+  static async getContracts(data: GetContract, propertyId : Number): Promise<any> {
     return await api
-      .get(`${API.CONTRACT.DEFAULT}`, { params: data })
+      .get(`${API.CONTRACT.DEFAULT.replace(":id", `${propertyId}`)}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })
