@@ -22,7 +22,7 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
     const getAllAdvertises = async () => {
       if (!location) return;
       setImages(JSON.parse(location.images));
-      AdvertiseService.getAdvertises(location.id, { pageSize: 999 })
+      AdvertiseService.getAdvertisesByLocationId(location.id, { pageSize: 999 })
         .then((res) => {
           setAdvertises(res.content);
         })

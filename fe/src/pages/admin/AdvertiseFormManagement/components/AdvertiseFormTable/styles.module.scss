@@ -8,7 +8,7 @@
 }
 
 .sizeTable{
-  max-height: 50px;
+  min-width: 1050px;
 }
 
 .headerTable{
@@ -20,10 +20,15 @@
   &:last-child, &:last-child th{
     border: 0;
   }
+  &:hover{
+    background-color: #F5F5F5;
+  }
+  cursor: pointer;
 }
 
+
 .dataTable{
-  padding-top: 10px;
+  padding: 5px;
 }
 .pagination
 {
@@ -33,14 +38,12 @@
   margin-top: 10px;
 }
 
-.dataIcon{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.infoIcon{
+  color: #21A221;
 }
-
-.pagination {
-  width: 100%;
-  background-color: white;
-
+.editIcon{
+  color: #496dee;
+}
+.deleteIcon{
+  color: #FF0000;
 }
