@@ -1,15 +1,15 @@
 import { Box } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import DistricTable from "./components/DistrictTable";
-import TabPanelDistrictSearch from "./components/TabPanelDistrictSearch";
+import ReportFormTable from "./components/ReportFormTable";
+import TabPanelReportFormSearch from "./components/TabPanelReportFormSearch";
 
-export default function DistrictManagement() {
+export default function ReportFormManagement() {
   return (
     <div>
       <Box className={classes.boxContainer}>
         <SidebarDCMS />
-        <TabPanelDistrictSearch props={<DistricTable />} />
+        <TabPanelReportFormSearch props={<ReportFormTable />} />
       </Box>
     </div>
   );

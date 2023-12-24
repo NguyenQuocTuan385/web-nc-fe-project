@@ -7,7 +7,6 @@ export interface Advertise {
   width: number;
   pillarQuantity?: number;
   images: string;
-  companyImgUrl?: string;
   statusEdit?: boolean;
   location: Location;
   adsType: AdvertiseType;

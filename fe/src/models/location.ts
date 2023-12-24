@@ -1,5 +1,6 @@
 import { AdvertiseForm } from "./advertise";
 import { Property } from "./property";
+import { Report } from "./report";
 
 export interface RandomLocation {
   address: string;
@@ -20,6 +21,7 @@ export interface Location {
   property: Property;
   locationEditId?: number;
   createdAt?: string;
+  titleReport?: string;
 }
 
 export interface LocationType {

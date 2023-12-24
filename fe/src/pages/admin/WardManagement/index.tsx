@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import TabPanelFilter from "components/admin/TabPanelFilter";
+import TabPanelWardSearch from "./components/TabPanelWardSearch";
 import WardTable from "./components/WardTable";
 
 export default function WardManagement() {
@@ -9,7 +9,7 @@ export default function WardManagement() {
     <div>
       <Box className={classes.boxContainer}>
         <SidebarDCMS />
-        <TabPanelFilter props={<WardTable />} />
+        <TabPanelWardSearch props={<WardTable />} />
       </Box>
     </div>
   );

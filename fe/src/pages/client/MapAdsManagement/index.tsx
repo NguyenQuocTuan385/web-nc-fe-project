@@ -16,6 +16,8 @@ import RandomLocationSidebar from "./components/RandomLocationSidebar";
 import LocationService from "services/location";
 import { Box, Switch } from "@mui/material";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
+import { EReportStatus, Report } from "models/report";
+import ReportService from "services/report";
 
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -32,7 +34,9 @@ const MapAdsManagement = () => {
   maptilersdk.config.apiKey = API_KEY;
   const [mapController, setMapController] = useState<MapController>();
   const popup = new MapLibreGL.Popup({});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const locationsIsPlanning: Feature[] = [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const locationsIsNotPlanning: Feature[] = [];
   const closeAdsSidebar = () => {
     setOpenLocationSidebar(false);
@@ -47,23 +51,41 @@ const MapAdsManagement = () => {
       LocationService.getLocations({ pageSize: 9999 })
         .then((res) => {
           const locations_temp: Location[] = res.content;
-          locations_temp.map((location: Location) => {
-            const feature: Feature = {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [location.longitude, location.latitude]
-              },
-              properties: {
-                ...location
-              }
-            };
-            if (location.planning) {
-              locationsIsPlanning.push(feature);
-            } else {
-              locationsIsNotPlanning.push(feature);
-            }
-            return feature;
+          locations_temp.forEach((location: Location) => {
+            ReportService.getReports({ locationId: location.id, pageSize: 999, email: "nguyenvana@gmail.com" })
+              .then((res) => {
+                if (res.content.length > 0) {
+                  const report: Report = res.content[res.content.length - 1];
+                  let status: string;
+                  if (report.status === EReportStatus.NEW) {
+                    status = "Chưa xử lý";
+                  } else if (report.status === EReportStatus.PROCESSING) {
+                    status = "Đang xử lý";
+                  } else {
+                    status = "Đã xử lý";
+                  }
+                  location.titleReport = status;
+                }
+                const feature: Feature = {
+                  type: "Feature",
+                  geometry: {
+                    type: "Point",
+                    coordinates: [location.longitude, location.latitude]
+                  },
+                  properties: {
+                    ...location
+                  }
+                };
+                if (location.planning) {
+                  locationsIsPlanning.push(feature);
+                } else {
+                  locationsIsNotPlanning.push(feature);
+                }
+                return feature;
+              })
+              .catch((e) => {
+                console.log(e);
+              });
           });
         })
         .catch((e) => {
@@ -71,7 +93,7 @@ const MapAdsManagement = () => {
         });
     };
     getAllLocations();
-  }, []);
+  }, [locationsIsNotPlanning, locationsIsPlanning]);
 
   const changeHandleLocationIsPlanning = () => {
     const visibility = map.current?.getLayoutProperty("locations_is_planning", "visibility");
@@ -179,7 +201,11 @@ const MapAdsManagement = () => {
           type: "symbol",
           source: "locations_is_planning",
           layout: {
-            "icon-image": "marker-is-planning"
+            "icon-image": "marker-is-planning",
+            "text-field": ["get", "titleReport"],
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-offset": [0, 1.25],
+            "text-anchor": "top"
           }
         });
         map.current.on("mouseenter", "locations_is_planning", (e) => showPopup(e));
@@ -242,7 +268,12 @@ const MapAdsManagement = () => {
           type: "symbol",
           source: "locations_is_not_planning",
           layout: {
-            "icon-image": "marker-is-not-planning"
+            "icon-image": "marker-is-not-planning",
+            "text-field": ["get", "titleReport"],
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-offset": [0, 1.25],
+            "text-size": 4,
+            "text-anchor": "top"
           }
         });
       });

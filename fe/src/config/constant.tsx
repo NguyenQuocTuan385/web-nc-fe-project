@@ -6,8 +6,9 @@ export const API = {
     DEFAULT: "/api/locations/:id/advertises"
   },
   CONTRACT: {
-    DEFAULT: "/api/contracts",
-    DELETE: "/api/contracts/:id"
+    DEFAULT: "/api/properties/:id/contracts",
+    DELETE: "/api/contracts/:id",
+    ByAdvertiseId: "/api/advertises/:id/contracts"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
@@ -23,5 +24,17 @@ export const API = {
     UPDATE: "/api/users/:id",
     DELETE: "/api/users/:id",
     DETAIL: "/api/users/:id"
+  },
+  REPORT: {
+    DEFAULT: "/api/reports"
+  },
+  REPORT_FORM: {
+    DEFAULT: "/api/report-forms"
+  },
+  ADVERTISE_FORM: {
+    DEFAULT: "/api/advertise-forms"
+  },
+  ADVERTISE_TYPE: {
+    DEFAULT: "/api/advertise-types"
   }
 };
