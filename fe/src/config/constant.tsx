@@ -21,5 +21,14 @@ export const API = {
   },
   REPORT: {
     DEFAULT: "/api/reports"
+  },
+  REPORT_FORM: {
+    DEFAULT: "/api/report-forms"
+  },
+  ADVERTISE_FORM: {
+    DEFAULT: "/api/advertise-forms"
+  },
+  ADVERTISE_TYPE: {
+    DEFAULT: "/api/advertise-types"
   }
 };

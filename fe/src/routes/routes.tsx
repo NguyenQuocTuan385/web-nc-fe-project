@@ -33,6 +33,17 @@ export const routes = {
       root: "/admin/contracts",
       createForm: "/admin/contracts/create-form",
       detail: "/admin/contracts/:id"
+      createForm: "/admin/contracts/create-form"
+    },
+    reportForm: {
+      root: "/admin/report-forms"
+    },
+    advertisesForm: {
+      root: "/admin/advertise-forms"
+    },
+    advertiseType: {
+      root: "/admin/advertise-types"
+
     }
   }
 };
