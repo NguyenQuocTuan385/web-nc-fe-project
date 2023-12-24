@@ -1,61 +1,122 @@
 {
+  "id": 1,
+  "licensing": true,
+  "height": 5.0,
+  "width": 6.0,
+  "statusEdit": false,
+  "location": {
     "id": 1,
-    "licensing": true,
-    "height": 5.0,
-    "width": 6.0,
+    "planning": true,
+    "latitude": 123.45,
+    "longtitude": 2356.12,
+    "address": "Thạnh Xuân, Quận 12, TP.HCM",
     "statusEdit": false,
-    "location": {
-        "id": 1,
-        "planning": true,
-        "latitude": 123.45,
-        "longtitude": 2356.12,
-        "address": "Thạnh Xuân, Quận 12, TP.HCM",
-        "statusEdit": false,
-        "createdAt": "2023-12-17 13:55:35",
-        "updatedAt": "2023-12-17 13:55:35",
-        "adsForm": {
+    "createdAt": "2023-12-17 13:55:35",
+    "updatedAt": "2023-12-17 13:55:35",
+    "adsForm": {
+      "id": 1,
+      "name": "Cổ định chính trị",
+      "description": "Bảng quảng cáo dùng để cổ động chính trị",
+      "createdAt": "2023-10-12T00:00:00"
+    },
+    "locationType": {
+      "id": 1,
+      "name": "Đất công",
+      "description": null,
+      "createdAt": "2023-12-17T13:38:40"
+    },
+    "property": {
+      "id": 2,
+      "propertyParentId": 1,
+      "name": "Phường Thạnh Xuân",
+      "code": "71514"
+    },
+    "locationEdit": null,
+    "images": null
+  },
+  "adsType": {
+    "id": 1,
+    "name": "Trụ, Pano",
+    "description": "Có cấu trúc dạng trụ, pano",
+    "createdAt": "2023-12-19T14:06:32"
+  },
+  "advertiseEdit": null,
+  "contracts": [
+    {
+      "id": 1,
+      "companyName": "FPT Telecom",
+      "companyEmail": "congty@fpt.com",
+      "companyPhone": "0123456789",
+      "companyAddress": "FPT Tân Thuận 2",
+      "startAt": "2023-01-01 12:12:12",
+      "endAt": "2024-01-01 12:12:12",
+      "status": 1,
+      "images": "https://bienhieudep.vn/wp-content/uploads/2021/08/bien-quang-cao-tam-lon-6.jpg",
+      "advertise": {
+        "id": 2,
+        "licensing": false,
+        "height": 12.0,
+        "width": 2.8,
+        "statusEdit": null,
+        "images": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmq1k95wJA5bP_jYuAeEomw-NanJEBmTULTA&usqp=CAU",
+        "pillarQuantity": 2,
+        "location": {
+          "id": 1,
+          "planning": true,
+          "latitude": 10.7647,
+          "longitude": 106.682,
+          "address": "239 Đ. Nguyễn Văn Cừ, Phường 4, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
+          "statusEdit": true,
+          "images": "[\"https://goldsungroup.com.vn/wp-content/uploads/2019/11/bien-quang-cao-mot-cot-tren-duong-quoc-lo.jpg\",\"https://lambanghieuhcm.com/wp-content/uploads/2020/01/lam-bang-hieu-trung-tam-thuong-mai-2.jpg\"]",
+          "createdAt": "2023-12-18 20:49:44",
+          "updatedAt": "2023-12-22 00:51:39",
+          "adsForm": {
             "id": 1,
-            "name": "Cổ định chính trị",
-            "description": "Bảng quảng cáo dùng để cổ động chính trị",
-            "createdAt": "2023-10-12T00:00:00"
-        },
-        "locationType": {
-            "id": 1,
-            "name": "Đất công",
-            "description": null,
-            "createdAt": "2023-12-17T13:38:40"
-        },
-        "property": {
+            "name": "Cổ động chính trị",
+            "description": "mô tả Cổ động chính trị",
+            "createdAt": "2023-12-17T14:58:14"
+          },
+          "locationType": {
             "id": 2,
-            "propertyParentId": 1,
-            "name": "Phường Thạnh Xuân",
-            "code": "71514"
-        },
-        "locationEdit": null,
-        "images": null
-    },
-    "adsType": {
-        "id": 1,
-        "name": "Trụ, Pano",
-        "description": "Có cấu trúc dạng trụ, pano",
-        "createdAt": "2023-12-19T14:06:32"
-    },
-    "advertiseEdit": null,
-    "contracts": [
-        {
+            "name": "Đất tư nhân/Nhà ở riêng lẻ",
+            "description": "Mô tả Đất tư nhân/Nhà ở riêng lẻ",
+            "createdAt": "2023-12-17T14:30:23"
+          },
+          "property": {
+            "id": 4,
+            "name": "Phường 4",
+            "code": "PHUONG",
+            "propertyParent": {
+              "id": 1,
+              "name": "Quận 5",
+              "code": "QUAN",
+              "propertyParent": null
+            }
+          },
+          "locationEdit": {
             "id": 1,
-            "companyName": "FPT Telecom",
-            "companyEmail": "congty@fpt.com",
-            "companyPhone": "0123456789",
-            "companyAddress": "FPT Tân Thuận 2",
-            "startAt": "2023-01-01 12:12:12",
-            "endAt": "2024-01-01 12:12:12",
-            "status": 1,
-            "imgUrl": "https://bienhieudep.vn/wp-content/uploads/2021/08/bien-quang-cao-tam-lon-6.jpg"
-        }
-    ],
-    "reports": [],
-    "createdAt": "2023-12-19 14:06:38",
-    "updatedAt": "2023-12-19 14:06:38"
+            "planning": true,
+            "latitude": 123.456,
+            "longitude": 678.123,
+            "address": "227 Đ. Nguyễn Văn Cừ, Phường 6, Quận 5, Thành phố Hồ Chí Minh, Việt Nam",
+            "content": "Bảng quảng cáo làm mất mỹ quang đô thị và chắn ngang nhà tôi",
+            "images": "[\"https://goldsungroup.com.vn/wp-content/uploads/2019/11/bien-quang-cao-mot-cot-tren-duong-quoc-lo.jpg\",\"https://lambanghieuhcm.com/wp-content/uploads/2020/01/lam-bang-hieu-trung-tam-thuong-mai-2.jpg\"]",
+            "createdAt": "2023-12-18T20:49:44",
+            "updatedAt": "2023-12-22T00:51:38.799313"
+          }
+        },
+        "adsType": {
+          "id": 2,
+          "name": "Trụ màn hình điện tử LED",
+          "description": "Mô tả Trụ màn hình điện tử LED",
+          "createdAt": "2023-12-17T14:55:56"
+        },
+        "createdAt": "2023-12-19 15:05:18",
+        "updatedAt": "2023-12-19 15:05:18"
+      }
+    }
+  ],
+  "reports": [],
+  "createdAt": "2023-12-19 14:06:38",
+  "updatedAt": "2023-12-19 14:06:38"
 }
-

@@ -10,6 +10,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 
 interface IReportDetail {
   id: number;
@@ -33,7 +35,22 @@ const ButtonSubmit = styled(Button)(
   `
 );
 
+const ButtonBack = styled(Button)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
+const IconButtonBack = styled(IconButton)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
 export const ReportHandle = () => {
+  const navigate = useNavigate();
   const [replyText, setReplyText] = useState("");
 
   const formatDateToString = (date: Date): string => {
@@ -60,50 +77,64 @@ export const ReportHandle = () => {
     reply: reportDetail.reply
   };
 
+  const goBack = () => {
+    navigate(`${routes.admin.reports.root}`);
+  };
+
   return (
     <Box>
       <Header />
       <div className={classes["report-handle-container"]}>
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
-          <Button>
-            <IconButton size='medium'>
+          <ButtonBack onClick={() => goBack()}>
+            <IconButtonBack size='medium'>
               <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButton>
+            </IconButtonBack>
             Trở về
-          </Button>
+          </ButtonBack>
 
           <Box>
             <h3>Thông tin xử lý</h3>
             <Box className={classes["info-handle-container"]}>
               <div className={classes["input-container"]}>
                 <label>Loại báo cáo</label>
-                <input type='text' value={dataReportDetail.reportTypeName} readOnly />
+                <input
+                  className={classes["input-custom"]}
+                  type='text'
+                  value={dataReportDetail.reportTypeName}
+                  readOnly
+                />
               </div>
 
               <div className={classes["input-container"]}>
                 <label>Thời điểm gửi</label>
-                <input type='text' value={dataReportDetail.createdAt} readOnly />
+                <input className={classes["input-custom"]} type='text' value={dataReportDetail.createdAt} readOnly />
               </div>
 
               <div className={classes["input-container"]}>
                 <label>Hình thức báo cáo</label>
-                <input type='text' value={dataReportDetail.reportFormName} readOnly />
+                <input
+                  className={classes["input-custom"]}
+                  type='text'
+                  value={dataReportDetail.reportFormName}
+                  readOnly
+                />
               </div>
 
               <div className={classes["input-container"]}>
                 <label>Họ tên người gửi</label>
-                <input type='text' value={dataReportDetail.fullName} readOnly />
+                <input className={classes["input-custom"]} type='text' value={dataReportDetail.fullName} readOnly />
               </div>
 
               <div className={classes["input-container"]}>
                 <label>Email</label>
-                <input type='text' value={dataReportDetail.email} readOnly />
+                <input className={classes["input-custom"]} type='text' value={dataReportDetail.email} readOnly />
               </div>
 
               <div className={classes["input-container"]}>
                 <label>Số điện thoại</label>
-                <input type='text' value={dataReportDetail.phone} readOnly />
+                <input className={classes["input-custom"]} type='text' value={dataReportDetail.phone} readOnly />
               </div>
 
               {dataReportDetail.images && dataReportDetail.images.length > 0 && (
@@ -149,7 +180,7 @@ export const ReportHandle = () => {
             <h3>Thông tin phản hồi</h3>
             <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} mb={"20px"}>
               <label>Tình trạng</label>
-              <select>
+              <select className={classes["select-custom"]}>
                 <option value=''>Chọn tình trạng</option>
                 <option value='0'>Đã xử lý</option>
                 <option value='1'>Chưa xử lý</option>

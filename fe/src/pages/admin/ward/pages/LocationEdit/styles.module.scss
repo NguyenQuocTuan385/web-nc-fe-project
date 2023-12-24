@@ -30,9 +30,10 @@ form {
   width: 70%;
 }
 
-input, select {
+.input-custom,
+.select-custom {
   height: 40px;
-  width: 100%;
+  width: 100% !important;
   border-radius: 8px;
   border: 1px solid #ccc;
   padding: 0 $pacing-main;

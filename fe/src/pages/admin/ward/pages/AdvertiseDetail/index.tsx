@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
+
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import advertiseDetail from "./advertise-detail.json";
 import { InfoAdvertise } from "./components/InfoAdvertise";
 import { InfoContract } from "./components/InfoContract";
 import styled from "styled-components";
@@ -9,6 +10,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Sidebar from "../../components/common/Sidebar";
 import { Header } from "../../components/common/Header";
 import Heading4 from "components/common/text/Heading4";
+import AdvertiseService from "services/advertise";
+import ContractService from "services/contract";
+import advertiseDetailsMock from "./advertise-detail.json";
+import { useParams, useNavigate } from "react-router-dom";
 
 const InfoAdsBox = styled(Box)(() => ({
   display: "flex",
@@ -16,21 +21,93 @@ const InfoAdsBox = styled(Box)(() => ({
 }));
 
 const BoxFlex = styled(Box)(() => ({
-  display: "flex",
-  alignItems: "center"
+  display: "flex"
+  // alignItems: "center"
 }));
 
-export const AdvertiseDetail = () => {
-  const infoAds = {
-    adsType: advertiseDetail.adsType.name,
-    address: advertiseDetail.location.address,
-    size: advertiseDetail.width + " x " + advertiseDetail.height,
-    quantity: 1,
-    adsForm: advertiseDetail.location.adsForm.name,
-    locationType: advertiseDetail.location.locationType.name
-  };
+const ButtonBack = styled(Button)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
 
-  const infoContract = advertiseDetail.contracts[0];
+const IconButtonBack = styled(IconButton)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
+interface InfoAds {
+  adsType: string;
+  address: string;
+  size: string;
+  pillarQuantity: number;
+  adsForm: string;
+  locationType: string;
+}
+
+interface InfoContract {
+  companyName: string;
+  companyEmail: string;
+  companyPhone: string;
+  companyAddress: string;
+}
+
+export const AdvertiseDetail = () => {
+  const navigate = useNavigate();
+
+  const { id } = useParams<{ id: string }>();
+
+  const [advertiseDetails, setAdvertiseDetails] = useState(null || advertiseDetailsMock);
+  const [infoContractDetails, setInfoContractDetails] = useState(null || advertiseDetailsMock.contracts[0]);
+  const [infoAds, setInfoAds] = useState<InfoAds | null>(null);
+  const [infoContract, setInfoContract] = useState<InfoContract | null>(null);
+
+  useEffect(() => {
+    const getAdvertiseDetails = async () => {
+      AdvertiseService.getAdvertiseById(Number(id))
+        .then((res) => {
+          setAdvertiseDetails(res);
+          setInfoAds({
+            adsType: res.adsType.name,
+            address: res.location.address,
+            size: res.width + " x " + advertiseDetails?.height,
+            pillarQuantity: res.pillarQuantity,
+            adsForm: res.location.adsForm.name,
+            locationType: res.location.locationType.name
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getAdvertiseDetails();
+  }, []);
+
+  useEffect(() => {
+    const getContractByAdvertiseId = async () => {
+      ContractService.getContractByAdvertiseId(Number(id))
+        .then((res) => {
+          setInfoContractDetails(res);
+          setInfoContract({
+            companyName: res.companyName,
+            companyEmail: res.companyEmail,
+            companyPhone: res.companyPhone,
+            companyAddress: res.companyAddress
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getContractByAdvertiseId();
+  }, []);
+
+  const goBack = () => {
+    navigate(-1);
+  };
 
   return (
     <Box>
@@ -38,30 +115,18 @@ export const AdvertiseDetail = () => {
       <div className={classes["advertise-detail-container"]}>
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
-          <Button>
-            <IconButton size='medium'>
+          <ButtonBack onClick={() => goBack()}>
+            <IconButtonBack size='medium'>
               <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButton>
+            </IconButtonBack>
             Trở về
-          </Button>
+          </ButtonBack>
           <BoxFlex>
             <InfoAdsBox>
-              <img
-                src={
-                  infoContract?.imgUrl ||
-                  "https://bienhieudep.vn/wp-content/uploads/2021/08/bien-quang-cao-tam-lon-6.jpg"
-                }
-                alt='Bảng quảng cáo'
-                width={"400px"}
-                height={"250px"}
-              />
-              <BoxFlex ml={"15px"}>
-                <InfoAdvertise data={infoAds} />
-              </BoxFlex>
+              <img src={infoContractDetails.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} />
+              <BoxFlex ml={"15px"}>{infoAds && <InfoAdvertise data={infoAds} />}</BoxFlex>
             </InfoAdsBox>
-            <Box>
-              <InfoContract data={infoContract} />
-            </Box>
+            <Box>{infoContract && <InfoContract data={infoContract} />}</Box>
           </BoxFlex>
 
           <Box mt={"15px"}>
@@ -73,14 +138,16 @@ export const AdvertiseDetail = () => {
               height={"250px"}
             />
 
-            <Box mt={"15px"}>
-              <Typography>
-                <span className={classes.title}>Bắt đầu hợp đồng: </span> <span>{infoContract.startAt}</span>
-              </Typography>
-              <Typography>
-                <span className={classes.title}>Kết thúc hợp đồng: </span> <span>{infoContract.endAt}</span>
-              </Typography>
-            </Box>
+            {infoContractDetails && (
+              <Box mt={"15px"}>
+                <Typography>
+                  <span className={classes.title}>Bắt đầu hợp đồng: </span> <span>{infoContractDetails.startAt}</span>
+                </Typography>
+                <Typography>
+                  <span className={classes.title}>Kết thúc hợp đồng: </span> <span>{infoContractDetails.endAt}</span>
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </div>

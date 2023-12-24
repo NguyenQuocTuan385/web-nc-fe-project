@@ -1,60 +1,115 @@
-import Box from "@mui/material/Box";
-import Sidebar from "../../components/common/Sidebar";
+import React, { useState, useEffect } from "react";
+import { Box, Pagination } from "@mui/material";
+
+import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
+import queryString from "query-string";
+
+import SideBarWard from "components/admin/SidebarWard";
 import TableTemplate from "../../components/common/TableTemplate";
+import SearchAppBar from "../../components/common/Search";
+import { Header } from "../../components/common/Header";
 import reports from "./reports.json";
 import classes from "./styles.module.scss";
-
-import React, { useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import SearchAppBar from "../../components/common/Search";
-import { Button, IconButton } from "@mui/material";
-
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { Header } from "../../components/common/Header";
+import ReportService from "services/report";
+import { routes } from "routes/routes";
 
 const ReportsManagement = () => {
-  const itemsPerPage = 10;
-  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const itemsPerPage = 5;
+  const [reportList, setReportList] = useState([]);
 
-  const data = reports.map((report: any, index: number) => {
+  const [searchValue, setSearchValue] = useState("");
+
+  const locationHook = useLocation();
+  const match = useResolvedPath("").pathname;
+
+  const [currentPage, setCurrentPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.page || 1;
+  });
+  const [totalPage, setTotalPage] = useState(1);
+  const [totalElements, setTotalElements] = useState(1);
+  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
+    setCurrentPage(newPageValue);
+    navigate({
+      pathname: match,
+      search: createSearchParams({
+        page: newPageValue.toString()
+      }).toString()
+    });
+  };
+
+  useEffect(() => {
+    const getAllReports = async () => {
+      ReportService.getReports({ search: searchValue, pageSize: itemsPerPage, current: Number(currentPage) })
+        .then((res) => {
+          setReportList(res.content);
+          setTotalPage(res.totalPages);
+          setTotalElements(res.totalElements);
+
+          navigate({
+            pathname: match,
+            search: createSearchParams({
+              page: currentPage.toString()
+            }).toString()
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getAllReports();
+  }, [currentPage, searchValue]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchValue]);
+
+  const data = reportList.map((report: any, index: number) => {
     return {
       stt: index + 1,
-      statusObject: [report.status, report.status ? "Đã xử lí" : "Chưa xử lí"],
+      objectStatus: { value: report.status, name: report.status ? "Đã xử lí" : "Chưa xử lí" },
       ...report
     };
   });
 
-  const customHeading = ["STT", "Mã", "Email", "Tên", "Điện thoại", "Tình trạng"];
-  const customColumns = ["stt", "id", "email", "fullName", "phone", "statusObject"];
+  const customHeading = ["STT", "Mã", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
+  const customColumns = ["stt", "id", "email", "fullName", "phone", "objectStatus"];
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+  const handleSearch = (query: string) => {
+    setSearchValue(query);
   };
-  const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const handleReport = (idReport: number) => {
+    navigate(`${routes.admin.reports.edit.replace(":id", `${idReport}`)}`);
+  };
 
   return (
     <Box>
       <Header />
       <div className={classes["reports-management-container"]}>
-        <Sidebar></Sidebar>
+        <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <Box className={classes["search-container"]}>
-            <SearchAppBar />
+            <SearchAppBar onSearch={handleSearch} />
           </Box>
           <Box className={classes["table-container"]}>
             <Box className={classes["table-container"]}>
               <TableTemplate
-                data={paginatedData}
+                data={data}
                 customHeading={customHeading}
                 customColumns={customColumns}
                 isActionColumn={true}
+                onEditClick={handleReport}
               />
 
               <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(page * itemsPerPage, data.length)} kết quả trên ${data.length}`}</span>
-                <Pagination count={Math.ceil(data.length / itemsPerPage)} page={page} onChange={handleChange} />
+                <span>{`Hiển thị ${Math.min(
+                  Number(currentPage) * itemsPerPage,
+                  totalElements
+                )} kết quả trên ${totalElements}`}</span>
+                <Pagination count={totalPage} page={Number(currentPage)} onChange={handleChangePage} />
               </Box>
             </Box>
           </Box>

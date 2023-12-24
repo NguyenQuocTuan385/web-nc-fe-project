@@ -3,10 +3,12 @@ export const API = {
     DEFAULT: "/api/locations"
   },
   ADVERTISE: {
-    DEFAULT: "/api/locations/:id/advertises"
+    DEFAULT: "/api/locations/:id/advertises",
+    DETAILS: "/api/advertises/:id"
   },
   CONTRACT: {
     DEFAULT: "/api/contracts",
+    WITH_ADVERTISE: "/api/contracts/advertises/:id",
     DELETE: "/api/contracts/:id"
   },
   DISTRICT: {
@@ -16,5 +18,8 @@ export const API = {
   },
   WARD: {
     DEFAULT: "/api/properties/:propertyParentId"
+  },
+  REPORT: {
+    DEFAULT: "/api/reports"
   }
 };

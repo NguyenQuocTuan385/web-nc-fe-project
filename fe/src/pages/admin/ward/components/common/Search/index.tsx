@@ -1,13 +1,5 @@
 import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import { Button } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import MenuIcon from "@mui/icons-material/Menu";
+import { styled, alpha, Box, Button, InputBase, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
@@ -68,14 +60,18 @@ const ButtonDownload = styled(Button)(() => ({
   }
 }));
 
-export default function SearchAppBar() {
+export default function SearchAppBar({ onSearch }: any) {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onSearch(event.target.value);
+  };
+
   return (
     <Box className={classes["search-wrapper"]}>
       <Search>
         <SearchIconWrapper>
           <SearchIcon />
         </SearchIconWrapper>
-        <StyledInputBase placeholder='Search…' inputProps={{ "aria-label": "search" }} />
+        <StyledInputBase placeholder='Search…' inputProps={{ "aria-label": "search" }} onChange={handleSearchChange} />
       </Search>
 
       <ButtonDownload size='small'>

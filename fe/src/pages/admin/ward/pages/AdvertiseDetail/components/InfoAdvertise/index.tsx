@@ -13,7 +13,7 @@ export const InfoAdvertise = ({ data }: any) => {
       </Typography>
       <Typography>
         <span className={classes.title}>Số lượng: </span>
-        <span>{data.quantity}</span>
+        <span>{data.pillarQuantity}</span>
       </Typography>
       <Typography>
         <span className={classes.title}>Hình thức: </span> <span>{data.adsForm}</span>
@@ -25,5 +25,3 @@ export const InfoAdvertise = ({ data }: any) => {
     </Box>
   );
 };
-
-

@@ -35,17 +35,18 @@ form {
   width: 70%;
 }
 
-input,
-select,
-textarea {
+.input-custom,
+.select-custom,
+.textarea-custom {
   height: 40px;
   width: 100%;
   border-radius: 8px;
   border: 1px solid #ccc;
   padding: 0 $pacing-main;
+  outline: none;
 }
 
-textarea {
+.textarea-custom {
   height: 100px !important;
   resize: none;
   padding: $pacing-main;

@@ -1,14 +1,6 @@
 import React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import IconButton from "@mui/material/IconButton";
+import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Paper, IconButton } from "@mui/material";
+import { faEdit, faEye, faRectangleAd, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
 
@@ -17,9 +9,40 @@ interface TableTemplateProps {
   customHeading: string[];
   customColumns: string[];
   isActionColumn: boolean;
+  onViewAdsClick?: (idLocation: number) => void;
+  onViewDetailsClick?: (idDetails: number) => void;
+  onEditClick?: (idEdit: number) => void;
+  linkToMove?: string;
 }
 
-function TableTemplate({ data, customHeading, customColumns, isActionColumn }: TableTemplateProps) {
+function TableTemplate({
+  data,
+  customHeading,
+  customColumns,
+  isActionColumn,
+  onViewAdsClick,
+  onViewDetailsClick,
+  onEditClick,
+  linkToMove
+}: TableTemplateProps) {
+  const handleViewAdsClick = (rowId: number) => {
+    if (onViewAdsClick) {
+      onViewAdsClick(rowId);
+    }
+  };
+
+  const handleViewDetailsClick = (rowId: number) => {
+    if (onViewDetailsClick) {
+      onViewDetailsClick(rowId);
+    }
+  };
+
+  const handleEditClick = (rowId: number) => {
+    if (onEditClick) {
+      onEditClick(rowId);
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label='custom table'>
@@ -47,18 +70,38 @@ function TableTemplate({ data, customHeading, customColumns, isActionColumn }: T
                   key={colIndex}
                   align='center'
                   className={`${classes["col-table-body"]} ${
-                    column === "planning" ? (row[column] ? `${classes["active"]}` : `${classes["inactive"]} }`) : ""
+                    column === "objectStatus"
+                      ? row[column].value
+                        ? `${classes["active"]}`
+                        : `${classes["inactive"]} }`
+                      : ""
                   }`}
                 >
-                  {column === "planning" ? (row[column] ? "Đã quy hoạch" : "Chưa quy hoạch") : row[column]}
+                  {column === "objectStatus" ? row[column].name : row[column]}
                 </TableCell>
               ))}
 
               {/* Action column */}
               {isActionColumn && (
-                <TableCell align='center'>
-                  <IconButton aria-label='edit' size='medium'>
-                    <FontAwesomeIcon icon={faEdit} color='var(--blue-500)' />
+                <TableCell align='center' className={classes["cell-actions"]}>
+                  {onViewAdsClick && (
+                    <IconButton aria-label='view-ads-list' size='medium' onClick={() => handleViewAdsClick(row.id)}>
+                      <FontAwesomeIcon icon={faRectangleAd} color='var(--blue-500)' />
+                    </IconButton>
+                  )}
+                  {onViewDetailsClick && (
+                    <IconButton aria-label='view-detail' size='medium' onClick={() => handleViewDetailsClick(row.id)}>
+                      <FontAwesomeIcon icon={faEye} color='var(--blue-700)' />
+                    </IconButton>
+                  )}
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={() => {
+                      handleEditClick(row.id);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faEdit} color='#FFA500' />
                   </IconButton>
                 </TableCell>
               )}

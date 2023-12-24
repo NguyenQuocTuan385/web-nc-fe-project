@@ -9,6 +9,8 @@ import { Header } from "../../components/common/Header";
 import classes from "./styles.module.scss";
 import Sidebar from "../../components/common/Sidebar";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 
 const YOUR_MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 megabytes in bytes
 
@@ -20,6 +22,20 @@ interface FormData {
   quyHoach: string;
   hinhAnh: FileList | null | []; // Thay đổi kiểu dữ liệu ở đây
 }
+
+const ButtonBack = styled(Button)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
+const IconButtonBack = styled(IconButton)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
 
 const schema: any = Yup.object().shape({
   khuVuc: Yup.string().required("Khu vực là trường bắt buộc"),
@@ -85,7 +101,7 @@ const MyForm: React.FC = () => {
           name='khuVuc'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input {...field} type='text' />
+              <input {...field} type='text' className={classes["input-custom"]} />
               {errors.khuVuc && <div className={classes["error-text"]}>{errors.khuVuc.message}</div>}
             </div>
           )}
@@ -100,7 +116,7 @@ const MyForm: React.FC = () => {
           name='diaChi'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input {...field} type='text' />
+              <input {...field} type='text' className={classes["input-custom"]} />
               {errors.diaChi && <div className={classes["error-text"]}>{errors.diaChi.message}</div>}
             </div>
           )}
@@ -115,7 +131,7 @@ const MyForm: React.FC = () => {
           name='loaiViTri'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field}>
+              <select {...field} className={classes["select-custom"]}>
                 <option value=''>Chọn loại vị trí</option>
                 <option value='0'>Đất công</option>
                 <option value='1'>Đất thổ cư</option>
@@ -134,7 +150,7 @@ const MyForm: React.FC = () => {
           name='hinhThucQuangCao'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field}>
+              <select {...field} className={classes["select-custom"]}>
                 <option value=''>Chọn hình thức quảng cáo</option>
                 <option value='0'>Cổ động chính trị</option>
                 <option value='1'>Quảng cáo thương mại</option>
@@ -155,7 +171,7 @@ const MyForm: React.FC = () => {
           name='quyHoach'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field}>
+              <select {...field} className={classes["select-custom"]}>
                 <option value=''>Chọn quy hoạch</option>
                 <option value='0'>Chưa quy hoạch</option>
                 <option value='1'>Đã quy hoạch</option>
@@ -181,6 +197,7 @@ const MyForm: React.FC = () => {
                 name={field.name}
                 ref={field.ref}
                 multiple={true}
+                className={classes["input-custom"]}
               />
               {errors.hinhAnh && <div className={classes["error-text"]}>{errors.hinhAnh.message}</div>}
             </div>
@@ -194,18 +211,23 @@ const MyForm: React.FC = () => {
 };
 
 export const LocationEdit = () => {
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(`${routes.admin.locations.root}`);
+  };
+
   return (
     <Box>
       <Header />
       <div className={classes["location-edit-container"]}>
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
-          <Button>
-            <IconButton size='medium'>
+          <ButtonBack>
+            <IconButtonBack size='medium' onClick={() => goBack()}>
               <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButton>
+            </IconButtonBack>
             Trở về
-          </Button>
+          </ButtonBack>
 
           <Box className={classes["info-edit-container"]}>
             <h2>Thông tin điểm đặt quảng cáo</h2>

@@ -25,7 +25,7 @@ img {
 }
 
 .text-active {
-  color: #00BA00 !important;
+  color: #00ba00 !important;
 }
 
 .text-inactive {
@@ -64,13 +64,14 @@ form {
   margin-bottom: $pacing-main;
 }
 
-input, select {
+.input-custom,
+.select-custom {
   height: 40px;
   // width: 100%;
   border-radius: 8px;
   border: 1px solid #ccc;
   padding: 0 $pacing-main;
-  width: 70%;
+  width: 70% !important;
   outline: none;
 }
 

@@ -1,42 +1,101 @@
-import Box from "@mui/material/Box";
-import SideBarWard from "components/admin/SidebarWard";
-import TableTemplate from "../../components/common/TableTemplate";
-import InfoAdvertise from "../AdvertisesManagement/components/InfoLocation";
+import React, { useState, useEffect } from "react";
+import { Pagination, Box } from "@mui/material";
+import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
+import queryString from "query-string";
 
 import classes from "./styles.module.scss";
 
-import React, { useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import locations from "./locations.json";
+import SideBarWard from "components/admin/SidebarWard";
+import TableTemplate from "../../components/common/TableTemplate";
 import SearchAppBar from "../../components/common/Search";
-import { Button, IconButton } from "@mui/material";
-
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { Header } from "../../components/common/Header";
+import LocationService from "services/location";
+import { routes } from "routes/routes";
 
 const LocationManagement = () => {
-  const itemsPerPage = 10;
-  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const itemsPerPage = 5;
+  const [locationList, setLocationList] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
-  const data = locations.map((location: any, index: number) => {
+  const locationHook = useLocation();
+  const match = useResolvedPath("").pathname;
+
+  const [currentPage, setCurrentPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.page || 1;
+  });
+  const [totalPage, setTotalPage] = useState(1);
+  const [totalElements, setTotalElements] = useState(1);
+  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
+    setCurrentPage(newPageValue);
+    navigate({
+      pathname: match,
+      search: createSearchParams({
+        page: newPageValue.toString()
+      }).toString()
+    });
+  };
+
+  useEffect(() => {
+    const getAllLocations = async () => {
+      LocationService.getLocations({
+        search: searchValue,
+        pageSize: itemsPerPage,
+        current: Number(currentPage)
+      })
+        .then((res) => {
+          setLocationList(res.content);
+          setTotalPage(res.totalPages);
+          setTotalElements(res.totalElements);
+
+          navigate({
+            pathname: match,
+            search: createSearchParams({
+              page: currentPage.toString()
+            }).toString()
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getAllLocations();
+  }, [currentPage, searchValue]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchValue]);
+
+  const data = locationList.map((location: any, index: number) => {
     return {
       stt: index + 1,
       id: location.id,
       address: location.address,
       adsForm: location.adsForm.name,
-      planning: location.planning
+      objectStatus: {
+        name: location.planning ? "Đã quy hoạch" : "Chưa quy hoạch",
+        value: location.planning
+      }
     };
   });
 
   const customHeading = ["STT", "Mã", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
-  const customColumns = ["stt", "id", "address", "adsForm", "planning"];
+  const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+  // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const handleViewAds = (idLocation: number) => {
+    navigate(`${routes.admin.advertises.ofLocation.replace(":id", `${idLocation}`)}`);
   };
-  const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const handleEditLocation = (idLocation: number) => {
+    navigate(`${routes.admin.locations.edit.replace(":id", `${idLocation}`)}`);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchValue(query);
+  };
 
   return (
     <Box>
@@ -45,20 +104,25 @@ const LocationManagement = () => {
         <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <Box className={classes["search-container"]}>
-            <SearchAppBar />
+            <SearchAppBar onSearch={handleSearch} />
           </Box>
           <Box className={classes["table-container"]}>
             <Box className={classes["table-container"]}>
               <TableTemplate
-                data={paginatedData}
+                data={data}
                 customHeading={customHeading}
                 customColumns={customColumns}
                 isActionColumn={true}
+                onViewAdsClick={handleViewAds}
+                onEditClick={handleEditLocation}
               />
 
               <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(page * itemsPerPage, data.length)} kết quả trên ${data.length}`}</span>
-                <Pagination count={Math.ceil(data.length / itemsPerPage)} page={page} onChange={handleChange} />
+                <span>{`Hiển thị ${Math.min(
+                  Number(currentPage) * itemsPerPage,
+                  totalElements
+                )} kết quả trên ${totalElements}`}</span>
+                <Pagination count={totalPage} page={Number(currentPage)} onChange={handleChangePage} />
               </Box>
             </Box>
           </Box>

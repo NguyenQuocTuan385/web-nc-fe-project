@@ -13,6 +13,7 @@ import ads from "../../../../../editadlocation.json";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 
 const rows = [...ads];
 const rowsPerPage = 6;
@@ -30,7 +31,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
   const navigate = useNavigate();
 
   const handleClick = (row: any) => {
-    navigate(`/admin/review/edit/location/${row.id}`, {
+    navigate(`${routes.admin.reviewEdit.location.replace(":id", `${row.id}`)}`, {
       state: {
         id: row.id,
         address: row.address,
