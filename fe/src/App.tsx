@@ -19,6 +19,7 @@ import CreateAccount from "pages/admin/CreateAccount";
 import ReportFormManagement from "pages/admin/ReportFormManagement";
 import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
+import DCMSLocationManagement from "pages/admin/DCMSLocationManagement";
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -41,6 +42,7 @@ function App() {
           <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
           <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
           <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+          <Route path={routes.admin.locations.root} Component={DCMSLocationManagement} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

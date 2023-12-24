@@ -23,7 +23,8 @@ export const routes = {
     locations: {
       root: "/admin/locations",
       create: "/admin/locations/create",
-      edit: "/admin/locations/edit/:id"
+      edit: "/admin/locations/edit/:id",
+      detail: "/admin/locations/:id"
     },
     properties: {
       district: "/admin/districts",
