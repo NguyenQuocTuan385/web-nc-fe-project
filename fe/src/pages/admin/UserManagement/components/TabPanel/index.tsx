@@ -15,7 +15,7 @@ export default function TabPanel() {
   const navigate = useNavigate();
   const locationHook = useLocation();
   const params = new URLSearchParams(locationHook.search);
-  const role = params.get("role");
+  const role = params.get("roleId");
   React.useEffect(() => {
     if (role) {
       setValue(Number(role));
@@ -29,7 +29,7 @@ export default function TabPanel() {
     navigate({
       pathname: locationHook.pathname,
       search: createSearchParams({
-        role: newValue.toString()
+        ...(newValue !== 0 && { roleId: newValue.toString() })
       }).toString()
     });
     setValue(newValue);

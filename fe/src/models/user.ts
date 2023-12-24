@@ -12,7 +12,7 @@ export interface User {
   property: Property;
 }
 export interface GetUsers {
-  role?: number;
+  roleId?: number;
   search?: string;
   pageSize?: number;
   current?: number;

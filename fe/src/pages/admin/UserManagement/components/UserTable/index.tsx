@@ -59,7 +59,7 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
   const getUsers = async () => {
     Userservice.getUsers({
       search: fieldSearch,
-      role: role,
+      ...(role && { roleId: role }),
       pageSize: rowsPerPage,
       current: Number(page) + 1
     })
@@ -86,7 +86,7 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
     navigate({
       pathname: "/admin/users",
       search: createSearchParams({
-        role: role.toString(),
+        ...(role && { role: role.toString() }),
         page: (Number(newPage) + 1).toString()
       }).toString()
     });
