@@ -8,8 +8,8 @@ import { Box, Card, Divider } from "@mui/material";
 import classes from "./styles.module.scss";
 import Heading6 from "components/common/text/Heading6";
 import ShowContractImage from "./Components/ContractImageShow";
-
-const id = 1;
+import ContractDetailStickyFooter from "./Components/ContractDetailStickyFooter";
+import { useParams } from "react-router-dom";
 
 interface dataListObjectItem {
   imageIcon: any;
@@ -18,6 +18,8 @@ interface dataListObjectItem {
 }
 
 function ContractDetail() {
+  const { id } = useParams<{ id: string }>();
+
   const [contractData, setContractData] = useState<Contract>();
   const [companyDataList, setCompanyDataList] = useState<dataListObjectItem[]>([]);
   const [advertiseDataList, setAdvertiseDataList] = useState<dataListObjectItem[]>([]);
@@ -85,6 +87,12 @@ function ContractDetail() {
 
         <Divider className={classes.divider} variant='middle' />
         <ShowContractImage imageSrc={String(contractData?.images)} />
+        <ContractDetailStickyFooter
+          startDate={contractData?.startAt}
+          endDate={contractData?.endAt}
+          status={contractData?.status}
+          deleteId={Number(id)}
+        />
       </Card>
     </div>
   );

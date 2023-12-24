@@ -32,7 +32,7 @@ export const routes = {
     contracts: {
       root: "/admin/contracts",
       createForm: "/admin/contracts/create-form",
-      detail: "admin/contracts/detail"
+      detail: "/admin/contracts/:id"
     }
   }
 };
