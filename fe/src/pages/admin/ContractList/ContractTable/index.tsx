@@ -26,6 +26,7 @@ import Heading6 from "components/common/text/Heading6";
 import clsx from "clsx";
 import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import queryString from "query-string";
+import { routes } from "routes/routes";
 
 // const rows = [...user];
 interface FilterProps {
@@ -131,6 +132,10 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
     setOpenDeleteDialog(false);
   };
 
+  const viewContractDetailHandle = (contractDetailId: number) => {
+    navigate(`${routes.admin.contracts.detail.replace(":id", `${contractDetailId}`)}`);
+  };
+
   return (
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>
@@ -198,10 +203,10 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
                   )}
                 </TableCell>
                 <TableCell align='center' className={clsx(classes.dataTable, classes.dataIcon)}>
-                  <IconButton aria-label='edit' size='medium'>
+                  <IconButton aria-label='edit' size='medium' onClick={() => viewContractDetailHandle(contract.id)}>
                     <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
                   </IconButton>
-                  {contract.status === 2 ? (
+                  {contract.status === EContractStatus.notLicensed ? (
                     <IconButton aria-label='edit' size='medium' onClick={() => openDeleteDialogHandle(contract.id)}>
                       <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                     </IconButton>

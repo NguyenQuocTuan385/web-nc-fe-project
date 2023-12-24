@@ -6,6 +6,11 @@ import quantityIcon from "assets/img/icon/ic-quantity.svg";
 import sizeIcon from "assets/img/icon/ic-size.svg";
 import sortIcon from "assets/img/icon/ic-sort.svg";
 
+import companyAddress from "assets/img/icon/ic-comAddress.svg";
+import compamyEmail from "assets/img/icon/ic-comEmail.svg";
+import companyName from "assets/img/icon/ic-comName.svg";
+import companyPhone from "assets/img/icon/ic-comPhone.svg";
+
 const images = {
   twitterIcon,
   uploadImageIcon,
@@ -13,7 +18,11 @@ const images = {
   categoryIcon,
   quantityIcon,
   sizeIcon,
-  sortIcon
+  sortIcon,
+  compamyEmail,
+  companyAddress,
+  companyName,
+  companyPhone
 };
 
 export default images;

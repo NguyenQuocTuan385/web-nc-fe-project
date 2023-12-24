@@ -31,6 +31,8 @@ export const routes = {
     },
     contracts: {
       root: "/admin/contracts",
+      createForm: "/admin/contracts/create-form",
+      detail: "/admin/contracts/:id"
       createForm: "/admin/contracts/create-form"
     },
     reportForm: {
@@ -41,6 +43,7 @@ export const routes = {
     },
     advertiseType: {
       root: "/admin/advertise-types"
+
     }
   }
 };

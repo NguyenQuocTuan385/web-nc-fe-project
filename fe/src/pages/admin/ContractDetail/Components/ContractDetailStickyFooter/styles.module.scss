@@ -1,0 +1,35 @@
+.stickyFooterItem {
+    background-color: #ffffff;
+    border-top: 1px solid #e7e7e7;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+
+    z-index: 10;
+}
+
+.footerItem {
+    display: flex;
+    justify-content: space-between;   
+    flex-direction: row;
+    align-items: center;
+    margin-left: 320px;
+    padding: 10px;
+}
+
+.phantom {
+  display: block;
+  height: 60px;
+  width: 100%;
+}
+
+.stickyFooterContainer {
+  position: relative;
+}
+
+// .itemIcon{
+//     color: var(--green-600);
+// }
