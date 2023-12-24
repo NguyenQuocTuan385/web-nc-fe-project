@@ -60,6 +60,10 @@ export default function DistrictTable({ fieldSearch }: FilterProps) {
         name: editedDistrict.name,
         code: editedDistrict.code
       });
+      const updatedDistrict = district.map((d) =>
+        d.id === editedDistrict.id ? { ...d, name: editedDistrict.name } : d
+      );
+      setDistrict(updatedDistrict);
       setEditSuccess(true);
       setEditFormOpen(false);
     } catch (error) {
@@ -71,7 +75,11 @@ export default function DistrictTable({ fieldSearch }: FilterProps) {
   const handleDeleteConfirm = async () => {
     try {
       if (editedDistrict.id) {
+        console.log(editedDistrict.id);
+        console.log("first");
         await DistrictService.deleteDistrict(editedDistrict.id);
+        const updatedDistrict = district.filter((d) => d.id !== editedDistrict.id);
+        setDistrict(updatedDistrict);
         setDeleteSuccess(true);
       }
       setDeleteConfirmationOpen(false);
@@ -187,26 +195,25 @@ export default function DistrictTable({ fieldSearch }: FilterProps) {
         className={classes.pagination}
       />
       <Dialog open={deleteConfirmationOpen} onClose={handleDeleteCancel}>
-        <DialogTitle>Delete District</DialogTitle>
-        <DialogContent>Are you sure you want to delete this district?</DialogContent>
+        <DialogTitle>Xóa Quận</DialogTitle>
+        <DialogContent>Bạn có chắc chắn muốn xóa quận này?</DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel}>Cancel</Button>
+          <Button onClick={handleDeleteCancel}>Hủy</Button>
           <Button onClick={handleDeleteConfirm} color='error'>
-            Delete
+            Xóa
           </Button>
         </DialogActions>
       </Dialog>
 
       <Snackbar open={editSuccess !== null} autoHideDuration={3000} onClose={() => setEditSuccess(null)}>
         <Alert severity={editSuccess ? "success" : "error"} onClose={() => setEditSuccess(null)}>
-          {editSuccess ? "Edit successful" : "Edit failed"}
+          {editSuccess ? "Sửa thành công" : "Sửa thất bại"}
         </Alert>
       </Snackbar>
 
-      {/* Delete Success/Failure Snackbar */}
       <Snackbar open={deleteSuccess !== null} autoHideDuration={3000} onClose={() => setDeleteSuccess(null)}>
         <Alert severity={deleteSuccess ? "success" : "error"} onClose={() => setDeleteSuccess(null)}>
-          {deleteSuccess ? "Delete successful" : "Delete failed"}
+          {deleteSuccess ? "Xóa thành công" : "Xóa thất bại"}
         </Alert>
       </Snackbar>
     </Box>
