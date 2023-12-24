@@ -23,6 +23,16 @@ export class Userservice {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async createUser(userRequest: UserRequest): Promise<any> {
+    return await api
+      .post(`${API.USER.CREATE}`, userRequest)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
   static async updateUser(id: Number, userRequest: UserRequest): Promise<any> {
     return await api
       .put(`${API.USER.UPDATE.replace(":id", `${id}`)}`, userRequest)
