@@ -13,7 +13,6 @@ export class DistrictService {
         return Promise.reject(e?.response?.data);
       });
   }
-
   static async updateDistrict(id: number, propertyRequest: PropertyRequest): Promise<any> {
     const updateData = {
       name: propertyRequest.name,

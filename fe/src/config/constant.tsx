@@ -14,10 +14,17 @@ export const API = {
   DISTRICT: {
     DEFAULT: "/api/properties",
     UPDATE: "/api/properties/:id",
-    DELETE: "/api/properties/:id"
+    DELETE: "/api/properties/:id",
+    ALL: "/api/properties/all"
   },
   WARD: {
     DEFAULT: "/api/properties/:propertyParentId"
+  },
+  USER: {
+    DEFAULT: "/api/users",
+    UPDATE: "/api/users/:id",
+    DELETE: "/api/users/:id",
+    DETAIL: "/api/users/:id"
   },
   REPORT: {
     DEFAULT: "/api/reports"

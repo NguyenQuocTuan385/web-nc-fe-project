@@ -7,7 +7,7 @@ import classes from "./styles.module.scss";
 import Heading4 from "components/common/text/Heading4";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { Button, TextField } from "@mui/material";
@@ -15,25 +15,23 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import district from "../../../../../district.json";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Box from "@mui/system/Box";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { User, UserRequest } from "models/user";
+import { Property } from "models/property";
+import DistrictService from "services/district";
+import WardService from "services/ward";
+import dayjs, { Dayjs } from "dayjs";
+import Userservice from "services/user";
 
 interface PopupProps {
   openPopup: boolean;
   setOpenPopup: (value: boolean) => void;
-}
-interface District {
-  id: number;
-  name: string;
-  wards: Ward[];
-}
-interface Ward {
-  id: number;
-  name: string;
+  user: User;
+  onUpdated: () => void;
 }
 interface FormData {
   name: string;
@@ -41,69 +39,167 @@ interface FormData {
   avatar: string;
   email: string;
   phone: string;
-  birthday: string;
-  district: District;
-  ward?: Ward;
+  birthday: Dayjs;
+  district: Property;
+  ward?: Property;
 }
-
-const districts: District[] = district;
+const getSchema = () =>
+  yup.object().shape({
+    name: yup.string().required("Vui lòng nhập tên"),
+    email: yup.string().required("Vui lòng nhập email"),
+    role: yup.string().required("Vui lòng chọn phân hệ"),
+    avatar: yup.string(),
+    phone: yup.string().required("Vui lòng nhập số điện thoại"),
+    birthday: yup.string().required("Vui lòng nhập ngày sinh"),
+    district: yup.object().required("Vui lòng chọn quận"),
+    ward: yup.object().when("role", {
+      is: (role: string) => role === "ward",
+      then: () => yup.object().required("Vui lòng chọn phường")
+    })
+  });
 
 export default function Popup(props: PopupProps) {
-  const [selectedRole, setSelectedRole] = useState("district");
+  const { openPopup, setOpenPopup, user, onUpdated } = props;
 
-  const schema = useMemo(() => {
-    return yup.object().shape({
-      name: yup.string().required("Vui lòng nhập tên"),
-      email: yup.string().required("Vui lòng nhập email"),
-      role: yup.string().required("Vui lòng chọn phân hệ"),
-      avatar: yup.string(),
-      phone: yup.string().required("Vui lòng nhập số điện thoại"),
-      birthday: yup.string().required("Vui lòng nhập ngày sinh"),
-      district: yup.object().required("Vui lòng chọn quận"),
-      ward: yup.object().when("role", {
-        is: (role: string) => role === "ward",
-        then: () => yup.object().required("Vui lòng chọn phường")
-      })
-    });
-  }, []);
+  const schema = useMemo(getSchema, []);
 
   const {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<FormData>({ resolver: yupResolver(schema) });
   const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [fileImage, setFileImage] = useState<File | null>(null);
+  const [districts, setDistricts] = useState<Property[]>([]);
+  const [wards, setWards] = useState<Property[]>([]);
 
   const handleClickAvatar = async (event: any) => {
     const files = event.target.files;
     setFileImage(files[0]);
     setAvatarPreview(URL.createObjectURL(files[0]));
   };
-  const FormDataSubmitHandler = async (data: any) => {
-    const formSubmit: FormData = {
-      ...data,
-      avatar: ""
-    };
-    const formData = new FormData();
-    formData.append("file", fileImage as File);
-    formData.append("upload_preset", "test-react-uploads-unsigned");
-    formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY as string);
-    const URL = process.env.REACT_APP_CLOUDINARY_URL as string;
-    const uploadDataResult = await fetch(URL, {
-      method: "POST",
-      body: formData
-    }).then((res) => res.json());
-    formSubmit.avatar = uploadDataResult.secure_url;
-    console.log(formSubmit);
+  const updateUser = async (id: number, data: UserRequest) => {
+    Userservice.updateUser(id, data)
+      .then((res) => {
+        setOpenPopup(false);
+        resetForm();
+        onUpdated();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  const { openPopup, setOpenPopup } = props;
-  const [selectedDistrict, setSelectedDistrict] = React.useState<District | null>(null);
-  const [selectedWard, setSelectedWard] = React.useState<Ward | null>(null);
+  function convertToYYYYMMDD(dateString: string): Date {
+    const dateObject = new Date(dateString);
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObject.getDate().toString().padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day}`;
+    return new Date(formattedDate);
+  }
+  const resetForm = () => {
+    reset({
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      phone: user.phone,
+      birthday: dayjs(user.birthday),
+      role: user.role.code === "DISTRICT" ? "district" : "ward",
+      district: user.property.propertyParent === null ? user.property : user.property.propertyParent,
+      ward: user.property
+    });
+  };
+  const FormDataSubmitHandler = async (data: any) => {
+    const formSubmit: UserRequest = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      birthday: convertToYYYYMMDD(data.birthday),
+      avatar: user.avatar,
+      roleId: selectedRole === "district" ? 3 : 2,
+      propertyId: 0
+    };
+    if (selectedRole === "district") {
+      formSubmit.propertyId = selectedDistrict?.id ?? 0;
+    } else {
+      formSubmit.propertyId = selectedWard?.id ?? 0;
+    }
+    const formData = new FormData();
+    if (fileImage) {
+      formData.append("file", fileImage);
+      formData.append("upload_preset", "test-react-uploads-unsigned");
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY || "");
+
+      const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
+      const uploadDataResult = await fetch(URL, {
+        method: "POST",
+        body: formData
+      }).then((res) => res.json());
+      formSubmit.avatar = uploadDataResult.secure_url;
+    }
+    setAvatarPreview("");
+    updateUser(user.id, formSubmit);
+  };
+  const [selectedRole, setSelectedRole] = useState(user.role.code === "DISTRICT" ? "district" : "ward");
+  const [selectedDistrict, setSelectedDistrict] = React.useState<Property | null>(null);
+  const [selectedWard, setSelectedWard] = React.useState<Property | null>(null);
+  const getAllWard = async (id: Number) => {
+    WardService.getAllWardBy(Number(id), {
+      search: "",
+      pageSize: 999
+    })
+      .then((res) => {
+        setWards(res.content);
+        return res.content;
+      })
+      .catch((err: any) => console.log(err));
+  };
+  useEffect(() => {
+    resetForm();
+  }, [user, reset]);
+
+  useEffect(() => {
+    setSelectedRole(user.role.code === "DISTRICT" ? "district" : "ward");
+    console.log(user.role.code + "heheheeh");
+  }, [user.role.code]);
+
+  useEffect(() => {
+    if (user.property.code === "QUAN") {
+      setSelectedDistrict(user.property);
+      setSelectedWard(null);
+    } else {
+      setSelectedWard(user.property);
+      setSelectedDistrict(user.property.propertyParent || null);
+    }
+  }, [user.property]);
+
+  useEffect(() => {
+    const getAllDistrict = async () => {
+      DistrictService.getAllDistrict({
+        search: "",
+        pageSize: 999
+      })
+        .then((res) => {
+          setDistricts(res.content);
+          return res.content;
+        })
+        .catch((err: any) => console.log(err));
+    };
+    getAllDistrict();
+  }, []);
+
+  useEffect(() => {
+    if (selectedDistrict) {
+      getAllWard(selectedDistrict.id);
+    }
+  }, [selectedDistrict]);
+
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: (option: District) => option.name
+    stringify: (option: Property) => option.name
   });
   return (
     <Dialog open={openPopup}>
@@ -122,14 +218,7 @@ export default function Popup(props: PopupProps) {
               <Grid container spacing={5}>
                 <Grid item xs={12}>
                   <Box className={classes.imageContainer}>
-                    <img
-                      src={
-                        avatarPreview ||
-                        "https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/385780595_784340566826510_8513447287827069210_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=GAImUy0MBpQAX83N_Iw&_nc_ht=scontent.fsgn2-9.fna&oh=00_AfBvnNhzjKmg3twnhZCz_D5mFrCYVy85E0G1u0aimZURQg&oe=6588C1D0"
-                      }
-                      alt='FormData'
-                      className={classes.image}
-                    />
+                    <img src={avatarPreview || user.avatar} alt='FormData' className={classes.image} />
                     <label htmlFor='icon-button-file'>
                       <Box className={classes.iconButton}>
                         <input
@@ -154,7 +243,7 @@ export default function Popup(props: PopupProps) {
                         <TextField
                           fullWidth
                           variant='outlined'
-                          defaultValue={"Nguyễn Quốc Thịnh"}
+                          defaultValue={user.name}
                           {...register("name")}
                           aria-invalid={errors.name ? "true" : "false"}
                           error={Boolean(errors?.name)}
@@ -166,7 +255,7 @@ export default function Popup(props: PopupProps) {
                         <TextField
                           fullWidth
                           variant='outlined'
-                          defaultValue={"ngqt@gmail.com"}
+                          defaultValue={user.email}
                           {...register("email")}
                           aria-invalid={errors.email ? "true" : "false"}
                           error={Boolean(errors?.email)}
@@ -176,8 +265,8 @@ export default function Popup(props: PopupProps) {
                       <Grid item xs={12}>
                         <Box className={classes.title}>Ngày sinh</Box>
                         <Controller
-                          defaultValue=''
                           control={control}
+                          defaultValue={dayjs(user.birthday)}
                           name='birthday'
                           aria-invalid={errors.birthday ? "true" : "false"}
                           rules={{ required: true }}
@@ -205,7 +294,7 @@ export default function Popup(props: PopupProps) {
                         <TextField
                           fullWidth
                           variant='outlined'
-                          defaultValue={"09083276462"}
+                          defaultValue={user.phone}
                           {...register("phone")}
                           aria-invalid={errors.phone ? "true" : "false"}
                           error={Boolean(errors?.phone)}
@@ -219,7 +308,7 @@ export default function Popup(props: PopupProps) {
                         <Controller
                           control={control}
                           name='role'
-                          defaultValue='district'
+                          defaultValue={selectedRole}
                           aria-invalid={errors.role ? "true" : "false"}
                           rules={{ required: true }}
                           render={({ field: { ref, value, ...field }, fieldState: { invalid, error } }) => (
@@ -250,6 +339,9 @@ export default function Popup(props: PopupProps) {
                               name='district'
                               aria-invalid={errors.district ? "true" : "false"}
                               rules={{ required: true }}
+                              defaultValue={
+                                user.property.propertyParent === null ? user.property : user.property.propertyParent
+                              }
                               render={({ field: { onChange, value }, fieldState: { error } }) => (
                                 <>
                                   <Autocomplete
@@ -277,21 +369,22 @@ export default function Popup(props: PopupProps) {
                               <Controller
                                 control={control}
                                 name='ward'
+                                defaultValue={user.property}
                                 aria-invalid={errors.ward ? "true" : "false"}
                                 rules={{ required: selectedRole === "ward" }}
                                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                                   <>
                                     <Autocomplete
                                       id='filter-demo'
-                                      options={
-                                        districts.filter((district) => district.id === selectedDistrict?.id)[0]?.wards
-                                      }
+                                      options={wards}
                                       getOptionLabel={(option) => option.name}
                                       onChange={(event, newValue) => {
                                         onChange(newValue); // cần gọi để cập nhật giá trị trong form
                                         setSelectedWard(newValue);
                                       }}
-                                      renderInput={(params) => <TextField {...params} label='Phường' />}
+                                      renderInput={(params) => (
+                                        <TextField {...params} label='Phường' error={Boolean(error)} />
+                                      )}
                                       value={selectedWard}
                                       disabled={selectedDistrict === null}
                                     />
