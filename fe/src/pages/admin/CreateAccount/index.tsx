@@ -10,21 +10,21 @@ import { useForm, Controller } from "react-hook-form";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useState, useMemo } from "react";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import district from "../../../district.json";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { Button, TextField } from "@mui/material";
-interface District {
-  id: number;
-  name: string;
-  wards: Ward[];
-}
-interface Ward {
-  id: number;
-  name: string;
-}
+import { Property } from "models/property";
+import WardService from "services/ward";
+import DistrictService from "services/district";
+import { useEffect } from "react";
+import avatar from "assets/img/avatar/default.jpg";
+import { UserRequest } from "models/user";
+import Userservice from "services/user";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+
 interface FormData {
   name: string;
   avatar: string;
@@ -34,19 +34,52 @@ interface FormData {
   password: string;
   confirmPassword: string;
   role: string;
-  district: District;
-  ward: Ward;
+  district: Property;
+  ward?: Property;
 }
-const districts: District[] = district;
 
 export default function CreateAccount() {
-  const [selectedDistrict, setSelectedDistrict] = React.useState<District | null>(null);
-  const [selectedWard, setSelectedWard] = React.useState<Ward | null>(null);
+  const [districts, setDistricts] = useState<Property[]>([]);
+  const [wards, setWards] = useState<Property[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = React.useState<Property | null>(null);
+  const [selectedWard, setSelectedWard] = React.useState<Property | null>(null);
+  const getAllWard = async (id: Number) => {
+    WardService.getAllWardBy(Number(id), {
+      search: "",
+      pageSize: 999
+    })
+      .then((res) => {
+        setWards(res.content);
+        return res.content;
+      })
+      .catch((err: any) => console.log(err));
+  };
+
+  useEffect(() => {
+    const getAllDistrict = async () => {
+      DistrictService.getAllDistrict({
+        search: "",
+        pageSize: 999
+      })
+        .then((res) => {
+          setDistricts(res.content);
+          return res.content;
+        })
+        .catch((err: any) => console.log(err));
+    };
+    getAllDistrict();
+  }, []);
+
+  useEffect(() => {
+    if (selectedDistrict) {
+      getAllWard(selectedDistrict.id);
+    }
+  }, [selectedDistrict]);
   const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [fileImage, setFileImage] = useState<File | null>(null);
   const filterOptions = createFilterOptions({
     matchFrom: "start",
-    stringify: (option: District) => option.name
+    stringify: (option: Property) => option.name
   });
   const [selectedRole, setSelectedRole] = useState("district");
 
@@ -75,35 +108,99 @@ export default function CreateAccount() {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<FormData>({ resolver: yupResolver(schema) });
+  const resetForm = () => {
+    reset({
+      name: "",
+      email: "",
+      phone: "",
+      birthday: "",
+      password: "",
+      confirmPassword: "",
+      role: "district",
+      district: undefined,
+      ward: undefined
+    });
+    setSelectedDistrict(null);
+    setSelectedWard(null);
+    setAvatarPreview("");
+  };
   const handleClickAvatar = async (event: any) => {
     const files = event.target.files;
     setFileImage(files[0]);
     setAvatarPreview(URL.createObjectURL(files[0]));
   };
-  const SubmitHandler = async (data: any) => {
-    const formSubmit: FormData = {
-      ...data,
-      avatar: ""
-    };
-    const formData = new FormData();
-    formData.append("file", fileImage as File);
-    formData.append("upload_preset", "test-react-uploads-unsigned");
-    formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY as string);
-    const URL = process.env.REACT_APP_CLOUDINARY_URL as string;
-    const uploadDataResult = await fetch(URL, {
-      method: "POST",
-      body: formData
-    }).then((res) => res.json());
-    formSubmit.avatar = uploadDataResult.secure_url;
-    console.log(formSubmit);
+  function convertToYYYYMMDD(dateString: string): Date {
+    const dateObject = new Date(dateString);
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObject.getDate().toString().padStart(2, "0");
+
+    const formattedDate = `${year}-${month}-${day}`;
+    return new Date(formattedDate);
+  }
+  const createUser = async (data: UserRequest) => {
+    Userservice.createUser(data)
+      .then((res) => {
+        handleAddSuccess();
+        resetForm();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+  const SubmitHandler = async (data: any) => {
+    const formSubmit: UserRequest = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      birthday: convertToYYYYMMDD(data.birthday),
+      avatar: "",
+      password: data.password,
+      roleId: selectedRole === "district" ? 3 : 2,
+      propertyId: 0
+    };
+    if (selectedRole === "district") {
+      formSubmit.propertyId = selectedDistrict?.id ?? 0;
+    } else {
+      formSubmit.propertyId = selectedWard?.id ?? 0;
+    }
+    const formData = new FormData();
+    if (fileImage) {
+      formData.append("file", fileImage);
+      formData.append("upload_preset", "test-react-uploads-unsigned");
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY as string);
+
+      const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
+      const uploadDataResult = await fetch(URL, {
+        method: "POST",
+        body: formData
+      }).then((res) => res.json());
+      formSubmit.avatar = uploadDataResult.secure_url;
+    }
+    createUser(formSubmit);
+  };
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleAddSuccess = () => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+  };
+
   return (
     <Box className={classes.boxContainer}>
       <SidebarDCMS />
       <form onSubmit={handleSubmit(SubmitHandler)}>
         <Box className={classes.boxContent}>
+          {showAlert && (
+            <Alert className={classes.alert} severity='success'>
+              Đã tạo thành công
+            </Alert>
+          )}
           <Box className={classes.boxForm}>
             <Grid container spacing={5}>
               <Grid item xs={6}>
@@ -111,14 +208,7 @@ export default function CreateAccount() {
                   <Grid item xs={12}>
                     <Box className={classes.title}>Ảnh đại diện</Box>
                     <Box className={classes.imageContainer}>
-                      <img
-                        src={
-                          avatarPreview ||
-                          "https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/385780595_784340566826510_8513447287827069210_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=GAImUy0MBpQAX83N_Iw&_nc_ht=scontent.fsgn2-9.fna&oh=00_AfBvnNhzjKmg3twnhZCz_D5mFrCYVy85E0G1u0aimZURQg&oe=6588C1D0"
-                        }
-                        alt='avatar'
-                        className={classes.image}
-                      />
+                      <img src={avatarPreview || avatar} alt='avatar' className={classes.image} />
                       <label htmlFor='icon-button-file'>
                         <Box className={classes.iconButton}>
                           <input
@@ -203,9 +293,7 @@ export default function CreateAccount() {
                               <>
                                 <Autocomplete
                                   id='filter-demo'
-                                  options={
-                                    districts.filter((district) => district.id === selectedDistrict?.id)[0]?.wards
-                                  }
+                                  options={wards}
                                   getOptionLabel={(option) => option.name}
                                   onChange={(event, newValue) => {
                                     onChange(newValue); // cần gọi để cập nhật giá trị trong form
