@@ -1,17 +1,16 @@
-.customTextField{
-  & input{
+.customTextField {
+  & input {
     height: 10px;
-    width: 400px;
-
+    width: 390px;
   }
 
-  & fieldset{
+  & fieldset {
     border-radius: 40px;
     border-color: var(--blue-500);
   }
 }
-.boxContainer{
-   display: flex;
+.boxContainer {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -19,7 +18,7 @@
   width: 100%;
 }
 
-.boxTabPanel{
+.boxTabPanel {
   width: 100%;
   display: flex;
   justify-content: start;
@@ -29,7 +28,4 @@
   gap: 20px;
   background-color: white;
   padding-left: 20px;
-
-
-
 }

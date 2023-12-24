@@ -60,7 +60,7 @@ const AdvertiseOfLocationManagement = () => {
 
   useEffect(() => {
     const getAllAdvertises = async () => {
-      AdvertiseService.getAdvertises(Number(id), {
+      AdvertiseService.getAdvertisesByLocationId(Number(id), {
         search: searchValue,
         pageSize: itemsPerPage,
         current: Number(currentPage)

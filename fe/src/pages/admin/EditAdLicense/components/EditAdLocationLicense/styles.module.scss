@@ -35,7 +35,7 @@
   white-space: nowrap; // Prevents the text from wrapping onto the next line
   overflow: hidden; // Hides any text that overflows the cell
   text-overflow: ellipsis; // Adds an ellipsis (...) when the text overflows
-  width: 500px;
+  width: 400px;
 }
 .pagination {
   display: flex;

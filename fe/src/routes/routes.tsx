@@ -3,7 +3,8 @@ export const routes = {
   admin: {
     root: "/admin",
     users: {
-      root: "/admin/users"
+      root: "/admin/users",
+      create: "/admin/users/create"
     },
     reviewEdit: {
       root: "/admin/review/edit",
@@ -32,12 +33,24 @@ export const routes = {
     },
     contracts: {
       root: "/admin/contracts",
-      createForm: "/admin/contracts/create-form"
+      createForm: "/admin/contracts/create-form",
+      detail: "/admin/contracts/:id"
     },
     reports: {
       root: "/admin/reports",
       edit: "/admin/reports/edit/:id",
-      details: "/admin/report/:id"
+      details: "/admin/report/:id",
+      createForm: "/admin/contracts/create-form",
+      detail: "/admin/contracts/:id"
+    },
+    reportForm: {
+      root: "/admin/report-forms"
+    },
+    advertisesForm: {
+      root: "/admin/advertise-forms"
+    },
+    advertiseType: {
+      root: "/admin/advertise-types"
     }
   }
 };

@@ -23,6 +23,12 @@ import { AdvertiseEdit } from "pages/admin/ward/pages/AdvertiseEdit";
 import ReportsManagement from "pages/admin/ward/pages/ReportsManagement";
 import { ReportHandle } from "pages/admin/ward/pages/ReportHandle";
 import { ReportDetail } from "pages/admin/ward/pages/ReportDetail";
+import CreateAccount from "pages/admin/CreateAccount";
+import ContractDetail from "pages/admin/ContractDetail";
+import ReportFormManagement from "pages/admin/ReportFormManagement";
+import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
+import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
+
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -31,6 +37,8 @@ function App() {
           <Route path={routes.admin.users.root} Component={UserManagement} />
           <Route path={routes.client} Component={MapAdsManagement} />
           <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
+
+          <Route path={routes.admin.users.create} Component={CreateAccount} />
 
           <Route path={routes.admin.reviewEdit.location} Component={EditAdLocationLicenseDetail} />
           <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
@@ -54,6 +62,10 @@ function App() {
           <Route path={routes.admin.reports.root} Component={ReportsManagement} />
           <Route path={routes.admin.reports.edit} Component={ReportHandle} />
           <Route path={routes.admin.reports.details} Component={ReportDetail} />
+          <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
+          <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
+          <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
+          <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

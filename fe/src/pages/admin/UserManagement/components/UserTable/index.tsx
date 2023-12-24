@@ -6,46 +6,110 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import BasicPagination from "@mui/material/Pagination";
 import { Box, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
-import user from "../../../../../user.json";
 import Popup from "../PopupEditProfile/index";
+import TablePagination from "@mui/material/TablePagination";
+import { User } from "models/user";
+import { createSearchParams, useLocation } from "react-router-dom";
+import Userservice from "services/user";
+import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
+import AlertDialog from "components/admin/ConfirmDialog";
 
-const rows = [...user];
-const rowsPerPage = 7;
 interface FilterProps {
   role: number;
   fieldSearch: string;
 }
 export default function UserManagementTable({ role, fieldSearch }: FilterProps) {
-  const [page, setPage] = useState(1);
+  const locationHook = useLocation();
+  const [page, setPage] = React.useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.page || 0;
+  });
+  console.log(page);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [totalPage, setTotalPage] = useState(1);
+  const [dataList, setDataList] = useState<User[]>([]);
+  const [user, setUser] = useState<User>();
   const [openPopup, setOpenPopup] = useState(false);
-  console.log(role);
-  const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+  const [open, setOpen] = React.useState(false);
+  const [id, setId] = useState(0);
+  const handleClick = (id: number) => {
+    const getUserById = async () => {
+      Userservice.getUserbyId(id)
+        .then((res) => {
+          setUser(res);
+          setOpenPopup(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUserById();
   };
-  const [filterRole, setFilterRole] = useState(rows);
-  useEffect(() => {
-    if (role === 1) {
-      setFilterRole(rows.filter((row) => row.role === "Quận"));
-    } else if (role === 2) {
-      setFilterRole(rows.filter((row) => row.role === "Phường"));
-    } else {
-      setFilterRole(rows);
-    }
-  }, [role]);
+  const handleClickDelete = (id: number) => {
+    setOpen(true);
+    console.log(id);
+    setId(id);
+  };
+  const navigate = useNavigate();
+  const getUsers = async () => {
+    Userservice.getUsers({
+      search: fieldSearch,
+      ...(role && { roleId: role }),
+      pageSize: rowsPerPage,
+      current: Number(page) + 1
+    })
+      .then((res) => {
+        setDataList(res.content);
+        setTotalPage(res.totalPages);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
-    if (fieldSearch !== "") {
-      setFilterRole(rows.filter((row) => row.name.toLowerCase().includes(fieldSearch.toLowerCase())));
-    } else {
-      setFilterRole(rows);
-    }
-  }, [fieldSearch]);
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, filterRole.length - (page - 1) * rowsPerPage);
+    getUsers();
+  }, [role, rowsPerPage, page, fieldSearch]);
+  console.log(dataList);
+
+  useEffect(() => {
+    setPage(0);
+  }, [role]);
+
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+    navigate({
+      pathname: "/admin/users",
+      search: createSearchParams({
+        ...(role && { role: role.toString() }),
+        page: (Number(newPage) + 1).toString()
+      }).toString()
+    });
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const confirmDelete = (id: number) => {
+    const deleteUser = async () => {
+      Userservice.deleteUser(id)
+        .then((res) => {
+          getUsers();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    setOpen(false);
+    deleteUser();
+  };
+  const emptyRows = rowsPerPage - dataList.length;
 
   return (
     <Box className={classes.boxContainer}>
@@ -72,8 +136,8 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
             </TableRow>
           </TableHead>
           <TableBody>
-            {filterRole.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.id} className={classes.rowTable} onClick={() => setOpenPopup(true)}>
+            {dataList.map((row) => (
+              <TableRow key={row.id} className={classes.rowTable}>
                 <TableCell component='th' scope='row'>
                   {row.id}
                 </TableCell>
@@ -84,14 +148,19 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
                   {row.email}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.role}
+                  {row.role.description}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.location}
+                  {row.property.propertyParent === null
+                    ? row.property.name
+                    : row.property.name + ", " + row.property.propertyParent?.name}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
-                  <IconButton aria-label='edit' size='medium'>
+                  <IconButton aria-label='edit' size='medium' onClick={() => handleClick(row.id)}>
                     <FontAwesomeIcon icon={faEdit} color='var(--blue-500)' />
+                  </IconButton>
+                  <IconButton aria-label='delete' size='medium' onClick={() => handleClickDelete(row.id)}>
+                    <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -104,14 +173,27 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
           </TableBody>
         </Table>
       </TableContainer>
-      <BasicPagination
-        color='primary'
-        count={Math.ceil(filterRole.length / rowsPerPage)}
-        page={page}
-        onChange={handleChangePage}
-        className={classes.pagination}
+      <Box className={classes.pagination}>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 100]}
+          component='div'
+          count={totalPage * rowsPerPage}
+          page={Number(page)}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Box>
+      {user && <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} user={user} onUpdated={getUsers} />}
+      <AlertDialog
+        open={open}
+        setOpen={setOpen}
+        title='Xác nhận xóa?'
+        content='Bạn có chắc chắn muốn xóa tài khoản này?'
+        confirm={confirmDelete}
+        id={id}
       />
-      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
     </Box>
   );
 }

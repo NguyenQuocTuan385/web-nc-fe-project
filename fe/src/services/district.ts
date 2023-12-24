@@ -13,7 +13,6 @@ export class DistrictService {
         return Promise.reject(e?.response?.data);
       });
   }
-
   static async updateDistrict(id: number, propertyRequest: PropertyRequest): Promise<any> {
     const updateData = {
       name: propertyRequest.name,
@@ -31,12 +30,14 @@ export class DistrictService {
   }
 
   static async deleteDistrict(id: number): Promise<any> {
-    try {
-      const response = await api.delete(`${API.DISTRICT.DELETE.replace(":id", `${id}`)}`);
-      return Promise.resolve(response.data);
-    } catch (error) {
-      return Promise.reject(error);
-    }
+    return await api
+      .delete(`${API.DISTRICT.DELETE.replace(":id", `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
   }
 }
 
