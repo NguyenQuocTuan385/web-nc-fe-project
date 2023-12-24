@@ -6,7 +6,7 @@ export const API = {
     DEFAULT: "/api/locations/:id/advertises"
   },
   CONTRACT: {
-    DEFAULT: "/api/contracts",
+    DEFAULT: "/api/properties/:id/contracts",
     DELETE: "/api/contracts/:id",
     ByAdvertiseId: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id"

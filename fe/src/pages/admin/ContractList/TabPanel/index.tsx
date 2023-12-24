@@ -10,6 +10,8 @@ import classes from "./styles.module.scss";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 
+const tempPropertyId = 3;
+
 export default function TabPanel() {
   const locationHook = useLocation();
   const [tabValue, setTabValue] = React.useState(() => {
@@ -17,7 +19,11 @@ export default function TabPanel() {
 
     return Number(params.status) || 0;
   });
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+
+    return params.searchKey || "";
+  });
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -52,7 +58,7 @@ export default function TabPanel() {
           />
         </Box>
 
-        <ContractTable status={Number(tabValue)} fieldSearch={searchValue} />
+        <ContractTable propertyId={tempPropertyId} status={Number(tabValue)} fieldSearch={String(searchValue)} />
       </Box>
     </>
   );
