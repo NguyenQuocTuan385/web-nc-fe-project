@@ -6,59 +6,88 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
 import { Box, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import classes from "./styles.module.scss";
-import user from "../../../../../user.json";
 import Popup from "../PopupEditProfile/index";
 import TablePagination from "@mui/material/TablePagination";
-
-const rows = [...user];
-
-
+import { User } from "models/user";
+import { createSearchParams, useLocation } from "react-router-dom";
+import Userservice from "services/user";
+import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
 
 interface FilterProps {
   role: number;
   fieldSearch: string;
 }
 export default function UserManagementTable({ role, fieldSearch }: FilterProps) {
-  const [page, setPage] = React.useState(0);
+  const locationHook = useLocation();
+  const [page, setPage] = React.useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.page || 0;
+  });
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [totalPage, setTotalPage] = useState(1);
+  const [dataList, setDataList] = useState<User[]>([]);
+  const [user, setUser] = useState<User>();
+  const [openPopup, setOpenPopup] = useState(false);
+  const handleClick = (id: number) => {
+    const getUserById = async () => {
+      Userservice.getUserbyId(id)
+        .then((res) => {
+          setUser(res);
+          setOpenPopup(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUserById();
+  };
+  const navigate = useNavigate();
+  console.log(locationHook);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      Userservice.getUsers({
+        search: fieldSearch,
+        role: role,
+        pageSize: rowsPerPage,
+        current: Number(page) + 1
+      })
+        .then((res) => {
+          setDataList(res.content);
+          setTotalPage(res.totalPages);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUsers();
+  }, [role, rowsPerPage, page, fieldSearch, openPopup]);
+
+  useEffect(() => {
+    setPage(0);
+  }, [role]);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
+    navigate({
+      pathname: "/admin/users",
+      search: createSearchParams({
+        role: role.toString(),
+        page: (Number(newPage) + 1).toString()
+      }).toString()
+    });
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const [openPopup, setOpenPopup] = useState(false);
-  console.log(role);
-
-
-  
-  const [filterRole, setFilterRole] = useState(rows);
-  useEffect(() => {
-    if (role === 1) {
-      setFilterRole(rows.filter((row) => row.role === "Quận"));
-    } else if (role === 2) {
-      setFilterRole(rows.filter((row) => row.role === "Phường"));
-    } else {
-      setFilterRole(rows);
-    }
-  }, [role]);
-
-  useEffect(() => {
-    if (fieldSearch !== "") {
-      setFilterRole(rows.filter((row) => row.name.toLowerCase().includes(fieldSearch.toLowerCase())));
-    } else {
-      setFilterRole(rows);
-    }
-  }, [fieldSearch]);
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterRole.length) : 0;
+  const emptyRows = rowsPerPage - dataList.length;
 
   return (
     <Box className={classes.boxContainer}>
@@ -85,33 +114,32 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0 ? filterRole.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map(
-              (row) => (
-                <TableRow key={row.id} className={classes.rowTable} onClick={() => setOpenPopup(true)}>
-                  <TableCell component='th' scope='row'>
-                    {row.id}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {row.name}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {row.email}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {row.role}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {row.location}
-                  </TableCell>
-                  <TableCell align='center' className={classes.dataTable}>
-                    <IconButton aria-label='edit' size='medium'>
-                      <FontAwesomeIcon icon={faEdit} color='var(--blue-500)' />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              )
-            )}
-
+            {dataList.map((row) => (
+              <TableRow key={row.id} className={classes.rowTable}>
+                <TableCell component='th' scope='row'>
+                  {row.id}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.name}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.email}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.role.description}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.property.propertyParent === null
+                    ? row.property.name
+                    : row.property.name + ", " + row.property.propertyParent?.name}
+                </TableCell>
+                <TableCell align='center' className={classes.dataTable}>
+                  <IconButton aria-label='edit' size='medium' onClick={() => handleClick(row.id)}>
+                    <FontAwesomeIcon icon={faEdit} color='var(--blue-500)' />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />
@@ -124,15 +152,15 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 100]}
           component='div'
-          count={filterRole.length}
-          page={page}
+          count={totalPage * rowsPerPage}
+          page={Number(page)}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
-      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} />
+      {user && <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} user={user} />}
     </Box>
   );
 }

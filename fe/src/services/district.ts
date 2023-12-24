@@ -13,6 +13,16 @@ export class DistrictService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async getAll(): Promise<any> {
+    return await api
+      .get(`${API.DISTRICT.ALL}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 
   static async updateDistrict(id: number, propertyRequest: PropertyRequest): Promise<any> {
     const updateData = {
