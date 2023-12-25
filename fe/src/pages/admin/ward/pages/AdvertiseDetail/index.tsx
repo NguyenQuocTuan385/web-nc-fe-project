@@ -88,7 +88,7 @@ export const AdvertiseDetail = () => {
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
-      ContractService.getContractsByAdvertise(Number(id), {})
+      ContractService.getContractsByAdvertiseOne(Number(id), {})
         .then((res) => {
           setInfoContractDetails(res);
           setInfoContract({

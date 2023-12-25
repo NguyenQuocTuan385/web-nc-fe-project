@@ -30,6 +30,14 @@ form {
   width: 70%;
 }
 
+.input-property {
+  width: 70%;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 0 $pacing-main;
+}
+
 .input-custom,
 .select-custom {
   height: 40px;
@@ -37,6 +45,40 @@ form {
   border-radius: 8px;
   border: 1px solid #ccc;
   padding: 0 $pacing-main;
+}
+
+.coordinates-container {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+
+  .input-small {
+    width: 100%;
+  }
+}
+
+.textarea-custom {
+  height: 100px !important;
+  width: 100% !important;
+  border-radius: 8px;
+  resize: none;
+  border: 1px solid #ccc;
+  padding: $pacing-main;
+}
+
+.input-small {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-small:nth-child(2) {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.image-wrapper {
+  width: 100% !important;
 }
 
 .error-text {

@@ -36,3 +36,22 @@ export interface GetLocations {
   pageSize?: number;
   current?: number;
 }
+
+export interface GetLocationTypes {
+  search?: string;
+  pageSize?: number;
+  current?: number;
+}
+
+export interface LocationEditRequest {
+  address: string;
+  locationTypeId: number;
+  advertiseFormId: number;
+  planning: number;
+  imageUrls: any;
+  latitude: number;
+  longitude: number;
+  propertyId: number;
+  userId: number;
+  content: string;
+}

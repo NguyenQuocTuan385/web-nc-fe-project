@@ -1,6 +1,11 @@
 export const API = {
   LOCATION: {
-    DEFAULT: "/api/locations"
+    DEFAULT: "/api/locations",
+    DETAILS: "/api/locations/:id",
+    EDIT: "/api/locations/:id"
+  },
+  LOCATION_TYPE: {
+    DEFAULT: "/api/location-types"
   },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
@@ -10,7 +15,8 @@ export const API = {
     DEFAULT: "/api/properties/:id/contracts",
     DELETE: "/api/contracts/:id",
     ByAdvertiseId: "/api/advertises/:id/contracts",
-    ById: "/api/contracts/:id"
+    ById: "/api/contracts/:id",
+    ByAdvertiseIdOne: "/api/contracts/advertises/:id"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",

@@ -24,6 +24,17 @@ export class ContractService {
       });
   }
 
+  static async getContractsByAdvertiseOne(id: number, data: GetContract): Promise<any> {
+    return await api
+      .get(`${API.CONTRACT.ByAdvertiseIdOne.replace(":id", `${id}`)}`, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
   static async deleteContracts(id: number): Promise<any> {
     return await api
       .delete(`${API.CONTRACT.DELETE.replace(":id", `${id}`)}`)

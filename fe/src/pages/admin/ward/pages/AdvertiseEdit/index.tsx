@@ -11,6 +11,8 @@ import styled from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 
 const YOUR_MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 megabytes in bytes
 
@@ -215,8 +217,27 @@ const MyForm: React.FC = () => {
   );
 };
 
+const ButtonBack = styled(Button)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
+const IconButtonBack = styled(IconButton)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
 export const AdvertiseEdit = () => {
+  const navigate = useNavigate();
   const infoContract = advertiseDetail.contracts[0];
+
+  const goBack = () => {
+    navigate(`${routes.admin.advertises.ofLocation}`);
+  };
 
   return (
     <Box>
@@ -224,12 +245,12 @@ export const AdvertiseEdit = () => {
       <div className={classes["advertise-edit-container"]}>
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
-          <Button>
-            <IconButton size='medium'>
+          <ButtonBack onClick={() => goBack()}>
+            <IconButtonBack size='medium'>
               <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButton>
+            </IconButtonBack>
             Trở về
-          </Button>
+          </ButtonBack>
 
           <Box>
             <h2>Thông tin công ty</h2>

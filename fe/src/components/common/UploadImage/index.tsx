@@ -10,10 +10,11 @@ interface UploadImageProps {
   onChange?: (file: string | File) => void;
   maxFiles?: number;
   padding?: string | number;
+  borderRadius?: string | number;
 }
 
 const UploadImage = (props: UploadImageProps) => {
-  const { errorMessage, onChange, maxFiles, padding } = props;
+  const { errorMessage, onChange, maxFiles, padding, borderRadius } = props;
   const [filesPreview, setFilesPreview] = useState<string[]>([]);
 
   const handleDrop = useCallback(
@@ -37,7 +38,7 @@ const UploadImage = (props: UploadImageProps) => {
   });
   return (
     <Box className={classes.uploadImage} padding={padding}>
-      <div {...getRootProps({ className: classes.dropzone })}>
+      <div {...getRootProps({ className: classes.dropzone })} style={{ borderRadius: `${borderRadius}` }}>
         <input className='input-zone' {...getInputProps()} type='file' />
         <div className={classes.dropzoneContent}>
           {isDragActive ? (
