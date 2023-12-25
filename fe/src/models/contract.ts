@@ -1,3 +1,6 @@
+import { companyPhone } from 'assets/img/icon/ic-comPhone.svg';
+import { companyAddress } from 'assets/img/icon/ic-comAddress.svg';
+import { compamyEmail } from 'assets/img/icon/ic-comEmail.svg';
 import { Advertise } from "./advertise";
 
 export interface Contract {
@@ -11,6 +14,17 @@ export interface Contract {
   status: EContractStatus;
   images: string;
   advertise: Advertise;
+}
+
+export interface PutContract {
+  companyName: string;
+  companyEmail: string;
+  companyAddress: string;
+  companyPhone: string;
+  images: string;
+  startAt: string;
+  endAt: string;
+  advertiseId: number;
 }
 
 export interface GetContract {
