@@ -42,7 +42,6 @@ export const routes = {
     },
     advertiseType: {
       root: "/admin/advertise-types"
-
     }
   }
 };
