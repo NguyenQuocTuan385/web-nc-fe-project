@@ -148,7 +148,7 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
                   {row.email}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.role.description}
+                  {row.role.id === 2 ? "Phường" : "Quận"}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
                   {row.property.propertyParent === null
