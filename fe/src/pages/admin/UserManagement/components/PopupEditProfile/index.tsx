@@ -163,7 +163,6 @@ export default function Popup(props: PopupProps) {
 
   useEffect(() => {
     setSelectedRole(user.role.code === "DISTRICT" ? "district" : "ward");
-    console.log(user.role.code + "heheheeh");
   }, [user.role.code]);
 
   useEffect(() => {

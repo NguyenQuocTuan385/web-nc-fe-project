@@ -1,6 +1,6 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { GetContract } from "models/contract";
+import { GetContract, PutContract } from "models/contract";
 
 export class ContractService {
   static async getContracts(data: GetContract, propertyId: Number): Promise<any> {
@@ -49,6 +49,17 @@ export class ContractService {
   static async getContractById(id: number): Promise<any> {
     return await api
       .get(`${API.CONTRACT.ById.replace(":id", `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
+  static async createContract(contractData: PutContract): Promise<any> {
+    return await api
+      .post(`${API.CONTRACT.CREATE}`, contractData)
       .then((res) => {
         return Promise.resolve(res.data);
       })

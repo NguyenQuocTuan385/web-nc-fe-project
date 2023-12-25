@@ -23,6 +23,7 @@ export interface UserRequest {
   email: string;
   birthday: Date;
   avatar: string;
+  password?: string;
   phone: string;
   roleId: number;
   propertyId: number;

@@ -16,7 +16,8 @@ export const API = {
     DELETE: "/api/contracts/:id",
     ByAdvertiseId: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id",
-    ByAdvertiseIdOne: "/api/contracts/advertises/:id"
+    ByAdvertiseIdOne: "/api/contracts/advertises/:id",
+    CREATE: "/api/contracts"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
@@ -30,6 +31,7 @@ export const API = {
   USER: {
     DEFAULT: "/api/users",
     UPDATE: "/api/users/:id",
+    CREATE: "/api/users",
     DELETE: "/api/users/:id",
     DETAIL: "/api/users/:id"
   },
