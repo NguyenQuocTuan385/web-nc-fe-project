@@ -12,6 +12,8 @@ import SidebarDCMS from "components/admin/SidebarDCMS";
 import { Contract } from "models/contract";
 import ContractService from "services/contract";
 import { useEffect } from "react";
+import dayjs from "dayjs";
+import AdvertiseService from "services/advertise";
 
 export default function AdLicenseDetail() {
   const navigate = useNavigate();
@@ -30,6 +32,53 @@ export default function AdLicenseDetail() {
   const startAt = new Date(state?.startAt ?? "").toLocaleDateString("en-GB");
 
   const endAt = new Date(state?.endAt ?? "").toLocaleDateString("en-GB");
+
+  const updateAdvertisesById = async (row: Contract) => {
+    AdvertiseService.updateAdvertisesId(row.advertise.id, {
+      licensing: true,
+      height: row.advertise.height,
+      width: row.advertise.width,
+      pillarQuantity: row.advertise.pillarQuantity,
+      images: row.advertise.images,
+      locationId: row.advertise.location.id,
+      adsTypeId: row.advertise.adsType.id
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const updateContractById = async (row: Contract, status: number) => {
+    ContractService.updateContractById(row.id, {
+      status: status,
+      startAt: dayjs(row.startAt).format("YYYY-MM-DD hh:mm:ss"),
+      endAt: dayjs(row.endAt).format("YYYY-MM-DD hh:mm:ss"),
+      companyName: row.companyName,
+      companyAddress: row.companyAddress,
+      companyEmail: row.companyEmail,
+      companyPhone: row.companyPhone,
+      images: row.images,
+      advertiseId: row.advertise.id
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleClickAccept = () => {
+    if (state) {
+      Promise.all([updateAdvertisesById(state), updateContractById(state, 1)]).then(() => navigate(-1));
+    }
+  };
+  const handleClickCancel = () => {
+    if (state) {
+      updateContractById(state, 4).then(() => navigate(-1));
+    }
+  };
   return (
     <Box className={classes.boxContainer}>
       <SidebarDCMS />
@@ -126,10 +175,15 @@ export default function AdLicenseDetail() {
       </Box>
       <Box className={classes.editHistoryContainer}>
         <Box className={classes.actionButtons}>
-          <Button className={classes.approveButton} variant='contained' color='primary'>
+          <Button
+            onClick={() => handleClickAccept()}
+            className={classes.approveButton}
+            variant='contained'
+            color='primary'
+          >
             Duyệt
           </Button>
-          <Button className={classes.skipButton} variant='contained' color='error'>
+          <Button onClick={() => handleClickCancel()} className={classes.skipButton} variant='contained' color='error'>
             Bỏ qua
           </Button>
         </Box>
