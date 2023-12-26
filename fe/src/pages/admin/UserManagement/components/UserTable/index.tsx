@@ -13,7 +13,7 @@ import classes from "./styles.module.scss";
 import Popup from "../PopupEditProfile/index";
 import TablePagination from "@mui/material/TablePagination";
 import { User } from "models/user";
-import { createSearchParams, useLocation } from "react-router-dom";
+import { createSearchParams, useLocation, useResolvedPath } from "react-router-dom";
 import Userservice from "services/user";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
@@ -25,11 +25,11 @@ interface FilterProps {
 }
 export default function UserManagementTable({ role, fieldSearch }: FilterProps) {
   const locationHook = useLocation();
+  const match = useResolvedPath("").pathname;
   const [page, setPage] = React.useState(() => {
     const params = queryString.parse(locationHook.search);
-    return params.page || 0;
+    return Number(params.page) - 1 || 0;
   });
-  console.log(page);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [totalPage, setTotalPage] = useState(1);
   const [dataList, setDataList] = useState<User[]>([]);
@@ -66,6 +66,14 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
       .then((res) => {
         setDataList(res.content);
         setTotalPage(res.totalPages);
+
+        navigate({
+          pathname: match,
+          search: createSearchParams({
+            ...(role && { role: role.toString() }),
+            page: (Number(page) + 1).toString()
+          }).toString()
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -75,16 +83,11 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
   useEffect(() => {
     getUsers();
   }, [role, rowsPerPage, page, fieldSearch]);
-  console.log(dataList);
-
-  useEffect(() => {
-    setPage(0);
-  }, [role]);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
     navigate({
-      pathname: "/admin/users",
+      pathname: match,
       search: createSearchParams({
         ...(role && { role: role.toString() }),
         page: (Number(newPage) + 1).toString()

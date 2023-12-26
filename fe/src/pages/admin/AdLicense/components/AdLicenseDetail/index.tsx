@@ -9,11 +9,27 @@ import Heading3 from "components/common/text/Heading3";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import SidebarDCMS from "components/admin/SidebarDCMS";
+import { Contract } from "models/contract";
+import ContractService from "services/contract";
+import { useEffect } from "react";
 
 export default function AdLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { table, company, startDate, endDate } = location.state;
+
+  const constractId = location.pathname.split("/").pop();
+  const [state, setState] = React.useState<Contract | null>(null);
+  useEffect(() => {
+    const getAllContractById = async () => {
+      ContractService.getContractById(Number(constractId)).then((res) => {
+        setState(res);
+      });
+    };
+    getAllContractById();
+  }, [constractId]);
+  const startAt = new Date(state?.startAt ?? "").toLocaleDateString("en-GB");
+
+  const endAt = new Date(state?.endAt ?? "").toLocaleDateString("en-GB");
   return (
     <Box className={classes.boxContainer}>
       <SidebarDCMS />
@@ -25,11 +41,7 @@ export default function AdLicenseDetail() {
         <Box className={classes.boxContentDetail}>
           <Box className={classes.imageInfoContainer}>
             <Box className={classes.imageContainer}>
-              <img
-                src='https://kenh14cdn.com/thumb_w/620/203336854389633024/2023/10/19/photo-6-16976830334011868785001.jpg'
-                alt=''
-                className={classes.image}
-              />
+              <img src={state?.advertise.images} alt='' className={classes.image} />
             </Box>
             <Box className={classes.infoContainer}>
               <Grid container spacing={2} columns={16}>
@@ -37,24 +49,24 @@ export default function AdLicenseDetail() {
                   <Box className={classes.infoTable}>
                     <Heading3>Thông tin bảng</Heading3>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
-                      {table.type}
+                      {state?.advertise.adsType.name}
                     </ParagraphBody>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
-                      {table.address}
+                      {state?.advertise.location.address}
                     </ParagraphBody>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Kích thước:&nbsp;
                       <span>
-                        {table.width} x {table.height}
+                        {state?.advertise.width} x {state?.advertise.height}
                       </span>
                     </ParagraphBody>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Hình thức:&nbsp;
-                      <span>{table.form}</span>
+                      <span>{state?.advertise.location.adsForm.name}</span>
                     </ParagraphBody>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Phân loại:&nbsp;
-                      <span>{table.location}</span>
+                      <span>{state?.advertise.location.locationType.name}</span>
                     </ParagraphBody>
                   </Box>
                 </Grid>
@@ -63,19 +75,19 @@ export default function AdLicenseDetail() {
                     <Heading3>Thông tin công ty</Heading3>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Tên công ty:&nbsp;
-                      <span>{company.name}</span>
+                      <span>{state?.companyName}</span>
                     </ParagraphBody>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Email:&nbsp;
-                      <span>{company.email}</span>
+                      <span>{state?.companyEmail}</span>
                     </ParagraphBody>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Số điện thoại:&nbsp;
-                      <span>{company.phone}</span>
+                      <span>{state?.companyPhone}</span>
                     </ParagraphBody>
                     <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
                       Địa chỉ:&nbsp;
-                      <span>{company.address}</span>
+                      <span>{state?.companyAddress}</span>
                     </ParagraphBody>
                   </Box>
                 </Grid>
@@ -85,12 +97,12 @@ export default function AdLicenseDetail() {
           <Box className={classes.editInfo}>
             <ParagraphBody className={classes.infoContent}>
               Bắt đầu hợp đồng:&nbsp;
-              <span>{startDate}</span>
+              <span>{startAt}</span>
             </ParagraphBody>
             <Box>
               <ParagraphBody className={classes.infoContent}>
                 Kết thúc hợp đồng:&nbsp;
-                <span>{endDate}</span>
+                <span>{endAt}</span>
               </ParagraphBody>
               <Box></Box>
             </Box>

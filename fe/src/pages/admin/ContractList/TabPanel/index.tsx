@@ -10,7 +10,7 @@ import classes from "./styles.module.scss";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 
-const tempPropertyId = 1;
+const tempPropertyId = 2;
 
 export default function TabPanel() {
   const locationHook = useLocation();
