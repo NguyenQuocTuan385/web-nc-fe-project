@@ -6,8 +6,8 @@ export interface AdvertiseType {
 
 export interface GetAdvertiseTypes {
   search?: string;
-  current: number;
-  pageSize: number;
+  current?: number;
+  pageSize?: number;
 }
 
 export interface Pageable {

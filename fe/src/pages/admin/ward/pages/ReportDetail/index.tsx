@@ -7,6 +7,7 @@ import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
 import reportDetail from "./report-detail.json";
+import { useNavigate } from "react-router-dom";
 
 interface IReportDetail {
   id: number;
@@ -26,6 +27,20 @@ const BoxFlex = styled(Box)(() => ({
   alignItems: "center"
 }));
 
+const ButtonBack = styled(Button)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
+const IconButtonBack = styled(IconButton)(() => ({
+  paddingLeft: "0 !important",
+  "&:hover": {
+    backgroundColor: "transparent !important"
+  }
+}));
+
 export const ReportDetail = () => {
   const formatDateToString = (date: Date): string => {
     const year = date.getFullYear();
@@ -37,6 +52,8 @@ export const ReportDetail = () => {
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
+
+  const navigate = useNavigate();
 
   const dataReportDetail: IReportDetail = {
     id: reportDetail.id,
@@ -51,18 +68,22 @@ export const ReportDetail = () => {
     reply: reportDetail.reply
   };
 
+  const goBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Box>
       <Header />
       <div className={classes["report-detail-container"]}>
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
-          <Button>
-            <IconButton size='medium'>
+          <ButtonBack onClick={goBack}>
+            <IconButtonBack size='medium'>
               <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButton>
+            </IconButtonBack>
             Trở về
-          </Button>
+          </ButtonBack>
           <Box>
             <h3>Hình ảnh báo cáo</h3>
             <BoxFlex justifyContent={"space-between"} mt={"15px"}>
@@ -116,7 +137,7 @@ export const ReportDetail = () => {
             </Box>
           </Box>
 
-          <Box mt="20px">
+          <Box mt='20px'>
             <h3>Thông tin xử lý của cán bộ</h3>
             <Typography mt={"15px"}>
               <span className={classes["title"]}>Tình trạng: </span>

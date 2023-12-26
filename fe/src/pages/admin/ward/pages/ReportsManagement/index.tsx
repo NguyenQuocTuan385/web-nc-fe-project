@@ -85,6 +85,10 @@ const ReportsManagement = () => {
     navigate(`${routes.admin.reports.edit.replace(":id", `${idReport}`)}`);
   };
 
+  const handleViewDetails = (idReport: number) => {
+    navigate(`${routes.admin.reports.details.replace(":id", `${idReport}`)}`);
+  };
+
   return (
     <Box>
       <Header />
@@ -102,6 +106,7 @@ const ReportsManagement = () => {
                 customColumns={customColumns}
                 isActionColumn={true}
                 onEditClick={handleReport}
+                onViewDetailsClick={handleViewDetails}
               />
 
               <Box className={classes["pagination-custom"]}>

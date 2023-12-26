@@ -18,7 +18,7 @@ export const routes = {
     advertises: {
       root: "/admin/advertises",
       create: "/admin/advertises/create",
-      edit: "/admin/advertises/edit/:id",
+      edit: "/admin/advertises/edit/:locationId/:advertiseId",
       details: "/admin/advertises/:id",
       ofLocation: "/admin/advertises/locations/:id"
     },

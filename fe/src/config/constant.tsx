@@ -9,7 +9,8 @@ export const API = {
   },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
-    DETAILS: "/api/advertises/:id"
+    DETAILS: "/api/advertises/:id",
+    EDIT: "/api/advertises/:id"
   },
   CONTRACT: {
     DEFAULT: "/api/properties/:id/contracts",
@@ -36,7 +37,9 @@ export const API = {
     DETAIL: "/api/users/:id"
   },
   REPORT: {
-    DEFAULT: "/api/reports"
+    DEFAULT: "/api/reports",
+    DETAILS: "/api/reports/:id",
+    UPDATE: "/api/reports/:id"
   },
   REPORT_FORM: {
     DEFAULT: "/api/report-forms"

@@ -138,6 +138,8 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       imageUrls: []
     };
 
+    let savedImageUrls: string = "";
+
     if (selectedImages.length > 0) {
       await Promise.all(
         files.map(async (file: any) => {
@@ -155,13 +157,15 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           formSubmit.imageUrls.push(JSON.stringify(uploadDataResult.secure_url));
         })
       );
+
+      savedImageUrls = JSON.stringify(formSubmit.imageUrls);
     } else {
       formSubmit.imageUrls.push(JSON.stringify(files));
     }
 
     const dataSubmit = {
       ...formSubmit,
-      imageUrls: formSubmit.imageUrls[0],
+      imageUrls: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
       propertyId: userInfo.property.id,
       userId: userInfo.id
     };

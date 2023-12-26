@@ -93,7 +93,9 @@ const AdvertiseOfLocationManagement = () => {
   };
 
   const handleEditAdvertise = (idAdvertise: number) => {
-    navigate(`${routes.admin.advertises.edit.replace(":id", `${idAdvertise}`)}`);
+    navigate(
+      `${routes.admin.advertises.edit.replace(":locationId", `${id}`).replace(":advertiseId", `${idAdvertise}`)}`
+    );
   };
 
   const handleSearch = (query: string) => {
