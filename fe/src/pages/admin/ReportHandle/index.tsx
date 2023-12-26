@@ -1,12 +1,10 @@
 import classes from "./styles.module.scss";
 
-import { Header } from "../../components/common/Header";
-import Sidebar from "../../components/common/Sidebar";
+import { Header } from "components/common/Header";
+import SideBarWard from "components/admin/SidebarWard";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { Alert, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
@@ -105,7 +103,7 @@ export const ReportHandle = () => {
     <Box>
       <Header />
       <div className={classes["report-handle-container"]}>
-        <Sidebar></Sidebar>
+        <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
             <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />

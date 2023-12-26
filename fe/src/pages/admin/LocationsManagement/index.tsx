@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Box, Pagination } from "@mui/material";
-
+import { Pagination, Box } from "@mui/material";
 import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import queryString from "query-string";
 
-import SideBarWard from "components/admin/SidebarWard";
-import TableTemplate from "../../components/common/TableTemplate";
-import SearchAppBar from "../../components/common/Search";
-import { Header } from "../../components/common/Header";
-import reports from "./reports.json";
 import classes from "./styles.module.scss";
-import ReportService from "services/report";
+
+import SideBarWard from "components/admin/SidebarWard";
+import TableTemplate from "components/common/TableTemplate";
+import SearchAppBar from "components/common/Search";
+import { Header } from "components/common/Header";
+import LocationService from "services/location";
 import { routes } from "routes/routes";
 
-const ReportsManagement = () => {
+const LocationManagement = () => {
   const navigate = useNavigate();
   const itemsPerPage = 5;
-  const [reportList, setReportList] = useState([]);
-
+  const [locationList, setLocationList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
   const locationHook = useLocation();
@@ -40,10 +38,14 @@ const ReportsManagement = () => {
   };
 
   useEffect(() => {
-    const getAllReports = async () => {
-      ReportService.getReports({ search: searchValue, pageSize: itemsPerPage, current: Number(currentPage) })
+    const getAllLocations = async () => {
+      LocationService.getLocations({
+        search: searchValue,
+        pageSize: itemsPerPage,
+        current: Number(currentPage)
+      })
         .then((res) => {
-          setReportList(res.content);
+          setLocationList(res.content);
           setTotalPage(res.totalPages);
           setTotalElements(res.totalElements);
 
@@ -58,41 +60,47 @@ const ReportsManagement = () => {
           console.log(e);
         });
     };
-    getAllReports();
+    getAllLocations();
   }, [currentPage, searchValue]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchValue]);
 
-  const data = reportList.map((report: any, index: number) => {
+  const data = locationList.map((location: any, index: number) => {
     return {
       stt: index + 1,
-      objectStatus: { value: report.status, name: report.status ? "Đã xử lí" : "Chưa xử lí" },
-      ...report
+      id: location.id,
+      address: location.address,
+      adsForm: location.adsForm.name,
+      objectStatus: {
+        name: location.planning ? "Đã quy hoạch" : "Chưa quy hoạch",
+        value: location.planning
+      }
     };
   });
 
-  const customHeading = ["STT", "Mã", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
-  const customColumns = ["stt", "id", "email", "fullName", "phone", "objectStatus"];
+  const customHeading = ["STT", "Mã", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
+  const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
+
+  // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const handleViewAds = (idLocation: number) => {
+    navigate(`${routes.admin.advertises.ofLocation.replace(":id", `${idLocation}`)}`);
+  };
+
+  const handleEditLocation = (idLocation: number) => {
+    navigate(`${routes.admin.locations.edit.replace(":id", `${idLocation}`)}`);
+  };
 
   const handleSearch = (query: string) => {
     setSearchValue(query);
-  };
-  // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
-  const handleReport = (idReport: number) => {
-    navigate(`${routes.admin.reports.edit.replace(":id", `${idReport}`)}`);
-  };
-
-  const handleViewDetails = (idReport: number) => {
-    navigate(`${routes.admin.reports.details.replace(":id", `${idReport}`)}`);
   };
 
   return (
     <Box>
       <Header />
-      <div className={classes["reports-management-container"]}>
+      <div className={classes["location-management-container"]}>
         <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <Box className={classes["search-container"]}>
@@ -105,8 +113,8 @@ const ReportsManagement = () => {
                 customHeading={customHeading}
                 customColumns={customColumns}
                 isActionColumn={true}
-                onEditClick={handleReport}
-                onViewDetailsClick={handleViewDetails}
+                onViewAdsClick={handleViewAds}
+                onEditClick={handleEditLocation}
               />
 
               <Box className={classes["pagination-custom"]}>
@@ -124,4 +132,4 @@ const ReportsManagement = () => {
   );
 };
 
-export default ReportsManagement;
+export default LocationManagement;

@@ -16,9 +16,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 
-import { Header } from "../../components/common/Header";
+import { Header } from "components/common/Header";
 import classes from "./styles.module.scss";
-import Sidebar from "../../components/common/Sidebar";
+import SideBarWard from "components/admin/SidebarWard";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
@@ -30,7 +30,7 @@ import AdvertiseFormService from "services/advertiseForm";
 import { LocationEditRequest, LocationType } from "models/location";
 import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
-import userDetails from "../../../../../userDetails.json";
+import userDetails from "userDetails.json";
 
 interface FormData {
   propertyId: number;
@@ -475,7 +475,7 @@ export const LocationEdit = () => {
     <Box>
       <Header />
       <div className={classes["location-edit-container"]}>
-        <Sidebar></Sidebar>
+        <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
             <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />

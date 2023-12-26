@@ -8,14 +8,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
 
 import SideBarWard from "components/admin/SidebarWard";
-import TableTemplate from "../../components/common/TableTemplate";
+import TableTemplate from "components/common/TableTemplate";
 import InfoLocation from "./components/InfoLocation";
-import { Location } from "../../models/Location.model";
-import { Header } from "../../components/common/Header";
-import SearchAppBar from "../../components/common/Search";
+import { Header } from "components/common/Header";
+import SearchAppBar from "components/common/Search";
 import AdvertiseService from "services/advertise";
 import { routes } from "routes/routes";
 import styled from "styled-components";
+import { LocationView } from "models/location";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -128,7 +128,7 @@ const AdvertiseOfLocationManagement = () => {
   ];
   const customColumns = ["stt", "id", "adsType", "adsForm", "size", "pillarQuantity", "objectStatus"];
 
-  const dataInfoLocation: Location = advertiseList.map((ads: any, index: number) => {
+  const dataInfoLocation: LocationView = advertiseList.map((ads: any, index: number) => {
     return {
       stt: index,
       id: ads.location.id,

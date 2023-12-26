@@ -7,12 +7,12 @@ import styled from "styled-components";
 import classes from "./styles.module.scss";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Sidebar from "../../components/common/Sidebar";
-import { Header } from "../../components/common/Header";
+import SideBarWard from "components/admin/SidebarWard";
+import { Header } from "components/common/Header";
 import Heading4 from "components/common/text/Heading4";
 import AdvertiseService from "services/advertise";
 import ContractService from "services/contract";
-import advertiseDetailsMock from "./advertise-detail.json";
+import advertiseDetailsMock from "advertise-detail.json";
 import { useParams, useNavigate } from "react-router-dom";
 
 const InfoAdsBox = styled(Box)(() => ({
@@ -113,7 +113,7 @@ export const AdvertiseDetail = () => {
     <Box>
       <Header />
       <div className={classes["advertise-detail-container"]}>
-        <Sidebar></Sidebar>
+        <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
             <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />

@@ -1,12 +1,11 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import classes from "./styles.module.scss";
-import { Header } from "../../components/common/Header";
-import Sidebar from "../../components/common/Sidebar";
+import { Header } from "components/common/Header";
+import SideBarWard from "components/admin/SidebarWard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-import reportDetail from "./report-detail.json";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { EReportTypeName, Report } from "models/report";
@@ -70,7 +69,7 @@ export const ReportDetail = () => {
     <Box>
       <Header />
       <div className={classes["report-detail-container"]}>
-        <Sidebar></Sidebar>
+        <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
             <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />

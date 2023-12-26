@@ -20,15 +20,14 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-import advertiseDetail from "../AdvertiseDetail/advertise-detail.json";
 import { InfoContract } from "../AdvertiseDetail/components/InfoContract";
-import { Header } from "../../components/common/Header";
-import Sidebar from "../../components/common/Sidebar";
+import { Header } from "components/common/Header";
+import SideBarWard from "components/admin/SidebarWard";
 import classes from "./styles.module.scss";
 import { routes } from "routes/routes";
 import { Advertise, AdvertiseEditRequest, AdvertiseType } from "models/advertise";
 import UploadImage from "components/common/UploadImage";
-import userDetails from "../../../../../userDetails.json";
+import userDetails from "userDetails.json";
 import ContractService from "services/contract";
 import AdvertiseTypeService from "services/advertiseType";
 import AdvertiseEditService from "services/advertiseEdit";
@@ -439,7 +438,7 @@ export const AdvertiseEdit = () => {
     <Box>
       <Header />
       <div className={classes["advertise-edit-container"]}>
-        <Sidebar></Sidebar>
+        <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
             <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />

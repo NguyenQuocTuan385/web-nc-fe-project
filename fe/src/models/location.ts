@@ -24,6 +24,17 @@ export interface Location {
   titleReport?: string;
 }
 
+export interface LocationView {
+  stt: number;
+  id: number;
+  address: string;
+  adsForm: string;
+  locationType: string;
+  planning: number;
+  latitude: number;
+  longtitude: number;
+}
+
 export interface LocationType {
   id: number;
   name: string;
