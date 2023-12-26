@@ -7,15 +7,31 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import UserManagementTable from "../UserTable";
 import classes from "./styles.module.scss";
+import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 
 export default function TabPanel() {
   const [value, setValue] = React.useState(0);
   const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
+  const locationHook = useLocation();
+  const params = new URLSearchParams(locationHook.search);
+  const role = params.get("roleId");
+  React.useEffect(() => {
+    if (role) {
+      setValue(Number(role));
+    }
+  }, [role]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    navigate({
+      pathname: locationHook.pathname,
+      search: createSearchParams({
+        ...(newValue !== 0 && { roleId: newValue.toString() })
+      }).toString()
+    });
     setValue(newValue);
   };
 
@@ -24,9 +40,9 @@ export default function TabPanel() {
       <Box className={classes.boxContainer}>
         <Box className={classes.boxTabPanel}>
           <Tabs value={value} onChange={handleChange}>
-            <Tab label='Tất cả' />
-            <Tab label='Quận' />
-            <Tab label='Phường' />
+            <Tab label='Tất cả' value={0} />
+            <Tab label='Quận' value={3} />
+            <Tab label='Phường' value={2} />
           </Tabs>
 
           <TextField

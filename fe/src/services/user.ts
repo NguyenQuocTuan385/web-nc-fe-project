@@ -1,11 +1,11 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { GetContract, PutContract } from "models/contract";
+import { User, GetUsers, UserRequest } from "models/user";
 
-export class ContractService {
-  static async getContracts(data: GetContract, propertyId: Number): Promise<any> {
+export class Userservice {
+  static async getUsers(data: GetUsers): Promise<any> {
     return await api
-      .get(`${API.CONTRACT.DEFAULT.replace(":id", `${propertyId}`)}`, { params: data })
+      .get(`${API.USER.DEFAULT}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -13,9 +13,9 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getContractsByAdvertise(id: number, data: GetContract): Promise<any> {
+  static async getUserbyId(id: Number): Promise<any> {
     return await api
-      .get(`${API.CONTRACT.ByAdvertiseId.replace(":id", `${id}`)}`, { params: data })
+      .get(`${API.USER.DETAIL.replace(":id", `${id}`)}`)
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -23,10 +23,9 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
-
-  static async deleteContracts(id: number): Promise<any> {
+  static async createUser(userRequest: UserRequest): Promise<any> {
     return await api
-      .delete(`${API.CONTRACT.DELETE.replace(":id", `${id}`)}`)
+      .post(`${API.USER.CREATE}`, userRequest)
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -34,10 +33,9 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
-
-  static async getContractById(id: number): Promise<any> {
+  static async updateUser(id: Number, userRequest: UserRequest): Promise<any> {
     return await api
-      .get(`${API.CONTRACT.ById.replace(":id", `${id}`)}`)
+      .put(`${API.USER.UPDATE.replace(":id", `${id}`)}`, userRequest)
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -45,10 +43,9 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
-
-  static async createContract(contractData: PutContract): Promise<any> {
+  static async deleteUser(id: Number): Promise<any> {
     return await api
-      .post(`${API.CONTRACT.CREATE}`, contractData)
+      .delete(`${API.USER.DELETE.replace(":id", `${id}`)}`)
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -58,4 +55,4 @@ export class ContractService {
   }
 }
 
-export default ContractService;
+export default Userservice;

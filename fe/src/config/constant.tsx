@@ -8,15 +8,25 @@ export const API = {
   CONTRACT: {
     DEFAULT: "/api/properties/:id/contracts",
     DELETE: "/api/contracts/:id",
-    ByAdvertiseId: "/api/advertises/:id/contracts"
+    ByAdvertiseId: "/api/advertises/:id/contracts",
+    ById: "/api/contracts/:id",
+    CREATE: "/api/contracts"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
     UPDATE: "/api/properties/:id",
-    DELETE: "/api/properties/:id"
+    DELETE: "/api/properties/:id",
+    ALL: "/api/properties/all"
   },
   WARD: {
     DEFAULT: "/api/properties/:propertyParentId"
+  },
+  USER: {
+    DEFAULT: "/api/users",
+    UPDATE: "/api/users/:id",
+    CREATE: "/api/users",
+    DELETE: "/api/users/:id",
+    DETAIL: "/api/users/:id"
   },
   REPORT: {
     DEFAULT: "/api/reports"
