@@ -1,30 +1,19 @@
 import classes from "./styles.module.scss";
 
-import reportDetail from "../ReportDetail/report-detail.json";
 import { Header } from "../../components/common/Header";
 import Sidebar from "../../components/common/Sidebar";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Alert, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { routes } from "routes/routes";
-
-interface IReportDetail {
-  id: number;
-  fullName: string;
-  email: string;
-  phone: string;
-  reportTypeName: string;
-  reportFormName: string;
-  images: Array<string>;
-  createdAt: string;
-  content: string;
-  reply: string;
-}
+import ReportService from "services/report";
+import { EReportTypeName, Report, ReportEditRequest } from "models/report";
+import Editor from "components/common/Editor/EditWithQuill";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -50,8 +39,12 @@ const IconButtonBack = styled(IconButton)(() => ({
 }));
 
 export const ReportHandle = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+
   const [replyText, setReplyText] = useState("");
+  const [handleStatus, setHandleStatus] = useState(false);
+  const [isUpdateSuccess, setIsUpdateSuccess] = useState<boolean | null>(null);
 
   const formatDateToString = (date: Date): string => {
     const year = date.getFullYear();
@@ -64,21 +57,48 @@ export const ReportHandle = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
-  const dataReportDetail: IReportDetail = {
-    id: reportDetail.id,
-    fullName: reportDetail.fullName,
-    email: reportDetail.email,
-    phone: reportDetail.phone,
-    reportTypeName: reportDetail.reportTypeName === "ADVERTISE" ? "Bảng quảng cáo" : "Vị trị điểm đặt",
-    reportFormName: reportDetail.reportForm.name,
-    createdAt: formatDateToString(new Date(reportDetail.createdAt)),
-    images: JSON.parse(reportDetail.images),
-    content: reportDetail.content,
-    reply: reportDetail.reply
-  };
+  const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
+
+  useEffect(() => {
+    const getReportById = async () => {
+      ReportService.getReportById(Number(id))
+        .then((res) => {
+          setDataReportDetail(res);
+          setHandleStatus(res.status);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getReportById();
+  }, []);
 
   const goBack = () => {
     navigate(`${routes.admin.reports.root}`);
+  };
+
+  const handleGetValueOnChange = (value: string) => {
+    setReplyText(value);
+  };
+
+  const handleStatusChange = (e: any) => {
+    setHandleStatus(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    const updateData: ReportEditRequest = {
+      status: Number(handleStatus),
+      reply: replyText
+    };
+
+    ReportService.updateReport(Number(id), updateData)
+      .then((res) => {
+        setIsUpdateSuccess(true);
+      })
+      .catch((err) => {
+        setIsUpdateSuccess(false);
+        console.log(err);
+      });
   };
 
   return (
@@ -88,129 +108,142 @@ export const ReportHandle = () => {
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
-            <IconButtonBack size='medium'>
-              <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButtonBack>
+            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
 
-          <Box>
-            <h3>Thông tin xử lý</h3>
-            <Box className={classes["info-handle-container"]}>
-              <div className={classes["input-container"]}>
-                <label>Loại báo cáo</label>
-                <input
-                  className={classes["input-custom"]}
-                  type='text'
-                  value={dataReportDetail.reportTypeName}
-                  readOnly
-                />
-              </div>
-
-              <div className={classes["input-container"]}>
-                <label>Thời điểm gửi</label>
-                <input className={classes["input-custom"]} type='text' value={dataReportDetail.createdAt} readOnly />
-              </div>
-
-              <div className={classes["input-container"]}>
-                <label>Hình thức báo cáo</label>
-                <input
-                  className={classes["input-custom"]}
-                  type='text'
-                  value={dataReportDetail.reportFormName}
-                  readOnly
-                />
-              </div>
-
-              <div className={classes["input-container"]}>
-                <label>Họ tên người gửi</label>
-                <input className={classes["input-custom"]} type='text' value={dataReportDetail.fullName} readOnly />
-              </div>
-
-              <div className={classes["input-container"]}>
-                <label>Email</label>
-                <input className={classes["input-custom"]} type='text' value={dataReportDetail.email} readOnly />
-              </div>
-
-              <div className={classes["input-container"]}>
-                <label>Số điện thoại</label>
-                <input className={classes["input-custom"]} type='text' value={dataReportDetail.phone} readOnly />
-              </div>
-
-              {dataReportDetail.images && dataReportDetail.images.length > 0 && (
-                <div className={classes["image-container"]}>
-                  <label>Hình ảnh báo cáo</label>
-                  <Box className={classes["image-list"]}>
-                    {dataReportDetail.images.map((imageUrl: string) => {
-                      return (
-                        <div className={classes["image-item"]}>
-                          <img src={imageUrl} width={"100%"} height={"100%"} alt='Hình ảnh báo cáo' />
-                        </div>
-                      );
-                    })}
-                  </Box>
+          {dataReportDetail && (
+            <Box>
+              <h3>Thông tin xử lý</h3>
+              <Box className={classes["info-handle-container"]}>
+                <div className={classes["input-container"]}>
+                  <label>Loại báo cáo</label>
+                  <input
+                    className={classes["input-custom"]}
+                    type='text'
+                    value={dataReportDetail.reportForm.name}
+                    readOnly
+                  />
                 </div>
-              )}
 
-              <Box>
-                <Typography>Nội dung</Typography>
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={dataReportDetail.content}
-                  onReady={(editor) => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log("Editor is ready to use!", editor);
-                  }}
-                  onChange={(event, editor) => {
-                    const data = editor.getData();
-                    console.log({ event, editor, data });
-                  }}
-                  onBlur={(event, editor) => {
-                    console.log("Blur.", editor);
-                  }}
-                  onFocus={(event, editor) => {
-                    console.log("Focus.", editor);
-                  }}
-                />
+                <div className={classes["input-container"]}>
+                  <label>Thời điểm gửi</label>
+                  <input
+                    className={classes["input-custom"]}
+                    type='text'
+                    value={formatDateToString(new Date(dataReportDetail.createdAt))}
+                    readOnly
+                  />
+                </div>
+
+                <div className={classes["input-container"]}>
+                  <label>Hình thức báo cáo</label>
+                  <input
+                    className={classes["input-custom"]}
+                    type='text'
+                    value={
+                      dataReportDetail.reportTypeName === EReportTypeName.ADVERTISE_REPORT
+                        ? "Báo cáo bảng quảng cáo"
+                        : "Báo cáo địa điểm đặt quảng cáo"
+                    }
+                    readOnly
+                  />
+                </div>
+
+                <div className={classes["input-container"]}>
+                  <label>Họ tên người gửi</label>
+                  <input className={classes["input-custom"]} type='text' value={dataReportDetail.fullName} readOnly />
+                </div>
+
+                <div className={classes["input-container"]}>
+                  <label>Email</label>
+                  <input className={classes["input-custom"]} type='text' value={dataReportDetail.email} readOnly />
+                </div>
+
+                <div className={classes["input-container"]}>
+                  <label>Số điện thoại</label>
+                  <input className={classes["input-custom"]} type='text' value={dataReportDetail.phone} readOnly />
+                </div>
+
+                {dataReportDetail.images && dataReportDetail.images.length > 0 && (
+                  <div className={classes["image-container"]}>
+                    <label>Hình ảnh báo cáo</label>
+                    <Box className={classes["image-list"]}>
+                      {JSON.parse(dataReportDetail.images).map((imageUrl: string, index: number) => {
+                        return (
+                          <div className={classes["image-item"]}>
+                            <img
+                              src={imageUrl}
+                              width={"100%"}
+                              key={imageUrl + index}
+                              height={"100%"}
+                              alt='Hình ảnh báo cáo'
+                            />
+                          </div>
+                        );
+                      })}
+                    </Box>
+                  </div>
+                )}
+
+                <Box>
+                  <Typography>Nội dung</Typography>
+                  <Editor placeholder='' isAllowedType={false} content={dataReportDetail.content} />
+                </Box>
               </Box>
             </Box>
-          </Box>
+          )}
 
           <Box mt={"30px"} mb={"30px"}>
             <h3>Thông tin phản hồi</h3>
             <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} mb={"20px"}>
               <label>Tình trạng</label>
-              <select className={classes["select-custom"]}>
-                <option value=''>Chọn tình trạng</option>
-                <option value='0'>Đã xử lý</option>
-                <option value='1'>Chưa xử lý</option>
+              <select onChange={(e) => handleStatusChange(e)} className={classes["select-custom"]}>
+                {dataReportDetail?.status && (
+                  <>
+                    <option value='0'>Chưa xử lý</option>
+                    <option value='1' selected>
+                      Đã xử lý
+                    </option>
+                  </>
+                )}
+                {!dataReportDetail?.status && (
+                  <>
+                    <option value='0' selected>
+                      Chưa xử lý
+                    </option>
+                    <option value='1'>Đã xử lý</option>
+                  </>
+                )}
               </select>
             </Box>
             <Box>
               <label>Phản hồi báo cáo</label>
-              <CKEditor
-                editor={ClassicEditor}
-                data={replyText}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                  console.log("Editor is ready to use!", editor);
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setReplyText(data);
-                }}
-                onBlur={(event, editor) => {
-                  console.log("Blur.", editor);
-                }}
-                onFocus={(event, editor) => {
-                  console.log("Focus.", editor);
-                }}
-              />
+              {dataReportDetail && dataReportDetail.reply && (
+                <Editor
+                  placeholder=''
+                  getValueOnChange={handleGetValueOnChange}
+                  isAllowedType={true}
+                  content={dataReportDetail.reply}
+                />
+              )}
+
+              {dataReportDetail && !dataReportDetail.reply && (
+                <Editor placeholder='Nhập phản hồi...' getValueOnChange={handleGetValueOnChange} isAllowedType={true} />
+              )}
             </Box>
           </Box>
 
-          <ButtonSubmit type='submit'>Gửi</ButtonSubmit>
+          <ButtonSubmit type='button' onClick={handleSubmit}>
+            Gửi
+          </ButtonSubmit>
         </Box>
+
+        <Snackbar open={isUpdateSuccess !== null} autoHideDuration={3000} onClose={() => setIsUpdateSuccess(null)}>
+          <Alert severity={isUpdateSuccess ? "success" : "error"} onClose={() => setIsUpdateSuccess(null)}>
+            {isUpdateSuccess ? "Sửa thành công" : "Sửa thất bại"}
+          </Alert>
+        </Snackbar>
       </div>
     </Box>
   );

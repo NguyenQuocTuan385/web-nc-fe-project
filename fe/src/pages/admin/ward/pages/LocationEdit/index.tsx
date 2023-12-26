@@ -477,10 +477,8 @@ export const LocationEdit = () => {
       <div className={classes["location-edit-container"]}>
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
-          <ButtonBack>
-            <IconButtonBack size='medium' onClick={() => goBack()}>
-              <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButtonBack>
+          <ButtonBack onClick={() => goBack()}>
+            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
 
@@ -499,7 +497,7 @@ export const LocationEdit = () => {
 
           <Snackbar open={isCreateSuccess !== null} autoHideDuration={3000} onClose={() => setIsCreateSuccess(null)}>
             <Alert severity={isCreateSuccess ? "success" : "error"} onClose={() => setIsCreateSuccess(null)}>
-              {isCreateSuccess ? "Sửa thành công" : "Sửa thất bại"}
+              {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
             </Alert>
           </Snackbar>
         </Box>

@@ -153,9 +153,7 @@ const AdvertiseOfLocationManagement = () => {
         <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
-            <IconButtonBack size='medium'>
-              <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButtonBack>
+            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
           <Box className={classes["search-container"]}>

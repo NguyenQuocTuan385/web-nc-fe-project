@@ -442,9 +442,7 @@ export const AdvertiseEdit = () => {
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
-            <IconButtonBack size='medium'>
-              <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButtonBack>
+            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
 
@@ -478,7 +476,7 @@ export const AdvertiseEdit = () => {
 
           <Snackbar open={isCreateSuccess !== null} autoHideDuration={3000} onClose={() => setIsCreateSuccess(null)}>
             <Alert severity={isCreateSuccess ? "success" : "error"} onClose={() => setIsCreateSuccess(null)}>
-              {isCreateSuccess ? "Sửa thành công" : "Sửa thất bại"}
+              {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
             </Alert>
           </Snackbar>
         </Box>

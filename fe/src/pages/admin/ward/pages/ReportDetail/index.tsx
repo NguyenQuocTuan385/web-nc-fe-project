@@ -7,20 +7,10 @@ import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
 import reportDetail from "./report-detail.json";
-import { useNavigate } from "react-router-dom";
-
-interface IReportDetail {
-  id: number;
-  fullName: string;
-  email: string;
-  phone: string;
-  reportTypeName: string;
-  reportFormName: string;
-  images: Array<string>;
-  createdAt: string;
-  content: string;
-  reply: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { EReportTypeName, Report } from "models/report";
+import ReportService from "services/report";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -42,6 +32,8 @@ const IconButtonBack = styled(IconButton)(() => ({
 }));
 
 export const ReportDetail = () => {
+  const { id } = useParams<{ id: string }>();
+
   const formatDateToString = (date: Date): string => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -55,18 +47,20 @@ export const ReportDetail = () => {
 
   const navigate = useNavigate();
 
-  const dataReportDetail: IReportDetail = {
-    id: reportDetail.id,
-    fullName: reportDetail.fullName,
-    email: reportDetail.email,
-    phone: reportDetail.phone,
-    reportTypeName: reportDetail.reportTypeName === "ADVERTISE" ? "Bảng quảng cáo" : "Vị trị điểm đặt",
-    reportFormName: reportDetail.reportForm.name,
-    createdAt: formatDateToString(new Date(reportDetail.createdAt)),
-    images: JSON.parse(reportDetail.images),
-    content: reportDetail.content,
-    reply: reportDetail.reply
-  };
+  const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
+
+  useEffect(() => {
+    const getReportById = async () => {
+      ReportService.getReportById(Number(id))
+        .then((res) => {
+          setDataReportDetail(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getReportById();
+  }, []);
 
   const goBack = () => {
     navigate(-1);
@@ -78,17 +72,16 @@ export const ReportDetail = () => {
       <div className={classes["report-detail-container"]}>
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
-          <ButtonBack onClick={goBack}>
-            <IconButtonBack size='medium'>
-              <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButtonBack>
+          <ButtonBack onClick={() => goBack()}>
+            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
           <Box>
             <h3>Hình ảnh báo cáo</h3>
-            <BoxFlex justifyContent={"space-between"} mt={"15px"}>
-              {dataReportDetail.images.length > 0 &&
-                dataReportDetail.images.map((image: string) => {
+            <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
+              {dataReportDetail &&
+                JSON.parse(dataReportDetail.images).length > 0 &&
+                JSON.parse(dataReportDetail.images).map((image: string) => {
                   return (
                     <img
                       width={"48%"}
@@ -96,60 +89,69 @@ export const ReportDetail = () => {
                       className={classes["image"]}
                       src={image}
                       alt='Hình ảnh bảng QC'
+                      style={{ border: "1px solid #ccc" }}
                     />
                   );
                 })}
             </BoxFlex>
           </Box>
-          <Box mt={"20px"}>
-            <h3>Thông tin báo cáo</h3>
-            <Box display={"flex"} mt={"15px"}>
-              <Box width={"50%"}>
-                <Typography>
-                  <span className={classes["title"]}>Loại báo cáo: </span>
-                  <span>{dataReportDetail.reportTypeName}</span>
-                </Typography>
-                <Typography>
-                  <span className={classes["title"]}>Thời điểm gửi: </span>
-                  <span>{dataReportDetail.createdAt}</span>
-                </Typography>
-                <Typography>
-                  <span className={classes["title"]}>Hình thức báo cáo: </span>
-                  <span>{dataReportDetail.reportFormName}</span>
-                </Typography>
-                <Typography>
-                  <span className={classes["title"]}>Họ tên người gửi: </span>
-                  <span>{dataReportDetail.fullName}</span>
-                </Typography>
-                <Typography>
-                  <span className={classes["title"]}>Email: </span>
-                  <span>{dataReportDetail.email}</span>
-                </Typography>
-                <Typography>
-                  <span className={classes["title"]}>Số điện thoại: </span>
-                  <span>{dataReportDetail.phone}</span>
-                </Typography>
-              </Box>
-              <Box width={"50%"}>
-                <span className={classes["title"]}>Nội dung báo cáo: </span>
-                <Typography>{reportDetail.content}</Typography>
+          {dataReportDetail && (
+            <Box mt={"20px"}>
+              <h3>Thông tin báo cáo</h3>
+              <Box display={"flex"} mt={"15px"}>
+                <Box width={"50%"}>
+                  <Typography>
+                    <span className={classes["title"]}>Loại báo cáo: </span>
+                    <span>
+                      {dataReportDetail.reportTypeName === EReportTypeName.ADVERTISE_REPORT
+                        ? "Báo cáo bảng quảng cáo"
+                        : "Báo cáo địa điểm quảng cáo"}
+                    </span>
+                  </Typography>
+                  <Typography>
+                    <span className={classes["title"]}>Thời điểm gửi: </span>
+                    <span>{formatDateToString(new Date(dataReportDetail.createdAt))}</span>
+                  </Typography>
+                  <Typography>
+                    <span className={classes["title"]}>Hình thức báo cáo: </span>
+                    <span>{dataReportDetail.reportForm.name}</span>
+                  </Typography>
+                  <Typography>
+                    <span className={classes["title"]}>Họ tên người gửi: </span>
+                    <span>{dataReportDetail.fullName}</span>
+                  </Typography>
+                  <Typography>
+                    <span className={classes["title"]}>Email: </span>
+                    <span>{dataReportDetail.email}</span>
+                  </Typography>
+                  <Typography>
+                    <span className={classes["title"]}>Số điện thoại: </span>
+                    <span>{dataReportDetail.phone}</span>
+                  </Typography>
+                </Box>
+                <Box width={"50%"}>
+                  <span className={classes["title"]}>Nội dung báo cáo: </span>
+                  <Typography dangerouslySetInnerHTML={{ __html: dataReportDetail.content }}></Typography>
+                </Box>
               </Box>
             </Box>
-          </Box>
+          )}
 
-          <Box mt='20px'>
-            <h3>Thông tin xử lý của cán bộ</h3>
-            <Typography mt={"15px"}>
-              <span className={classes["title"]}>Tình trạng: </span>
-              <span className={`${reportDetail.status ? classes["text-active"] : classes["text-inactive"]}`}>
-                {reportDetail.status ? "Đã xử lý" : "Chưa xử lý"}
-              </span>
-            </Typography>
-            <Typography>
-              <span className={classes["title"]}>Phản hồi: </span>
-              <div>{reportDetail.reply}</div>
-            </Typography>
-          </Box>
+          {dataReportDetail && (
+            <Box mt='20px'>
+              <h3>Thông tin xử lý của cán bộ</h3>
+              <Typography mt={"15px"}>
+                <span className={classes["title"]}>Tình trạng: </span>
+                <span className={`${dataReportDetail.status ? classes["text-active"] : classes["text-inactive"]}`}>
+                  {dataReportDetail.status ? "Đã xử lý" : "Chưa xử lý"}
+                </span>
+              </Typography>
+              <Typography>
+                <span className={classes["title"]}>Phản hồi: </span>
+                <span dangerouslySetInnerHTML={{ __html: dataReportDetail?.reply || "Chưa có thông tin phản hồi" }} />
+              </Typography>
+            </Box>
+          )}
         </Box>
       </div>
     </Box>

@@ -116,9 +116,7 @@ export const AdvertiseDetail = () => {
         <Sidebar></Sidebar>
         <Box className={classes["container-body"]}>
           <ButtonBack onClick={() => goBack()}>
-            <IconButtonBack size='medium'>
-              <FontAwesomeIcon icon={faArrowLeftLong}></FontAwesomeIcon>
-            </IconButtonBack>
+            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
           <BoxFlex>
