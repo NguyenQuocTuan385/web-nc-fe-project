@@ -28,6 +28,8 @@ export interface PutContract {
 }
 
 export interface GetContract {
+  propertyId?: number[];
+  parentId?: number[];
   status?: number;
   search?: string;
   pageSize?: number;
@@ -37,7 +39,8 @@ export interface GetContract {
 export enum EContractStatus {
   licensed = 1,
   notLicensed = 2,
-  expired = 3
+  expired = 3,
+  rejected = 4
 }
 
 export interface DynamicObject {

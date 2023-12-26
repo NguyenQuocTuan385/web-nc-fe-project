@@ -20,6 +20,7 @@ import ContractDetail from "pages/admin/ContractDetail";
 import ReportFormManagement from "pages/admin/ReportFormManagement";
 import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
+import DistrictContractList from "pages/admin/DistrictContractList";
 
 function App() {
   return (
@@ -45,6 +46,8 @@ function App() {
           <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
           <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
           <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+
+          <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

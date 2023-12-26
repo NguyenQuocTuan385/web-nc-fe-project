@@ -1,40 +1,47 @@
 import React, { useEffect, useState } from "react";
 
 import classes from "./styles.module.scss";
-import { Box, Button, Card, FormControl, FormControlLabel, FormGroup, FormLabel } from "@mui/material";
+import { Box, Button, FormControl, FormControlLabel, FormGroup, FormLabel } from "@mui/material";
 import Heading6 from "components/common/text/Heading6";
 import { Property } from "models/property";
 import Checkbox from "@mui/material/Checkbox";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
-import { check } from "prettier";
+import { openFilterDialog } from "reduxes/Status";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store";
 
 interface PropsData {
   propertyList?: Property[];
-  districtId?: number;
+  selectedId?: (string | null)[];
 }
 
 function WardFilter(propsData: PropsData) {
   const locationHook = useLocation();
-  const wardParams = queryString.parse(locationHook.search).wardFilter;
+  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const openFilterDialogValue = useSelector((state: RootState) => state.status.isOpenFilterDialog);
 
   const [filteredList, setFilteredList] = useState<string[]>(() => {
     const initFilteredArray: string[] = [];
+
     propsData.propertyList?.forEach((item, index) => {
-      if (wardParams?.includes(index.toString())) initFilteredArray.push(item.id.toString());
+      if (propsData.selectedId?.includes(item.id.toString())) initFilteredArray.push(item.id.toString());
     });
 
     return initFilteredArray;
   });
 
-  const [checkbox, setCheckbox] = useState(() => {
+  const [checkbox, setCheckbox] = useState<boolean[]>(() => {
     const indexArray: boolean[] = [];
 
     propsData.propertyList?.forEach((item, index) => {
-      wardParams?.includes(index.toString()) ? (indexArray[index] = true) : (indexArray[index] = false);
+      if (propsData.selectedId?.includes(item.id.toString())) indexArray.push(true);
+      else indexArray.push(false);
     });
 
-    return indexArray;
+    console.log(indexArray);
+    return indexArray || [];
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checkIndex: number) => {
@@ -43,17 +50,25 @@ function WardFilter(propsData: PropsData) {
       : setFilteredList(filteredList.filter((item) => item !== event.target.name));
 
     setCheckbox(checkbox.map((item, index) => (index === checkIndex ? (item = event.target.checked) : item)));
-    console.log(checkbox);
   };
 
   const sendFilterHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
+    // Clear the existing values for the key 'item'
+    searchParams.delete("wardFilter");
 
-    console.log(filteredList);
+    // Add each item in the list to the 'item' key
+    filteredList.forEach((item) => {
+      searchParams.append("wardFilter", item);
+    });
+
+    setSearchParams(searchParams, { replace: true });
+
+    dispatch(openFilterDialog(false));
   };
 
   return (
-    <Card className={classes.cardContainer}>
+    <Box className={classes.cardContainer}>
       <Heading6>Lọc danh sách hợp đồng theo phường</Heading6>
 
       <FormControl component='fieldset' variant='standard'>
@@ -85,7 +100,7 @@ function WardFilter(propsData: PropsData) {
       >
         Hiển thị kết quả
       </Button>
-    </Card>
+    </Box>
   );
 }
 

@@ -10,7 +10,8 @@ export const API = {
     DELETE: "/api/contracts/:id",
     ByAdvertiseId: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id",
-    CREATE: "/api/contracts"
+    CREATE: "/api/contracts",
+    CONTRACTBYPROPERTY: "/api/properties/contracts"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",

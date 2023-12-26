@@ -12,7 +12,6 @@ function ContractList() {
       <SideBarWard />
       <Box className={classes.rightComponentContainer}>
         <WardFilter
-          districtId={1}
           propertyList={[
             {
               id: 3,

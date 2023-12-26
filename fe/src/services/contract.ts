@@ -56,6 +56,17 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
+
+  static async getContractByPropertyAndParent(data: GetContract): Promise<any> {
+    return await api
+      .get(`${API.CONTRACT.CONTRACTBYPROPERTY}`, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default ContractService;
