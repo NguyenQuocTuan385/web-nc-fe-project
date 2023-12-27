@@ -1,6 +1,6 @@
-import { companyPhone } from 'assets/img/icon/ic-comPhone.svg';
-import { companyAddress } from 'assets/img/icon/ic-comAddress.svg';
-import { compamyEmail } from 'assets/img/icon/ic-comEmail.svg';
+import { companyPhone } from "assets/img/icon/ic-comPhone.svg";
+import { companyAddress } from "assets/img/icon/ic-comAddress.svg";
+import { compamyEmail } from "assets/img/icon/ic-comEmail.svg";
 import { Advertise } from "./advertise";
 
 export interface Contract {
@@ -25,6 +25,10 @@ export interface PutContract {
   startAt: string;
   endAt: string;
   advertiseId: number;
+}
+
+export interface UpdateContractStatus {
+  status: number;
 }
 
 export interface GetContract {
