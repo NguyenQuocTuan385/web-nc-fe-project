@@ -1,6 +1,6 @@
-import { companyPhone } from 'assets/img/icon/ic-comPhone.svg';
-import { companyAddress } from 'assets/img/icon/ic-comAddress.svg';
-import { compamyEmail } from 'assets/img/icon/ic-comEmail.svg';
+import { companyPhone } from "assets/img/icon/ic-comPhone.svg";
+import { companyAddress } from "assets/img/icon/ic-comAddress.svg";
+import { compamyEmail } from "assets/img/icon/ic-comEmail.svg";
 import { Advertise } from "./advertise";
 
 export interface Contract {
@@ -27,7 +27,13 @@ export interface PutContract {
   advertiseId: number;
 }
 
+export interface UpdateContractStatus {
+  status: number;
+}
+
 export interface GetContract {
+  propertyId?: number[];
+  parentId?: number[];
   status?: number;
   search?: string;
   pageSize?: number;
@@ -37,7 +43,8 @@ export interface GetContract {
 export enum EContractStatus {
   licensed = 1,
   notLicensed = 2,
-  expired = 3
+  expired = 3,
+  rejected = 4
 }
 
 export interface DynamicObject {

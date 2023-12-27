@@ -10,7 +10,8 @@ export const API = {
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
     DETAILS: "/api/advertises/:id",
-    EDIT: "/api/advertises/:id"
+    EDIT: "/api/advertises/:id",
+    UPDATE_LICENSE: "/api/advertises/:id/license"
   },
   CONTRACT: {
     DEFAULT: "/api/properties/:id/contracts",
@@ -18,7 +19,9 @@ export const API = {
     ByAdvertiseId: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id",
     ByAdvertiseIdOne: "/api/contracts/advertises/:id",
-    CREATE: "/api/contracts"
+    CREATE: "/api/contracts",
+    UPDATE_STATUS: "/api/contracts/:id/status",
+    GETBYPROPERTY_PARENT_ID: "/api/properties/contracts"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",

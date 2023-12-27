@@ -75,7 +75,7 @@ export default function SearchAppBar({ onSearch }: any) {
       </Search>
 
       <ButtonDownload size='small' sx={{ height: "39px", padding: "0 12px" }}>
-        <FontAwesomeIcon width={"20px"} height={"20px !important"} icon={faSquarePlus} color='#fff' />{" "}
+        <FontAwesomeIcon width={"20px"} height={"20px"} icon={faSquarePlus} color='#fff' />{" "}
         <span style={{ marginLeft: "2px" }}>Thêm</span>
       </ButtonDownload>
     </Box>
