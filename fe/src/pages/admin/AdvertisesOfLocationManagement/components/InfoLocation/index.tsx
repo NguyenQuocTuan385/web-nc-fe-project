@@ -1,6 +1,7 @@
 import classes from "./styles.module.scss";
 import { Box, Typography } from "@mui/material";
 import { LocationView } from "models/location";
+import SlideShowImages from "components/common/SlideShowImages";
 
 interface InfoLocationProps {
   data: LocationView;
@@ -10,7 +11,8 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
   return (
     <Box className={classes["info-container"]}>
       <Box className={classes["info-item"]}>
-        <img src='https://quangcaotb.vn/wp-content/uploads/tam-pano.png' alt='Điểm đặt quảng cáo' />
+        <SlideShowImages images={data.images} />
+        {/* <img src='https://quangcaotb.vn/wp-content/uploads/tam-pano.png' alt='Điểm đặt quảng cáo' /> */}
 
         <Typography variant='h6'>Điểm đặt quảng cáo</Typography>
         <Typography className={classes["inline-typo"]}>

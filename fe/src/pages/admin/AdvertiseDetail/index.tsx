@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
-
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { InfoAdvertise } from "./components/InfoAdvertise";
-import { InfoContract } from "./components/InfoContract";
 import styled from "styled-components";
 import classes from "./styles.module.scss";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useParams, useNavigate } from "react-router-dom";
+
+import { InfoAdvertise } from "./components/InfoAdvertise";
+import { InfoContract } from "./components/InfoContract";
 import SideBarWard from "components/admin/SidebarWard";
 import { Header } from "components/common/Header";
-import Heading4 from "components/common/text/Heading4";
 import AdvertiseService from "services/advertise";
 import ContractService from "services/contract";
 import advertiseDetailsMock from "advertise-detail.json";
-import { useParams, useNavigate } from "react-router-dom";
+import Heading4 from "components/common/text/Heading4";
+import SlideShowImages from "components/common/SlideShowImages";
 
 const InfoAdsBox = styled(Box)(() => ({
   display: "flex",
@@ -46,6 +47,7 @@ interface InfoAds {
   pillarQuantity: number;
   adsForm: string;
   locationType: string;
+  images: string[];
 }
 
 interface InfoContract {
@@ -76,7 +78,8 @@ export const AdvertiseDetail = () => {
             size: res.width + " x " + advertiseDetails?.height,
             pillarQuantity: res.pillarQuantity,
             adsForm: res.location.adsForm.name,
-            locationType: res.location.locationType.name
+            locationType: res.location.locationType.name,
+            images: res.location.images.length > 0 ? JSON.parse(res.location.images) : ""
           });
         })
         .catch((e) => {
@@ -121,7 +124,8 @@ export const AdvertiseDetail = () => {
           </ButtonBack>
           <BoxFlex>
             <InfoAdsBox>
-              <img src={infoContractDetails.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} />
+              {infoAds?.images && infoAds?.images.length > 0 && <SlideShowImages images={infoAds.images} />}
+              {/* <img src={infoContractDetails.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} /> */}
               <BoxFlex ml={"15px"}>{infoAds && <InfoAdvertise data={infoAds} />}</BoxFlex>
             </InfoAdsBox>
             <Box>{infoContract && <InfoContract data={infoContract} />}</Box>

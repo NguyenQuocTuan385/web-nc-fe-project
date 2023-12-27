@@ -2,7 +2,7 @@ import * as React from "react";
 import { styled, alpha, Box, Button, InputBase, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./styles.module.scss";
 
@@ -74,11 +74,9 @@ export default function SearchAppBar({ onSearch }: any) {
         <StyledInputBase placeholder='Search…' inputProps={{ "aria-label": "search" }} onChange={handleSearchChange} />
       </Search>
 
-      <ButtonDownload size='small'>
-        Download{" "}
-        <IconButton size='medium' aria-label='download'>
-          <FontAwesomeIcon width={"15px"} height={"15px"} icon={faArrowDown} color='#fff' />
-        </IconButton>
+      <ButtonDownload size='small' sx={{ height: "39px", padding: "0 12px" }}>
+        <FontAwesomeIcon width={"20px"} height={"20px !important"} icon={faSquarePlus} color='#fff' />{" "}
+        <span style={{ marginLeft: "2px" }}>Thêm</span>
       </ButtonDownload>
     </Box>
   );

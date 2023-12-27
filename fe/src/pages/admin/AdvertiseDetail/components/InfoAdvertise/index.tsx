@@ -5,7 +5,7 @@ import classes from "./styles.module.scss";
 export const InfoAdvertise = ({ data }: any) => {
   return (
     <Box>
-      <Heading4>Thông tin bảng QC</Heading4>
+      <Heading4>Thông tin bảng quảng cáo</Heading4>
       <Typography>{data.adsType}</Typography>
       <Typography>{data.address}</Typography>
       <Typography>

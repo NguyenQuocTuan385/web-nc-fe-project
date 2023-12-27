@@ -1,38 +1,38 @@
 .info-container {
-    display: flex;
+  display: flex;
 }
 
 .info-item {
-    width: calc(50% - 15px);
-    margin-right: 30px;
-    img {
-        width: 100%;
-        height: 180px;
-        border-radius: 8px;
-    }
+  width: calc(50% - 15px);
+  margin-right: 30px;
+  img {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+  }
 
-    .inline-typo {
-        .title {
-            font-weight: 700;
-        }
+  .inline-typo {
+    .title {
+      font-weight: 700;
     }
+  }
 }
 
 .map-item {
-    width: calc(50% - 15px);
-    border-radius: 8px;
+  width: calc(50% - 15px);
+  border-radius: 8px;
 
-    img {
-        width: 100%;
-        height: 100%;
-        border-radius: 8px;
-    }
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
 }
 
 .planning-text.active {
-    color: #00ba00 !important;
+  color: #00ba00 !important;
 }
 
 .planning-text.inactive {
-    color: var(--blue-500) !important;
+  color: var(--blue-500) !important;
 }

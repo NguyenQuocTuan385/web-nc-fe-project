@@ -137,7 +137,8 @@ const AdvertiseOfLocationManagement = () => {
       planning: ads.location.planning,
       locationType: ads.location.locationType.name,
       latitude: ads.location.latitude,
-      longtitude: ads.location.longitude
+      longtitude: ads.location.longitude,
+      images: JSON.parse(ads.location.images)
     };
   })[0];
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
