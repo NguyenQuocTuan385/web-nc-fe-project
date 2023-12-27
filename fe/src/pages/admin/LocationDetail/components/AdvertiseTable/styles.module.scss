@@ -1,0 +1,46 @@
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  margin-right: 24px;
+}
+
+.tableContainer {
+  margin-top: 20px;
+}
+
+.sizeTable {
+  min-width: 1050px;
+}
+
+.headerTable {
+  font-weight: bold;
+  padding: 5px;
+}
+
+.rowTable {
+  &:last-child,
+  &:last-child th {
+    border: 0;
+  }
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  cursor: pointer;
+}
+
+.dataTable {
+  padding: 5px;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.editIcon {
+  color: #496dee;
+}
+.deleteIcon {
+  color: #ff0000;
+}

@@ -21,6 +21,7 @@ import ReportFormManagement from "pages/admin/ReportFormManagement";
 import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
 import DCMSLocationManagement from "pages/admin/DCMSLocationManagement";
+import LocationDetail from "pages/admin/LocationDetail";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
           <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
           <Route path={routes.admin.locations.root} Component={DCMSLocationManagement} />
+          <Route path={routes.admin.locations.detail} Component={LocationDetail} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

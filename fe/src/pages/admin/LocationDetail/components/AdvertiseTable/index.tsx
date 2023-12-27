@@ -15,15 +15,17 @@ import LocationService from "services/location";
 import BasicPagination from "@mui/material/Pagination";
 import Heading6 from "components/common/text/Heading6";
 import { useNavigate } from "react-router-dom";
+import AdvertiseService from "services/advertise";
+import { Advertise } from "models/advertise";
 
 interface FilterProps {
   district?: string;
   ward?: string;
   fieldSearch?: string;
 }
-export default function DCMSLocationTable({ district, ward, fieldSearch }: FilterProps) {
-  const [locations, setLocations] = useState<Location[]>([]);
-  const rowsPerPage = 7;
+export default function AdvertiseTable({ district, ward, fieldSearch }: FilterProps) {
+  const [advertises, setAdvertises] = useState<Advertise[]>([]);
+  const rowsPerPage = 4;
   const [page, setPage] = useState({ currentPage: 1, totalPages: 1 });
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -43,13 +45,13 @@ export default function DCMSLocationTable({ district, ward, fieldSearch }: Filte
   useEffect(() => {
     const getAllLocation = async () => {
       try {
-        const res = await LocationService.getLocations({
+        const res = await AdvertiseService.getAdvertisesByLocationId(1, {
           search: fieldSearch ? fieldSearch : "",
           current: page.currentPage,
           pageSize: rowsPerPage
         });
-        const locations: Location[] = res.content;
-        setLocations(locations);
+        const advertises: Advertise[] = res.content;
+        setAdvertises(advertises);
         setPage({ ...page, totalPages: res.totalPages });
       } catch (error) {
         console.log(error);
@@ -67,10 +69,13 @@ export default function DCMSLocationTable({ district, ward, fieldSearch }: Filte
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell align='left' className={classes.headerTable}>
-                Địa chỉ
+                Loại bảng quảng cáo
               </TableCell>
               <TableCell align='left' className={classes.headerTable}>
-                Hình thức quảng cáo
+                Chiều dài
+              </TableCell>
+              <TableCell align='left' className={classes.headerTable}>
+                Chiều rộng
               </TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Trạng thái
@@ -81,27 +86,30 @@ export default function DCMSLocationTable({ district, ward, fieldSearch }: Filte
             </TableRow>
           </TableHead>
           <TableBody>
-            {locations.map((row) => (
+            {advertises.map((row) => (
               <TableRow key={row.id} className={classes.rowTable}>
                 <TableCell component='th' scope='row'>
                   {row.id}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.address}
+                  {row.adsType.name}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.locationType.name}
+                  {row.width}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.planning === true ? (
-                    <Heading6 $colorName='--green-600'>Đã quy hoạch</Heading6>
+                  {row.height}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.lisencing === true ? (
+                    <Heading6 $colorName='--green-600'>Đang sử dụng</Heading6>
                   ) : (
-                    <Heading6 $colorName='--yellow-600'>Chưa quy hoạch</Heading6>
+                    <Heading6 $colorName='--yellow-600'>Chưa sử dụng</Heading6>
                   )}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
                   <IconButton aria-label='edit' size='medium'>
-                  {/* <IconButton aria-label='edit' size='medium' onClick={() => detailLocation(row)}> */}
+                    {/* <IconButton aria-label='edit' size='medium' onClick={() => detailLocation(row)}> */}
                     <EditIcon className={classes.editIcon} />
                   </IconButton>
                   <IconButton aria-label='delete' size='medium'>
@@ -110,7 +118,7 @@ export default function DCMSLocationTable({ district, ward, fieldSearch }: Filte
                 </TableCell>
               </TableRow>
             ))}
-            {Array(rowsPerPage - locations.length)
+            {Array(rowsPerPage - advertises.length)
               .fill(null)
               .map((_, index) => (
                 <TableRow key={index} style={{ height: 73 }}>
