@@ -13,14 +13,8 @@ export interface Advertise {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface PutAdvertise {
+export interface UpdateAdvertiseStatus {
   licensing: boolean;
-  height: number;
-  width: number;
-  pillarQuantity?: number;
-  images: string;
-  locationId: number;
-  adsTypeId: number;
 }
 export interface GetAdvertises {
   search?: string;

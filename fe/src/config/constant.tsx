@@ -4,13 +4,14 @@ export const API = {
   },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
-    UPDATE: "/api/advertises/:id"
+    UPDATE_LICENSE: "/api/advertises/:id/license"
   },
   CONTRACT: {
     DEFAULT: "/api/properties/:id/contracts",
     DELETE: "/api/contracts/:id",
     ByAdvertiseId: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id",
+    UPDATE_STATUS: "/api/contracts/:id/status",
     CREATE: "/api/contracts",
     GETBYPROPERTY_PARENT_ID: "/api/properties/contracts"
   },

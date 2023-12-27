@@ -13,7 +13,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
 import { useNavigate, useResolvedPath, useLocation, createSearchParams } from "react-router-dom";
 import { routes } from "routes/routes";
-import { Contract } from "models/contract";
+import { Contract, EContractStatus } from "models/contract";
 import ContractService from "services/contract";
 import queryString from "query-string";
 import AdvertiseService from "services/advertise";
@@ -42,7 +42,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
         propertyId: ward ? [ward] : [],
         parentId: district ? [district] : [],
         search: fieldSearch,
-        status: 2,
+        status: EContractStatus.notLicensed,
         pageSize: rowsPerPage,
         current: Number(page) + 1
       })
@@ -87,13 +87,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
   };
   const updateAdvertisesById = async (row: Contract) => {
     AdvertiseService.updateAdvertisesId(row.advertise.id, {
-      licensing: true,
-      height: row.advertise.height,
-      width: row.advertise.width,
-      pillarQuantity: row.advertise.pillarQuantity,
-      images: row.advertise.images,
-      locationId: row.advertise.location.id,
-      adsTypeId: row.advertise.adsType.id
+      licensing: true
     })
       .then((res) => {
         console.log(res);
@@ -102,17 +96,9 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
         console.log(err);
       });
   };
-  const updateContractById = async (row: Contract, status: number) => {
+  const updateContractById = async (row: Contract) => {
     ContractService.updateContractById(row.id, {
-      status: status,
-      startAt: dayjs(row.startAt).format("YYYY-MM-DD hh:mm:ss"),
-      endAt: dayjs(row.endAt).format("YYYY-MM-DD hh:mm:ss"),
-      companyName: row.companyName,
-      companyAddress: row.companyAddress,
-      companyEmail: row.companyEmail,
-      companyPhone: row.companyPhone,
-      images: row.images,
-      advertiseId: row.advertise.id
+      status: EContractStatus.licensed
     })
       .then((res) => {
         console.log(res);
@@ -123,14 +109,13 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
   };
   const handleClickAccept = (event: React.MouseEvent, row: Contract) => {
     event.stopPropagation();
-    Promise.all([updateAdvertisesById(row), updateContractById(row, 1)]).then(() => {
+    Promise.all([updateAdvertisesById(row), updateContractById(row)]).then(() => {
       setUpdate(true);
-      console.log("update: ", update);
     });
   };
   const handleClickCancel = (event: React.MouseEvent, row: Contract) => {
     event.stopPropagation();
-    updateContractById(row, 4).then(() => {
+    updateContractById(row).then(() => {
       setUpdate(true);
     });
   };

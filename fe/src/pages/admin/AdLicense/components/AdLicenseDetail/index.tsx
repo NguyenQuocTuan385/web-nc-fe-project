@@ -9,10 +9,9 @@ import Heading3 from "components/common/text/Heading3";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import SidebarDCMS from "components/admin/SidebarDCMS";
-import { Contract } from "models/contract";
+import { Contract, EContractStatus } from "models/contract";
 import ContractService from "services/contract";
 import { useEffect } from "react";
-import dayjs from "dayjs";
 import AdvertiseService from "services/advertise";
 
 export default function AdLicenseDetail() {
@@ -35,13 +34,7 @@ export default function AdLicenseDetail() {
 
   const updateAdvertisesById = async (row: Contract) => {
     AdvertiseService.updateAdvertisesId(row.advertise.id, {
-      licensing: true,
-      height: row.advertise.height,
-      width: row.advertise.width,
-      pillarQuantity: row.advertise.pillarQuantity,
-      images: row.advertise.images,
-      locationId: row.advertise.location.id,
-      adsTypeId: row.advertise.adsType.id
+      licensing: true
     })
       .then((res) => {
         console.log(res);
@@ -50,17 +43,9 @@ export default function AdLicenseDetail() {
         console.log(err);
       });
   };
-  const updateContractById = async (row: Contract, status: number) => {
+  const updateContractById = async (row: Contract) => {
     ContractService.updateContractById(row.id, {
-      status: status,
-      startAt: dayjs(row.startAt).format("YYYY-MM-DD hh:mm:ss"),
-      endAt: dayjs(row.endAt).format("YYYY-MM-DD hh:mm:ss"),
-      companyName: row.companyName,
-      companyAddress: row.companyAddress,
-      companyEmail: row.companyEmail,
-      companyPhone: row.companyPhone,
-      images: row.images,
-      advertiseId: row.advertise.id
+      status: EContractStatus.licensed
     })
       .then((res) => {
         console.log(res);
@@ -71,12 +56,12 @@ export default function AdLicenseDetail() {
   };
   const handleClickAccept = () => {
     if (state) {
-      Promise.all([updateAdvertisesById(state), updateContractById(state, 1)]).then(() => navigate(-1));
+      Promise.all([updateAdvertisesById(state), updateContractById(state)]).then(() => navigate(-1));
     }
   };
   const handleClickCancel = () => {
     if (state) {
-      updateContractById(state, 4).then(() => navigate(-1));
+      updateContractById(state).then(() => navigate(-1));
     }
   };
   return (

@@ -27,15 +27,7 @@ export interface PutContract {
   advertiseId: number;
 }
 
-export interface UpdateContract {
-  companyName: string;
-  companyEmail: string;
-  companyAddress: string;
-  companyPhone: string;
-  images: string;
-  startAt: string;
-  endAt: string;
-  advertiseId: number;
+export interface UpdateContractStatus {
   status: number;
 }
 
@@ -51,7 +43,8 @@ export interface GetContract {
 export enum EContractStatus {
   licensed = 1,
   notLicensed = 2,
-  expired = 3
+  expired = 3,
+  rejected = 4
 }
 
 export interface DynamicObject {
