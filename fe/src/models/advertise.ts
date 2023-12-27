@@ -13,7 +13,9 @@ export interface Advertise {
   createdAt: Date;
   updatedAt: Date;
 }
-
+export interface UpdateAdvertiseStatus {
+  licensing: boolean;
+}
 export interface GetAdvertises {
   search?: string;
   pageSize?: number;

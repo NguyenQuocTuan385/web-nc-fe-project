@@ -1,46 +1,58 @@
-.boxContainer{
+.boxContainer {
   display: flex;
   flex-direction: column;
 }
 
-.tableContainer{
+.tableContainer {
   margin-top: 20px;
 }
 
-.sizeTable{
+.sizeTable {
   min-width: 1050px;
 }
 
-.headerTable{
+.headerTable {
   font-weight: bold;
   padding: 5px;
 }
 
-.rowTable{
-  &:last-child, &:last-child th{
+.rowTable {
+  &:last-child,
+  &:last-child th {
     border: 0;
   }
-  &:hover{
-    background-color: #F5F5F5;
+  &:hover {
+    background-color: #f5f5f5;
   }
   cursor: pointer;
 }
+.textOverflow {
+  white-space: nowrap; // Prevents the text from wrapping onto the next line
+  overflow: hidden; // Hides any text that overflows the cell
+  text-overflow: ellipsis; // Adds an ellipsis (...) when the text overflows
+  width: 500px;
+}
 
+.pagination {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
 
-.dataTable{
+.dataTable {
   padding: 5px;
 }
-.pagination
-{
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 10px;
 }
 
-.checkIcon{
-  color: #21A221;
+.checkIcon {
+  color: #21a221;
 }
-.cancelIcon{
-  color: #FF0000;
+.cancelIcon {
+  color: #ff0000;
 }
