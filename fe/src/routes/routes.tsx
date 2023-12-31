@@ -49,6 +49,9 @@ export const routes = {
     },
     advertiseType: {
       root: "/admin/advertise-types"
+    },
+    authentication: {
+      login: "/admin/login"
     }
   }
 };

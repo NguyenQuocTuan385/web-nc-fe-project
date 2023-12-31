@@ -1,0 +1,49 @@
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+
+  .formBox {
+    width: 60%;
+    border-radius: 8px;
+    border: #000000 1px solid;
+  }
+
+  .imageContainer {
+    border-radius: 8px 0 0 8px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem;
+    border-radius: 8px;
+    align-items: stretch;
+    justify-content: space-around;
+
+    h5 {
+      text-align: center;
+      font-size: 2.5rem;
+    }
+
+    .customTextField {
+      margin-bottom: 1rem;
+    }
+
+    .loginButton {
+      margin-top: 1rem;
+    }
+
+    .forgotPasswordLink {
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+  }
+}
