@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Grid, Link, TextField, Typography } from "@mui/material";
 import classes from "./styles.module.scss";
-import picture from "assets/img/login/login.png";
+import picture from "../../../assets/img/login/login.jpg";
 import { routes } from "routes/routes";
 import { useNavigate } from "react-router-dom";
 const Login: React.FC = () => {
