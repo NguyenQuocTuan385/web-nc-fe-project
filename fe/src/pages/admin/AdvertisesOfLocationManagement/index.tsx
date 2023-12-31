@@ -16,6 +16,9 @@ import AdvertiseService from "services/advertise";
 import { routes } from "routes/routes";
 import styled from "styled-components";
 import { LocationView } from "models/location";
+import { Contract } from "models/contract";
+import ContractService from "services/contract";
+import { Advertise } from "models/advertise";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -36,7 +39,7 @@ const AdvertiseOfLocationManagement = () => {
   const { id } = useParams<{ id: string }>();
   const itemsPerPage = 5;
   const [advertiseList, setAdvertiseList] = useState([]);
-
+  const [infoContract, setInfoContract] = useState<Contract | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
@@ -59,29 +62,38 @@ const AdvertiseOfLocationManagement = () => {
   };
 
   useEffect(() => {
-    const getAllAdvertises = async () => {
-      AdvertiseService.getAdvertisesByLocationId(Number(id), {
-        search: searchValue,
-        pageSize: itemsPerPage,
-        current: Number(currentPage)
-      })
-        .then((res) => {
-          setAdvertiseList(res.content);
-          setTotalPage(res.totalPages);
-          setTotalElements(res.totalElements);
-
-          navigate({
-            pathname: match,
-            search: createSearchParams({
-              page: currentPage.toString()
-            }).toString()
-          });
-        })
-        .catch((e) => {
-          console.log(e);
+    (async () => {
+      try {
+        const res = await AdvertiseService.getAdvertisesByLocationId(Number(id), {
+          search: searchValue,
+          pageSize: itemsPerPage,
+          current: Number(currentPage)
         });
-    };
-    getAllAdvertises();
+
+        const updatedAdvertises: any = await Promise.all(
+          res.content.map(async (advertise: Advertise) => {
+            const contractData = await ContractService.getContractsByAdvertiseOne(advertise.id, {});
+            return {
+              ...advertise,
+              contract: contractData
+            };
+          })
+        );
+
+        setAdvertiseList(updatedAdvertises);
+        setTotalPage(res.totalPages);
+        setTotalElements(res.totalElements);
+
+        navigate({
+          pathname: match,
+          search: createSearchParams({
+            page: currentPage.toString()
+          }).toString()
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, [currentPage, searchValue]);
 
   useEffect(() => {
@@ -96,6 +108,10 @@ const AdvertiseOfLocationManagement = () => {
     navigate(
       `${routes.admin.advertises.edit.replace(":locationId", `${id}`).replace(":advertiseId", `${idAdvertise}`)}`
     );
+  };
+
+  const handleAddAdvertise = (idAdvertise: number) => {
+    console.log(idAdvertise);
   };
 
   const handleSearch = (query: string) => {
@@ -113,7 +129,8 @@ const AdvertiseOfLocationManagement = () => {
         name: ads.licensing ? "Đã cấp phép" : "Chưa cấp phép",
         value: ads.licensing
       },
-      pillarQuantity: ads.pillarQuantity
+      pillarQuantity: ads.pillarQuantity,
+      statusContract: ads.contract.status
     };
   });
 
@@ -138,7 +155,7 @@ const AdvertiseOfLocationManagement = () => {
       locationType: ads.location.locationType.name,
       latitude: ads.location.latitude,
       longtitude: ads.location.longitude,
-      images: JSON.parse(ads.location.images)
+      images: ads.location.images
     };
   })[0];
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
@@ -171,6 +188,7 @@ const AdvertiseOfLocationManagement = () => {
                 isActionColumn={true}
                 onViewDetailsClick={handleViewAdDetails}
                 onEditClick={handleEditAdvertise}
+                onAddClick={handleAddAdvertise}
               />
 
               <Box className={classes["pagination-custom"]}>

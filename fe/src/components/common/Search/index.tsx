@@ -74,10 +74,10 @@ export default function SearchAppBar({ onSearch }: any) {
         <StyledInputBase placeholder='Search…' inputProps={{ "aria-label": "search" }} onChange={handleSearchChange} />
       </Search>
 
-      <ButtonDownload size='small' sx={{ height: "39px", padding: "0 12px" }}>
+      {/* <ButtonDownload size='small' sx={{ height: "39px", padding: "0 12px" }}>
         <FontAwesomeIcon width={"20px"} height={"20px"} icon={faSquarePlus} color='#fff' />{" "}
         <span style={{ marginLeft: "2px" }}>Thêm</span>
-      </ButtonDownload>
+      </ButtonDownload> */}
     </Box>
   );
 }

@@ -47,7 +47,7 @@ interface InfoAds {
   pillarQuantity: number;
   adsForm: string;
   locationType: string;
-  images: string[];
+  images: string;
 }
 
 interface InfoContract {
@@ -79,7 +79,7 @@ export const AdvertiseDetail = () => {
             pillarQuantity: res.pillarQuantity,
             adsForm: res.location.adsForm.name,
             locationType: res.location.locationType.name,
-            images: res.location.images.length > 0 ? JSON.parse(res.location.images) : ""
+            images: res.images
           });
         })
         .catch((e) => {
@@ -124,11 +124,11 @@ export const AdvertiseDetail = () => {
           </ButtonBack>
           <BoxFlex>
             <InfoAdsBox>
-              {infoAds?.images && infoAds?.images.length > 0 && <SlideShowImages images={infoAds.images} />}
-              {/* <img src={infoContractDetails.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} /> */}
+              {/* {infoAds?.images && infoAds?.images.length > 0 && <SlideShowImages images={infoAds.images} />} */}
+              {infoAds && <img src={infoAds.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} />}
               <BoxFlex ml={"15px"}>{infoAds && <InfoAdvertise data={infoAds} />}</BoxFlex>
             </InfoAdsBox>
-            <Box>{infoContract && <InfoContract data={infoContract} />}</Box>
+            <Box>{infoContract && infoContractDetails && <InfoContract data={infoContract} />}</Box>
           </BoxFlex>
 
           <Box mt={"15px"}>

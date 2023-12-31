@@ -12,6 +12,7 @@ import { routes } from "routes/routes";
 import ReportService from "services/report";
 import { EReportTypeName, Report, ReportEditRequest } from "models/report";
 import Editor from "components/common/Editor/EditWithQuill";
+import { EReportStatus } from "models/report";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -197,20 +198,31 @@ export const ReportHandle = () => {
             <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} mb={"20px"}>
               <label>Tình trạng</label>
               <select onChange={(e) => handleStatusChange(e)} className={classes["select-custom"]}>
-                {dataReportDetail?.status && (
+                {dataReportDetail?.status === EReportStatus.NEW && (
                   <>
-                    <option value='0'>Chưa xử lý</option>
-                    <option value='1' selected>
-                      Đã xử lý
-                    </option>
-                  </>
-                )}
-                {!dataReportDetail?.status && (
-                  <>
-                    <option value='0' selected>
+                    <option value={EReportStatus.NEW} selected>
                       Chưa xử lý
                     </option>
-                    <option value='1'>Đã xử lý</option>
+                    <option value={EReportStatus.PROCESSING}>Đang xử lý</option>
+                    <option value={EReportStatus.DONE}>Đã xử lý</option>
+                  </>
+                )}
+                {dataReportDetail?.status === EReportStatus.PROCESSING && (
+                  <>
+                    <option value={EReportStatus.NEW}>Chưa xử lý</option>
+                    <option value={EReportStatus.PROCESSING} selected>
+                      Đang xử lý
+                    </option>
+                    <option value={EReportStatus.DONE}>Đã xử lý</option>
+                  </>
+                )}
+                {dataReportDetail?.status === EReportStatus.DONE && (
+                  <>
+                    <option value={EReportStatus.NEW}>Chưa xử lý</option>
+                    <option value={EReportStatus.PROCESSING}>Đang xử lý</option>
+                    <option value={EReportStatus.DONE} selected>
+                      Đã xử lý
+                    </option>
                   </>
                 )}
               </select>

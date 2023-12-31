@@ -105,7 +105,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   const userInfo = { ...userDetails };
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [originalImages, setOriginalImages] = useState(JSON.parse(data.images));
+  const [originalImages, setOriginalImages] = useState(data.images);
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
 
   const handleOpenDialog = () => {
@@ -154,13 +154,13 @@ const MyForm: React.FC<FormEditLocationProps> = ({
             body: formData
           }).then((res) => res.json());
 
-          formSubmit.imageUrls.push(JSON.stringify(uploadDataResult.secure_url));
+          formSubmit.imageUrls.push(uploadDataResult.secure_url);
         })
       );
 
-      savedImageUrls = JSON.stringify(formSubmit.imageUrls);
+      savedImageUrls = formSubmit.imageUrls[0];
     } else {
-      formSubmit.imageUrls.push(JSON.stringify(files));
+      formSubmit.imageUrls.push(files[0]);
     }
 
     const dataSubmit = {
@@ -349,9 +349,9 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                     );
                   })}
 
-                {JSON.parse(data.images).length > 0 &&
+                {data.images.length > 0 &&
                   selectedImages.length < 1 &&
-                  JSON.parse(data.images).map((image: string, index: number) => {
+                  data.images.map((image: string, index: number) => {
                     return (
                       <img
                         src={image}
@@ -371,6 +371,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                 <DialogContent>
                   <UploadImage
                     files={field.value}
+                    maxFiles={1}
                     errorMessage={errors.imageUrls?.message}
                     onChange={(value) => {
                       field.onChange(value);
@@ -432,7 +433,10 @@ export const LocationEdit = () => {
     const getLocationById = async () => {
       LocationService.getLocationsById(Number(id), {})
         .then((res) => {
-          setLocationData(res);
+          setLocationData({
+            ...res,
+            images: [res.images]
+          });
         })
         .catch((e) => {
           console.log(e);

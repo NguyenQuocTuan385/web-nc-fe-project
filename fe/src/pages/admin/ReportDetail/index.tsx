@@ -75,25 +75,35 @@ export const ReportDetail = () => {
             <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
-          <Box>
-            <h3>Hình ảnh báo cáo</h3>
-            <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
-              {dataReportDetail &&
-                JSON.parse(dataReportDetail.images).length > 0 &&
-                JSON.parse(dataReportDetail.images).map((image: string) => {
-                  return (
-                    <img
-                      width={"48%"}
-                      height={"250px"}
-                      className={classes["image"]}
-                      src={image}
-                      alt='Hình ảnh bảng QC'
-                      style={{ border: "1px solid #ccc" }}
-                    />
-                  );
-                })}
-            </BoxFlex>
-          </Box>
+          {dataReportDetail && dataReportDetail.images && (
+            <Box>
+              <h3>Hình ảnh báo cáo</h3>
+              <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
+                {dataReportDetail &&
+                  JSON.parse(dataReportDetail.images).length > 0 &&
+                  JSON.parse(dataReportDetail.images).map((image: string) => {
+                    return (
+                      <img
+                        width={"48%"}
+                        height={"250px"}
+                        className={classes["image"]}
+                        src={image}
+                        alt='Hình ảnh bảng QC'
+                        style={{ border: "1px solid #ccc" }}
+                      />
+                    );
+                  })}
+                {/* <img
+                  width={"48%"}
+                  height={"250px"}
+                  className={classes["image"]}
+                  src={dataReportDetail.images}
+                  alt='Hình ảnh bảng QC'
+                  style={{ border: "1px solid #ccc" }}
+                /> */}
+              </BoxFlex>
+            </Box>
+          )}
           {dataReportDetail && (
             <Box mt={"20px"}>
               <h3>Thông tin báo cáo</h3>

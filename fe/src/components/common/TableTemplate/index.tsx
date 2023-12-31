@@ -1,9 +1,8 @@
 import React from "react";
 import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Paper, IconButton } from "@mui/material";
-import { faEdit, faEye, faRectangleAd, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye, faRectangleAd, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
-
 interface TableTemplateProps {
   data: Array<{ [key: string]: any }>;
   customHeading: string[];
@@ -12,6 +11,7 @@ interface TableTemplateProps {
   onViewAdsClick?: (idLocation: number) => void;
   onViewDetailsClick?: (idDetails: number) => void;
   onEditClick?: (idEdit: number) => void;
+  onAddClick?: (idAdd: number) => void;
   linkToMove?: string;
 }
 
@@ -23,6 +23,7 @@ function TableTemplate({
   onViewAdsClick,
   onViewDetailsClick,
   onEditClick,
+  onAddClick,
   linkToMove
 }: TableTemplateProps) {
   const handleViewAdsClick = (rowId: number) => {
@@ -40,6 +41,13 @@ function TableTemplate({
   const handleEditClick = (rowId: number) => {
     if (onEditClick) {
       onEditClick(rowId);
+    }
+  };
+
+  const handleAddClick = (rowId: number) => {
+    if (onAddClick) {
+      onAddClick(rowId);
+      console.log("Add here!");
     }
   };
 
@@ -103,6 +111,11 @@ function TableTemplate({
                   >
                     <FontAwesomeIcon icon={faEdit} color='#FFA500' />
                   </IconButton>
+                  {onAddClick && row.statusContract !== 1 && (
+                    <IconButton aria-label='add' size='medium' onClick={() => handleAddClick(row.id)}>
+                      <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                    </IconButton>
+                  )}
                 </TableCell>
               )}
             </TableRow>

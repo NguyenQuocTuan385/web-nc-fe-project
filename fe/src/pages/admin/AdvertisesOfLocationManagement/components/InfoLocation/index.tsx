@@ -11,8 +11,8 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
   return (
     <Box className={classes["info-container"]}>
       <Box className={classes["info-item"]}>
-        <SlideShowImages images={data.images} />
-        {/* <img src='https://quangcaotb.vn/wp-content/uploads/tam-pano.png' alt='Điểm đặt quảng cáo' /> */}
+        {/* <SlideShowImages images={data.images} /> */}
+        <img src={data.images} alt='Điểm đặt quảng cáo' />
 
         <Typography variant='h6'>Điểm đặt quảng cáo</Typography>
         <Typography className={classes["inline-typo"]}>

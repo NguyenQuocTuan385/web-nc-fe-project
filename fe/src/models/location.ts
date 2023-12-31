@@ -33,7 +33,7 @@ export interface LocationView {
   planning: number;
   latitude: number;
   longtitude: number;
-  images: string[];
+  images: string;
 }
 
 export interface LocationType {

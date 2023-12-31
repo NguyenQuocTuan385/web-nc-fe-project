@@ -91,7 +91,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
   const userInfo = { ...userDetails };
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [originalImages, setOriginalImages] = useState(JSON.parse(data.images));
+  const [originalImages, setOriginalImages] = useState(data.images);
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
 
   const handleOpenDialog = () => {
@@ -144,9 +144,9 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         })
       );
 
-      savedImageUrls = JSON.stringify(formSubmit.imageUrls);
+      savedImageUrls = formSubmit.imageUrls[0];
     } else {
-      formSubmit.imageUrls.push(JSON.stringify(files));
+      formSubmit.imageUrls.push(files[0]);
     }
 
     const dataSubmit = {
@@ -247,7 +247,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         <Controller
           control={control}
           name='pillarQuantity'
-          defaultValue={data.pillarQuantity}
+          defaultValue={data.pillarQuantity ? data.pillarQuantity : 0}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
               <input {...field} {...register("pillarQuantity")} type='number' className={classes["input-custom"]} />
@@ -295,9 +295,9 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                     );
                   })}
 
-                {JSON.parse(data.images).length > 0 &&
+                {data.images.length > 0 &&
                   selectedImages.length < 1 &&
-                  JSON.parse(data.images).map((image: string, index: number) => {
+                  data.images.map((image: string, index: number) => {
                     return (
                       <img
                         src={image}
@@ -317,6 +317,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                 <DialogContent>
                   <UploadImage
                     files={field.value}
+                    maxFiles={1}
                     errorMessage={errors.imageUrls?.message}
                     onChange={(value) => {
                       field.onChange(value);
@@ -411,7 +412,10 @@ export const AdvertiseEdit = () => {
             endAt: res.endAt
           });
 
-          setInfoAds(res.advertise);
+          setInfoAds({
+            ...res.advertise,
+            images: [res.advertise.images]
+          });
         })
         .catch((e) => {
           console.log(e);
