@@ -35,3 +35,14 @@ export interface AdvertiseType {
   description: string;
   created_at: Date;
 }
+export interface AdvertiseEditRequest {
+  licensing: number;
+  height: number;
+  width: number;
+  adsTypeId: number;
+  locationId: number;
+  pillarQuantity: number;
+  userId: number;
+  content: string;
+  imageUrls: any;
+}

@@ -42,3 +42,8 @@ export interface GetReports {
   pageSize?: number;
   current?: number;
 }
+
+export interface ReportEditRequest {
+  status: number;
+  reply: string;
+}

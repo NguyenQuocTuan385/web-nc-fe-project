@@ -15,6 +15,14 @@ import AdLicenseDetail from "pages/admin/AdLicense/components/AdLicenseDetail";
 import DistrictManagement from "pages/admin/DistrictManagement";
 import WardManagement from "pages/admin/WardManagement";
 import { routes } from "routes/routes";
+import LocationManagement from "pages/admin/LocationsManagement";
+import { LocationEdit } from "pages/admin/LocationEdit";
+import AdvertisesOfLocationManagement from "pages/admin/AdvertisesOfLocationManagement";
+import { AdvertiseDetail } from "pages/admin/AdvertiseDetail";
+import { AdvertiseEdit } from "pages/admin/AdvertiseEdit";
+import ReportsManagement from "pages/admin/ReportsManagement";
+import { ReportHandle } from "pages/admin/ReportHandle";
+import { ReportDetail } from "pages/admin/ReportDetail";
 import CreateAccount from "pages/admin/CreateAccount";
 import ContractDetail from "pages/admin/ContractDetail";
 import ReportFormManagement from "pages/admin/ReportFormManagement";
@@ -42,6 +50,19 @@ function App() {
           <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
           <Route path={routes.admin.contracts.root} Component={ContractList} />
 
+          {/* Locations */}
+          <Route path={routes.admin.locations.root} Component={LocationManagement} />
+          <Route path={routes.admin.locations.edit} Component={LocationEdit} />
+
+          {/* Advertises */}
+          <Route path={routes.admin.advertises.ofLocation} Component={AdvertisesOfLocationManagement} />
+          <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
+          <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
+
+          {/* Reports */}
+          <Route path={routes.admin.reports.root} Component={ReportsManagement} />
+          <Route path={routes.admin.reports.edit} Component={ReportHandle} />
+          <Route path={routes.admin.reports.details} Component={ReportDetail} />
           <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
           <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
           <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />

@@ -1,9 +1,16 @@
 export const API = {
   LOCATION: {
-    DEFAULT: "/api/locations"
+    DEFAULT: "/api/locations",
+    DETAILS: "/api/locations/:id",
+    EDIT: "/api/locations/:id"
+  },
+  LOCATION_TYPE: {
+    DEFAULT: "/api/location-types"
   },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
+    DETAILS: "/api/advertises/:id",
+    EDIT: "/api/advertises/:id",
     UPDATE_LICENSE: "/api/advertises/:id/license"
   },
   CONTRACT: {
@@ -11,8 +18,9 @@ export const API = {
     DELETE: "/api/contracts/:id",
     ByAdvertiseId: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id",
-    UPDATE_STATUS: "/api/contracts/:id/status",
+    ByAdvertiseIdOne: "/api/contracts/advertises/:id",
     CREATE: "/api/contracts",
+    UPDATE_STATUS: "/api/contracts/:id/status",
     GETBYPROPERTY_PARENT_ID: "/api/properties/contracts"
   },
   DISTRICT: {
@@ -32,7 +40,9 @@ export const API = {
     DETAIL: "/api/users/:id"
   },
   REPORT: {
-    DEFAULT: "/api/reports"
+    DEFAULT: "/api/reports",
+    DETAILS: "/api/reports/:id",
+    UPDATE: "/api/reports/:id"
   },
   REPORT_FORM: {
     DEFAULT: "/api/report-forms"

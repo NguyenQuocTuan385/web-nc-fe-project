@@ -6,8 +6,8 @@ export interface AdvertiseForm {
 
 export interface GetAdvertiseForms {
   search?: string;
-  current: number;
-  pageSize: number;
+  current?: number;
+  pageSize?: number;
 }
 
 export interface Pageable {
