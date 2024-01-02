@@ -30,6 +30,9 @@
 .dataTable {
   padding: 5px;
   font-weight: normal;
+  white-space: nowrap; // Prevents the text from wrapping onto the next line
+  overflow: hidden; // Hides any text that overflows the cell
+  text-overflow: ellipsis; // Adds
 }
 .textOverflow {
   white-space: nowrap; // Prevents the text from wrapping onto the next line
@@ -37,6 +40,7 @@
   text-overflow: ellipsis; // Adds an ellipsis (...) when the text overflows
   width: 500px;
 }
+
 .pagination {
   display: flex;
   justify-content: center;

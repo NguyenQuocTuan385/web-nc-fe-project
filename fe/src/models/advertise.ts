@@ -1,8 +1,9 @@
 import { Location } from "./location";
+import { User } from "./user";
 
 export interface Advertise {
   id: number;
-  lisencing: boolean;
+  licensing: boolean;
   height: number;
   width: number;
   pillarQuantity?: number;
@@ -10,6 +11,7 @@ export interface Advertise {
   statusEdit?: boolean;
   location: Location;
   adsType: AdvertiseType;
+  advertiseEdit?: AdvertiseEdit;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,6 +19,8 @@ export interface UpdateAdvertiseStatus {
   licensing: boolean;
 }
 export interface GetAdvertises {
+  propertyId?: number;
+  parentId?: number;
   search?: string;
   pageSize?: number;
   current?: number;
@@ -34,4 +38,37 @@ export interface AdvertiseType {
   name: string;
   description: string;
   created_at: Date;
+}
+
+export interface AdvertiseEdit {
+  id: number;
+  lisensing: boolean;
+  height: number;
+  width: number;
+  content: string;
+  images: string;
+  location: Location;
+  adsType: AdvertiseType;
+  createdAt: Date;
+  user: User;
+}
+
+export interface UpdateStatus {
+  status: boolean;
+  advertiseEditId?: number;
+}
+
+export interface UpdateAdvertise {
+  licensing: boolean;
+  height: number;
+  width: number;
+  pillarQuantity: number;
+  images: string;
+  locationId: number;
+  adsTypeId: number;
+}
+
+export enum TAB_ADVERTISE {
+  location = 1,
+  advertise = 2
 }

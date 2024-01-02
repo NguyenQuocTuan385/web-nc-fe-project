@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -9,11 +9,29 @@ import classes from "./styles.module.scss";
 import TabPanelFilter from "../../../../../components/admin/TabPanelFilter";
 import EditAdTableLicense from "../EditAdTableLicense";
 import EditAdLocationLicense from "../EditAdLocationLicense";
+import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 
 export default function TabPanelAdvertise() {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState("-1");
+  const navigate = useNavigate();
+  const locationHook = useLocation();
+  const params = new URLSearchParams(locationHook.search);
+  const tab = params.get("tab");
+  React.useEffect(() => {
+    if (tab) {
+      setValue(tab);
+    } else {
+      setValue("1");
+    }
+  }, [tab]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    navigate({
+      pathname: locationHook.pathname,
+      search: createSearchParams({
+        ...(newValue !== "0" && { tab: newValue.toString() })
+      }).toString()
+    });
     setValue(newValue);
   };
 

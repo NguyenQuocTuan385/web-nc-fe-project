@@ -86,7 +86,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
     navigate(`${routes.admin.reviewLisence.detail}`.replace(":id", row.id.toString()));
   };
   const updateAdvertisesById = async (row: Contract) => {
-    AdvertiseService.updateAdvertisesId(row.advertise.id, {
+    AdvertiseService.updateAdvertiseLicense(row.advertise.id, {
       licensing: true
     })
       .then((res) => {

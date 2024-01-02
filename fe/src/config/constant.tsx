@@ -1,10 +1,20 @@
 export const API = {
   LOCATION: {
-    DEFAULT: "/api/locations"
+    DEFAULT: "/api/locations",
+    GET_ALL_REVIEW: "/api/locations/review",
+    GET_BY_ID: "/api/locations/:id",
+    UPDATE: "/api/locations/:id",
+    UPDATE_STATUS: "/api/locations/:id/status",
+    DELETE: "/api/locations/edit/:id"
   },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
-    UPDATE_LICENSE: "/api/advertises/:id/license"
+    UPDATE_LICENSE: "/api/advertises/:id/license",
+    UPDATE: "/api/advertises/:id",
+    GET_ALL_UNAUTHORIZED: "/api/advertises",
+    GET_BY_ID: "/api/advertises/:id",
+    DELETE_ADVERTISE_EDIT: "/api/advertises/edit/:id",
+    UPDATE_STATUS: "/api/advertises/:id/status"
   },
   CONTRACT: {
     DEFAULT: "/api/properties/:id/contracts",
