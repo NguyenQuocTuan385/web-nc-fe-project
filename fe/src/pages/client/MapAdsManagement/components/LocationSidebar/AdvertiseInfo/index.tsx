@@ -37,7 +37,7 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
         </ParagraphBody>
       </Box>
       <ParagraphBody>
-        Trạng thái: <b>{advertise.lisencing ? "ĐÃ ĐƯỢC ĐẶT" : "CHƯA ĐẶT"}</b>
+        Trạng thái: <b>{advertise.licensing ? "ĐÃ ĐƯỢC ĐẶT" : "CHƯA ĐẶT"}</b>
       </ParagraphBody>
       <Box className={classes.btnContainer}>
         <IconButton onClick={() => setOpenAdvertiseInfoPopup(true)}>

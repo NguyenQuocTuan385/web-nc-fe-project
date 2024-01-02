@@ -9,25 +9,42 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { Box, IconButton } from "@mui/material";
 import classes from "./styles.module.scss";
-import ads from "../../../../../editadlocation.json";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import { routes } from "routes/routes";
+import queryString from "query-string";
+import LocationService from "services/location";
+import { Location, updateStatus } from "models/location";
+import { TAB_ADVERTISE } from "models/advertise";
 
-const rows = [...ads];
 interface FilterProps {
   district?: string;
   ward?: string;
   fieldSearch?: string;
 }
 export default function EditAdLocationLicense({ district, ward, fieldSearch }: FilterProps) {
-  const [filterDistrict, setFilterDistrict] = useState(rows);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const locationHook = useLocation();
+  const match = useResolvedPath("").pathname;
+  const [page, setPage] = React.useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return Number(params.page) - 1 || 0;
+  });
+  const [totalPage, setTotalPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [dataList, setDataList] = useState<Location[]>([]);
+  const [update, setUpdate] = useState(false);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
+    navigate({
+      pathname: match,
+      search: createSearchParams({
+        tab: TAB_ADVERTISE.location.toString(),
+        page: (Number(page) + 1).toString()
+      }).toString()
+    });
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -35,41 +52,96 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
     setPage(0);
   };
   const navigate = useNavigate();
+  function formatDateToDDMMYYYY(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(date).toLocaleDateString("en-GB", options);
+  }
 
-  const handleClick = (row: any) => {
-    navigate(`${routes.admin.reviewEdit.location.replace(":id", `${row.id}`)}`, {
-      state: {
-        id: row.id,
-        address: row.address,
-        timeEdit: row.timeEdit,
-        planning: row.planning,
-        imgUrl: row.imgUrl,
-        adsType: row.adsType,
-        position: row.location,
-        edit: row.edit,
-        reason: row.reason
-      }
-    });
+  const handleClick = (row: Location) => {
+    navigate(`${routes.admin.reviewEdit.location}`.replace(":id", row.id.toString()));
   };
   useEffect(() => {
-    let filteredRows = rows;
+    const getAllLocationReview = async () => {
+      LocationService.getLocationsReview({
+        propertyId: ward ? Number(ward) : undefined,
+        parentId: district ? Number(district) : undefined,
+        search: fieldSearch,
+        pageSize: rowsPerPage,
+        current: Number(page) + 1
+      })
+        .then((res) => {
+          setDataList(res.content);
+          setTotalPage(res.totalPages);
+          setUpdate(false);
+          navigate({
+            pathname: match,
+            search: createSearchParams({
+              tab: TAB_ADVERTISE.location.toString(),
+              ...(ward && { propertyId: ward.toString() }),
+              ...(district && { parentId: district.toString() }),
+              page: (Number(page) + 1).toString()
+            }).toString()
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getAllLocationReview();
+  }, [fieldSearch, page, rowsPerPage, ward, district, update]);
+  const emptyRows = rowsPerPage - dataList.length;
 
-    if (district) {
-      filteredRows = filteredRows.filter((row) => row.district === district);
-    }
+  const deleteLocationEdit = async (id: number) => {
+    await LocationService.deleteLocationEditById(id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const updateStatus = async (id: number, updateStatus: updateStatus) => {
+    await LocationService.updateStatus(id, updateStatus)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleClickAccept = async (event: React.MouseEvent, data: Location) => {
+    event.stopPropagation();
+    const updateLocation = async (data: Location) => {
+      await LocationService.updateLocationsById(data.id, {
+        planning: data.locationEdit?.planning!!,
+        latitude: data.locationEdit?.latitude!!,
+        longitude: data.locationEdit?.longitude!!,
+        address: data.locationEdit?.address!!,
+        advertiseFormId: data.locationEdit?.adsForm.id!!,
+        locationTypeId: data.locationEdit?.locationType.id!!,
+        propertyId: data.locationEdit?.property.id!!,
+        imageUrls: data.locationEdit?.images!!
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    await updateLocation(data);
+    await deleteLocationEdit(data.locationEdit?.id!!);
+    setUpdate(true);
+  };
 
-    if (ward) {
-      filteredRows = filteredRows.filter((row) => row.ward === ward);
-    }
-
-    if (fieldSearch !== "") {
-      filteredRows = filteredRows.filter((row) => row.address.toLowerCase().includes(fieldSearch?.toLowerCase() ?? ""));
-    }
-
-    setFilterDistrict(filteredRows);
-  }, [district, ward, fieldSearch]);
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
+  const handleClickCancel = async (event: React.MouseEvent, data: Location) => {
+    event.stopPropagation();
+    await updateStatus(data.id, {
+      status: false
+    });
+    await deleteLocationEdit(data.locationEdit?.id!!);
+    setUpdate(true);
+  };
   return (
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>
@@ -92,36 +164,34 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0 ? filterDistrict.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : rows).map(
-              (row) => (
-                <TableRow
-                  key={row.id}
-                  className={classes.rowTable}
-                  onClick={() => {
-                    handleClick(row);
-                  }}
-                >
-                  <TableCell scope='row'>{row.id}</TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    <div className={classes.textOverflow}>{row.address}</div>
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {row.timeEdit}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {row.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
-                  </TableCell>
-                  <TableCell align='center' className={classes.dataTable}>
-                    <IconButton aria-label='edit' size='medium'>
-                      <CheckCircleIcon className={classes.checkIcon} />
-                    </IconButton>
-                    <IconButton aria-label='edit' size='medium'>
-                      <Cancel className={classes.cancelIcon} />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              )
-            )}
+            {dataList.map((row) => (
+              <TableRow
+                key={row.id}
+                className={classes.rowTable}
+                onClick={() => {
+                  handleClick(row);
+                }}
+              >
+                <TableCell scope='row'>{row.id}</TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  <div className={classes.textOverflow}>{row.address}</div>
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.locationEdit?.updatedAt && formatDateToDDMMYYYY(row.locationEdit?.updatedAt)}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {row.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
+                </TableCell>
+                <TableCell align='center' className={classes.dataTable}>
+                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickAccept(e, row)}>
+                    <CheckCircleIcon className={classes.checkIcon} />
+                  </IconButton>
+                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickCancel(e, row)}>
+                    <Cancel className={classes.cancelIcon} />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
 
             {emptyRows > 0 && (
               <TableRow style={{ height: 73 * emptyRows }}>
@@ -133,8 +203,8 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
       </TableContainer>
       <TablePagination
         component='div'
-        count={filterDistrict.length}
-        page={page}
+        count={totalPage * rowsPerPage}
+        page={Number(page)}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
