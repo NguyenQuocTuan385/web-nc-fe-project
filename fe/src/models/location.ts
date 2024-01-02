@@ -25,6 +25,18 @@ export interface Location {
   titleReport?: string;
 }
 
+export interface LocationView {
+  stt: number;
+  id: number;
+  address: string;
+  adsForm: string;
+  locationType: string;
+  planning: number;
+  latitude: number;
+  longtitude: number;
+  images: string;
+}
+
 export interface LocationType {
   id: number;
   name: string;
@@ -70,4 +82,23 @@ export interface putLocation {
 export interface updateStatus {
   status: boolean;
   locationEditId?: number;
+}
+
+export interface GetLocationTypes {
+  search?: string;
+  pageSize?: number;
+  current?: number;
+}
+
+export interface LocationEditRequest {
+  address: string;
+  locationTypeId: number;
+  advertiseFormId: number;
+  planning: number;
+  imageUrls: any;
+  latitude: number;
+  longitude: number;
+  propertyId: number;
+  userId: number;
+  content: string;
 }

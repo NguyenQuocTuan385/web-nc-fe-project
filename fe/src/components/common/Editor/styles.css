@@ -1,0 +1,26 @@
+body {
+  background: #f3f1f2;
+  font-family: sans-serif;
+}
+
+.container-quill {
+  margin-top: 10px;
+}
+
+.ql-container {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  background: #fefcfc;
+}
+
+/* Snow Theme */
+.ql-snow.ql-toolbar {
+  display: block;
+  background: #eaecec;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.ql-editor {
+  min-height: 18em;
+}

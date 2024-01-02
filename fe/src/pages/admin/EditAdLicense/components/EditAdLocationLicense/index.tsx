@@ -142,7 +142,6 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
     await deleteLocationEdit(data.locationEdit?.id!!);
     setUpdate(true);
   };
-
   return (
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>

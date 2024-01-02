@@ -1,0 +1,33 @@
+$pacing-main: 15px;
+
+.report-detail-container {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: $pacing-main;
+  margin-top: 60px;
+  background-color: var(--blue-50);
+}
+
+.container-body {
+  width: calc(100% - 300px);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: $pacing-main;
+}
+
+.title {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+img {
+  border-radius: 8px;
+}
+
+.text-active {
+  color: #00BA00 !important;
+}
+
+.text-inactive {
+  color: rgb(241, 35, 35) !important;
+}

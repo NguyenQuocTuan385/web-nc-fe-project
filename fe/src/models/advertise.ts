@@ -72,3 +72,15 @@ export enum TAB_ADVERTISE {
   location = 1,
   advertise = 2
 }
+
+export interface AdvertiseEditRequest {
+  licensing: number;
+  height: number;
+  width: number;
+  adsTypeId: number;
+  locationId: number;
+  pillarQuantity: number;
+  userId: number;
+  content: string;
+  imageUrls: any;
+}

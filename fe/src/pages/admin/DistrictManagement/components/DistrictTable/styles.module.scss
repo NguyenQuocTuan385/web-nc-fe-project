@@ -1,49 +1,48 @@
-.boxContainer{
+.boxContainer {
   display: flex;
   flex-direction: column;
 }
 
-.tableContainer{
+.tableContainer {
   margin-top: 20px;
 }
 
-.sizeTable{
+.sizeTable {
   min-width: 1050px;
 }
 
-.headerTable{
+.headerTable {
   font-weight: bold;
   padding: 5px;
 }
 
-.rowTable{
-  &:last-child, &:last-child th{
+.rowTable {
+  &:last-child,
+  &:last-child th {
     border: 0;
   }
-  &:hover{
-    background-color: #F5F5F5;
+  &:hover {
+    background-color: #f5f5f5;
   }
   cursor: pointer;
 }
 
-
-.dataTable{
+.dataTable {
   padding: 5px;
 }
-.pagination
-{
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 10px;
 }
 
-.infoIcon{
-  color: #21A221;
+.infoIcon {
+  color: #21a221;
 }
-.editIcon{
+.editIcon {
   color: #496dee;
 }
-.deleteIcon{
-  color: #FF0000;
+.deleteIcon {
+  color: #ff0000;
 }

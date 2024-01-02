@@ -18,7 +18,9 @@ export const routes = {
     advertises: {
       root: "/admin/advertises",
       create: "/admin/advertises/create",
-      edit: "/admin/advertises/edit/:id"
+      edit: "/admin/advertises/edit/:locationId/:advertiseId",
+      details: "/admin/advertises/:id",
+      ofLocation: "/admin/advertises/locations/:id"
     },
     locations: {
       root: "/admin/locations",
@@ -34,6 +36,11 @@ export const routes = {
       createForm: "/admin/contracts/create-form",
       detail: "/admin/contracts/:id"
     },
+    reports: {
+      root: "/admin/reports",
+      edit: "/admin/reports/edit/:id",
+      details: "/admin/report/:id"
+    },
     reportForm: {
       root: "/admin/report-forms"
     },
@@ -42,6 +49,9 @@ export const routes = {
     },
     advertiseType: {
       root: "/admin/advertise-types"
+    },
+    authentication: {
+      login: "/admin/login"
     }
   }
 };
