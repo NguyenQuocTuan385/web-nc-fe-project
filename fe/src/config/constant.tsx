@@ -5,7 +5,8 @@ export const API = {
     GET_BY_ID: "/api/locations/:id",
     UPDATE: "/api/locations/:id",
     UPDATE_STATUS: "/api/locations/:id/status",
-    DELETE: "/api/locations/edit/:id"
+    DELETE: "/api/locations/edit/:id",
+    EDIT: "/api/locations/:id"
   },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",

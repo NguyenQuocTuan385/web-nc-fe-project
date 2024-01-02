@@ -2,7 +2,7 @@ import { Error, InfoOutlined } from "@mui/icons-material";
 import { Box, Button, IconButton } from "@mui/material";
 import { useState } from "react";
 import classes from "./styles.module.scss";
-import ReportPopup from "../ReportPopup";
+import ReportFormPopup from "../ReportFormPopup";
 import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Advertise } from "models/advertise";
@@ -48,7 +48,7 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
         </Button>
       </Box>
       <AdvertiseInfoPopup advertise={advertise} open={openAdvertiseInfoPopup} onClose={closeAdvertiseInfoPopup} />
-      <ReportPopup open={openReportPopup} setOpen={setOpenReportPopup} />
+      <ReportFormPopup open={openReportPopup} setOpen={setOpenReportPopup} />
     </Box>
   );
 };

@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Grid } from "@mui/material";
 import classes from "./styles.module.scss";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { Error } from "@mui/icons-material";
@@ -17,13 +16,11 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import ErrorMessage from "components/common/text/ErrorMessage";
-import clsx from "clsx";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import UploadImage from "components/common/UploadImage";
 import InputWysiwyg from "components/common/InputWysiwyg";
 
-const ReportDialog = styled(Dialog)(({ theme }) => ({
+export const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2)
   },
@@ -32,7 +29,7 @@ const ReportDialog = styled(Dialog)(({ theme }) => ({
   }
 }));
 
-interface ReportPopupProps {
+interface ReportFormPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -45,7 +42,7 @@ interface FormData {
   images: string[] | File[];
 }
 
-export default function ReportPopup({ setOpen, open }: ReportPopupProps) {
+export default function ReportFormPopup({ setOpen, open }: ReportFormPopupProps) {
   const schema = useMemo(() => {
     return yup.object().shape({
       reportFormName: yup.string().required("Bắt buộc nhập hình thức báo cáo"),

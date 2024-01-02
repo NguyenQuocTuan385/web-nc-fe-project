@@ -10,7 +10,7 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { routes } from "routes/routes";
 import ReportService from "services/report";
-import { EReportTypeName, Report, ReportEditRequest } from "models/report";
+import { EReportType, Report, ReportEditRequest } from "models/report";
 import Editor from "components/common/Editor/EditWithQuill";
 import { EReportStatus } from "models/report";
 
@@ -141,7 +141,7 @@ export const ReportHandle = () => {
                     className={classes["input-custom"]}
                     type='text'
                     value={
-                      dataReportDetail.reportTypeName === EReportTypeName.ADVERTISE_REPORT
+                      dataReportDetail.reportTypeName === EReportType.ADVERTISE
                         ? "Báo cáo bảng quảng cáo"
                         : "Báo cáo địa điểm đặt quảng cáo"
                     }

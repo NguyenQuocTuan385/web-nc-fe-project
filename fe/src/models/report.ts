@@ -17,16 +17,18 @@ export interface Report {
   status: EReportStatus;
   reply: string;
   images: string;
-  reportTypeName: EReportTypeName;
+  reportTypeName: EReportType;
   reportForm: ReportForm;
   advertise?: Advertise;
-  location?: Location;
+  address?: string;
+  longitude?: number;
+  latitude?: number;
   createdAt: Date;
 }
 
-export enum EReportTypeName {
-  LOCATION_REPORT = 1,
-  ADVERTISE_REPORT = 2
+export enum EReportType {
+  LOCATION = 1,
+  ADVERTISE = 2
 }
 
 export enum EReportStatus {
@@ -41,6 +43,7 @@ export interface GetReports {
   search?: string;
   pageSize?: number;
   current?: number;
+  reportTypeName?: EReportType;
 }
 
 export interface ReportEditRequest {

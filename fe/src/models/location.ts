@@ -1,12 +1,12 @@
 import { AdvertiseForm } from "./advertise";
 import { Property } from "./property";
-import { Report } from "./report";
 import { User } from "./user";
 
 export interface RandomLocation {
   address: string;
   longitude: number;
   latitude: number;
+  reportStatus?: string;
 }
 
 export interface Location {
@@ -22,7 +22,7 @@ export interface Location {
   property: Property;
   locationEdit?: LocationEdit;
   createdAt?: string;
-  titleReport?: string;
+  reportStatus?: string;
 }
 
 export interface LocationView {

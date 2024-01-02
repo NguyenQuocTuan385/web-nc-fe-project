@@ -431,7 +431,7 @@ export const LocationEdit = () => {
 
   useEffect(() => {
     const getLocationById = async () => {
-      LocationService.getLocationsById(Number(id), {})
+      LocationService.getLocationsById(Number(id))
         .then((res) => {
           setLocationData({
             ...res,

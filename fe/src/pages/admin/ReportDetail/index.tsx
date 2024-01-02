@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { EReportTypeName, Report } from "models/report";
+import { EReportType, Report } from "models/report";
 import ReportService from "services/report";
 
 const BoxFlex = styled(Box)(() => ({
@@ -112,7 +112,7 @@ export const ReportDetail = () => {
                   <Typography>
                     <span className={classes["title"]}>Loại báo cáo: </span>
                     <span>
-                      {dataReportDetail.reportTypeName === EReportTypeName.ADVERTISE_REPORT
+                      {dataReportDetail.reportTypeName === EReportType.ADVERTISE
                         ? "Báo cáo bảng quảng cáo"
                         : "Báo cáo địa điểm quảng cáo"}
                     </span>

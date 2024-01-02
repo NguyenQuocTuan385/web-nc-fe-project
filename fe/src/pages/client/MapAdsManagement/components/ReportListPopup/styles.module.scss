@@ -1,0 +1,16 @@
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.errorIc {
+  color: var(--red-error) !important;
+}
+[class~="MuiDialog-paper"] {
+  max-width: 1000px !important;
+}
+
+.sizeTable {
+  min-width: 700px;
+}
