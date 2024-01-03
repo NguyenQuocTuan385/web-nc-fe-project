@@ -12,9 +12,7 @@ import SideBarWard from "components/admin/SidebarWard";
 import { Header } from "components/common/Header";
 import AdvertiseService from "services/advertise";
 import ContractService from "services/contract";
-import advertiseDetailsMock from "advertise-detail.json";
 import Heading4 from "components/common/text/Heading4";
-import SlideShowImages from "components/common/SlideShowImages";
 
 const InfoAdsBox = styled(Box)(() => ({
   display: "flex",
@@ -55,6 +53,8 @@ interface InfoContract {
   companyEmail: string;
   companyPhone: string;
   companyAddress: string;
+  startAt: string;
+  endAt: string;
 }
 
 export const AdvertiseDetail = () => {
@@ -62,8 +62,6 @@ export const AdvertiseDetail = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const [advertiseDetails, setAdvertiseDetails] = useState(null || advertiseDetailsMock);
-  const [infoContractDetails, setInfoContractDetails] = useState(null || advertiseDetailsMock.contracts[0]);
   const [infoAds, setInfoAds] = useState<InfoAds | null>(null);
   const [infoContract, setInfoContract] = useState<InfoContract | null>(null);
 
@@ -71,11 +69,10 @@ export const AdvertiseDetail = () => {
     const getAdvertiseDetails = async () => {
       AdvertiseService.getAdvertiseById(Number(id))
         .then((res) => {
-          setAdvertiseDetails(res);
           setInfoAds({
             adsType: res.adsType.name,
             address: res.location.address,
-            size: res.width + " x " + advertiseDetails?.height,
+            size: res.width + " x " + res.height,
             pillarQuantity: res.pillarQuantity,
             adsForm: res.location.adsForm.name,
             locationType: res.location.locationType.name,
@@ -93,12 +90,13 @@ export const AdvertiseDetail = () => {
     const getContractByAdvertiseId = async () => {
       ContractService.getContractsByAdvertiseOne(Number(id), {})
         .then((res) => {
-          setInfoContractDetails(res);
           setInfoContract({
             companyName: res.companyName,
             companyEmail: res.companyEmail,
             companyPhone: res.companyPhone,
-            companyAddress: res.companyAddress
+            companyAddress: res.companyAddress,
+            startAt: res.startAt,
+            endAt: res.endAt
           });
         })
         .catch((e) => {
@@ -125,10 +123,12 @@ export const AdvertiseDetail = () => {
           <BoxFlex>
             <InfoAdsBox>
               {/* {infoAds?.images && infoAds?.images.length > 0 && <SlideShowImages images={infoAds.images} />} */}
-              {infoAds && <img src={infoAds.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} />}
+              {infoAds && (
+                <img src={infoAds.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} />
+              )}
               <BoxFlex ml={"15px"}>{infoAds && <InfoAdvertise data={infoAds} />}</BoxFlex>
             </InfoAdsBox>
-            <Box>{infoContract && infoContractDetails && <InfoContract data={infoContract} />}</Box>
+            <Box>{infoContract && infoContract && <InfoContract data={infoContract} />}</Box>
           </BoxFlex>
 
           <Box mt={"15px"}>
@@ -140,13 +140,15 @@ export const AdvertiseDetail = () => {
               height={"250px"}
             />
 
-            {infoContractDetails && (
+            {infoContract && (
               <Box mt={"15px"}>
                 <Typography>
-                  <span className={classes.title}>Bắt đầu hợp đồng: </span> <span>{infoContractDetails.startAt}</span>
+                  <span className={classes.title}>Bắt đầu hợp đồng: </span>{" "}
+                  <span>{infoContract.startAt}</span>
                 </Typography>
                 <Typography>
-                  <span className={classes.title}>Kết thúc hợp đồng: </span> <span>{infoContractDetails.endAt}</span>
+                  <span className={classes.title}>Kết thúc hợp đồng: </span>{" "}
+                  <span>{infoContract.endAt}</span>
                 </Typography>
               </Box>
             )}

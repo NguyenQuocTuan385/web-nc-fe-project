@@ -1,6 +1,12 @@
 import { Box, Button, IconButton, Pagination } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useLocation,
+  useResolvedPath,
+  createSearchParams
+} from "react-router-dom";
 import queryString from "query-string";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -106,7 +112,9 @@ const AdvertiseOfLocationManagement = () => {
 
   const handleEditAdvertise = (idAdvertise: number) => {
     navigate(
-      `${routes.admin.advertises.edit.replace(":locationId", `${id}`).replace(":advertiseId", `${idAdvertise}`)}`
+      `${routes.admin.advertises.edit
+        .replace(":locationId", `${id}`)
+        .replace(":advertiseId", `${idAdvertise}`)}`
     );
   };
 
@@ -143,7 +151,15 @@ const AdvertiseOfLocationManagement = () => {
     "Số lượng trụ",
     "Trạng thái"
   ];
-  const customColumns = ["stt", "id", "adsType", "adsForm", "size", "pillarQuantity", "objectStatus"];
+  const customColumns = [
+    "stt",
+    "id",
+    "adsType",
+    "adsForm",
+    "size",
+    "pillarQuantity",
+    "objectStatus"
+  ];
 
   const dataInfoLocation: LocationView = advertiseList.map((ads: any, index: number) => {
     return {
@@ -155,10 +171,9 @@ const AdvertiseOfLocationManagement = () => {
       locationType: ads.location.locationType.name,
       latitude: ads.location.latitude,
       longtitude: ads.location.longitude,
-      images: ads.location.images
+      images: ads.location.images.length > 0 ? JSON.parse(ads.location.images) : []
     };
   })[0];
-  // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const goBack = () => {
     navigate(`${routes.admin.locations.root}`);
@@ -196,7 +211,11 @@ const AdvertiseOfLocationManagement = () => {
                   Number(currentPage) * itemsPerPage,
                   totalElements
                 )} kết quả trên ${totalElements}`}</span>
-                <Pagination count={totalPage} page={Number(currentPage)} onChange={handleChangePage} />
+                <Pagination
+                  count={totalPage}
+                  page={Number(currentPage)}
+                  onChange={handleChangePage}
+                />
               </Box>
             </Box>
           </Box>

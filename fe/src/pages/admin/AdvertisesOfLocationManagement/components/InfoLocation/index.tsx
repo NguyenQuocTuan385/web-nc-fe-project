@@ -11,8 +11,8 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
   return (
     <Box className={classes["info-container"]}>
       <Box className={classes["info-item"]}>
-        {/* <SlideShowImages images={data.images} /> */}
-        <img src={data.images} alt='Điểm đặt quảng cáo' />
+        <SlideShowImages images={data.images} />
+        {/* <img src={data.images} alt='Điểm đặt quảng cáo' /> */}
 
         <Typography variant='h6'>Điểm đặt quảng cáo</Typography>
         <Typography className={classes["inline-typo"]}>
@@ -36,14 +36,19 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
         <Typography
           variant='h6'
           style={{ textTransform: "uppercase" }}
-          className={`${classes["planning-text"]} ${data.planning ? classes["active"] : classes["inactive"]}`}
+          className={`${classes["planning-text"]} ${
+            data.planning ? classes["active"] : classes["inactive"]
+          }`}
         >
           {data.planning ? "đã quy hoạch" : "chưa quy hoạch"}
         </Typography>
       </Box>
 
       <Box className={classes["map-item"]}>
-        <img src='https://baotayninh.vn/image/fckeditor/upload/2020/20200308/images/hoang%20mang%201.png' alt='Map' />
+        <img
+          src='https://baotayninh.vn/image/fckeditor/upload/2020/20200308/images/hoang%20mang%201.png'
+          alt='Map'
+        />
       </Box>
     </Box>
   );
