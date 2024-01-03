@@ -26,7 +26,7 @@ export class AdvertiseService {
 
   static async getAdvertiseById(id: number): Promise<any> {
     return await api
-      .get(`${API.ADVERTISE.DETAILS.replace(":id", `${id}`)}`)
+      .get(`${API.ADVERTISE.GET_BY_ID.replace(":id", `${id}`)}`)
       .then((res) => {
         return Promise.resolve(res.data);
       })
