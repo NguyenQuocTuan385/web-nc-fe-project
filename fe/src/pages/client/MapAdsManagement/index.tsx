@@ -204,8 +204,17 @@ const MapAdsManagement = () => {
     });
     if (features.length > 0) {
       closeAddressSidebar();
-      const { id, address, adsForm, images, locationType, planning, longitude, latitude, property } =
-        features[0].properties;
+      const {
+        id,
+        address,
+        adsForm,
+        images,
+        locationType,
+        planning,
+        longitude,
+        latitude,
+        property
+      } = features[0].properties;
 
       const locationTemp: Location = {
         id,
@@ -418,11 +427,20 @@ const MapAdsManagement = () => {
           <Switch defaultChecked onChange={changeHandleReportLocation} />
           <ParagraphSmall>Địa điểm báo cáo</ParagraphSmall>
         </Box>
-        <Button variant='contained' color='primary' size='small' onClick={() => setOpenReportInfoPopup(true)}>
+        <Button
+          variant='contained'
+          color='primary'
+          size='small'
+          onClick={() => setOpenReportInfoPopup(true)}
+        >
           Xem báo cáo
         </Button>
       </Box>
-      <LocationSidebar isOpen={openLocationSidebar} closeSidebar={closeAdsSidebar} location={location} />
+      <LocationSidebar
+        isOpen={openLocationSidebar}
+        closeSidebar={closeAdsSidebar}
+        location={location}
+      />
       <RandomLocationSidebar
         isOpen={openRandomLocationSidebar}
         closeSidebar={closeAddressSidebar}

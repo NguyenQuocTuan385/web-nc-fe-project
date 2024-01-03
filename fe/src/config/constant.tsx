@@ -12,7 +12,7 @@ export const API = {
     DEFAULT: "/api/locations/:id/advertises",
     UPDATE_LICENSE: "/api/advertises/:id/license",
     UPDATE: "/api/advertises/:id",
-    GET_ALL_UNAUTHORIZED: "/api/advertises",
+    GET_ALL_UNLICENSING: "/api/advertises",
     GET_BY_ID: "/api/advertises/:id",
     DELETE_ADVERTISE_EDIT: "/api/advertises/edit/:id",
     UPDATE_STATUS: "/api/advertises/:id/status",
@@ -25,9 +25,9 @@ export const API = {
   CONTRACT: {
     DEFAULT: "/api/properties/:id/contracts",
     DELETE: "/api/contracts/:id",
-    ByAdvertiseId: "/api/advertises/:id/contracts",
+    BY_ADVERTISE_ID: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id",
-    ByAdvertiseIdOne: "/api/contracts/advertises/:id",
+    BY_ADVERTISE_ID_ONE: "/api/contracts/advertises/:id",
     CREATE: "/api/contracts",
     UPDATE_STATUS: "/api/contracts/:id/status",
     GETBYPROPERTY_PARENT_ID: "/api/properties/contracts"
@@ -50,6 +50,7 @@ export const API = {
   },
   REPORT: {
     DEFAULT: "/api/reports",
+    CREATE: "/api/reports",
     DETAILS: "/api/reports/:id",
     UPDATE: "/api/reports/:id"
   },

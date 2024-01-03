@@ -35,7 +35,6 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
     const getReportsUser = async () => {
       ReportService.getReports({ pageSize: 999, email: "nguyenvana@gmail.com" })
         .then((res) => {
-          console.log(res.content);
           setReports(res.content);
         })
         .catch((error) => {
@@ -43,7 +42,7 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
         });
     };
     getReportsUser();
-  });
+  }, []);
   return (
     <ReportDialog onClose={onClose} aria-labelledby='customized-dialog-title' open={open}>
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>

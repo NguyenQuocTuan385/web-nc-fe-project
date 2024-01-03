@@ -6,6 +6,7 @@ import ReportFormPopup from "../ReportFormPopup";
 import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Advertise } from "models/advertise";
+import { EReportType } from "models/report";
 
 interface AdvertiseInfoProps {
   advertise: Advertise;
@@ -48,7 +49,12 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
         </Button>
       </Box>
       <AdvertiseInfoPopup advertise={advertise} open={openAdvertiseInfoPopup} onClose={closeAdvertiseInfoPopup} />
-      <ReportFormPopup open={openReportPopup} setOpen={setOpenReportPopup} />
+      <ReportFormPopup
+        advertiseId={advertise.id}
+        reportTypeName={EReportType.ADVERTISE}
+        open={openReportPopup}
+        setOpen={setOpenReportPopup}
+      />
     </Box>
   );
 };

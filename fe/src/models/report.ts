@@ -27,8 +27,8 @@ export interface Report {
 }
 
 export enum EReportType {
-  LOCATION = 1,
-  ADVERTISE = 2
+  LOCATION = "LOCATION",
+  ADVERTISE = "ADVERTISE"
 }
 
 export enum EReportStatus {
@@ -49,4 +49,18 @@ export interface GetReports {
 export interface ReportEditRequest {
   status: number;
   reply: string;
+}
+
+export interface ReportCreateRequest {
+  reportFormId: number;
+  fullName: string;
+  email: string;
+  phone: string;
+  content: string;
+  images: string;
+  reportTypeName: EReportType;
+  address?: string;
+  longitude?: number;
+  latitude?: number;
+  advertiseId?: number;
 }

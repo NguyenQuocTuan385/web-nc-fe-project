@@ -62,9 +62,9 @@ function ContractDetailForm(propsData: PropsData) {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("upload_preset", "test-react-uploads-unsigned");
-        formData.append("api_key", "487343349115581");
+        formData.append("api_key", process.env.REACT_APP_API_KEY_CLOUDINARY as string);
 
-        const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
+        const URL = process.env.REACT_APP_URL_CLOUDINARY as string;
         const uploadDataResult = await fetch(URL, {
           method: "POST",
           body: formData

@@ -6,8 +6,8 @@ export interface ReportForm {
 
 export interface GetReportForms {
   search?: string;
-  current: number;
-  pageSize: number;
+  current?: number;
+  pageSize?: number;
 }
 
 export interface Pageable {

@@ -13,7 +13,7 @@ export class AdvertiseService {
         return Promise.reject(e?.response?.data);
       });
   }
- static async updateAdvertiseLicense(id: number, data: UpdateAdvertiseStatus): Promise<any> {
+  static async updateAdvertiseLicense(id: number, data: UpdateAdvertiseStatus): Promise<any> {
     return await api
       .put(`${API.ADVERTISE.UPDATE_LICENSE.replace(":id", `${id}`)}`, data)
       .then((res) => {
@@ -46,9 +46,9 @@ export class AdvertiseService {
       });
   }
 
-  static async getAllUnauthorizedAdvertisement(data: GetAdvertises): Promise<any> {
+  static async getAllUnLicensingAdvertisement(data: GetAdvertises): Promise<any> {
     return await api
-      .get(`${API.ADVERTISE.GET_ALL_UNAUTHORIZED}`, { params: data })
+      .get(`${API.ADVERTISE.GET_ALL_UNLICENSING}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })
