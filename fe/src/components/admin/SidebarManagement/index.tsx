@@ -9,10 +9,12 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import classes from "./styles.module.scss";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarItem {
   name: string;
   icon: JSX.Element;
+  link?: string;
   children?: Array<{ name: string }>;
 }
 
@@ -26,6 +28,7 @@ interface SelectedItem {
 }
 
 export default function SidebarManagement(sideBarItemList: SideBarItemList) {
+  const navigate = useNavigate();
   const [openItems, setOpenItems] = useState<number | null>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedItem>({
     parentIndex: null,
@@ -33,7 +36,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   });
   const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
 
-  const handleClick = (index: number, child: Array<{ name: string }>) => {
+  const handleClick = (index: number, sideBarItem: SidebarItem, child: Array<{ name: string }>) => {
     if (openItems === index) {
       setOpenItems(null);
       if (selectedItem.childIndex == null) {
@@ -62,6 +65,10 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
               : item
           )
         );
+
+        if (sideBarItem && sideBarItem.link) {
+          navigate(sideBarItem.link);
+        }
       } else {
         if (selectedItem.parentIndex === null) {
           setSelectedItem({
@@ -89,7 +96,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
               <React.Fragment key={index}>
                 <ListItem disablePadding>
                   <ListItemButton
-                    onClick={() => handleClick(index, list.children || [])}
+                    onClick={() => handleClick(index, list, list.children || [])}
                     className={classes.item}
                     selected={selectedItem.parentIndex === index && list.children === undefined}
                   >

@@ -1,0 +1,25 @@
+{
+  "id": 2,
+  "name": "Nguyễn Văn Tý",
+  "email": "nvty@gmail.com",
+  "password": "ty123",
+  "birthday": "2000-09-09",
+  "avatar": null,
+  "phone": "0246802468",
+  "role": {
+    "id": 2,
+    "code": "WARD",
+    "description": "Cán bộ phường/xã"
+  },
+  "property": {
+    "id": 4,
+    "name": "Phường 4",
+    "code": "PHUONG",
+    "propertyParent": {
+      "id": 1,
+      "name": "Quận 5",
+      "code": "QUAN",
+      "propertyParent": null
+    }
+  }
+}

@@ -1,8 +1,9 @@
-import { Location } from "./location";
+import { Location, RandomLocation } from "./location";
+import { Report } from "./report";
 
 export interface Feature {
   type: string;
-  properties: Location;
+  properties: Location | RandomLocation;
   geometry: Geometry;
 }
 

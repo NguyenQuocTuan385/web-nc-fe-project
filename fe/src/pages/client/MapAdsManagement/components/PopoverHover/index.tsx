@@ -9,8 +9,8 @@ const PopoverHover = ({ properties }: any) => {
   return (
     <Box className={classes.popup}>
       <ParagraphExtraSmall $fontWeight={"bold"}>{adsFormName}</ParagraphExtraSmall>
-      <ParagraphExtraSmall>{properties.address}</ParagraphExtraSmall>
       <ParagraphExtraSmall>{locationTypeName}</ParagraphExtraSmall>
+      <ParagraphExtraSmall>{properties.address}</ParagraphExtraSmall>
       {properties.planning ? (
         <ParagraphSmall $fontWeight={"bold"}>ĐÃ QUY HOẠCH</ParagraphSmall>
       ) : (

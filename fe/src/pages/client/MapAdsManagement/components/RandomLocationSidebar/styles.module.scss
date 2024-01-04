@@ -9,16 +9,21 @@
   }
 }
 
-.boxContainer {
+.boxWrapped {
   display: flex;
   padding: 20px;
   flex-direction: column;
   gap: 15px;
-  border-bottom: 1px solid var(--gray-50);
   background-color: #edf7ed;
 }
 
 .btnContainer {
   display: flex;
   justify-content: flex-end;
+}
+
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
