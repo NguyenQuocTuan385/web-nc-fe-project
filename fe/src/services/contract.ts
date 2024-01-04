@@ -93,7 +93,6 @@ export class ContractService {
   static async updateContractById(id: number, data: UpdateContractStatus): Promise<any> {
     return await api
       .put(`${API.CONTRACT.UPDATE_STATUS.replace(":id", `${id}`)}`, data)
->
       .then((res) => {
         return Promise.resolve(res.data);
       })

@@ -56,9 +56,9 @@ export default function TabPanel() {
     if (params.wardFilter === undefined || params.wardFilter === null) setSearchParams([null]);
     else {
       if (Array.isArray(params.wardFilter)) {
-        console.log("HIHI");
         setSearchParams(params?.wardFilter);
-      } else if (Number.isInteger(Number(params.wardFilter))) setSearchParams([params.wardFilter.toString()]);
+      } else if (Number.isInteger(Number(params.wardFilter)))
+        setSearchParams([params.wardFilter.toString()]);
     }
   }, [locationHook.search]);
 

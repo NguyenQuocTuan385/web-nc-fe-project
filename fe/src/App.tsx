@@ -30,6 +30,7 @@ import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
 import DistrictContractList from "pages/admin/DistrictContractList";
 import Login from "pages/admin/Login";
+import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
 
 function App() {
   return (
@@ -56,7 +57,10 @@ function App() {
           <Route path={routes.admin.locations.edit} Component={LocationEdit} />
 
           {/* Advertises */}
-          <Route path={routes.admin.advertises.ofLocation} Component={AdvertisesOfLocationManagement} />
+          <Route
+            path={routes.admin.advertises.ofLocation}
+            Component={AdvertisesOfLocationManagement}
+          />
           <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
           <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
@@ -70,6 +74,8 @@ function App() {
           <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
 
           <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
+          <Route path={routes.admin.locations.district} Component={DistrictLocationManagement} />
+
           <Route path={routes.admin.authentication.login} Component={Login} />
         </Routes>
       </BrowserRouter>
