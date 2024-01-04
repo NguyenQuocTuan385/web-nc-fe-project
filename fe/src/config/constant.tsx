@@ -27,9 +27,10 @@ export const API = {
     DELETE: "/api/contracts/:id",
     BY_ADVERTISE_ID: "/api/advertises/:id/contracts",
     ById: "/api/contracts/:id",
+    CONTRACTBYPROPERTY: "/api/properties/contracts",
+    UPDATE_STATUS: "/api/contracts/:id/status",
     BY_ADVERTISE_ID_ONE: "/api/contracts/advertises/:id",
     CREATE: "/api/contracts",
-    UPDATE_STATUS: "/api/contracts/:id/status",
     GETBYPROPERTY_PARENT_ID: "/api/properties/contracts"
   },
   DISTRICT: {

@@ -78,9 +78,22 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
+
+  static async getContractByPropertyAndParent(data: GetContract): Promise<any> {
+    return await api
+      .get(`${API.CONTRACT.CONTRACTBYPROPERTY}`, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
   static async updateContractById(id: number, data: UpdateContractStatus): Promise<any> {
     return await api
       .put(`${API.CONTRACT.UPDATE_STATUS.replace(":id", `${id}`)}`, data)
+>
       .then((res) => {
         return Promise.resolve(res.data);
       })
