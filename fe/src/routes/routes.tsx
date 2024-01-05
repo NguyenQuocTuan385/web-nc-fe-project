@@ -25,7 +25,8 @@ export const routes = {
     locations: {
       root: "/admin/locations",
       create: "/admin/locations/create",
-      edit: "/admin/locations/edit/:id"
+      edit: "/admin/locations/edit/:id",
+      district: "/admin/district/locations"
     },
     properties: {
       district: "/admin/districts",
@@ -33,7 +34,7 @@ export const routes = {
     },
     contracts: {
       root: "/admin/contracts",
-      createForm: "/admin/contracts/create-form",
+      createForm: "/admin/contracts/create-form/:id",
       detail: "/admin/contracts/:id",
       district: "admin/district/contracts"
     },

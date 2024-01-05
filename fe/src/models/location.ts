@@ -52,6 +52,14 @@ export interface GetLocations {
   current?: number;
 }
 
+export interface GetLocationsWithPropertyArray {
+  propertyId?: number[];
+  parentId?: number[];
+  search?: string;
+  pageSize?: number;
+  current?: number;
+}
+
 export interface LocationEdit {
   id: number;
   planning: boolean;
