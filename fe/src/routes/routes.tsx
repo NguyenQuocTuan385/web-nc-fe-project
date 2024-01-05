@@ -41,7 +41,8 @@ export const routes = {
     reports: {
       root: "/admin/reports",
       edit: "/admin/reports/edit/:id",
-      details: "/admin/report/:id"
+      details: "/admin/report/:id",
+      district: "/admin/district/reports"
     },
     reportForm: {
       root: "/admin/report-forms"

@@ -38,6 +38,8 @@ export enum EReportStatus {
 }
 
 export interface GetReports {
+  propertyId?: number[];
+  parentId?: number[];
   email?: string;
   locationId?: number;
   search?: string;

@@ -31,6 +31,7 @@ import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
 import DistrictContractList from "pages/admin/DistrictContractList";
 import Login from "pages/admin/Login";
 import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
+import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
 
 function App() {
   return (
@@ -75,6 +76,7 @@ function App() {
 
           <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
           <Route path={routes.admin.locations.district} Component={DistrictLocationManagement} />
+          <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
 
           <Route path={routes.admin.authentication.login} Component={Login} />
         </Routes>
