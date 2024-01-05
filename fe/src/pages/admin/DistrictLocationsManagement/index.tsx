@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Pagination, Box, Dialog, DialogContent, Button } from "@mui/material";
-import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  useResolvedPath,
+  createSearchParams,
+  useSearchParams
+} from "react-router-dom";
 import queryString from "query-string";
 
 import classes from "./styles.module.scss";
@@ -26,13 +32,24 @@ const DistrictLocationManagement = () => {
 
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
-  const [searchParams, setSearchParams] = useState(() => {
+  const [searchParamFilter, setSearchParamFilter] = useState(() => {
     const params = queryString.parse(locationHook.search);
 
     if (params.wardFilter !== null) {
       if (Array.isArray(params.wardFilter)) return params.wardFilter;
       else if (Number.isInteger(Number(params.wardFilter))) return [params.wardFilter.toString()];
     }
+    return [];
+  });
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [filteredId, setFilterdId] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    if (params.wardFilter !== null) {
+      if (Array.isArray(params.wardFilter)) return params.wardFilter.map(Number);
+      else if (Number.isInteger(Number(params.wardFilter))) return [Number(params.wardFilter)];
+    }
+
     return [];
   });
   const [currentPage, setCurrentPage] = useState(() => {
@@ -43,19 +60,13 @@ const DistrictLocationManagement = () => {
   const [totalElements, setTotalElements] = useState(1);
   const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
     setCurrentPage(newPageValue);
-    navigate({
-      pathname: match,
-      search: createSearchParams({
-        page: newPageValue.toString()
-      }).toString()
-    });
   };
 
   useEffect(() => {
     const getAllLocations = async () => {
       LocationService.getLocationsWithPropertyAndParent({
-        propertyId: [],
-        parentId: [],
+        propertyId: filteredId,
+        parentId: [1],
         search: searchValue,
         pageSize: itemsPerPage,
         current: Number(currentPage)
@@ -65,19 +76,15 @@ const DistrictLocationManagement = () => {
           setTotalPage(res.totalPages);
           setTotalElements(res.totalElements);
 
-          navigate({
-            pathname: match,
-            search: createSearchParams({
-              page: currentPage.toString()
-            }).toString()
-          });
+          searchParams.set("page", currentPage.toString());
+          // searchParams.set("rowsNum", rowsPerPage.toString());
         })
         .catch((e) => {
           console.log(e);
         });
     };
     getAllLocations();
-  }, [currentPage, searchValue]);
+  }, [currentPage, searchValue, filteredId]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -86,12 +93,17 @@ const DistrictLocationManagement = () => {
   useEffect(() => {
     const params = queryString.parse(locationHook.search);
 
-    if (params.wardFilter === undefined || params.wardFilter === null) setSearchParams([null]);
-    else {
+    if (params.wardFilter === undefined || params.wardFilter === null) {
+      setFilterdId([]);
+      setSearchParamFilter([null]);
+    } else {
       if (Array.isArray(params.wardFilter)) {
-        setSearchParams(params?.wardFilter);
-      } else if (Number.isInteger(Number(params.wardFilter)))
-        setSearchParams([params.wardFilter.toString()]);
+        setSearchParamFilter(params?.wardFilter);
+        setFilterdId(params.wardFilter.map(Number));
+      } else if (Number.isInteger(Number(params.wardFilter))) {
+        setSearchParamFilter([params.wardFilter.toString()]);
+        setFilterdId([Number(params.wardFilter)]);
+      }
     }
   }, [locationHook.search]);
 
@@ -174,7 +186,7 @@ const DistrictLocationManagement = () => {
       >
         <DialogContent>
           <WardFilter
-            selectedId={searchParams}
+            selectedId={searchParamFilter}
             propertyList={[
               {
                 id: 3,
