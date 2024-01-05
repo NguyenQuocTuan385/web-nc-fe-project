@@ -54,7 +54,8 @@ export const API = {
     DEFAULT: "/api/reports",
     CREATE: "/api/reports",
     DETAILS: "/api/reports/:id",
-    UPDATE: "/api/reports/:id"
+    UPDATE: "/api/reports/:id",
+    GET_WITH_PROPERTY_PARENT: "/api/properties/reports"
   },
   REPORT_FORM: {
     DEFAULT: "/api/report-forms"
