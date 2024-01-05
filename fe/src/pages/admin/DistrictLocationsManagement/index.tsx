@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pagination, Box, Dialog, DialogContent, Button } from "@mui/material";
+import { Pagination, Box, Dialog, DialogContent, Button, TablePagination } from "@mui/material";
 import {
   useNavigate,
   useLocation,
@@ -25,7 +25,6 @@ import { openFilterDialog } from "reduxes/Status";
 const DistrictLocationManagement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const itemsPerPage = 5;
 
   const [locationList, setLocationList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -40,6 +39,10 @@ const DistrictLocationManagement = () => {
       else if (Number.isInteger(Number(params.wardFilter))) return [params.wardFilter.toString()];
     }
     return [];
+  });
+  const [rowsPerPage, setRowsPerPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.rowsNum || 5;
   });
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -58,33 +61,43 @@ const DistrictLocationManagement = () => {
   });
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
-  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
-    setCurrentPage(newPageValue);
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPageValue: number
+  ) => {
+    setCurrentPage(newPageValue + 1);
   };
-
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
+  };
   useEffect(() => {
     const getAllLocations = async () => {
       LocationService.getLocationsWithPropertyAndParent({
         propertyId: filteredId,
         parentId: [1],
         search: searchValue,
-        pageSize: itemsPerPage,
+        pageSize: Number(rowsPerPage),
         current: Number(currentPage)
       })
         .then((res) => {
+          if (res.content.length === 0) setCurrentPage(1);
+
           setLocationList(res.content);
           setTotalPage(res.totalPages);
           setTotalElements(res.totalElements);
 
           searchParams.set("page", currentPage.toString());
-          // searchParams.set("rowsNum", rowsPerPage.toString());
+          searchParams.set("rowsNum", rowsPerPage.toString());
         })
         .catch((e) => {
           console.log(e);
         });
     };
     getAllLocations();
-  }, [currentPage, searchValue, filteredId]);
+  }, [currentPage, searchValue, filteredId, rowsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -164,15 +177,24 @@ const DistrictLocationManagement = () => {
               />
 
               <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(
-                  Number(currentPage) * itemsPerPage,
-                  totalElements
-                )} kết quả trên ${totalElements}`}</span>
-                <Pagination
+                <Box className={classes.pagination}>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 100]}
+                    component='div'
+                    count={totalElements}
+                    page={Number(currentPage) - 1}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={Number(rowsPerPage)}
+                    labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Box>
+
+                {/* <Pagination
                   count={totalPage}
                   page={Number(currentPage)}
                   onChange={handleChangePage}
-                />
+                /> */}
               </Box>
             </Box>
           </Box>

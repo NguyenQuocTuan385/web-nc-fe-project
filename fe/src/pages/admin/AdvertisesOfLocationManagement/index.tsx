@@ -176,7 +176,7 @@ const AdvertiseOfLocationManagement = () => {
   })[0];
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.root}`);
+    navigate(-1);
   };
 
   return (
