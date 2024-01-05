@@ -1,8 +1,19 @@
 import React from "react";
-import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Paper, IconButton } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Paper,
+  IconButton
+} from "@mui/material";
 import { faEdit, faEye, faRectangleAd, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
+import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
 interface TableTemplateProps {
   data: Array<{ [key: string]: any }>;
   customHeading: string[];
@@ -26,6 +37,7 @@ function TableTemplate({
   onAddClick,
   linkToMove
 }: TableTemplateProps) {
+  const navigate = useNavigate();
   const handleViewAdsClick = (rowId: number) => {
     if (onViewAdsClick) {
       onViewAdsClick(rowId);
@@ -47,7 +59,7 @@ function TableTemplate({
   const handleAddClick = (rowId: number) => {
     if (onAddClick) {
       onAddClick(rowId);
-      console.log("Add here!");
+      navigate(`${routes.admin.contracts.createForm.replace(":id", `${rowId}`)}`);
     }
   };
 
@@ -93,12 +105,20 @@ function TableTemplate({
               {isActionColumn && (
                 <TableCell align='center' className={classes["cell-actions"]}>
                   {onViewAdsClick && (
-                    <IconButton aria-label='view-ads-list' size='medium' onClick={() => handleViewAdsClick(row.id)}>
+                    <IconButton
+                      aria-label='view-ads-list'
+                      size='medium'
+                      onClick={() => handleViewAdsClick(row.id)}
+                    >
                       <FontAwesomeIcon icon={faRectangleAd} color='var(--blue-500)' />
                     </IconButton>
                   )}
                   {onViewDetailsClick && (
-                    <IconButton aria-label='view-detail' size='medium' onClick={() => handleViewDetailsClick(row.id)}>
+                    <IconButton
+                      aria-label='view-detail'
+                      size='medium'
+                      onClick={() => handleViewDetailsClick(row.id)}
+                    >
                       <FontAwesomeIcon icon={faEye} color='var(--blue-700)' />
                     </IconButton>
                   )}
@@ -112,7 +132,11 @@ function TableTemplate({
                     <FontAwesomeIcon icon={faEdit} color='#FFA500' />
                   </IconButton>
                   {onAddClick && row.statusContract !== 1 && (
-                    <IconButton aria-label='add' size='medium' onClick={() => handleAddClick(row.id)}>
+                    <IconButton
+                      aria-label='add'
+                      size='medium'
+                      onClick={() => handleAddClick(row.id)}
+                    >
                       <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
                     </IconButton>
                   )}
