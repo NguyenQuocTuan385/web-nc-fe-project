@@ -14,6 +14,17 @@ export class ReportService {
       });
   }
 
+  static async getReportsWithPropertyAndParent(data: GetReports): Promise<any> {
+    return await api
+      .get(`${API.REPORT.GET_WITH_PROPERTY_PARENT}`, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
   static async getReportById(reportId: number): Promise<any> {
     return await api
       .get(`${API.REPORT.DETAILS.replace(":id", `${reportId}`)}`)

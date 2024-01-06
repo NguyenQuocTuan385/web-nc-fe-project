@@ -7,7 +7,8 @@ export const API = {
     UPDATE_STATUS: "/api/locations/:id/status",
     DELETE: "/api/locations/edit/:id",
     EDIT: "/api/locations/:id",
-    GET_BY_PROPERTY_ID: "/api/properties/:id/locations"
+    GET_BY_PROPERTY_ID: "/api/properties/:id/locations",
+    GET_WITH_PROPERTY_PARENT: "/api/properties/locations"
   },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
@@ -54,7 +55,8 @@ export const API = {
     DEFAULT: "/api/reports",
     CREATE: "/api/reports",
     DETAILS: "/api/reports/:id",
-    UPDATE: "/api/reports/:id"
+    UPDATE: "/api/reports/:id",
+    GET_WITH_PROPERTY_PARENT: "/api/properties/reports"
   },
   REPORT_FORM: {
     DEFAULT: "/api/report-forms"
