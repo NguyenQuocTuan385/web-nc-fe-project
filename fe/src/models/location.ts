@@ -102,3 +102,26 @@ export interface LocationEditRequest {
   userId: number;
   content: string;
 }
+
+export interface LocationEditByCDMSRequest {
+  address: string;
+  locationTypeId: number;
+  advertiseFormId: number;
+  planning: number;
+  imageUrls: any;
+  latitude: number;
+  longitude: number;
+  propertyId: number;
+  userId: number;
+}
+
+export interface LocationCreateRequest {
+  planning: number;
+  latitude: number;
+  longitude: number;
+  address: string;
+  advertiseFormId: number;
+  locationTypeId: number;
+  propertyId: number;
+  image: any;
+}

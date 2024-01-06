@@ -30,6 +30,10 @@ import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
 import DistrictContractList from "pages/admin/DistrictContractList";
 import Login from "pages/admin/Login";
+import LocationManagementDCMS from "pages/admin/LocationManagementDCMS";
+import { LocationEditCDMS } from "pages/admin/LocationEditDCMS";
+import { LocationCreateCDMS } from "pages/admin/LocationCreateDCMS";
+import AdvertisesOfLocationManagementDCMS from "pages/admin/AdvertisesOfLocationManagementDCMS";
 
 function App() {
   return (
@@ -55,8 +59,20 @@ function App() {
           <Route path={routes.admin.locations.root} Component={LocationManagement} />
           <Route path={routes.admin.locations.edit} Component={LocationEdit} />
 
+          {/* Location DCMS  */}
+          <Route path={routes.admin.locations.dcms} Component={LocationManagementDCMS} />
+          <Route path={routes.admin.locations.dcmsEdit} Component={LocationEditCDMS} />
+          <Route path={routes.admin.locations.dcmsCreate} Component={LocationCreateCDMS} />
+          <Route
+            path={routes.admin.locations.dcmsDetail}
+            Component={AdvertisesOfLocationManagementDCMS}
+          />
+
           {/* Advertises */}
-          <Route path={routes.admin.advertises.ofLocation} Component={AdvertisesOfLocationManagement} />
+          <Route
+            path={routes.admin.advertises.ofLocation}
+            Component={AdvertisesOfLocationManagement}
+          />
           <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
           <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
