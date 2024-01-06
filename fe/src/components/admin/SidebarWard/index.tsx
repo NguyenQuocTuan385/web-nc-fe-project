@@ -1,9 +1,13 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPeopleRoof, faCircleCheck, faRectangleAd, faFlag } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPeopleRoof,
+  faCircleCheck,
+  faRectangleAd,
+  faFlag
+} from "@fortawesome/free-solid-svg-icons";
 import SidebarManagement from "../SidebarManagement";
 import classes from "./styles.module.scss";
-
 import { routes } from "routes/routes";
 
 const sideBarItemListData = [
