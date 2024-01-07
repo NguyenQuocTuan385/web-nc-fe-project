@@ -62,5 +62,9 @@ export const API = {
   },
   ADVERTISE_TYPE: {
     DEFAULT: "/api/advertise-types"
+  },
+  EMAIL: {
+    SEND_TEXT_EMAIL: "/api/email/text",
+    SEND_HTML_EMAIL: "/api/email/html"
   }
 };
