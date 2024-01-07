@@ -52,6 +52,14 @@ export interface GetLocations {
   current?: number;
 }
 
+export interface GetLocationsWithPropertyArray {
+  propertyId?: number[];
+  parentId?: number[];
+  search?: string;
+  pageSize?: number;
+  current?: number;
+}
+
 export interface LocationEdit {
   id: number;
   planning: boolean;
@@ -101,4 +109,27 @@ export interface LocationEditRequest {
   propertyId: number;
   userId: number;
   content: string;
+}
+
+export interface LocationEditByCDMSRequest {
+  address: string;
+  locationTypeId: number;
+  advertiseFormId: number;
+  planning: number;
+  imageUrls: any;
+  latitude: number;
+  longitude: number;
+  propertyId: number;
+  userId: number;
+}
+
+export interface LocationCreateRequest {
+  planning: number;
+  latitude: number;
+  longitude: number;
+  address: string;
+  advertiseFormId: number;
+  locationTypeId: number;
+  propertyId: number;
+  image: any;
 }

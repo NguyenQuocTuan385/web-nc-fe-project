@@ -28,7 +28,17 @@ import ContractDetail from "pages/admin/ContractDetail";
 import ReportFormManagement from "pages/admin/ReportFormManagement";
 import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
+import DistrictContractList from "pages/admin/DistrictContractList";
 import Login from "pages/admin/Login";
+
+import LocationManagementDCMS from "pages/admin/LocationManagementDCMS";
+import { LocationEditCDMS } from "pages/admin/LocationEditDCMS";
+import { LocationCreateCDMS } from "pages/admin/LocationCreateDCMS";
+import AdvertisesOfLocationManagementDCMS from "pages/admin/AdvertisesOfLocationManagementDCMS";
+
+import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
+import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
+
 
 function App() {
   return (
@@ -54,8 +64,20 @@ function App() {
           <Route path={routes.admin.locations.root} Component={LocationManagement} />
           <Route path={routes.admin.locations.edit} Component={LocationEdit} />
 
+          {/* Location DCMS  */}
+          <Route path={routes.admin.locations.dcms} Component={LocationManagementDCMS} />
+          <Route path={routes.admin.locations.dcmsEdit} Component={LocationEditCDMS} />
+          <Route path={routes.admin.locations.dcmsCreate} Component={LocationCreateCDMS} />
+          <Route
+            path={routes.admin.locations.dcmsDetail}
+            Component={AdvertisesOfLocationManagementDCMS}
+          />
+
           {/* Advertises */}
-          <Route path={routes.admin.advertises.ofLocation} Component={AdvertisesOfLocationManagement} />
+          <Route
+            path={routes.admin.advertises.ofLocation}
+            Component={AdvertisesOfLocationManagement}
+          />
           <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
           <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
@@ -67,6 +89,10 @@ function App() {
           <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
           <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
           <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+
+          <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
+          <Route path={routes.admin.locations.district} Component={DistrictLocationManagement} />
+          <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
 
           <Route path={routes.admin.authentication.login} Component={Login} />
         </Routes>

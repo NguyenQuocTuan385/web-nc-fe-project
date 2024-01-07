@@ -1,6 +1,7 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { GetLocations, putLocation, updateStatus } from "models/location";
+import { GetLocations, LocationCreateRequest,GetLocationsWithPropertyArray, putLocation, updateStatus } from "models/location";
+
 
 export class LocationService {
   static async getLocations(data: GetLocations): Promise<any> {
@@ -56,6 +57,28 @@ export class LocationService {
   static async getLocationsReview(data: GetLocations): Promise<any> {
     return await api
       .get(`${API.LOCATION.GET_ALL_REVIEW}`, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
+  static async createLocation(locationCreateRequest: LocationCreateRequest): Promise<any> {
+    return await api
+      .post(`${API.LOCATION.DEFAULT}`, locationCreateRequest)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
+  static async getLocationsWithPropertyAndParent(data: GetLocationsWithPropertyArray): Promise<any> {
+    return await api
+      .get(`${API.LOCATION.GET_WITH_PROPERTY_PARENT}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })

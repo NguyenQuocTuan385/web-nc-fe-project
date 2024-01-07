@@ -25,6 +25,7 @@ import { LocationView } from "models/location";
 import { Contract } from "models/contract";
 import ContractService from "services/contract";
 import { Advertise } from "models/advertise";
+import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -40,7 +41,7 @@ const IconButtonBack = styled(IconButton)(() => ({
   }
 }));
 
-const AdvertiseOfLocationManagement = () => {
+const AdvertiseOfLocationManagementDCMS = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const itemsPerPage = 5;
@@ -176,7 +177,7 @@ const AdvertiseOfLocationManagement = () => {
   })[0];
 
   const goBack = () => {
-    navigate(-1);
+    navigate(`${routes.admin.locations.dcms}`);
   };
 
   return (
@@ -196,7 +197,7 @@ const AdvertiseOfLocationManagement = () => {
 
           <Box className={classes["table-container"]}>
             <Box className={classes["table-container"]}>
-              <TableTemplate
+              <TableTemplateDCMS
                 data={data}
                 customHeading={customHeading}
                 customColumns={customColumns}
@@ -225,4 +226,4 @@ const AdvertiseOfLocationManagement = () => {
   );
 };
 
-export default AdvertiseOfLocationManagement;
+export default AdvertiseOfLocationManagementDCMS;

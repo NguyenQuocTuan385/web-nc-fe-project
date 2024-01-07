@@ -9,11 +9,9 @@ import {
   Paper,
   IconButton
 } from "@mui/material";
-import { faEdit, faEye, faRectangleAd, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye, faRectangleAd, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
-import { useNavigate } from "react-router-dom";
-import { routes } from "routes/routes";
 interface TableTemplateProps {
   data: Array<{ [key: string]: any }>;
   customHeading: string[];
@@ -26,7 +24,7 @@ interface TableTemplateProps {
   linkToMove?: string;
 }
 
-function TableTemplate({
+function TableTemplateDCMS({
   data,
   customHeading,
   customColumns,
@@ -37,7 +35,6 @@ function TableTemplate({
   onAddClick,
   linkToMove
 }: TableTemplateProps) {
-  const navigate = useNavigate();
   const handleViewAdsClick = (rowId: number) => {
     if (onViewAdsClick) {
       onViewAdsClick(rowId);
@@ -59,7 +56,7 @@ function TableTemplate({
   const handleAddClick = (rowId: number) => {
     if (onAddClick) {
       onAddClick(rowId);
-      navigate(`${routes.admin.contracts.createForm.replace(":id", `${rowId}`)}`);
+      console.log("Add here!");
     }
   };
 
@@ -137,7 +134,7 @@ function TableTemplate({
                       size='medium'
                       onClick={() => handleAddClick(row.id)}
                     >
-                      <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                      <FontAwesomeIcon icon={faTrash} color='var(--red-600)' />
                     </IconButton>
                   )}
                 </TableCell>
@@ -150,4 +147,4 @@ function TableTemplate({
   );
 }
 
-export default TableTemplate;
+export default TableTemplateDCMS;
