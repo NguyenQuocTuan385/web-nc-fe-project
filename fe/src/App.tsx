@@ -32,8 +32,12 @@ import DistrictContractList from "pages/admin/DistrictContractList";
 import Login from "pages/admin/Login";
 import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
 import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
+import { store } from "store";
+import { injectStore } from "services/configApi";
 
 function App() {
+  injectStore(store);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>

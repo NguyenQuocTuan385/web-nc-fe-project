@@ -65,5 +65,10 @@ export const API = {
   },
   ADVERTISE_TYPE: {
     DEFAULT: "/api/advertise-types"
+  },
+  AUTH: {
+    LOGIN: "/api/authentication/login",
+    REGISTER: "/api/authentication/register",
+    REFRESH: "/api/authentication/refresh"
   }
 };

@@ -7,6 +7,12 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { AuthenticationService } from "services/authentication";
+import { LoginRequest } from "models/authentication";
+import { useDispatch } from "react-redux";
+import { setLogin } from "reduxes/Auth";
+import Userservice from "services/user";
+import { Token } from "@mui/icons-material";
 
 interface FormData {
   email: string;
@@ -15,9 +21,24 @@ interface FormData {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogin = (data: any) => {
-    console.log(data);
-    // navigate(routes.admin.properties.district);
+    const loginData: LoginRequest = {
+      email: data.email,
+      password: data.password
+    };
+
+    AuthenticationService.login(loginData)
+      .then((res) => {
+        console.log(res);
+        dispatch(setLogin({ user: null, token: res.access_token }));
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        navigate(routes.admin.locations.district);
+      });
   };
   const schema = useMemo(() => {
     return yup.object().shape({
@@ -53,7 +74,9 @@ const Login: React.FC = () => {
               fullWidth
               {...register("email")}
               className={classes.customTextField}
+              error={Boolean(errors?.email)}
             />
+            <p className={classes.errorText}>{errors?.email?.message}</p>
             <TextField
               label='Password'
               type='password'
@@ -63,7 +86,9 @@ const Login: React.FC = () => {
               required
               {...register("password")}
               className={classes.customTextField}
+              error={Boolean(errors?.password)}
             />
+            <p className={classes.errorText}>{errors?.password?.message}</p>
 
             <Button
               variant='contained'
