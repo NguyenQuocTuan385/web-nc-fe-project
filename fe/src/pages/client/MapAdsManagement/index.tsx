@@ -58,7 +58,6 @@ const MapAdsManagement = () => {
           locations_temp.forEach((location: Location) => {
             ReportService.getReports({
               locationId: location.id,
-              reportTypeName: EReportType.ADVERTISE,
               pageSize: 999,
               email: "nguyenvana@gmail.com"
             })

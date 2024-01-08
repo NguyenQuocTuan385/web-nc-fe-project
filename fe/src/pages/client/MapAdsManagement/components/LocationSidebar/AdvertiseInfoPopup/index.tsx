@@ -42,7 +42,12 @@ export default function AdvertiseInfoPopup({ onClose, open, advertise }: Adverti
     getContracts();
   }, [advertise]);
   return (
-    <AdvertisePopup onClose={onClose} aria-labelledby='customized-dialog-title' open={open} maxWidth='lg'>
+    <AdvertisePopup
+      onClose={onClose}
+      aria-labelledby='customized-dialog-title'
+      open={open}
+      maxWidth='lg'
+    >
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Heading4>Thông tin chi tiết bảng quảng cáo</Heading4>
       </DialogTitle>

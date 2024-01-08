@@ -11,10 +11,11 @@ type InputWysiwygProps = {
   onChange?: (value: string) => void;
   onBlur?: () => void;
   errorMessage?: string;
+  readOnly?: boolean;
 };
 
 const InputWysiwyg = (props: InputWysiwygProps) => {
-  const { value, onChange, onBlur, errorMessage, title } = props;
+  const { value, onChange, onBlur, errorMessage, title, readOnly } = props;
 
   const myColors = ["green", "blue", "gray", "purple", "pink", "yellow", "white", "red", "black"];
   const modules = {
@@ -35,6 +36,7 @@ const InputWysiwyg = (props: InputWysiwygProps) => {
       <Box className={classes.editor}>
         <TextTitle>{title}</TextTitle>
         <ReactQuill
+          readOnly={readOnly}
           value={value}
           onBlur={onBlur}
           onChange={onChange}

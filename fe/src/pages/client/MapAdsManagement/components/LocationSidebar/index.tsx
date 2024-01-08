@@ -42,7 +42,8 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
         </Box>
         {!!images && <ImagesSlider images={images} />}
         <Box className={classes.adsContainer}>
-          {!!advertises && advertises.map((item) => <AdvertiseInfo key={item.id} advertise={item} />)}
+          {!!advertises &&
+            advertises.map((item) => <AdvertiseInfo key={item.id} advertise={item} />)}
         </Box>
       </Box>
     </Drawer>

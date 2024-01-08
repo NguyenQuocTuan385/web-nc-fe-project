@@ -1,7 +1,7 @@
 .formWrap {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
 
 .editor {
@@ -13,7 +13,6 @@
     height: calc(100% - 19.2px);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
-    border: 1px solid var(--gray-50);
     [class~="ql-container"] {
       height: calc(100% - 41.6px);
       [class~="ql-tooltip"] {
@@ -40,5 +39,28 @@
   }
   [class~="ql-container"] {
     border-color: var(--red-error) !important;
+  }
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.imagePreviewCardContainer {
+  stroke-width: 1px var(--gray-20) dashed;
+  width: 200px;
+  height: 150px;
+}
+
+.emptyImage {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  img {
+    width: 30px;
+    height: 30px;
   }
 }

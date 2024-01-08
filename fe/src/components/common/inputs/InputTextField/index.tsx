@@ -15,10 +15,21 @@ interface InputsProps extends OutlinedInputProps {
   autoComplete?: string;
   errorMessage?: string | null;
   optional?: boolean;
+  readOnly?: boolean;
 }
 
 const InputTextfield = memo((props: InputsProps) => {
-  const { title, placeholder, name, defaultValue, value, inputRef, errorMessage, autoComplete } = props;
+  const {
+    title,
+    placeholder,
+    name,
+    defaultValue,
+    value,
+    inputRef,
+    errorMessage,
+    autoComplete,
+    readOnly
+  } = props;
   const { ref: refInput, ...inputProps } = inputRef || { ref: null };
   return (
     <>
@@ -32,6 +43,7 @@ const InputTextfield = memo((props: InputsProps) => {
               placeholder={placeholder}
               fullWidth
               size='small'
+              readOnly={readOnly}
               name={name}
               classes={{
                 root: clsx(classes.inputTextfield, {

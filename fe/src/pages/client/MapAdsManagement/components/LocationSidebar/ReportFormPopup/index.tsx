@@ -64,7 +64,7 @@ export default function ReportFormPopup({
       reportFormId: yup.number().required("Bắt buộc nhập hình thức báo cáo"),
       fullName: yup.string().required("Bắt buộc nhập họ và tên"),
       email: yup.string().required("Bắt buộc nhập email"),
-      phone: yup.string(),
+      phone: yup.string().required("Bắt buộc nhập số điện thoại"),
       content: yup
         .string()
         .required("Bắt buộc nhập nội dung báo cáo")
@@ -228,6 +228,7 @@ export default function ReportFormPopup({
           <InputTextfield
             title='Số điện thoại'
             inputRef={register("phone")}
+            errorMessage={errors.phone?.message}
             name='phone'
             type='text'
           />
