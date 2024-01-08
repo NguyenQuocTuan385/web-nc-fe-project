@@ -27,8 +27,8 @@ export interface Report {
 }
 
 export enum EReportType {
-  LOCATION = 1,
-  ADVERTISE = 2
+  LOCATION = "LOCATION",
+  ADVERTISE = "ADVERTISE"
 }
 
 export enum EReportStatus {

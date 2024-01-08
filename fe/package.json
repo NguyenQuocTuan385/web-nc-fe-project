@@ -18,6 +18,7 @@
     "@mui/icons-material": "^5.14.19",
     "@mui/lab": "^5.0.0-alpha.156",
     "@mui/material": "^5.15.1",
+    "@mui/x-charts": "^6.18.4",
     "@mui/x-date-pickers": "^6.18.5",
     "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",

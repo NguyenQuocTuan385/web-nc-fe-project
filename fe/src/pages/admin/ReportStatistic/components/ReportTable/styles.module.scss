@@ -1,0 +1,57 @@
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.tableContainer {
+  margin-top: 20px;
+}
+
+.sizeTable {
+  min-width: 1050px;
+}
+
+.headerTable {
+  font-weight: bold;
+  padding: 5px;
+}
+
+.rowTable {
+  &:last-child,
+  &:last-child th {
+    border: 0;
+  }
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  cursor: pointer;
+}
+
+.dataTable {
+  padding: 5px;
+  font-weight: normal;
+  white-space: nowrap; // Prevents the text from wrapping onto the next line
+  overflow: hidden; // Hides any text that overflows the cell
+  text-overflow: ellipsis; // Adds
+}
+.textOverflow {
+  white-space: nowrap; // Prevents the text from wrapping onto the next line
+  overflow: hidden; // Hides any text that overflows the cell
+  text-overflow: ellipsis; // Adds an ellipsis (...) when the text overflows
+  width: 400px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.checkIcon {
+  color: #21a221;
+}
+.cancelIcon {
+  color: #ff0000;
+}

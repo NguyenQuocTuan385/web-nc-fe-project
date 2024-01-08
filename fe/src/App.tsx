@@ -29,6 +29,7 @@ import ReportFormManagement from "pages/admin/ReportFormManagement";
 import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
 import Login from "pages/admin/Login";
+import ReportStatistic from "pages/admin/ReportStatistic";
 
 function App() {
   return (
@@ -67,6 +68,8 @@ function App() {
           <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
           <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
           <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+          <Route path={routes.admin.statistic.root} Component={ReportStatistic} />
+          <Route path={routes.admin.statistic.detail} Component={ReportDetail} />
 
           <Route path={routes.admin.authentication.login} Component={Login} />
         </Routes>
