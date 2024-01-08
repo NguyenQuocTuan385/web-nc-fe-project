@@ -31,6 +31,8 @@ import userDetails from "userDetails.json";
 import ContractService from "services/contract";
 import AdvertiseTypeService from "services/advertiseType";
 import AdvertiseEditService from "services/advertiseEdit";
+import Heading2 from "components/common/text/Heading2";
+import Editor from "components/common/Editor/EditWithQuill";
 
 interface FormData {
   licensing: number;
@@ -106,7 +108,10 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     createAdvertiseEditRequest(isSuccess);
   };
 
-  const createAdvertiseEdit = async (advertiseId: number, advertiseEditRequest: AdvertiseEditRequest) => {
+  const createAdvertiseEdit = async (
+    advertiseId: number,
+    advertiseEditRequest: AdvertiseEditRequest
+  ) => {
     AdvertiseEditService.createAdvertiseEditRequest(locationId, advertiseEditRequest)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -162,7 +167,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       {/* Loại bảng quảng cáo */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Loại bảng quảng cáo:</label>
         <Controller
           control={control}
@@ -180,14 +185,16 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                     );
                   })}
               </select>
-              {errors.adsTypeId && <div className={classes["error-text"]}>{errors.adsTypeId.message}</div>}
+              {errors.adsTypeId && (
+                <div className={classes["error-text"]}>{errors.adsTypeId.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Cấp phép */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Tình trạng cấp phép:</label>
         <Controller
           control={control}
@@ -199,14 +206,16 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                 <option value='false'>Chưa cấp phép</option>
                 <option value='true'>Đã cấp phép</option>
               </select>
-              {errors.licensing && <div className={classes["error-text"]}>{errors.licensing.message}</div>}
+              {errors.licensing && (
+                <div className={classes["error-text"]}>{errors.licensing.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Kích thước */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Kích thước:</label>
         <Box className={classes["size-container"]}>
           <Box className={classes["input-small"]}>
@@ -217,8 +226,15 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
               defaultValue={data.width}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input {...field} {...register("width")} type='number' className={classes["input-custom"]} />
-                  {errors.width && <div className={classes["error-text"]}>{errors.width.message}</div>}
+                  <input
+                    {...field}
+                    {...register("width")}
+                    type='number'
+                    className={classes["input-custom"]}
+                  />
+                  {errors.width && (
+                    <div className={classes["error-text"]}>{errors.width.message}</div>
+                  )}
                 </div>
               )}
             />
@@ -232,17 +248,24 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
               defaultValue={data.height}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input {...field} {...register("height")} type='number' className={classes["input-custom"]} />
-                  {errors.height && <div className={classes["error-text"]}>{errors.height.message}</div>}
+                  <input
+                    {...field}
+                    {...register("height")}
+                    type='number'
+                    className={classes["input-custom"]}
+                  />
+                  {errors.height && (
+                    <div className={classes["error-text"]}>{errors.height.message}</div>
+                  )}
                 </div>
               )}
             />
           </Box>
         </Box>
-      </div>
+      </Box>
 
       {/* Số lượng trụ/ bảng */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Số lượng trụ:</label>
         <Controller
           control={control}
@@ -250,30 +273,62 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
           defaultValue={data.pillarQuantity ? data.pillarQuantity : 0}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input {...field} {...register("pillarQuantity")} type='number' className={classes["input-custom"]} />
-              {errors.pillarQuantity && <div className={classes["error-text"]}>{errors.pillarQuantity.message}</div>}
+              <input
+                {...field}
+                {...register("pillarQuantity")}
+                type='number'
+                className={classes["input-custom"]}
+              />
+              {errors.pillarQuantity && (
+                <div className={classes["error-text"]}>{errors.pillarQuantity.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Lý do chỉnh sửa */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Lý do chỉnh sửa:</label>
-        <Controller
+        {/* <Controller
           control={control}
           name='content'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <textarea {...field} {...register("content")} className={classes["textarea-custom"]}></textarea>
-              {errors.content && <div className={classes["error-text"]}>{errors.content.message}</div>}
+              <textarea
+                {...field}
+                {...register("content")}
+                className={classes["textarea-custom"]}
+              ></textarea>
+              {errors.content && (
+                <div className={classes["error-text"]}>{errors.content.message}</div>
+              )}
+            </div>
+          )}
+        /> */}
+        <Controller
+          control={control}
+          name='content'
+          defaultValue=''
+          render={({ field }) => (
+            <div className={classes["input-error-container"]}>
+              {/* Replace textarea with the Editor component */}
+              <Editor
+                placeholder='Nhập lí do chỉnh sửa...'
+                getValueOnChange={(html: string) => field.onChange(html)}
+                content={field.value}
+                isAllowedType={true}
+              />
+              {errors.content && (
+                <div className={classes["error-text"]}>{errors.content.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình ảnh */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình ảnh:</label>
         <Controller
           control={control}
@@ -289,7 +344,11 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                         src={image}
                         width={"200px"}
                         height={"150px"}
-                        style={{ borderRadius: "8px", margin: "0 15px 10px 0", border: "1px solid #ccc" }}
+                        style={{
+                          borderRadius: "8px",
+                          margin: "0 15px 10px 0",
+                          border: "1px solid #ccc"
+                        }}
                         alt='Image Loation'
                       />
                     );
@@ -303,13 +362,20 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                         src={image}
                         width={"200px"}
                         height={"150px"}
-                        style={{ borderRadius: "8px", margin: "0 15px 10px 0", border: "1px solid #ccc" }}
+                        style={{
+                          borderRadius: "8px",
+                          margin: "0 15px 10px 0",
+                          border: "1px solid #ccc"
+                        }}
                         alt='Image Loation'
                       />
                     );
                   })}
               </Box>
-              <Button onClick={handleOpenDialog} style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}>
+              <Button
+                onClick={handleOpenDialog}
+                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
+              >
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -351,11 +417,13 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                 </DialogActions>
               </Dialog>
 
-              {errors.imageUrls && <div className={classes["error-text"]}>{errors.imageUrls.message}</div>}
+              {errors.imageUrls && (
+                <div className={classes["error-text"]}>{errors.imageUrls.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       <ButtonSubmit type='submit'>Gửi</ButtonSubmit>
     </form>
@@ -450,22 +518,28 @@ export const AdvertiseEdit = () => {
           </ButtonBack>
 
           <Box>
-            <h2>Thông tin công ty</h2>
+            <Heading2 fontSize={"24px"} fontWeight={600}>
+              Thông tin công ty
+            </Heading2>
             {infoContract && <InfoContract data={infoContract} />}
             {infoContract && (
               <Typography>
-                <span className={classes["title"]}>Ngày bắt đầu hợp đồng: </span> <span>{infoContract.startAt}</span>
+                <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
+                <span>{infoContract.startAt}</span>
               </Typography>
             )}
             {infoContract && (
               <Typography>
-                <span className={classes["title"]}>Ngày kết thúc hợp đồng: </span> <span>{infoContract.endAt}</span>
+                <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
+                <span>{infoContract.endAt}</span>
               </Typography>
             )}
           </Box>
 
           <Box mt='30px'>
-            <h2>Thông tin quảng cáo</h2>
+            <Heading2 fontSize={"24px"} fontWeight={600}>
+              Thông tin quảng cáo
+            </Heading2>
             {infoAds && (
               <MyForm
                 data={infoAds}
@@ -477,8 +551,15 @@ export const AdvertiseEdit = () => {
             )}
           </Box>
 
-          <Snackbar open={isCreateSuccess !== null} autoHideDuration={3000} onClose={() => setIsCreateSuccess(null)}>
-            <Alert severity={isCreateSuccess ? "success" : "error"} onClose={() => setIsCreateSuccess(null)}>
+          <Snackbar
+            open={isCreateSuccess !== null}
+            autoHideDuration={3000}
+            onClose={() => setIsCreateSuccess(null)}
+          >
+            <Alert
+              severity={isCreateSuccess ? "success" : "error"}
+              onClose={() => setIsCreateSuccess(null)}
+            >
               {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
             </Alert>
           </Snackbar>

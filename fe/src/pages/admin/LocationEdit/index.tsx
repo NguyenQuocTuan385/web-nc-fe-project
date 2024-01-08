@@ -31,6 +31,8 @@ import { LocationEditRequest, LocationType } from "models/location";
 import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
 import userDetails from "userDetails.json";
+import Heading2 from "components/common/text/Heading2";
+import Editor from "components/common/Editor/EditWithQuill";
 
 interface FormData {
   propertyId: number;
@@ -179,7 +181,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       {/* Khu vực */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Khu vực:</label>
         <input
           className={classes["input-property"]}
@@ -187,10 +189,10 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           value={`${userInfo.property.name}, ${userInfo.property.propertyParent.name}`}
           readOnly
         />
-      </div>
+      </Box>
 
       {/* Địa chỉ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Địa chỉ:</label>
         <Controller
           control={control}
@@ -210,10 +212,10 @@ const MyForm: React.FC<FormEditLocationProps> = ({
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Tọa độ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Tọa độ:</label>
         <Box className={classes["coordinates-container"]}>
           <Box className={classes["input-small"]}>
@@ -260,10 +262,10 @@ const MyForm: React.FC<FormEditLocationProps> = ({
             />
           </Box>
         </Box>
-      </div>
+      </Box>
 
       {/* Loại vị trí */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Loại vị trí:</label>
         <Controller
           control={control}
@@ -292,10 +294,10 @@ const MyForm: React.FC<FormEditLocationProps> = ({
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình thức quảng cáo */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình thức quảng cáo:</label>
         <Controller
           control={control}
@@ -324,10 +326,10 @@ const MyForm: React.FC<FormEditLocationProps> = ({
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Quy hoạch */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Quy hoạch:</label>
         <Controller
           control={control}
@@ -346,12 +348,12 @@ const MyForm: React.FC<FormEditLocationProps> = ({
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Lí do chỉnh sửa */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Lí do chỉnh sửa:</label>
-        <Controller
+        {/* <Controller
           control={control}
           name='content'
           defaultValue={data.content}
@@ -367,11 +369,30 @@ const MyForm: React.FC<FormEditLocationProps> = ({
               )}
             </div>
           )}
+        /> */}
+        <Controller
+          control={control}
+          name='content'
+          defaultValue=''
+          render={({ field }) => (
+            <div className={classes["input-error-container"]}>
+              {/* Replace textarea with the Editor component */}
+              <Editor
+                placeholder='Nhập lí do chỉnh sửa...'
+                getValueOnChange={(html: string) => field.onChange(html)}
+                content={field.value}
+                isAllowedType={true}
+              />
+              {errors.content && (
+                <div className={classes["error-text"]}>{errors.content.message}</div>
+              )}
+            </div>
+          )}
         />
-      </div>
+      </Box>
 
       {/* Hình ảnh */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình ảnh:</label>
         <Controller
           control={control}
@@ -465,7 +486,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
             </div>
           )}
         />
-      </div>
+      </Box>
 
       <ButtonSubmit type='submit'>Gửi</ButtonSubmit>
     </form>
@@ -541,7 +562,9 @@ export const LocationEdit = () => {
 
           {locationData && (
             <Box className={classes["info-edit-container"]}>
-              <h2>Thông tin điểm đặt quảng cáo</h2>
+              <Heading2 fontSize={"24px"} fontWeight={600}>
+                Thông tin điểm đặt quảng cáo
+              </Heading2>
               <MyForm
                 data={locationData}
                 locationTypes={locationTypes}

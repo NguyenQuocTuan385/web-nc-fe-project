@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pagination, Box } from "@mui/material";
+import { Pagination, Box, TablePagination } from "@mui/material";
 import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import queryString from "query-string";
 
@@ -11,10 +11,10 @@ import SearchAppBar from "components/common/Search";
 import { Header } from "components/common/Header";
 import LocationService from "services/location";
 import { routes } from "routes/routes";
+import ParagraphBody from "components/common/text/ParagraphBody";
 
 const LocationManagement = () => {
   const navigate = useNavigate();
-  const itemsPerPage = 5;
   const [locationList, setLocationList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -25,23 +25,36 @@ const LocationManagement = () => {
     const params = queryString.parse(locationHook.search);
     return params.page || 1;
   });
+  const [rowsPerPage, setRowsPerPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.rowsNum || 5;
+  });
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
-  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
-    setCurrentPage(newPageValue);
-    navigate({
-      pathname: match,
-      search: createSearchParams({
-        page: newPageValue.toString()
-      }).toString()
-    });
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPageValue: number
+  ) => {
+    setCurrentPage(newPageValue + 1);
+    // navigate({
+    //   pathname: match,
+    //   search: createSearchParams({
+    //     page: newPageValue.toString()
+    //   }).toString()
+    // });
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
   };
 
   useEffect(() => {
     const getAllLocations = async () => {
       LocationService.getLocations({
         search: searchValue,
-        pageSize: itemsPerPage,
+        pageSize: Number(rowsPerPage),
         current: Number(currentPage)
       })
         .then((res) => {
@@ -61,7 +74,7 @@ const LocationManagement = () => {
         });
     };
     getAllLocations();
-  }, [currentPage, searchValue]);
+  }, [currentPage, searchValue, rowsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -69,7 +82,7 @@ const LocationManagement = () => {
 
   const data = locationList.map((location: any, index: number) => {
     return {
-      stt: index + 1,
+      stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
       id: location.id,
       address: location.address,
       adsForm: location.adsForm.name,
@@ -80,10 +93,8 @@ const LocationManagement = () => {
     };
   });
 
-  const customHeading = ["STT", "Mã", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
+  const customHeading = ["STT", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
   const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
-
-  // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const handleViewAds = (idLocation: number) => {
     navigate(`${routes.admin.advertises.ofLocation.replace(":id", `${idLocation}`)}`);
@@ -98,9 +109,9 @@ const LocationManagement = () => {
   };
 
   return (
-    <Box>
+    <>
       <Header />
-      <div className={classes["location-management-container"]}>
+      <Box className={classes["location-management-container"]}>
         <SideBarWard></SideBarWard>
         <Box className={classes["container-body"]}>
           <Box className={classes["search-container"]}>
@@ -117,18 +128,35 @@ const LocationManagement = () => {
                 onEditClick={handleEditLocation}
               />
 
-              <Box className={classes["pagination-custom"]}>
+              <Box className={classes.pagination}>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 100]}
+                  component='div'
+                  count={totalElements}
+                  page={Number(currentPage) - 1}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={Number(rowsPerPage)}
+                  labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </Box>
+
+              {/* <Box className={classes["pagination-custom"]}>
                 <span>{`Hiển thị ${Math.min(
                   Number(currentPage) * itemsPerPage,
                   totalElements
                 )} kết quả trên ${totalElements}`}</span>
-                <Pagination count={totalPage} page={Number(currentPage)} onChange={handleChangePage} />
-              </Box>
+                <Pagination
+                  count={totalPage}
+                  page={Number(currentPage)}
+                  onChange={handleChangePage}
+                />
+              </Box> */}
             </Box>
           </Box>
         </Box>
-      </div>
-    </Box>
+      </Box>
+    </>
   );
 };
 

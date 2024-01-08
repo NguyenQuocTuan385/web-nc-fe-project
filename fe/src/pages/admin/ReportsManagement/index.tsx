@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Pagination } from "@mui/material";
+import { Box, Pagination, TablePagination } from "@mui/material";
 
 import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import queryString from "query-string";
@@ -14,7 +14,6 @@ import { routes } from "routes/routes";
 
 const ReportsManagement = () => {
   const navigate = useNavigate();
-  const itemsPerPage = 5;
   const [reportList, setReportList] = useState([]);
 
   const [searchValue, setSearchValue] = useState("");
@@ -28,19 +27,37 @@ const ReportsManagement = () => {
   });
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
-  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
-    setCurrentPage(newPageValue);
-    navigate({
-      pathname: match,
-      search: createSearchParams({
-        page: newPageValue.toString()
-      }).toString()
-    });
+  const [rowsPerPage, setRowsPerPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.rowsNum || 5;
+  });
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPageValue: number
+  ) => {
+    setCurrentPage(newPageValue + 1);
+    // navigate({
+    //   pathname: match,
+    //   search: createSearchParams({
+    //     page: newPageValue.toString()
+    //   }).toString()
+    // });
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
   };
 
   useEffect(() => {
     const getAllReports = async () => {
-      ReportService.getReports({ search: searchValue, pageSize: itemsPerPage, current: Number(currentPage) })
+      ReportService.getReports({
+        search: searchValue,
+        pageSize: Number(rowsPerPage),
+        current: Number(currentPage)
+      })
         .then((res) => {
           setReportList(res.content);
           setTotalPage(res.totalPages);
@@ -58,7 +75,7 @@ const ReportsManagement = () => {
         });
     };
     getAllReports();
-  }, [currentPage, searchValue]);
+  }, [currentPage, searchValue, rowsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -66,13 +83,13 @@ const ReportsManagement = () => {
 
   const data = reportList.map((report: any, index: number) => {
     return {
-      stt: index + 1,
+      stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
       objectStatus: { value: report.status, name: report.status ? "Đã xử lí" : "Chưa xử lí" },
       ...report
     };
   });
 
-  const customHeading = ["STT", "Mã", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
+  const customHeading = ["STT", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
   const customColumns = ["stt", "id", "email", "fullName", "phone", "objectStatus"];
 
   const handleSearch = (query: string) => {
@@ -108,12 +125,29 @@ const ReportsManagement = () => {
                 onViewDetailsClick={handleViewDetails}
               />
 
+              <Box className={classes.pagination}>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 100]}
+                  component='div'
+                  count={totalElements}
+                  page={Number(currentPage) - 1}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={Number(rowsPerPage)}
+                  labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </Box>
+
               <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(
-                  Number(currentPage) * itemsPerPage,
+                {/* <span>{`Hiển thị ${Math.min(
+                  Number(currentPage) * rowsPerPage,
                   totalElements
-                )} kết quả trên ${totalElements}`}</span>
-                <Pagination count={totalPage} page={Number(currentPage)} onChange={handleChangePage} />
+                )} kết quả trên ${totalElements}`}</span> */}
+                {/* <Pagination
+                  count={totalPage}
+                  page={Number(currentPage)}
+                  onChange={handleChangePage}
+                /> */}
               </Box>
             </Box>
           </Box>
