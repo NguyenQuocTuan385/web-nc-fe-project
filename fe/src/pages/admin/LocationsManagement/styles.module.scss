@@ -32,3 +32,14 @@ $pacing-main: 15px;
   align-items: center;
   justify-content: space-between;
 }
+
+.pagination {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.noList {
+  text-align: center;
+}

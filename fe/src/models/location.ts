@@ -27,7 +27,6 @@ export interface Location {
 
 export interface LocationView {
   stt: number;
-  id: number;
   address: string;
   adsForm: string;
   locationType: string;

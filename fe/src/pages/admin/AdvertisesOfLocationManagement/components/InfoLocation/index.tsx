@@ -2,6 +2,7 @@ import classes from "./styles.module.scss";
 import { Box, Typography } from "@mui/material";
 import { LocationView } from "models/location";
 import SlideShowImages from "components/common/SlideShowImages";
+import Heading3 from "components/common/text/Heading3";
 
 interface InfoLocationProps {
   data: LocationView;
@@ -14,7 +15,9 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
         <SlideShowImages images={data.images} />
         {/* <img src={data.images} alt='Điểm đặt quảng cáo' /> */}
 
-        <Typography variant='h6'>Điểm đặt quảng cáo</Typography>
+        <Heading3 fontSize={"22px"} fontWeight={600}>
+          Điểm đặt quảng cáo
+        </Heading3>
         <Typography className={classes["inline-typo"]}>
           <span className={classes.title}>Địa chỉ: </span>
           <span>{data.address}</span>

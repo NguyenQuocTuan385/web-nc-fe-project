@@ -33,6 +33,7 @@ import userDetails from "userDetails.json";
 import DistrictService from "services/district";
 import { Property } from "models/property";
 import WardService from "services/ward";
+import Heading2 from "components/common/text/Heading2";
 
 interface FormData {
   districtId: number;
@@ -574,7 +575,7 @@ export const LocationCreateCDMS = () => {
           </ButtonBack>
 
           <Box className={classes["info-edit-container"]}>
-            <h2>Thông tin điểm đặt quảng cáo</h2>
+            <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
             <MyForm
               district={district}
               locationTypes={locationTypes}

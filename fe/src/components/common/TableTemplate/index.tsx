@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
+import ParagraphBody from "../text/ParagraphBody";
 interface TableTemplateProps {
   data: Array<{ [key: string]: any }>;
   customHeading: string[];
@@ -70,80 +71,98 @@ function TableTemplate({
           <TableRow>
             {/* Custom heading */}
             {customHeading.map((heading, index) => (
-              <TableCell key={index} align='center' className={classes["table-cell"]}>
+              <TableCell
+                key={index}
+                align='left'
+                className={`${classes["table-cell"]} ${
+                  heading === "STT" ? classes["small-heading"] : ""
+                }`}
+              >
                 {heading}
               </TableCell>
             ))}
             {/* Action column heading */}
             {isActionColumn && (
-              <TableCell align='center' className={classes["table-cell"]}>
+              <TableCell align='left' className={classes["table-cell"]}>
                 Hành động
               </TableCell>
             )}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, rowIndex) => (
-            <TableRow key={rowIndex}>
-              {customColumns.map((column, colIndex) => (
-                <TableCell
-                  key={colIndex}
-                  align='center'
-                  className={`${classes["col-table-body"]} ${
-                    column === "objectStatus"
-                      ? row[column].value
-                        ? `${classes["active"]}`
-                        : `${classes["inactive"]} }`
-                      : ""
-                  }`}
-                >
-                  {column === "objectStatus" ? row[column].name : row[column]}
-                </TableCell>
-              ))}
+          {data &&
+            data.length > 0 &&
+            data.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
+                {customColumns.map(
+                  (column, colIndex) =>
+                    column !== "id" && (
+                      <TableCell
+                        key={colIndex}
+                        align='left'
+                        className={`${classes["col-table-body"]} ${
+                          column === "objectStatus"
+                            ? row[column].value
+                              ? `${classes["active"]}`
+                              : `${classes["inactive"]} }`
+                            : ""
+                        }`}
+                      >
+                        {column === "objectStatus" ? row[column].name : row[column]}
+                      </TableCell>
+                    )
+                )}
 
-              {/* Action column */}
-              {isActionColumn && (
-                <TableCell align='center' className={classes["cell-actions"]}>
-                  {onViewAdsClick && (
+                {/* Action column */}
+                {isActionColumn && (
+                  <TableCell align='left' className={classes["cell-actions"]}>
+                    {onViewAdsClick && (
+                      <IconButton
+                        aria-label='view-ads-list'
+                        size='medium'
+                        onClick={() => handleViewAdsClick(row.id)}
+                      >
+                        <FontAwesomeIcon icon={faRectangleAd} color='var(--blue-500)' />
+                      </IconButton>
+                    )}
+                    {onViewDetailsClick && (
+                      <IconButton
+                        aria-label='view-detail'
+                        size='medium'
+                        onClick={() => handleViewDetailsClick(row.id)}
+                      >
+                        <FontAwesomeIcon icon={faEye} color='var(--blue-700)' />
+                      </IconButton>
+                    )}
                     <IconButton
-                      aria-label='view-ads-list'
+                      aria-label='edit'
                       size='medium'
-                      onClick={() => handleViewAdsClick(row.id)}
+                      onClick={() => {
+                        handleEditClick(row.id);
+                      }}
                     >
-                      <FontAwesomeIcon icon={faRectangleAd} color='var(--blue-500)' />
+                      <FontAwesomeIcon icon={faEdit} color='#FFA500' />
                     </IconButton>
-                  )}
-                  {onViewDetailsClick && (
-                    <IconButton
-                      aria-label='view-detail'
-                      size='medium'
-                      onClick={() => handleViewDetailsClick(row.id)}
-                    >
-                      <FontAwesomeIcon icon={faEye} color='var(--blue-700)' />
-                    </IconButton>
-                  )}
-                  <IconButton
-                    aria-label='edit'
-                    size='medium'
-                    onClick={() => {
-                      handleEditClick(row.id);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faEdit} color='#FFA500' />
-                  </IconButton>
-                  {onAddClick && row.statusContract !== 1 && (
-                    <IconButton
-                      aria-label='add'
-                      size='medium'
-                      onClick={() => handleAddClick(row.id)}
-                    >
-                      <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
-                    </IconButton>
-                  )}
-                </TableCell>
-              )}
+                    {onAddClick && row.statusContract !== 1 && (
+                      <IconButton
+                        aria-label='add'
+                        size='medium'
+                        onClick={() => handleAddClick(row.id)}
+                      >
+                        <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                      </IconButton>
+                    )}
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          {(!data || data.length === 0) && (
+            <TableRow>
+              <TableCell colSpan={isActionColumn ? customHeading.length + 1 : customHeading.length}>
+                <ParagraphBody className={classes.noList}>Không tìm thấy thông tin</ParagraphBody>
+              </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>

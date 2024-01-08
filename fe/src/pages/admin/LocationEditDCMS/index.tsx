@@ -32,6 +32,7 @@ import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
 import userDetails from "userDetails.json";
 import clsx from "clsx";
+import Heading2 from "components/common/text/Heading2";
 
 interface FormData {
   propertyId: number;
@@ -518,7 +519,7 @@ export const LocationEditCDMS = () => {
 
           {locationData && (
             <Box className={classes["info-edit-container"]}>
-              <h2>Thông tin điểm đặt quảng cáo</h2>
+              <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
               <MyForm
                 data={locationData}
                 locationTypes={locationTypes}
