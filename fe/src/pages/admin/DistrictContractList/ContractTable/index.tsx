@@ -27,6 +27,7 @@ import clsx from "clsx";
 import { useLocation, useNavigate, useResolvedPath, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 import { routes } from "routes/routes";
+import useIntercepts from "hooks/useIntercepts";
 
 // const rows = [...user];
 interface FilterProps {
@@ -58,10 +59,15 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     return [];
   });
 
-  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPageValue: number) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPageValue: number
+  ) => {
     setCurrentPage(newPageValue + 1);
   };
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1);
   };
@@ -70,41 +76,45 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const [dataList, setDataList] = useState<Contract[]>([]);
   const [totalElements, setTotalElements] = useState(1);
   const [selectedForDelete, setSelectedForDelete] = useState(-1);
+  const intercept = useIntercepts()
 
   // filter contract's status for Tab Panel
   useEffect(() => {
     // not licensed
     const getContractList = async () => {
-      ContractService.getContractByPropertyAndParent({
-        propertyId: filteredId,
-        parentId: [1],
-        search: fieldSearch,
-        status: Number(status) === 0 ? undefined : Number(status),
-        pageSize: Number(rowsPerPage),
-        current: Number(currentPage)
-      })
-        .then((res) => {
-          if (res.content.length === 0) setCurrentPage(1);
+      try {
+        const res = await ContractService.getContractByPropertyAndParent(
+          {
+            propertyId: filteredId,
+            parentId: [1],
+            search: fieldSearch,
+            status: Number(status) === 0 ? undefined : Number(status),
+            pageSize: Number(rowsPerPage),
+            current: Number(currentPage)
+          },
+          intercept
+        );
 
-          setDataList(res.content);
-          setTotalElements(res.totalElements);
-          setEmptyRows(Number(rowsPerPage) - res.numberOfElements);
+        if (res.content.length === 0) setCurrentPage(1);
 
-          if (status !== 0) searchParams.set("status", status.toString());
-          else searchParams.delete("status");
+        setDataList(res.content);
+        setTotalElements(res.totalElements);
+        setEmptyRows(Number(rowsPerPage) - res.numberOfElements);
 
-          if (fieldSearch !== "") searchParams.set("searchKey", fieldSearch.toString());
-          // else searchParams.delete("searchKey");
+        if (status !== 0) searchParams.set("status", status.toString());
+        else searchParams.delete("status");
 
-          searchParams.set("page", currentPage.toString());
-          searchParams.set("rowsNum", rowsPerPage.toString());
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+        if (fieldSearch !== "") searchParams.set("searchKey", fieldSearch.toString());
+
+        searchParams.set("page", currentPage.toString());
+        searchParams.set("rowsNum", rowsPerPage.toString());
+        setSearchParams(searchParams);
+      } catch (err: any) {}
     };
 
-    getContractList();
+    getContractList().catch((e) => {
+      console.log(e);
+    });
   }, [status, currentPage, rowsPerPage, fieldSearch, filteredId]);
 
   useEffect(() => {
@@ -112,7 +122,8 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     if (params.wardFilter === null || params.wardFilter === undefined) setFilterdId([]);
     else {
       if (Array.isArray(params.wardFilter)) setFilterdId(params.wardFilter.map(Number));
-      else if (Number.isInteger(Number(params.wardFilter))) setFilterdId([Number(params.wardFilter)]);
+      else if (Number.isInteger(Number(params.wardFilter)))
+        setFilterdId([Number(params.wardFilter)]);
     }
   }, [locationHook.search]);
 
@@ -211,11 +222,19 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                   )}
                 </TableCell>
                 <TableCell align='center' className={clsx(classes.dataTable, classes.dataIcon)}>
-                  <IconButton aria-label='edit' size='medium' onClick={() => viewContractDetailHandle(contract.id)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={() => viewContractDetailHandle(contract.id)}
+                  >
                     <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
                   </IconButton>
                   {contract.status === EContractStatus.notLicensed ? (
-                    <IconButton aria-label='edit' size='medium' onClick={() => openDeleteDialogHandle(contract.id)}>
+                    <IconButton
+                      aria-label='edit'
+                      size='medium'
+                      onClick={() => openDeleteDialogHandle(contract.id)}
+                    >
                       <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                     </IconButton>
                   ) : (
@@ -253,7 +272,9 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
       >
         <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>Bạn có thật sự muốn xóa cấp phép này ?</DialogContentText>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa cấp phép này ?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>

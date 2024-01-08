@@ -1,3 +1,5 @@
+import { API } from "config/constant";
+import { jwtDecode } from "jwt-decode";
 import { EStorageKey } from "models/general";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +12,7 @@ import {
   loginStatus
 } from "reduxes/Auth";
 import { AuthenticationService } from "services/authentication";
+import api, { apiAuth } from "services/configApi";
 import Userservice from "services/user";
 
 const PersistLogin = () => {
@@ -29,12 +32,22 @@ const PersistLogin = () => {
             const newToken = res.access_token;
             dispatch(setLogin({ token: newToken }));
 
-            Userservice.getUserbyId(Number(localStorage.getItem(EStorageKey.uid.toString()))).then(
-              (res) => {
-                dispatch(setLogin({ user: res }));
+            const email = jwtDecode(newToken).sub;
+            console.log(newToken);
+
+            api
+              .get(`${API.USER.EMAIL.replace(":email", `${email}`)}`, {
+                headers: { Authorization: `Bearer ${newToken}` }
+              })
+              .then((res) => {
+                dispatch(setLogin({ user: res.data, token: newToken }));
+
+                console.log(res.data);
                 dispatch(loginStatus(true));
-              }
-            );
+              })
+              .catch((e) => {
+                console.log(e);
+              });
           })
           .catch((e) => {
             dispatch(loginStatus(false));

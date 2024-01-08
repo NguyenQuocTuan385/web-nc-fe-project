@@ -1,4 +1,3 @@
-import { Token } from "@mui/icons-material";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { User } from "models/user";
 

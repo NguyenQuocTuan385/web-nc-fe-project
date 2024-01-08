@@ -48,7 +48,8 @@ export const API = {
     UPDATE: "/api/users/:id",
     CREATE: "/api/users",
     DELETE: "/api/users/:id",
-    DETAIL: "/api/users/:id"
+    DETAIL: "/api/users/:id",
+    EMAIL: "/api/users/FindByEmail/:email"
   },
   REPORT: {
     DEFAULT: "/api/reports",

@@ -14,6 +14,9 @@ import Userservice from "services/user";
 import { Token } from "@mui/icons-material";
 import { EStorageKey } from "models/general";
 import { loginStatus, setLogin } from "reduxes/Auth";
+import { API } from "config/constant";
+import api from "services/configApi";
+import { jwtDecode } from "jwt-decode";
 
 interface FormData {
   email: string;
@@ -33,16 +36,22 @@ const Login: React.FC = () => {
       .then((res) => {
         const accessToken = res.access_token;
 
-        console.log(res.uid);
-        localStorage.setItem(EStorageKey.uid.toString(), res.uid);
-
         dispatch(setLogin({ token: accessToken }));
-        Userservice.getUserbyId(Number(res.uid)).then((res) => {
-          localStorage.setItem(EStorageKey.role.toString(), res.role.id);
+        const email = jwtDecode(accessToken).sub;
 
-          dispatch(setLogin({ user: res, token: accessToken }));
-          dispatch(loginStatus(true));
-        });
+        api
+          .get(`${API.USER.EMAIL.replace(":email", `${email}`)}`, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+          })
+          .then((res) => {
+            dispatch(setLogin({ user: res.data, token: accessToken }));
+
+            console.log(res.data);
+            dispatch(loginStatus(true));
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       })
       .catch((e) => {
         console.log(e);
