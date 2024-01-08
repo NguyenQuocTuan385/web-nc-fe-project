@@ -9,7 +9,7 @@ import {
   Paper,
   IconButton
 } from "@mui/material";
-import { faEdit, faEye, faRectangleAd, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBuildingCircleArrowRight, faEdit, faEye, faRectangleAd, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
 interface TableTemplateProps {
@@ -19,8 +19,10 @@ interface TableTemplateProps {
   isActionColumn: boolean;
   onViewAdsClick?: (idLocation: number) => void;
   onViewDetailsClick?: (idDetails: number) => void;
+  onViewWardInDistrictClick?: (idDistrict: number) => void;
   onEditClick?: (idEdit: number) => void;
   onAddClick?: (idAdd: number) => void;
+  onDeleteClick?: (idDelete: number) => void;
   linkToMove?: string;
 }
 
@@ -31,8 +33,10 @@ function TableTemplateDCMS({
   isActionColumn,
   onViewAdsClick,
   onViewDetailsClick,
+  onViewWardInDistrictClick,
   onEditClick,
   onAddClick,
+  onDeleteClick,
   linkToMove
 }: TableTemplateProps) {
   const handleViewAdsClick = (rowId: number) => {
@@ -47,6 +51,12 @@ function TableTemplateDCMS({
     }
   };
 
+  const handleViewWardInDistrictClick = (rowId: number) => {
+    if (onViewWardInDistrictClick) {
+      onViewWardInDistrictClick(rowId);
+    }
+  };
+
   const handleEditClick = (rowId: number) => {
     if (onEditClick) {
       onEditClick(rowId);
@@ -57,6 +67,11 @@ function TableTemplateDCMS({
     if (onAddClick) {
       onAddClick(rowId);
       console.log("Add here!");
+    }
+  };
+  const handleDeleteClick = (rowId: number) => {
+    if (onDeleteClick) {
+      onDeleteClick(rowId);
     }
   };
 
@@ -101,6 +116,15 @@ function TableTemplateDCMS({
               {/* Action column */}
               {isActionColumn && (
                 <TableCell align='center' className={classes["cell-actions"]}>
+                  {onViewWardInDistrictClick && (
+                    <IconButton
+                      aria-label='view-ward'
+                      size='medium'
+                      onClick={() => handleViewWardInDistrictClick(row.id)}
+                    >
+                      <FontAwesomeIcon icon={faBuildingCircleArrowRight} color='var(--blue-700)' />
+                    </IconButton>
+                  )}
                   {onViewAdsClick && (
                     <IconButton
                       aria-label='view-ads-list'
@@ -133,6 +157,15 @@ function TableTemplateDCMS({
                       aria-label='add'
                       size='medium'
                       onClick={() => handleAddClick(row.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} color='var(--red-600)' />
+                    </IconButton>
+                  )}
+                  {onDeleteClick && (
+                    <IconButton
+                      aria-label='delete'
+                      size='medium'
+                      onClick={() => handleDeleteClick(row.id)}
                     >
                       <FontAwesomeIcon icon={faTrash} color='var(--red-600)' />
                     </IconButton>
