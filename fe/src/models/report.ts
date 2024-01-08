@@ -65,4 +65,5 @@ export interface ReportCreateRequest {
   longitude?: number;
   latitude?: number;
   advertiseId?: number;
+  userId?: number;
 }

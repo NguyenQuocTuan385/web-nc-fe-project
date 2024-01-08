@@ -5,6 +5,7 @@ import categoryIcon from "assets/img/icon/ic-category.svg";
 import quantityIcon from "assets/img/icon/ic-quantity.svg";
 import sizeIcon from "assets/img/icon/ic-size.svg";
 import sortIcon from "assets/img/icon/ic-sort.svg";
+import emptyIcon from "assets/img/icon/ic-empty.svg";
 
 import companyAddress from "assets/img/icon/ic-comAddress.svg";
 import compamyEmail from "assets/img/icon/ic-comEmail.svg";
@@ -22,7 +23,8 @@ const images = {
   compamyEmail,
   companyAddress,
   companyName,
-  companyPhone
+  companyPhone,
+  emptyIcon
 };
 
 export default images;

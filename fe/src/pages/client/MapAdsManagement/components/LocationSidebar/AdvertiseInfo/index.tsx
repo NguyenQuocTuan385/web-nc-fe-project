@@ -7,6 +7,7 @@ import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Advertise } from "models/advertise";
 import { EReportType } from "models/report";
+import ParagraphSmall from "components/common/text/ParagraphSmall";
 
 interface AdvertiseInfoProps {
   advertise: Advertise;
@@ -27,9 +28,11 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
             {advertise.height}m x {advertise.width}m
           </b>
         </ParagraphBody>
-        <ParagraphBody>
-          Số lượng: <b>{advertise.pillarQuantity} trụ/bảng</b>
-        </ParagraphBody>
+        {advertise.pillarQuantity && (
+          <ParagraphBody>
+            Số lượng: <b>{advertise.pillarQuantity} trụ/bảng</b>
+          </ParagraphBody>
+        )}
         <ParagraphBody>
           Hình thức: <b>{advertise.location.adsForm.name}</b>
         </ParagraphBody>
@@ -44,11 +47,22 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
         <IconButton onClick={() => setOpenAdvertiseInfoPopup(true)}>
           <InfoOutlined fontSize='large' color='primary' />
         </IconButton>
-        <Button variant='outlined' color='error' startIcon={<Error />} onClick={() => setOpenReportPopup(true)}>
-          Báo cáo vi phạm
+        <Button
+          variant='outlined'
+          color='error'
+          startIcon={<Error className={classes.errorIc} />}
+          onClick={() => setOpenReportPopup(true)}
+        >
+          <ParagraphSmall $colorName='--red-error' $fontWeight='bold'>
+            Báo cáo vi phạm
+          </ParagraphSmall>
         </Button>
       </Box>
-      <AdvertiseInfoPopup advertise={advertise} open={openAdvertiseInfoPopup} onClose={closeAdvertiseInfoPopup} />
+      <AdvertiseInfoPopup
+        advertise={advertise}
+        open={openAdvertiseInfoPopup}
+        onClose={closeAdvertiseInfoPopup}
+      />
       <ReportFormPopup
         advertiseId={advertise.id}
         reportTypeName={EReportType.ADVERTISE}

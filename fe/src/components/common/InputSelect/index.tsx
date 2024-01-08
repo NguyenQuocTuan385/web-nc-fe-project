@@ -11,9 +11,10 @@ interface InputSelectProps {
   title?: string;
   errorMessage?: string | null;
   control?: any;
+  readOnly?: boolean;
 }
 const InputSelect = memo((props: InputSelectProps) => {
-  const { name, control, elements, errorMessage, title } = props;
+  const { name, control, elements, errorMessage, title, readOnly } = props;
 
   return (
     <>
@@ -32,6 +33,7 @@ const InputSelect = memo((props: InputSelectProps) => {
                     value={field.value}
                     onChange={(value) => field.onChange(value)}
                     fullWidth
+                    readOnly={readOnly}
                     classes={{
                       root: clsx({
                         [classes.inputInvalid]: !!errorMessage
