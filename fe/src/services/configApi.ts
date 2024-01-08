@@ -1,8 +1,10 @@
 import axios from "axios";
 import { API } from "config/constant";
-import { selectToken, setLogin } from "reduxes/Auth";
+import { loginStatus, selectToken, setLogin } from "reduxes/Auth";
 import { AuthenticationService } from "./authentication";
 import { EnhancedStore } from "@reduxjs/toolkit";
+import Userservice from "./user";
+import { EStorageKey } from "models/general";
 
 let store: EnhancedStore;
 
@@ -19,7 +21,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (request) => {
     const token = store.getState().auth.token;
-    console.log("access: " + token + " dasdasjlhdaslj");
+
     if (token) {
       request.headers.Authorization = `Bearer ${token}`;
     }
@@ -39,23 +41,38 @@ api.interceptors.response.use(
     const prevRequest = error?.config;
 
     if (error.response.status === 403 && !prevRequest?.sent) {
-      console.log("refresh");
       prevRequest.sent = true;
 
-      return AuthenticationService.refresh()
+      AuthenticationService.refresh()
         .then((res) => {
           const newAccessToken = res["access_token"];
-          store.dispatch(setLogin({ user: null, token: newAccessToken }));
+          store.dispatch(setLogin({ token: newAccessToken }));
 
-          prevRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return api(prevRequest);
+          Userservice.getUserbyId(Number(localStorage.getItem(EStorageKey.uid.toString()))).then(
+            (res) => {
+              store.dispatch(setLogin({ user: res, token: newAccessToken }));
+              store.dispatch(loginStatus(true));
+
+              prevRequest.headers.Authorization = `Bearer ${store.getState().auth.token}`;
+              console.log(prevRequest);
+              return api(prevRequest);
+            }
+          );
         })
         .catch((e) => {
-          console.log(e);
+          if (e.response.status === 403) {
+            console.log("Your Login Session has expired");
+          }
         });
     }
 
     return Promise.reject(error);
   }
 );
+
+export const apiAuth = axios.create({
+  baseURL: `${process.env.REACT_APP_BASE_API_URL}`,
+  withCredentials: true
+});
+
 export default api;

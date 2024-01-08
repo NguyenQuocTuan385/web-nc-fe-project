@@ -5,11 +5,13 @@ import { User } from "models/user";
 interface InitialState {
   currentUser: User | null;
   token: string | null;
+  isLoggedIn: Boolean;
 }
 
 const initState: InitialState = {
   currentUser: null,
-  token: null
+  token: null,
+  isLoggedIn: false
 };
 
 const authSlice = createSlice({
@@ -20,16 +22,20 @@ const authSlice = createSlice({
       state.currentUser = action.payload.user;
       state.token = action.payload.token;
     },
-    logOut: (state, action: PayloadAction<any>) => {
+    logOut: (state) => {
       state.currentUser = null;
       state.token = null;
+    },
+    loginStatus: (state, action: PayloadAction<Boolean>) => {
+      state.isLoggedIn = action.payload;
     }
   }
 });
 
-export const { setLogin, logOut } = authSlice.actions;
+export const { setLogin, logOut, loginStatus } = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state: any) => state.auth.currentUser;
 export const selectToken = (state: any) => state.auth.token;
+export const selectLoginStatus = (state: any) => state.auth.isLoggedIn;

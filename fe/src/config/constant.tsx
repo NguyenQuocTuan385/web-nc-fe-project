@@ -69,6 +69,7 @@ export const API = {
   AUTH: {
     LOGIN: "/api/authentication/login",
     REGISTER: "/api/authentication/register",
-    REFRESH: "/api/authentication/refresh"
+    REFRESH: "/api/authentication/refresh",
+    LOGOUT: "/api/authentication/logout"
   }
 };

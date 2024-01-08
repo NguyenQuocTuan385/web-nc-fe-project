@@ -10,9 +10,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthenticationService } from "services/authentication";
 import { LoginRequest } from "models/authentication";
 import { useDispatch } from "react-redux";
-import { setLogin } from "reduxes/Auth";
 import Userservice from "services/user";
 import { Token } from "@mui/icons-material";
+import { EStorageKey } from "models/general";
+import { loginStatus, setLogin } from "reduxes/Auth";
 
 interface FormData {
   email: string;
@@ -30,8 +31,18 @@ const Login: React.FC = () => {
 
     AuthenticationService.login(loginData)
       .then((res) => {
-        console.log(res);
-        dispatch(setLogin({ user: null, token: res.access_token }));
+        const accessToken = res.access_token;
+
+        console.log(res.uid);
+        localStorage.setItem(EStorageKey.uid.toString(), res.uid);
+
+        dispatch(setLogin({ token: accessToken }));
+        Userservice.getUserbyId(Number(res.uid)).then((res) => {
+          localStorage.setItem(EStorageKey.role.toString(), res.role.id);
+
+          dispatch(setLogin({ user: res, token: accessToken }));
+          dispatch(loginStatus(true));
+        });
       })
       .catch((e) => {
         console.log(e);

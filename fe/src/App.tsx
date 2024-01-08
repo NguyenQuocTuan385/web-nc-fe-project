@@ -34,6 +34,7 @@ import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement"
 import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
 import { store } from "store";
 import { injectStore } from "services/configApi";
+import PersistLogin from "components/common/PersistLogin";
 
 function App() {
   injectStore(store);
@@ -42,46 +43,51 @@ function App() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <BrowserRouter>
         <Routes>
-          <Route path={routes.admin.users.root} Component={UserManagement} />
           <Route path={routes.client} Component={MapAdsManagement} />
-          <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
 
-          <Route path={routes.admin.users.create} Component={CreateAccount} />
+          <Route element={<PersistLogin />}>
+            <Route path={routes.admin.users.root} Component={UserManagement} />
+            <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
 
-          <Route path={routes.admin.reviewEdit.location} Component={EditAdLocationLicenseDetail} />
-          <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
-          <Route path={routes.admin.reviewLisence.root} Component={AdLicense} />
-          <Route path={routes.admin.reviewLisence.detail} Component={AdLicenseDetail} />
-          <Route path={routes.admin.properties.district} Component={DistrictManagement} />
-          <Route path={routes.admin.properties.ward} Component={WardManagement} />
-          <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
-          <Route path={routes.admin.contracts.root} Component={ContractList} />
+            <Route path={routes.admin.users.create} Component={CreateAccount} />
 
-          {/* Locations */}
-          <Route path={routes.admin.locations.root} Component={LocationManagement} />
-          <Route path={routes.admin.locations.edit} Component={LocationEdit} />
+            <Route
+              path={routes.admin.reviewEdit.location}
+              Component={EditAdLocationLicenseDetail}
+            />
+            <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
+            <Route path={routes.admin.reviewLisence.root} Component={AdLicense} />
+            <Route path={routes.admin.reviewLisence.detail} Component={AdLicenseDetail} />
+            <Route path={routes.admin.properties.district} Component={DistrictManagement} />
+            <Route path={routes.admin.properties.ward} Component={WardManagement} />
+            <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
+            <Route path={routes.admin.contracts.root} Component={ContractList} />
 
-          {/* Advertises */}
-          <Route
-            path={routes.admin.advertises.ofLocation}
-            Component={AdvertisesOfLocationManagement}
-          />
-          <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
-          <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
+            {/* Locations */}
+            <Route path={routes.admin.locations.root} Component={LocationManagement} />
+            <Route path={routes.admin.locations.edit} Component={LocationEdit} />
 
-          {/* Reports */}
-          <Route path={routes.admin.reports.root} Component={ReportsManagement} />
-          <Route path={routes.admin.reports.edit} Component={ReportHandle} />
-          <Route path={routes.admin.reports.details} Component={ReportDetail} />
-          <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
-          <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
-          <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
-          <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+            {/* Advertises */}
+            <Route
+              path={routes.admin.advertises.ofLocation}
+              Component={AdvertisesOfLocationManagement}
+            />
+            <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
+            <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
-          <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
-          <Route path={routes.admin.locations.district} Component={DistrictLocationManagement} />
-          <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
+            {/* Reports */}
+            <Route path={routes.admin.reports.root} Component={ReportsManagement} />
+            <Route path={routes.admin.reports.edit} Component={ReportHandle} />
+            <Route path={routes.admin.reports.details} Component={ReportDetail} />
+            <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
+            <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
+            <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
+            <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
 
+            <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
+            <Route path={routes.admin.locations.district} Component={DistrictLocationManagement} />
+            <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
+          </Route>
           <Route path={routes.admin.authentication.login} Component={Login} />
         </Routes>
       </BrowserRouter>
