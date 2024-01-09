@@ -14,13 +14,13 @@ export class ReportService {
       });
   }
 
-  static async getReportsWithPropertyAndParent(data: GetReports): Promise<any> {
+  static async getReportsWithPropertyAndParent(data: GetReports, api: any): Promise<any> {
     return await api
       .get(`${API.REPORT.GET_WITH_PROPERTY_PARENT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

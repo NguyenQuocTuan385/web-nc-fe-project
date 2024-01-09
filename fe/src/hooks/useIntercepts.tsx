@@ -9,7 +9,6 @@ import { API } from "config/constant";
 const useIntercepts = () => {
   const accessToken = useSelector(selectToken);
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(selectLoginStatus);
 
   useEffect(() => {
     const requestIntercept = api.interceptors.request.use(
@@ -35,22 +34,16 @@ const useIntercepts = () => {
 
           const res = await AuthenticationService.refresh();
           const newAccessToken = res["access_token"];
-
-          dispatch(setLogin({ token: newAccessToken }));
           const email = jwtDecode(newAccessToken).sub;
-          console.log(newAccessToken);
-
-          apiAuth
-            .get(`${API.USER.EMAIL.replace(":email", `${email}`)}`, {
+          const userResponse = await apiAuth.get(
+            `${API.USER.EMAIL.replace(":email", `${email}`)}`,
+            {
               headers: { Authorization: `Bearer ${newAccessToken}` }
-            })
-            .then((res) => {
-              dispatch(setLogin({ user: res, token: newAccessToken }));
-              dispatch(loginStatus(true));
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+            }
+          );
+
+          dispatch(setLogin({ user: userResponse.data, token: newAccessToken }));
+          dispatch(loginStatus(true));
 
           prevRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return api(prevRequest);

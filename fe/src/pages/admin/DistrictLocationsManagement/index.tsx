@@ -21,6 +21,7 @@ import WardFilter from "components/admin/WardFilter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import { openFilterDialog } from "reduxes/Status";
+import useIntercepts from "hooks/useIntercepts";
 
 const DistrictLocationManagement = () => {
   const navigate = useNavigate();
@@ -75,15 +76,20 @@ const DistrictLocationManagement = () => {
     setCurrentPage(1);
     searchParams.set("rowsNum", rowsPerPage.toString());
   };
+  const intercept = useIntercepts();
+
   useEffect(() => {
     const getAllLocations = async () => {
-      LocationService.getLocationsWithPropertyAndParent({
-        propertyId: filteredId,
-        parentId: [1],
-        search: searchValue,
-        pageSize: Number(rowsPerPage),
-        current: Number(currentPage)
-      })
+      LocationService.getLocationsWithPropertyAndParent(
+        {
+          propertyId: filteredId,
+          parentId: [1],
+          search: searchValue,
+          pageSize: Number(rowsPerPage),
+          current: Number(currentPage)
+        },
+        intercept
+      )
         .then((res) => {
           if (res.content.length === 0) setCurrentPage(1);
 

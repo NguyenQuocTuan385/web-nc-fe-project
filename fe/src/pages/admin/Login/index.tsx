@@ -33,31 +33,23 @@ const Login: React.FC = () => {
     };
 
     AuthenticationService.login(loginData)
-      .then((res) => {
+      .then(async (res) => {
         const accessToken = res.access_token;
 
-        dispatch(setLogin({ token: accessToken }));
         const email = jwtDecode(accessToken).sub;
 
-        api
-          .get(`${API.USER.EMAIL.replace(":email", `${email}`)}`, {
-            headers: { Authorization: `Bearer ${accessToken}` }
-          })
-          .then((res) => {
-            dispatch(setLogin({ user: res.data, token: accessToken }));
+        const userResponse = await api.get(`${API.USER.EMAIL.replace(":email", `${email}`)}`, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
 
-            console.log(res.data);
-            dispatch(loginStatus(true));
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+        dispatch(setLogin({ user: userResponse.data, token: accessToken }));
+        dispatch(loginStatus(true));
       })
       .catch((e) => {
         console.log(e);
       })
       .finally(() => {
-        navigate(routes.admin.locations.district);
+        navigate(routes.admin.contracts.district);
       });
   };
   const schema = useMemo(() => {

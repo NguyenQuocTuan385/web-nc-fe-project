@@ -36,6 +36,8 @@ import { store } from "store";
 import { injectStore } from "services/configApi";
 import PersistLogin from "components/common/PersistLogin";
 import NotFound from "pages/common/NotFound";
+import RequireAuth from "components/common/RequireAuth";
+import { ERole } from "models/general";
 
 function App() {
   injectStore(store);
@@ -45,7 +47,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={routes.client} Component={MapAdsManagement} />
-
           <Route element={<PersistLogin />}>
             <Route path={routes.admin.users.root} Component={UserManagement} />
             <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
@@ -62,8 +63,10 @@ function App() {
             <Route path={routes.admin.properties.district} Component={DistrictManagement} />
             <Route path={routes.admin.properties.ward} Component={WardManagement} />
             <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
-            <Route path={routes.admin.contracts.root} Component={ContractList} />
 
+            <Route element={<RequireAuth availableRole={ERole.WARD} />}>
+              <Route path={routes.admin.contracts.root} Component={ContractList} />
+            </Route>
             {/* Locations */}
             <Route path={routes.admin.locations.root} Component={LocationManagement} />
             <Route path={routes.admin.locations.edit} Component={LocationEdit} />
@@ -86,9 +89,14 @@ function App() {
             <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
 
             {/* Districts */}
-            <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
-            <Route path={routes.admin.locations.district} Component={DistrictLocationManagement} />
-            <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
+            <Route element={<RequireAuth availableRole={ERole.DISTRICT} />}>
+              <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
+              <Route
+                path={routes.admin.locations.district}
+                Component={DistrictLocationManagement}
+              />
+              <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
+            </Route>
           </Route>
 
           <Route path={routes.admin.authentication.login} Component={Login} />
