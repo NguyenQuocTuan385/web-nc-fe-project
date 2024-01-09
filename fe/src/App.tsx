@@ -38,7 +38,9 @@ import AdvertisesOfLocationManagementDCMS from "pages/admin/AdvertisesOfLocation
 
 import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
 import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
-
+import ForgotPassword from "pages/admin/ForgotPassword";
+import VerifyOTP from "pages/admin/ForgotPassword/components/VerifyOTP";
+import ResetPassword from "pages/admin/ForgotPassword/components/ResetPassword";
 
 function App() {
   return (
@@ -95,6 +97,11 @@ function App() {
           <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
 
           <Route path={routes.admin.authentication.login} Component={Login} />
+
+          {/* forgot password */}
+          <Route path={routes.admin.forgotPassword.root} Component={ForgotPassword} />
+          <Route path={routes.admin.forgotPassword.verify} Component={VerifyOTP} />
+          <Route path={routes.admin.forgotPassword.reset} Component={ResetPassword} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

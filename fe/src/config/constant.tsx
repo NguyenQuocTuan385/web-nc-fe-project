@@ -51,7 +51,8 @@ export const API = {
     UPDATE: "/api/users/:id",
     CREATE: "/api/users",
     DELETE: "/api/users/:id",
-    DETAIL: "/api/users/:id"
+    DETAIL: "/api/users/:id",
+    CHECK_OTP: "/api/users/checkOTP"
   },
   REPORT: {
     DEFAULT: "/api/reports",
@@ -71,6 +72,7 @@ export const API = {
   },
   EMAIL: {
     SEND_TEXT_EMAIL: "/api/email/text",
-    SEND_HTML_EMAIL: "/api/email/html"
+    SEND_HTML_EMAIL: "/api/email/html",
+    SEND_OTP_TO_EMAIL: "/api/email/otp"
   }
 };

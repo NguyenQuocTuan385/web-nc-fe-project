@@ -39,11 +39,17 @@ const Login: React.FC = () => {
             className={classes.customTextField}
           />
 
-          <Button onClick={handleLogin} variant='contained' size='large' fullWidth className={classes.loginButton}>
+          <Button
+            onClick={handleLogin}
+            variant='contained'
+            size='large'
+            fullWidth
+            className={classes.loginButton}
+          >
             Đăng nhập
           </Button>
 
-          <Link href='#' className={classes.forgotPasswordLink}>
+          <Link href='/admin/recover' className={classes.forgotPasswordLink}>
             Quên mật khẩu
           </Link>
         </Grid>

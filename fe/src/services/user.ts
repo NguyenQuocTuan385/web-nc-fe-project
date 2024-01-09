@@ -1,6 +1,6 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { User, GetUsers, UserRequest } from "models/user";
+import { User, GetUsers, UserRequest, RequestOTPUser } from "models/user";
 
 export class Userservice {
   static async getUsers(data: GetUsers): Promise<any> {
@@ -46,6 +46,16 @@ export class Userservice {
   static async deleteUser(id: Number): Promise<any> {
     return await api
       .delete(`${API.USER.DELETE.replace(":id", `${id}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async checkOTP(data: RequestOTPUser): Promise<any> {
+    return await api
+      .post(`${API.USER.CHECK_OTP}`, data)
       .then((res) => {
         return Promise.resolve(res.data);
       })
