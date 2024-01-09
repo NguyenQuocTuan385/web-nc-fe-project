@@ -3,7 +3,17 @@ import classes from "./styles.module.scss";
 import { Header } from "components/common/Header";
 import SideBarWard from "components/admin/SidebarWard";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
-import { Alert, Box, Button, IconButton, Snackbar, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  IconButton,
+  MenuItem,
+  Select,
+  Snackbar,
+  TextField,
+  Typography
+} from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -16,6 +26,7 @@ import { EReportStatus } from "models/report";
 import MailService from "services/email";
 import { EmailRequest } from "models/email";
 import Heading3 from "components/common/text/Heading3";
+import React from "react";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -76,7 +87,7 @@ export const ReportHandle = () => {
   }, []);
 
   const goBack = () => {
-    navigate(`${routes.admin.reports.root}`);
+    navigate(`${routes.admin.reports.ward}`);
   };
 
   const handleGetValueOnChange = (value: string) => {
@@ -84,7 +95,6 @@ export const ReportHandle = () => {
   };
 
   const handleStatusChange = (e: any) => {
-    console.log(e.target.value);
     setHandleStatus(e.target.value);
   };
 
@@ -184,6 +194,12 @@ export const ReportHandle = () => {
       });
   };
 
+  const reportStatus: any[] = [
+    { name: "Chưa xử lý", value: EReportStatus.NEW },
+    { name: "Đang xử lý", value: EReportStatus.PROCESSING },
+    { name: "Đã xử lý", value: EReportStatus.DONE }
+  ];
+
   return (
     <Box>
       <Header />
@@ -202,72 +218,78 @@ export const ReportHandle = () => {
               </Heading3>
               <Box className={classes["info-handle-container"]}>
                 <div className={classes["input-container"]}>
-                  <label>Loại báo cáo</label>
-                  <input
+                  <label>Loại báo cáo: </label>
+                  <TextField
                     className={classes["input-custom"]}
-                    type='text'
-                    value={dataReportDetail.reportForm.name}
-                    readOnly
+                    defaultValue={dataReportDetail.reportForm.name}
+                    id='outlined-required'
+                    InputProps={{ readOnly: true }}
+                    fullWidth
                   />
                 </div>
 
                 <div className={classes["input-container"]}>
-                  <label>Thời điểm gửi</label>
-                  <input
+                  <label>Thời điểm gửi: </label>
+                  <TextField
                     className={classes["input-custom"]}
-                    type='text'
-                    value={formatDateToString(new Date(dataReportDetail.createdAt))}
-                    readOnly
+                    defaultValue={formatDateToString(new Date(dataReportDetail.createdAt))}
+                    id='outlined-required'
+                    InputProps={{ readOnly: true }}
+                    fullWidth
                   />
                 </div>
 
                 <div className={classes["input-container"]}>
-                  <label>Hình thức báo cáo</label>
-                  <input
+                  <label>Hình thức báo cáo: </label>
+                  <TextField
                     className={classes["input-custom"]}
-                    type='text'
-                    value={
+                    defaultValue={
                       dataReportDetail.reportTypeName === EReportType.ADVERTISE
                         ? "Báo cáo bảng quảng cáo"
                         : "Báo cáo địa điểm đặt quảng cáo"
                     }
-                    readOnly
+                    id='outlined-required'
+                    InputProps={{ readOnly: true }}
+                    fullWidth
                   />
                 </div>
 
                 <div className={classes["input-container"]}>
-                  <label>Họ tên người gửi</label>
-                  <input
+                  <label>Họ tên người gửi: </label>
+                  <TextField
                     className={classes["input-custom"]}
-                    type='text'
-                    value={dataReportDetail.fullName}
-                    readOnly
+                    defaultValue={dataReportDetail.fullName}
+                    id='outlined-required'
+                    InputProps={{ readOnly: true }}
+                    fullWidth
                   />
                 </div>
 
                 <div className={classes["input-container"]}>
-                  <label>Email</label>
-                  <input
+                  <label>Email: </label>
+                  <TextField
                     className={classes["input-custom"]}
-                    type='text'
-                    value={dataReportDetail.email}
-                    readOnly
+                    defaultValue={dataReportDetail.email}
+                    id='outlined-required'
+                    InputProps={{ readOnly: true }}
+                    fullWidth
                   />
                 </div>
 
                 <div className={classes["input-container"]}>
-                  <label>Số điện thoại</label>
-                  <input
+                  <label>Số điện thoại: </label>
+                  <TextField
                     className={classes["input-custom"]}
-                    type='text'
-                    value={dataReportDetail.phone}
-                    readOnly
+                    defaultValue={dataReportDetail.phone}
+                    id='outlined-required'
+                    InputProps={{ readOnly: true }}
+                    fullWidth
                   />
                 </div>
 
                 {dataReportDetail.images && dataReportDetail.images.length > 0 && (
                   <div className={classes["image-container"]}>
-                    <label>Hình ảnh báo cáo</label>
+                    <label>Hình ảnh báo cáo: </label>
                     <Box className={classes["image-list"]}>
                       {JSON.parse(dataReportDetail.images).map(
                         (imageUrl: string, index: number) => {
@@ -290,7 +312,7 @@ export const ReportHandle = () => {
 
                 <Box>
                   <Typography>
-                    <span className={classes.title}>Nội dung</span>
+                    <span className={classes.title}>Nội dung: </span>
                   </Typography>
                   <Editor placeholder='' isAllowedType={false} content={dataReportDetail.content} />
                 </Box>
@@ -308,39 +330,25 @@ export const ReportHandle = () => {
               alignItems={"center"}
               mb={"20px"}
             >
-              <label>Tình trạng</label>
-              <select onChange={(e) => handleStatusChange(e)} className={classes["select-custom"]}>
-                {dataReportDetail?.status === EReportStatus.NEW && (
-                  <>
-                    <option value={EReportStatus.NEW} selected>
-                      Chưa xử lý
-                    </option>
-                    <option value={EReportStatus.PROCESSING}>Đang xử lý</option>
-                    <option value={EReportStatus.DONE}>Đã xử lý</option>
-                  </>
-                )}
-                {dataReportDetail?.status === EReportStatus.PROCESSING && (
-                  <>
-                    <option value={EReportStatus.NEW}>Chưa xử lý</option>
-                    <option value={EReportStatus.PROCESSING} selected>
-                      Đang xử lý
-                    </option>
-                    <option value={EReportStatus.DONE}>Đã xử lý</option>
-                  </>
-                )}
-                {dataReportDetail?.status === EReportStatus.DONE && (
-                  <>
-                    <option value={EReportStatus.NEW}>Chưa xử lý</option>
-                    <option value={EReportStatus.PROCESSING}>Đang xử lý</option>
-                    <option value={EReportStatus.DONE} selected>
-                      Đã xử lý
-                    </option>
-                  </>
-                )}
-              </select>
+              <label>Tình trạng: </label>
+              {dataReportDetail && (
+                <Select
+                  fullWidth
+                  className={classes["input-custom"]}
+                  value={handleStatus}
+                  onChange={(e) => handleStatusChange(e)}
+                >
+                  {reportStatus.length > 0 &&
+                    reportStatus.map((status: any) => (
+                      <MenuItem value={status.value} key={status.value}>
+                        {status.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              )}
             </Box>
             <Box>
-              <label>Phản hồi báo cáo</label>
+              <label>Phản hồi báo cáo:</label>
               {dataReportDetail && dataReportDetail.reply && (
                 <Editor
                   placeholder=''

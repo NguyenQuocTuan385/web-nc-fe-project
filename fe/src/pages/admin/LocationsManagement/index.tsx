@@ -97,11 +97,11 @@ const LocationManagement = () => {
   const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
 
   const handleViewAds = (idLocation: number) => {
-    navigate(`${routes.admin.advertises.ofLocation.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${idLocation}`)}`);
   };
 
   const handleEditLocation = (idLocation: number) => {
-    navigate(`${routes.admin.locations.edit.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.locations.wardEdit.replace(":id", `${idLocation}`)}`);
   };
 
   const handleSearch = (query: string) => {

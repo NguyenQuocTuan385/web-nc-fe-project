@@ -98,11 +98,11 @@ const ReportsManagement = () => {
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const handleReport = (idReport: number) => {
-    navigate(`${routes.admin.reports.edit.replace(":id", `${idReport}`)}`);
+    navigate(`${routes.admin.reports.wardEdit.replace(":id", `${idReport}`)}`);
   };
 
   const handleViewDetails = (idReport: number) => {
-    navigate(`${routes.admin.reports.details.replace(":id", `${idReport}`)}`);
+    navigate(`${routes.admin.reports.wardDetails.replace(":id", `${idReport}`)}`);
   };
 
   return (

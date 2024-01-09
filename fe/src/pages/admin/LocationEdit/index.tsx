@@ -7,7 +7,10 @@ import {
   DialogContent,
   DialogActions,
   Snackbar,
-  Alert
+  Alert,
+  TextField,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -183,12 +186,15 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       {/* Khu vực */}
       <Box className={classes["input-container"]}>
         <label>Khu vực:</label>
-        <input
-          className={classes["input-property"]}
-          type='text'
-          value={`${userInfo.property.name}, ${userInfo.property.propertyParent.name}`}
-          readOnly
-        />
+        <div className={classes["input-error-container"]}>
+          <TextField
+            required
+            id='outlined-required'
+            defaultValue={`${userInfo.property.name}, ${userInfo.property.propertyParent.name}`}
+            InputProps={{ readOnly: true }}
+            fullWidth
+          />
+        </div>
       </Box>
 
       {/* Địa chỉ */}
@@ -200,12 +206,14 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           defaultValue={data.address}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input
+              <TextField
+                required
+                id='outlined-required'
                 {...field}
                 {...register("address")}
-                type='text'
-                className={classes["input-custom"]}
+                fullWidth
               />
+
               {errors.address && (
                 <div className={classes["error-text"]}>{errors.address.message}</div>
               )}
@@ -219,19 +227,22 @@ const MyForm: React.FC<FormEditLocationProps> = ({
         <label>Tọa độ:</label>
         <Box className={classes["coordinates-container"]}>
           <Box className={classes["input-small"]}>
-            <label>Vĩ độ: </label>
             <Controller
               control={control}
               name='latitude'
               defaultValue={data.latitude}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
+                  <TextField
+                    required
+                    id='outlined-required'
+                    label='Vĩ độ'
+                    type='number'
                     {...field}
                     {...register("latitude")}
-                    type='number'
-                    className={classes["input-custom"]}
+                    fullWidth
                   />
+
                   {errors.latitude && (
                     <div className={classes["error-text"]}>{errors.latitude.message}</div>
                   )}
@@ -241,18 +252,20 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           </Box>
 
           <Box className={classes["input-small"]}>
-            <label>Tung độ: </label>
             <Controller
               control={control}
               name='longitude'
               defaultValue={data.longitude}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
-                    {...field}
-                    {...register("longitude")}
+                  <TextField
+                    required
+                    id='outlined-required'
+                    label='Tung độ'
                     type='number'
-                    className={classes["input-custom"]}
+                    {...field}
+                    {...register("latitude")}
+                    fullWidth
                   />
                   {errors.longitude && (
                     <div className={classes["error-text"]}>{errors.longitude.message}</div>
@@ -273,21 +286,23 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           defaultValue={data.locationType.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select
+              <Select
                 {...field}
                 {...register("locationTypeId")}
-                className={classes["select-custom"]}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
               >
-                <option value=''>Chọn loại vị trí</option>
+                <MenuItem value='' disabled>
+                  Chọn loại vị trí
+                </MenuItem>
                 {locationTypes.length > 0 &&
-                  locationTypes.map((locationType: LocationType, index: number) => {
-                    return (
-                      <option value={locationType.id} key={locationType.id}>
-                        {locationType.name}
-                      </option>
-                    );
-                  })}
-              </select>
+                  locationTypes.map((locationType: LocationType, index: number) => (
+                    <MenuItem value={locationType.id} key={locationType.id}>
+                      {locationType.name}
+                    </MenuItem>
+                  ))}
+              </Select>
               {errors.locationTypeId && (
                 <div className={classes["error-text"]}>{errors.locationTypeId.message}</div>
               )}
@@ -305,21 +320,23 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           defaultValue={data.adsForm.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select
+              <Select
                 {...field}
                 {...register("advertiseFormId")}
-                className={classes["select-custom"]}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
               >
-                <option value=''>Chọn hình thức quảng cáo</option>
+                <MenuItem value='' disabled>
+                  Chọn hình thức quảng cáo
+                </MenuItem>
                 {adsForms.length > 0 &&
-                  adsForms.map((adsForm: AdvertiseForm, index: number) => {
-                    return (
-                      <option value={adsForm.id} key={adsForm.id}>
-                        {adsForm.name}
-                      </option>
-                    );
-                  })}
-              </select>
+                  adsForms.map((adsForm: AdvertiseForm, index: number) => (
+                    <MenuItem value={adsForm.id} key={adsForm.id}>
+                      {adsForm.name}
+                    </MenuItem>
+                  ))}
+              </Select>
               {errors.advertiseFormId && (
                 <div className={classes["error-text"]}>{errors.advertiseFormId.message}</div>
               )}
@@ -337,11 +354,19 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           defaultValue={data.planning}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field} {...register("planning")} className={classes["select-custom"]}>
-                <option value=''>Chọn quy hoạch</option>
-                <option value='false'>Chưa quy hoạch</option>
-                <option value='true'>Đã quy hoạch</option>
-              </select>
+              <Select
+                {...field}
+                {...register("planning")}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
+              >
+                <MenuItem value='' disabled>
+                  Chọn quy hoạch
+                </MenuItem>
+                <MenuItem value='false'>Chưa quy hoạch</MenuItem>
+                <MenuItem value='true'>Đã quy hoạch</MenuItem>
+              </Select>
               {errors.planning && (
                 <div className={classes["error-text"]}>{errors.planning.message}</div>
               )}
@@ -353,23 +378,6 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       {/* Lí do chỉnh sửa */}
       <Box className={classes["input-container"]}>
         <label>Lí do chỉnh sửa:</label>
-        {/* <Controller
-          control={control}
-          name='content'
-          defaultValue={data.content}
-          render={({ field }) => (
-            <div className={classes["input-error-container"]}>
-              <textarea
-                {...field}
-                {...register("content")}
-                className={classes["textarea-custom"]}
-              ></textarea>
-              {errors.content && (
-                <div className={classes["error-text"]}>{errors.content.message}</div>
-              )}
-            </div>
-          )}
-        /> */}
         <Controller
           control={control}
           name='content'
@@ -498,7 +506,7 @@ export const LocationEdit = () => {
   const { id } = useParams<{ id: string }>();
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.root.replace(":id", `${id}`)}`);
+    navigate(`${routes.admin.locations.ward.replace(":id", `${id}`)}`);
   };
 
   const [locationData, setLocationData] = useState(null);

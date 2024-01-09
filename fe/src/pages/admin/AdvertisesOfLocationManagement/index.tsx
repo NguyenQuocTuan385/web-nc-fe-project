@@ -120,12 +120,12 @@ const AdvertiseOfLocationManagement = () => {
   }, [searchValue]);
 
   const handleViewAdDetails = (idAdvertise: number) => {
-    navigate(`${routes.admin.advertises.details.replace(":id", `${idAdvertise}`)}`);
+    navigate(`${routes.admin.advertises.wardDetails.replace(":id", `${idAdvertise}`)}`);
   };
 
   const handleEditAdvertise = (idAdvertise: number) => {
     navigate(
-      `${routes.admin.advertises.edit
+      `${routes.admin.advertises.wardEdit
         .replace(":locationId", `${id}`)
         .replace(":advertiseId", `${idAdvertise}`)}`
     );
@@ -188,7 +188,7 @@ const AdvertiseOfLocationManagement = () => {
   })[0];
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.root}`);
+    navigate(`${routes.admin.locations.ward}`);
   };
 
   return (

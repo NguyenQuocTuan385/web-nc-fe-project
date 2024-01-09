@@ -39,7 +39,6 @@ import AdvertisesOfLocationManagementDCMS from "pages/admin/AdvertisesOfLocation
 import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
 import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
 
-
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -60,9 +59,9 @@ function App() {
           <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
           <Route path={routes.admin.contracts.root} Component={ContractList} />
 
-          {/* Locations */}
-          <Route path={routes.admin.locations.root} Component={LocationManagement} />
-          <Route path={routes.admin.locations.edit} Component={LocationEdit} />
+          {/* Locations Ward*/}
+          <Route path={routes.admin.locations.ward} Component={LocationManagement} />
+          <Route path={routes.admin.locations.wardEdit} Component={LocationEdit} />
 
           {/* Location DCMS  */}
           <Route path={routes.admin.locations.dcms} Component={LocationManagementDCMS} />
@@ -73,18 +72,19 @@ function App() {
             Component={AdvertisesOfLocationManagementDCMS}
           />
 
-          {/* Advertises */}
+          {/* Advertises Ward*/}
           <Route
-            path={routes.admin.advertises.ofLocation}
+            path={routes.admin.advertises.wardOfLocation}
             Component={AdvertisesOfLocationManagement}
           />
-          <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
-          <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
+          <Route path={routes.admin.advertises.wardDetails} Component={AdvertiseDetail} />
+          <Route path={routes.admin.advertises.wardEdit} Component={AdvertiseEdit} />
 
-          {/* Reports */}
-          <Route path={routes.admin.reports.root} Component={ReportsManagement} />
-          <Route path={routes.admin.reports.edit} Component={ReportHandle} />
-          <Route path={routes.admin.reports.details} Component={ReportDetail} />
+          {/* Reports Ward*/}
+          <Route path={routes.admin.reports.ward} Component={ReportsManagement} />
+          <Route path={routes.admin.reports.wardEdit} Component={ReportHandle} />
+          <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
+
           <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
           <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
           <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />

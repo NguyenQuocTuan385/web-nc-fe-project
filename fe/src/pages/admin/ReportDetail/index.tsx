@@ -12,6 +12,7 @@ import { EReportType, Report } from "models/report";
 import ReportService from "services/report";
 import Heading3 from "components/common/text/Heading3";
 import Editor from "components/common/Editor/EditWithQuill";
+import { routes } from "routes/routes";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -64,7 +65,7 @@ export const ReportDetail = () => {
   }, []);
 
   const goBack = () => {
-    navigate(-1);
+    navigate(`${routes.admin.reports.ward}`);
   };
 
   return (

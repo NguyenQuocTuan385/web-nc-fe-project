@@ -20,8 +20,8 @@ const InfoAdsBox = styled(Box)(() => ({
 }));
 
 const BoxFlex = styled(Box)(() => ({
-  display: "flex"
-  // alignItems: "center"
+  display: "flex",
+  alignItems: "center"
 }));
 
 const ButtonBack = styled(Button)(() => ({
@@ -53,6 +53,7 @@ interface InfoContract {
   companyEmail: string;
   companyPhone: string;
   companyAddress: string;
+  images: string;
   startAt: string;
   endAt: string;
 }
@@ -95,6 +96,7 @@ export const AdvertiseDetail = () => {
             companyEmail: res.companyEmail,
             companyPhone: res.companyPhone,
             companyAddress: res.companyAddress,
+            images: res.images,
             startAt: res.startAt,
             endAt: res.endAt
           });
@@ -121,14 +123,26 @@ export const AdvertiseDetail = () => {
             Trở về
           </ButtonBack>
           <BoxFlex>
-            <InfoAdsBox>
-              {/* {infoAds?.images && infoAds?.images.length > 0 && <SlideShowImages images={infoAds.images} />} */}
-              {infoAds && (
-                <img src={infoAds.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} />
-              )}
-              <BoxFlex ml={"15px"}>{infoAds && <InfoAdvertise data={infoAds} />}</BoxFlex>
-            </InfoAdsBox>
-            <Box>{infoContract && infoContract && <InfoContract data={infoContract} />}</Box>
+            {infoAds && (
+              <img src={infoAds.images} alt='Bảng quảng cáo' width={"50%"} height={"250px"} />
+            )}
+            <Box width={"50%"} ml={"15px"}>
+              {infoAds && <InfoAdvertise data={infoAds} />}
+            </Box>
+          </BoxFlex>
+
+          <BoxFlex sx={{ justifyContent: "flex-end", marginTop: "24px" }}>
+            <Box width={"50%"}>
+              {infoContract && infoContract && <InfoContract data={infoContract} />}
+            </Box>
+            {infoContract && (
+              <img
+                src={infoContract.images}
+                alt='Hình ảnh công ty'
+                width={"50%"}
+                height={"250px"}
+              />
+            )}
           </BoxFlex>
 
           <Box mt={"15px"}>
