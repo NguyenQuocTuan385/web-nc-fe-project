@@ -2,8 +2,10 @@
   width: 300px;
   overflow: auto;
   flex-shrink: 0;
-  & .MuiDrawer-paper {
+  height: 100%;
+  & [class~="MuiDrawer-paper"] {
     width: 300px;
+    top: 60px !important;
     box-sizing: border-box;
   }
 }

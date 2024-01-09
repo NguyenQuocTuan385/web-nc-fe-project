@@ -214,11 +214,11 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
                   {contract.status === EContractStatus.licensed ? (
-                    <Heading6 $colorName='--green-600'>Đã cấp phép</Heading6>
+                    <Heading6 colorName='--green-600'>Đã cấp phép</Heading6>
                   ) : contract.status === EContractStatus.notLicensed ? (
-                    <Heading6 $colorName='--red-error'>Chưa cấp phép</Heading6>
+                    <Heading6 colorName='--red-error'>Chưa cấp phép</Heading6>
                   ) : (
-                    <Heading6 $colorName='--gray-60'>Đã hết hạn</Heading6>
+                    <Heading6 colorName='--gray-60'>Đã hết hạn</Heading6>
                   )}
                 </TableCell>
                 <TableCell align='center' className={clsx(classes.dataTable, classes.dataIcon)}>

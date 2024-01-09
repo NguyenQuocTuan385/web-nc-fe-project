@@ -4,7 +4,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import "@maptiler/geocoding-control/style.css";
 import classes from "./styles.module.scss";
-import ReactDOM from "react-dom";
 import * as maptilersdk from "@maptiler/sdk";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import { MapController } from "@maptiler/geocoding-control/types";
@@ -19,6 +18,8 @@ import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { EReportStatus, EReportType, Report } from "models/report";
 import ReportService from "services/report";
 import ReportInfoPopup from "./components/ReportListPopup";
+import ReactDOM from "react-dom/client";
+import { createPortal } from "react-dom";
 
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -58,7 +59,6 @@ const MapAdsManagement = () => {
           locations_temp.forEach((location: Location) => {
             ReportService.getReports({
               locationId: location.id,
-              reportTypeName: EReportType.ADVERTISE,
               pageSize: 999,
               email: "nguyenvana@gmail.com"
             })
@@ -187,9 +187,11 @@ const MapAdsManagement = () => {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    const popupNode = document.createElement("div");
-    ReactDOM.render(<PopoverHover properties={properties} />, popupNode);
-    popup.setLngLat(coordinates).setHTML(popupNode.innerHTML).addTo(map.current);
+    const popupContainer = document.createElement("div");
+    const root = ReactDOM.createRoot(popupContainer);
+    root.render(createPortal(<PopoverHover properties={properties} />, popupContainer));
+
+    popup.setLngLat(coordinates).setDOMContent(popupContainer).addTo(map.current);
   };
   const hidePopup = () => {
     if (!map.current) return;
@@ -413,7 +415,7 @@ const MapAdsManagement = () => {
       <Box className={classes.geocoding}>
         <GeocodingControl apiKey={API_KEY} language={"vi"} mapController={mapController} />
       </Box>
-      <Box ref={mapContainer} className={classes.map} />
+      <Box ref={mapContainer} className={classes.map}></Box>
       <Box className={classes.botNavbar}>
         <Box className={classes.botNavbarItem}>
           <Switch defaultChecked onChange={changeHandleLocationIsPlanning} />

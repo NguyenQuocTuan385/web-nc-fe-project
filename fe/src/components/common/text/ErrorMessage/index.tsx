@@ -1,5 +1,4 @@
-import { Typography } from "@mui/material";
-import styled from "styled-components";
+import { Typography, styled } from "@mui/material";
 
 const ErrorMessage = styled(Typography)`
   font-weight: 400;

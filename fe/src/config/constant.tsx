@@ -7,6 +7,7 @@ export const API = {
     UPDATE_STATUS: "/api/locations/:id/status",
     DELETE: "/api/locations/edit/:id",
     EDIT: "/api/locations/:id",
+    GET_BY_PROPERTY_ID: "/api/properties/:id/locations",
     GET_WITH_PROPERTY_PARENT: "/api/properties/locations"
   },
   ADVERTISE: {
@@ -41,7 +42,9 @@ export const API = {
     ALL: "/api/properties/all"
   },
   WARD: {
-    DEFAULT: "/api/properties/:propertyParentId"
+    DEFAULT: "/api/properties/:propertyParentId",
+    DELETE: "/api/properties/:id",
+    UPDATE: "/api/properties/:id"
   },
   USER: {
     DEFAULT: "/api/users",
@@ -72,5 +75,9 @@ export const API = {
     REGISTER: "/api/authentication/register",
     REFRESH: "/api/authentication/refresh",
     LOGOUT: "/api/authentication/logout"
+  },
+  EMAIL: {
+    SEND_TEXT_EMAIL: "/api/email/text",
+    SEND_HTML_EMAIL: "/api/email/html"
   }
 };

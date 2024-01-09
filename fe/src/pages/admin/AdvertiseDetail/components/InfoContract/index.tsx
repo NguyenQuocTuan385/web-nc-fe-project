@@ -1,11 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import Heading4 from "components/common/text/Heading4";
 import classes from "./styles.module.scss";
 
 export const InfoContract = ({ data }: any) => {
   return (
     <Box>
-      <Heading4>Thông tin Công ty</Heading4>
       <Typography>
         <span className={classes.title}>Tên: </span> <span>{data.companyName}</span>
       </Typography>

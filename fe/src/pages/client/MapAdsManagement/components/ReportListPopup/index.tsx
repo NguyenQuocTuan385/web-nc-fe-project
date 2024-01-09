@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ReportDialog } from "../LocationSidebar/ReportFormPopup";
 import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
@@ -21,6 +21,9 @@ import ReportService from "services/report";
 import { Error } from "@mui/icons-material";
 import Heading4 from "components/common/text/Heading4";
 import { DateHelper } from "helpers/date";
+import ReportViewPopup from "./ReportViewPopup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 interface ReportInfoPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -29,7 +32,9 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
   const onClose = () => {
     setOpen(false);
   };
-  const [reports, setReports] = React.useState<Report[]>([]);
+  const [reports, setReports] = useState<Report[]>([]);
+  const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
+  const [reportShow, setReportShow] = useState<Report | null>(null);
 
   useEffect(() => {
     const getReportsUser = async () => {
@@ -48,7 +53,7 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Box className={classes.titleWrap}>
           <Error color='error' className={classes.errorIc} />
-          <Heading4 $colorName='--red-error'>Danh sách báo cáo</Heading4>
+          <Heading4 colorName='--red-error'>Danh sách báo cáo</Heading4>
         </Box>
       </DialogTitle>
       <IconButton
@@ -68,9 +73,12 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
           <Table className={classes.sizeTable} aria-label='simple table'>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
+                <TableCell>STT</TableCell>
                 <TableCell align='left' className={classes.headerTable} style={{ width: 400 }}>
                   Địa điểm báo cáo
+                </TableCell>
+                <TableCell align='left' className={classes.headerTable}>
+                  Loại báo cáo
                 </TableCell>
                 <TableCell align='left' className={classes.headerTable}>
                   Ngày đăng
@@ -90,19 +98,37 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
                     {index + 1}
                   </TableCell>
                   <TableCell align='left' className={classes.dataTable}>
-                    {item.reportTypeName === EReportType.LOCATION ? item.address : item.advertise?.location.address}
+                    {item.reportTypeName === EReportType.LOCATION
+                      ? item.address
+                      : item.advertise?.location.address}
+                  </TableCell>
+                  <TableCell align='left' className={classes.dataTable}>
+                    {item.reportTypeName === EReportType.LOCATION ? "Địa điểm" : "Bảng quảng cáo"}
                   </TableCell>
                   <TableCell align='left' className={classes.dataTable}>
                     {DateHelper.formatDateToDDMMYYYY(item.createdAt)}
                   </TableCell>
                   <TableCell align='left' className={classes.dataTable}>
-                    {item.status === EReportStatus.NEW && "Chưa xử lý"}
-                    {item.status === EReportStatus.PROCESSING && "Đang xử lý"}
-                    {item.status === EReportStatus.DONE && "Đã xử lý"}
+                    {item.status === EReportStatus.NEW && (
+                      <span className={classes.red}>Chưa xử lý</span>
+                    )}
+                    {item.status === EReportStatus.PROCESSING && (
+                      <span className={classes.blue}>Đang xử lý</span>
+                    )}
+                    {item.status === EReportStatus.DONE && (
+                      <span className={classes.green}>Đã xử lý</span>
+                    )}
                   </TableCell>
                   <TableCell align='center' className={classes.dataTable}>
-                    <IconButton aria-label='edit' size='medium'>
-                      <InfoIcon className={classes.infoIcon} color='primary' />
+                    <IconButton
+                      aria-label='edit'
+                      size='medium'
+                      onClick={() => {
+                        setOpenReportPopup(true);
+                        setReportShow(item);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -110,6 +136,7 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <ReportViewPopup open={openReportPopup} setOpen={setOpenReportPopup} report={reportShow} />
       </DialogContent>
     </ReportDialog>
   );

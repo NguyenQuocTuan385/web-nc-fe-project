@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import AdvertiseService from "services/advertise";
 import { Advertise } from "models/advertise";
 import ImagesSlider from "components/common/ImagesSlider";
+import Heading3 from "components/common/text/Heading3";
+import images from "config/images";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -16,12 +18,12 @@ interface LocalAddressPopoverProps {
 
 const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopoverProps) => {
   const [advertises, setAdvertises] = useState<Advertise[]>([]);
-  const [images, setImages] = useState<string[]>([]);
+  const [imagesLocation, setImagesLocation] = useState<string[]>([]);
 
   useEffect(() => {
     const getAllAdvertises = async () => {
       if (!location) return;
-      setImages(JSON.parse(location.images));
+      setImagesLocation(JSON.parse(location.images));
       AdvertiseService.getAdvertisesByLocationId(location.id, { pageSize: 999 })
         .then((res) => {
           setAdvertises(res.content);
@@ -32,6 +34,7 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
     };
     getAllAdvertises();
   }, [location]);
+
   return (
     <Drawer variant='persistent' hideBackdrop={true} open={isOpen}>
       <Box className={classes.sidebarContainer}>
@@ -40,10 +43,19 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
             <ChevronLeft fontSize='large' />
           </IconButton>
         </Box>
-        {!!images && <ImagesSlider images={images} />}
-        <Box className={classes.adsContainer}>
-          {!!advertises && advertises.map((item) => <AdvertiseInfo key={item.id} advertise={item} />)}
-        </Box>
+        {!!imagesLocation && <ImagesSlider images={imagesLocation} />}
+        {advertises.length > 0 ? (
+          <Box className={classes.adsContainer}>
+            {advertises.map((item) => (
+              <AdvertiseInfo key={item.id} advertise={item} />
+            ))}
+          </Box>
+        ) : (
+          <Box className={classes.boxEmptyContainer}>
+            <img src={images.emptyIcon} alt='empty icon' className={classes.imgEmpty} />
+            <Heading3>Không có bảng quảng cáo nào</Heading3>
+          </Box>
+        )}
       </Box>
     </Drawer>
   );

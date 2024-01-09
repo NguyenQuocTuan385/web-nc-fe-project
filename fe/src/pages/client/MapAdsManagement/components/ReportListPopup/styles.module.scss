@@ -14,3 +14,25 @@
 .sizeTable {
   min-width: 700px;
 }
+
+.headerTable {
+  font-weight: bold !important;
+  padding: 10px !important;
+}
+
+.dataTable {
+  padding: 10px !important;
+  font-weight: normal !important;
+}
+
+.blue {
+  color: var(--blue-500);
+}
+
+.green {
+  color: var(--green-600);
+}
+
+.red {
+  color: var(--red-error);
+}

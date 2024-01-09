@@ -13,7 +13,12 @@ interface EditorProps {
   content?: string;
 }
 
-const Editor: React.FC<EditorProps> = ({ placeholder, getValueOnChange, isAllowedType, content }) => {
+const Editor: React.FC<EditorProps> = ({
+  placeholder,
+  getValueOnChange,
+  isAllowedType,
+  content
+}) => {
   let defaultValue = "";
   if (content) {
     defaultValue = content;
@@ -34,15 +39,10 @@ const Editor: React.FC<EditorProps> = ({ placeholder, getValueOnChange, isAllowe
       [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-      ["link", "image", "video"],
       ["clean"]
     ],
     clipboard: {
       matchVisual: false
-    },
-    imageResize: {
-      parchment: Quill.import("parchment"),
-      modules: ["Resize", "DisplaySize"]
     }
   };
 
@@ -57,10 +57,7 @@ const Editor: React.FC<EditorProps> = ({ placeholder, getValueOnChange, isAllowe
     "blockquote",
     "list",
     "bullet",
-    "indent",
-    "link",
-    "image",
-    "video"
+    "indent"
   ];
 
   return (

@@ -38,17 +38,28 @@ const UploadImage = (props: UploadImageProps) => {
   });
   return (
     <Box className={classes.uploadImage} padding={padding}>
-      <div {...getRootProps({ className: classes.dropzone })} style={{ borderRadius: `${borderRadius}` }}>
+      <div
+        {...getRootProps({ className: classes.dropzone })}
+        style={{ borderRadius: `${borderRadius}` }}
+      >
         <input className='input-zone' {...getInputProps()} type='file' />
         <div className={classes.dropzoneContent}>
           {isDragActive ? (
             <div>
-              <img src={images.dropFileIcon} alt='upload icon' className={classes.uploadImageIcon} />
+              <img
+                src={images.dropFileIcon}
+                alt='upload icon'
+                className={classes.uploadImageIcon}
+              />
               <p className={classes.dropzoneText}>Thả ở đây</p>
             </div>
           ) : (
             <div>
-              <img src={images.uploadImageIcon} alt='upload icon' className={classes.uploadImageIcon} />
+              <img
+                src={images.uploadImageIcon}
+                alt='upload icon'
+                className={classes.uploadImageIcon}
+              />
               <p className={classes.dropzoneText}>Kéo ảnh vào đây hoặc nhấn vào đây để chọn ảnh</p>
             </div>
           )}
@@ -56,7 +67,7 @@ const UploadImage = (props: UploadImageProps) => {
       </div>
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       {filesPreview && (
-        <Box className={classes.formGroup}>
+        <Box>
           <Box display={"flex"} gap={1}>
             {filesPreview.map((item, index) => (
               <Card key={index} className={classes.imagePreviewCardContainer} variant='outlined'>

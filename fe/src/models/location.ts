@@ -27,7 +27,6 @@ export interface Location {
 
 export interface LocationView {
   stt: number;
-  id: number;
   address: string;
   adsForm: string;
   locationType: string;
@@ -109,4 +108,27 @@ export interface LocationEditRequest {
   propertyId: number;
   userId: number;
   content: string;
+}
+
+export interface LocationEditByCDMSRequest {
+  address: string;
+  locationTypeId: number;
+  advertiseFormId: number;
+  planning: number;
+  imageUrls: any;
+  latitude: number;
+  longitude: number;
+  propertyId: number;
+  userId: number;
+}
+
+export interface LocationCreateRequest {
+  planning: number;
+  latitude: number;
+  longitude: number;
+  address: string;
+  advertiseFormId: number;
+  locationTypeId: number;
+  propertyId: number;
+  image: any;
 }

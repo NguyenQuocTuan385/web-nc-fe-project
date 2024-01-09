@@ -64,7 +64,7 @@ export default function ReportFormPopup({
       reportFormId: yup.number().required("Bắt buộc nhập hình thức báo cáo"),
       fullName: yup.string().required("Bắt buộc nhập họ và tên"),
       email: yup.string().required("Bắt buộc nhập email"),
-      phone: yup.string(),
+      phone: yup.string().required("Bắt buộc nhập số điện thoại"),
       content: yup
         .string()
         .required("Bắt buộc nhập nội dung báo cáo")
@@ -182,7 +182,7 @@ export default function ReportFormPopup({
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Box className={classes.titleWrap}>
           <Error color='error' className={classes.errorIc} />
-          <Heading4 $colorName='--red-error'>Báo cáo vi phạm</Heading4>
+          <Heading4 colorName='--red-error'>Báo cáo vi phạm</Heading4>
         </Box>
       </DialogTitle>
       <IconButton
@@ -228,6 +228,7 @@ export default function ReportFormPopup({
           <InputTextfield
             title='Số điện thoại'
             inputRef={register("phone")}
+            errorMessage={errors.phone?.message}
             name='phone'
             type='text'
           />
@@ -235,7 +236,7 @@ export default function ReportFormPopup({
             <Grid item xs={3}>
               <Box>
                 <TextTitle>Ảnh báo cáo</TextTitle>
-                <ParagraphSmall $colorName='--red-error' $fontWeight='bold'>
+                <ParagraphSmall colorName='--red-error' fontWeight='bold'>
                   (*Tối đa 2 ảnh)
                 </ParagraphSmall>
               </Box>

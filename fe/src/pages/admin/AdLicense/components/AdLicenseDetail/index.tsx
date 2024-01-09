@@ -56,7 +56,9 @@ export default function AdLicenseDetail() {
   };
   const handleClickAccept = () => {
     if (state) {
-      Promise.all([updateAdvertisesById(state), updateContractById(state)]).then(() => navigate(-1));
+      Promise.all([updateAdvertisesById(state), updateContractById(state)]).then(() =>
+        navigate(-1)
+      );
     }
   };
   const handleClickCancel = () => {
@@ -82,23 +84,23 @@ export default function AdLicenseDetail() {
                 <Grid item xs={8}>
                   <Box className={classes.infoTable}>
                     <Heading3>Thông tin bảng</Heading3>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       {state?.advertise.adsType.name}
                     </ParagraphBody>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       {state?.advertise.location.address}
                     </ParagraphBody>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       Kích thước:&nbsp;
                       <span>
                         {state?.advertise.width} x {state?.advertise.height}
                       </span>
                     </ParagraphBody>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       Hình thức:&nbsp;
                       <span>{state?.advertise.location.adsForm.name}</span>
                     </ParagraphBody>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       Phân loại:&nbsp;
                       <span>{state?.advertise.location.locationType.name}</span>
                     </ParagraphBody>
@@ -107,19 +109,19 @@ export default function AdLicenseDetail() {
                 <Grid item xs={8}>
                   <Box className={classes.infoCompany}>
                     <Heading3>Thông tin công ty</Heading3>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       Tên công ty:&nbsp;
                       <span>{state?.companyName}</span>
                     </ParagraphBody>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       Email:&nbsp;
                       <span>{state?.companyEmail}</span>
                     </ParagraphBody>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       Số điện thoại:&nbsp;
                       <span>{state?.companyPhone}</span>
                     </ParagraphBody>
-                    <ParagraphBody $colorName='--gray-60' className={classes.infoContent}>
+                    <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
                       Địa chỉ:&nbsp;
                       <span>{state?.companyAddress}</span>
                     </ParagraphBody>
@@ -168,7 +170,12 @@ export default function AdLicenseDetail() {
           >
             Duyệt
           </Button>
-          <Button onClick={() => handleClickCancel()} className={classes.skipButton} variant='contained' color='error'>
+          <Button
+            onClick={() => handleClickCancel()}
+            className={classes.skipButton}
+            variant='contained'
+            color='error'
+          >
             Bỏ qua
           </Button>
         </Box>

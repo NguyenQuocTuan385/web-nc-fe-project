@@ -3,7 +3,13 @@
   color: #fff;
 
   .table-cell {
+    min-width: 180px;
     color: #fff !important;
+  }
+
+  .table-cell.small-heading {
+    min-width: 60px !important;
+    max-width: 60px !important;
   }
 }
 
@@ -16,5 +22,9 @@
 }
 
 .cell-actions {
-  width: 200px;
+  width: 180px;
+}
+
+.noList {
+  text-align: center;
 }

@@ -24,6 +24,10 @@ export const routes = {
       ofLocation: "/admin/advertises/locations/:id"
     },
     locations: {
+      dcms: "/admin/dcms/locations",
+      dcmsEdit: "/admin/dcms/locations/edit/:id",
+      dcmsCreate: "/admin/dcms/locations/create",
+      dcmsDetail: "/admin/dcms/locations/:id",
       root: "/admin/locations",
       create: "/admin/locations/create",
       edit: "/admin/locations/edit/:id",

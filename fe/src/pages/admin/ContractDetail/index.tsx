@@ -37,10 +37,26 @@ function ContractDetail() {
 
   useEffect(() => {
     setCompanyDataList([
-      { imageIcon: images.companyName, title: "Tên công ty", content: String(contractData?.companyName) },
-      { imageIcon: images.compamyEmail, title: "Email", content: String(contractData?.companyEmail) },
-      { imageIcon: images.companyPhone, title: "Số điện thoại", content: String(contractData?.companyPhone) },
-      { imageIcon: images.companyAddress, title: "Địa chỉ", content: String(contractData?.companyAddress) }
+      {
+        imageIcon: images.companyName,
+        title: "Tên công ty",
+        content: String(contractData?.companyName)
+      },
+      {
+        imageIcon: images.compamyEmail,
+        title: "Email",
+        content: String(contractData?.companyEmail)
+      },
+      {
+        imageIcon: images.companyPhone,
+        title: "Số điện thoại",
+        content: String(contractData?.companyPhone)
+      },
+      {
+        imageIcon: images.companyAddress,
+        title: "Địa chỉ",
+        content: String(contractData?.companyAddress)
+      }
     ]);
 
     setAdvertiseDataList([

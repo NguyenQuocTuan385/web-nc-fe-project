@@ -50,7 +50,7 @@ export interface GetReports {
 
 export interface ReportEditRequest {
   status: number;
-  reply: string;
+  reply: string | null | undefined;
 }
 
 export interface ReportCreateRequest {
@@ -65,4 +65,5 @@ export interface ReportCreateRequest {
   longitude?: number;
   latitude?: number;
   advertiseId?: number;
+  userId?: number;
 }
