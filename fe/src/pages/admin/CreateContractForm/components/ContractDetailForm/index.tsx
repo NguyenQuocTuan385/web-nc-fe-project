@@ -104,7 +104,7 @@ function ContractDetailForm(propsData: PropsData) {
       <Card className={classes.cardContainer}>
         <Box className={classes.formGroup}>
           <Heading6 id='contract'>Thông tin về hợp đồng</Heading6>
-          <Heading6 fontWeight={100} $colorName='--gray-20'>
+          <Heading6 fontWeight={100} colorName='--gray-20'>
             Thêm các thông tin về ngày ký và thời hạn của hợp đồng
           </Heading6>
         </Box>
@@ -162,7 +162,7 @@ function ContractDetailForm(propsData: PropsData) {
       <Card className={classes.cardContainer}>
         <Box className={classes.formGroup}>
           <Heading6 id='company'>Thông tin về công ty</Heading6>
-          <Heading6 fontWeight={100} $colorName='--gray-20'>
+          <Heading6 fontWeight={100} colorName='--gray-20'>
             Thêm các thông tin chi tiết về công ty muốn ký hợp đồng với bảng quảng cáo này
           </Heading6>
         </Box>
@@ -214,7 +214,7 @@ function ContractDetailForm(propsData: PropsData) {
         <Box>
           <Box className={classes.formGroup}>
             <Heading6 id='image'>Hình ảnh bảng quảng cáo</Heading6>
-            <Heading6 fontWeight={100} $colorName='--gray-20'>
+            <Heading6 fontWeight={100} colorName='--gray-20'>
               Thêm ảnh của bảng quảng cáo tại đây
             </Heading6>
           </Box>

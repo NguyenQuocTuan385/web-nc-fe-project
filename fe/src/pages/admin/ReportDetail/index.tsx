@@ -79,9 +79,7 @@ export const ReportDetail = () => {
           </ButtonBack>
           {dataReportDetail && dataReportDetail.images && (
             <Box>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Hình ảnh báo cáo
-              </Heading3>
+              <Heading3>Hình ảnh báo cáo</Heading3>
               <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
                 {dataReportDetail &&
                   JSON.parse(dataReportDetail.images).length > 0 &&
@@ -110,9 +108,7 @@ export const ReportDetail = () => {
           )}
           {dataReportDetail && (
             <Box mt={"20px"}>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Thông tin báo cáo
-              </Heading3>
+              <Heading3>Thông tin báo cáo</Heading3>
               <Box display={"flex"} mt={"15px"}>
                 <Box width={"50%"}>
                   <Typography>
@@ -156,9 +152,7 @@ export const ReportDetail = () => {
 
           {dataReportDetail && (
             <Box mt='20px'>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Thông tin xử lý của cán bộ
-              </Heading3>
+              <Heading3>Thông tin xử lý của cán bộ</Heading3>
               <Typography mt={"15px"}>
                 <span className={classes["title"]}>Tình trạng: </span>
                 <span

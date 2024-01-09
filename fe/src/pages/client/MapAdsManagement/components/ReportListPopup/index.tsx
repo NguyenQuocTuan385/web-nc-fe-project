@@ -22,6 +22,8 @@ import { Error } from "@mui/icons-material";
 import Heading4 from "components/common/text/Heading4";
 import { DateHelper } from "helpers/date";
 import ReportViewPopup from "./ReportViewPopup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 interface ReportInfoPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -51,7 +53,7 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Box className={classes.titleWrap}>
           <Error color='error' className={classes.errorIc} />
-          <Heading4 $colorName='--red-error'>Danh sách báo cáo</Heading4>
+          <Heading4 colorName='--red-error'>Danh sách báo cáo</Heading4>
         </Box>
       </DialogTitle>
       <IconButton
@@ -126,7 +128,7 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
                         setReportShow(item);
                       }}
                     >
-                      <InfoIcon className={classes.infoIcon} color='primary' />
+                      <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
                     </IconButton>
                   </TableCell>
                 </TableRow>

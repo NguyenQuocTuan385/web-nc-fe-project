@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@mui/material";
 
 import classes from "./styles.module.scss";
 import ContractService from "services/contract";
@@ -52,7 +60,7 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
                   size='lg'
                   className={classes.itemIcon}
                 />
-                <Heading6 $colorName='--red-error'>Chưa được cấp phép</Heading6>
+                <Heading6 colorName='--red-error'>Chưa được cấp phép</Heading6>
               </Box>
               <Button
                 variant='contained'
@@ -72,7 +80,7 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
                   size='lg'
                   className={classes.itemIcon}
                 />
-                <Heading6 $colorName='--green-600'>Đã được cấp phép</Heading6>
+                <Heading6 colorName='--green-600'>Đã được cấp phép</Heading6>
               </Box>
 
               <Box>
@@ -89,7 +97,7 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
                   size='lg'
                   className={classes.itemIcon}
                 />
-                <Heading6 $colorName='--gray-60'>Đã hết hạn</Heading6>
+                <Heading6 colorName='--gray-60'>Đã hết hạn</Heading6>
               </Box>
 
               <Box>
@@ -109,13 +117,20 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
       >
         <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>Bạn có thật sự muốn xóa cấp phép này ?</DialogContentText>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa cấp phép này ?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
             Hủy bỏ
           </Button>
-          <Button variant='contained' onClick={() => deleteContractHandle(deleteId)} autoFocus color='success'>
+          <Button
+            variant='contained'
+            onClick={() => deleteContractHandle(deleteId)}
+            autoFocus
+            color='success'
+          >
             Đồng ý
           </Button>
         </DialogActions>

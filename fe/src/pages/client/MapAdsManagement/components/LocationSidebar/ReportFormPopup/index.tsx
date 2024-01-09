@@ -182,7 +182,7 @@ export default function ReportFormPopup({
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Box className={classes.titleWrap}>
           <Error color='error' className={classes.errorIc} />
-          <Heading4 $colorName='--red-error'>Báo cáo vi phạm</Heading4>
+          <Heading4 colorName='--red-error'>Báo cáo vi phạm</Heading4>
         </Box>
       </DialogTitle>
       <IconButton
@@ -236,7 +236,7 @@ export default function ReportFormPopup({
             <Grid item xs={3}>
               <Box>
                 <TextTitle>Ảnh báo cáo</TextTitle>
-                <ParagraphSmall $colorName='--red-error' $fontWeight='bold'>
+                <ParagraphSmall colorName='--red-error' fontWeight='bold'>
                   (*Tối đa 2 ảnh)
                 </ParagraphSmall>
               </Box>

@@ -90,7 +90,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   return (
     <Box className={classes.boxContainer}>
       <Drawer variant='permanent' anchor='left' className={classes.sideBar}>
-        <Box className={classes.sideBar}>
+        <Box>
           <List>
             {sideBar.map((list, index) => (
               <React.Fragment key={index}>
@@ -113,7 +113,10 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
                           key={childIndex}
                           onClick={() => handleClickChild(index, childIndex)}
                           className={classes.childItem}
-                          selected={selectedItem.parentIndex === index && selectedItem.childIndex === childIndex}
+                          selected={
+                            selectedItem.parentIndex === index &&
+                            selectedItem.childIndex === childIndex
+                          }
                         >
                           <ListItemText secondary={item.name} />
                         </ListItemButton>

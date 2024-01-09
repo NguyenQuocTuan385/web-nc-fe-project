@@ -132,9 +132,7 @@ export const AdvertiseDetail = () => {
           </BoxFlex>
 
           <Box mt={"15px"}>
-            <Heading4 fontWeight={600} fontSize={"18px"}>
-              Vị trí trên bản đồ
-            </Heading4>
+            <Heading4>Vị trí trên bản đồ</Heading4>
             <img
               src='https://inuvcuon.vn/images/2018/08/voi-nhung-cong-cu-rat-huu-ich-ban-da-co-the-in-truc-tiep-ngay-tren-google-map.jpg'
               alt='Bản đồ'

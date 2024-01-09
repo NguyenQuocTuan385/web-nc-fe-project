@@ -197,9 +197,7 @@ export const ReportHandle = () => {
 
           {dataReportDetail && (
             <Box>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Thông tin xử lý
-              </Heading3>
+              <Heading3>Thông tin xử lý</Heading3>
               <Box className={classes["info-handle-container"]}>
                 <div className={classes["input-container"]}>
                   <label>Loại báo cáo</label>
@@ -299,9 +297,7 @@ export const ReportHandle = () => {
           )}
 
           <Box mt={"30px"} mb={"30px"}>
-            <Heading3 fontSize={"22px"} fontWeight={600}>
-              Thông tin phản hồi
-            </Heading3>
+            <Heading3>Thông tin phản hồi</Heading3>
             <Box
               display={"flex"}
               justifyContent={"space-between"}

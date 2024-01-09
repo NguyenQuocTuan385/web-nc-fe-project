@@ -1,16 +1,15 @@
-import { Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Typography, styled } from "@mui/material";
 
 interface Props {
-  $colorName?: string;
-  $fontWeight?: number | string;
+  colorName?: string;
+  fontWeight?: number | string;
 }
 
 const ParagraphSmall = styled(Typography)<Props>`
   font-family: "Inter";
   font-style: normal;
-  font-weight: ${(props) => props.$fontWeight || 400};
-  color: ${(props) => `var(${props.$colorName || "--eerie-black-00"})`};
+  font-weight: ${(props) => props.fontWeight || 400};
+  color: ${(props) => `var(${props.colorName || "--eerie-black-00"})`};
   font-size: 14px;
   line-height: 24px;
 `;

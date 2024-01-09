@@ -518,9 +518,7 @@ export const AdvertiseEdit = () => {
           </ButtonBack>
 
           <Box>
-            <Heading2 fontSize={"24px"} fontWeight={600}>
-              Thông tin công ty
-            </Heading2>
+            <Heading2>Thông tin công ty</Heading2>
             {infoContract && <InfoContract data={infoContract} />}
             {infoContract && (
               <Typography>
@@ -537,9 +535,7 @@ export const AdvertiseEdit = () => {
           </Box>
 
           <Box mt='30px'>
-            <Heading2 fontSize={"24px"} fontWeight={600}>
-              Thông tin quảng cáo
-            </Heading2>
+            <Heading2>Thông tin quảng cáo</Heading2>
             {infoAds && (
               <MyForm
                 data={infoAds}

@@ -15,9 +15,7 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
         <SlideShowImages images={data.images} />
         {/* <img src={data.images} alt='Điểm đặt quảng cáo' /> */}
 
-        <Heading3 fontSize={"22px"} fontWeight={600}>
-          Điểm đặt quảng cáo
-        </Heading3>
+        <Heading3>Điểm đặt quảng cáo</Heading3>
         <Typography className={classes["inline-typo"]}>
           <span className={classes.title}>Địa chỉ: </span>
           <span>{data.address}</span>

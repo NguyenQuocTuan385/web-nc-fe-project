@@ -58,10 +58,15 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     return [];
   });
 
-  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPageValue: number) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPageValue: number
+  ) => {
     setCurrentPage(newPageValue + 1);
   };
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1);
   };
@@ -112,7 +117,8 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     if (params.wardFilter === null || params.wardFilter === undefined) setFilterdId([]);
     else {
       if (Array.isArray(params.wardFilter)) setFilterdId(params.wardFilter.map(Number));
-      else if (Number.isInteger(Number(params.wardFilter))) setFilterdId([Number(params.wardFilter)]);
+      else if (Number.isInteger(Number(params.wardFilter)))
+        setFilterdId([Number(params.wardFilter)]);
     }
   }, [locationHook.search]);
 
@@ -203,19 +209,27 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
                   {contract.status === EContractStatus.licensed ? (
-                    <Heading6 $colorName='--green-600'>Đã cấp phép</Heading6>
+                    <Heading6 colorName='--green-600'>Đã cấp phép</Heading6>
                   ) : contract.status === EContractStatus.notLicensed ? (
-                    <Heading6 $colorName='--red-error'>Chưa cấp phép</Heading6>
+                    <Heading6 colorName='--red-error'>Chưa cấp phép</Heading6>
                   ) : (
-                    <Heading6 $colorName='--gray-60'>Đã hết hạn</Heading6>
+                    <Heading6 colorName='--gray-60'>Đã hết hạn</Heading6>
                   )}
                 </TableCell>
                 <TableCell align='center' className={clsx(classes.dataTable, classes.dataIcon)}>
-                  <IconButton aria-label='edit' size='medium' onClick={() => viewContractDetailHandle(contract.id)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={() => viewContractDetailHandle(contract.id)}
+                  >
                     <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
                   </IconButton>
                   {contract.status === EContractStatus.notLicensed ? (
-                    <IconButton aria-label='edit' size='medium' onClick={() => openDeleteDialogHandle(contract.id)}>
+                    <IconButton
+                      aria-label='edit'
+                      size='medium'
+                      onClick={() => openDeleteDialogHandle(contract.id)}
+                    >
                       <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                     </IconButton>
                   ) : (
@@ -253,7 +267,9 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
       >
         <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>Bạn có thật sự muốn xóa cấp phép này ?</DialogContentText>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa cấp phép này ?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
