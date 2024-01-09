@@ -5,9 +5,9 @@ import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import UserManagementTable from "../UserTable";
 import classes from "./styles.module.scss";
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
+import UserManagementTable from "../UserTable";
 
 export default function TabPanel() {
   const [value, setValue] = React.useState(0);

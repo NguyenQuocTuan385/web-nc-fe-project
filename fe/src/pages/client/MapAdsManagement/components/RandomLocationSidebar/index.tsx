@@ -36,10 +36,10 @@ const RandomLocationSidebar = ({
         <Box className={classes.boxContainer}>
           <AdvertiseInfo />
           <Box className={classes.boxWrapped}>
-            <ParagraphBody $fontWeight={"bold"} $colorName='--green-500'>
+            <ParagraphBody fontWeight={"bold"} colorName='--green-500'>
               Thông tin địa điểm
             </ParagraphBody>
-            <ParagraphBody $colorName='--green-500'>{randomLocation?.address}</ParagraphBody>
+            <ParagraphBody colorName='--green-500'>{randomLocation?.address}</ParagraphBody>
             <Box className={classes.btnContainer}>
               <Button
                 variant='outlined'

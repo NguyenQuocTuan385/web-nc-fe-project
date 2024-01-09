@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openFilterDialog } from "reduxes/Status";
 import WardFilter from "components/admin/WardFilter";
 import { RootState } from "store";
+import useIntercepts from "hooks/useIntercepts";
 
 const DistrictReportsManagement = () => {
   const navigate = useNavigate();
@@ -76,16 +77,20 @@ const DistrictReportsManagement = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1);
   };
+  const intercept = useIntercepts();
 
   useEffect(() => {
     const getAllReports = async () => {
-      ReportService.getReportsWithPropertyAndParent({
-        propertyId: filteredId,
-        parentId: [1],
-        search: searchValue,
-        pageSize: Number(rowsPerPage),
-        current: Number(currentPage)
-      })
+      ReportService.getReportsWithPropertyAndParent(
+        {
+          propertyId: filteredId,
+          parentId: [1],
+          search: searchValue,
+          pageSize: Number(rowsPerPage),
+          current: Number(currentPage)
+        },
+        intercept
+      )
         .then((res) => {
           if (res.content.length === 0) setCurrentPage(1);
 

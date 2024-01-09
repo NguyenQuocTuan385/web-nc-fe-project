@@ -562,9 +562,7 @@ export const LocationEdit = () => {
 
           {locationData && (
             <Box className={classes["info-edit-container"]}>
-              <Heading2 fontSize={"24px"} fontWeight={600}>
-                Thông tin điểm đặt quảng cáo
-              </Heading2>
+              <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
               <MyForm
                 data={locationData}
                 locationTypes={locationTypes}

@@ -5,9 +5,7 @@ import classes from "./styles.module.scss";
 export const InfoAdvertise = ({ data }: any) => {
   return (
     <Box>
-      <Heading4 fontWeight={600} fontSize={"18px"}>
-        Thông tin bảng quảng cáo
-      </Heading4>
+      <Heading4>Thông tin bảng quảng cáo</Heading4>
       <Typography className={classes.text}>
         <span className={classes.title}>Loại bảng quảng cáo: </span>
         <span>{data.adsType}</span>

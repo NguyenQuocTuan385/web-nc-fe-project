@@ -1,4 +1,8 @@
 export const routes = {
+  general: {
+    notFound: "*",
+    unAuthorized: "/Unauthorized"
+  },
   client: "/",
   admin: {
     root: "/admin",
@@ -56,6 +60,10 @@ export const routes = {
     },
     advertiseType: {
       root: "/admin/advertise-types"
+    },
+    statistic: {
+      root: "/admin/statistic",
+      detail: "/admin/statistic/:id"
     },
     authentication: {
       login: "/admin/login"
