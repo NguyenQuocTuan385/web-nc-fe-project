@@ -47,18 +47,24 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
     });
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
   const navigate = useNavigate();
   function formatDateToDDMMYYYY(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    };
     return new Date(date).toLocaleDateString("en-GB", options);
   }
 
   const handleClick = (row: Location) => {
-    navigate(`${routes.admin.reviewEdit.location}`.replace(":id", row.id.toString()));
+    navigate(`${routes.admin.reviewEdit.dcmsLocation}`.replace(":id", row.id.toString()));
   };
   useEffect(() => {
     const getAllLocationReview = async () => {
@@ -183,10 +189,18 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
                   {row.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
-                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickAccept(e, row)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={(e) => handleClickAccept(e, row)}
+                  >
                     <CheckCircleIcon className={classes.checkIcon} />
                   </IconButton>
-                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickCancel(e, row)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={(e) => handleClickCancel(e, row)}
+                  >
                     <Cancel className={classes.cancelIcon} />
                   </IconButton>
                 </TableCell>

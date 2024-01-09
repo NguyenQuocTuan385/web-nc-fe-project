@@ -9,13 +9,16 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import classes from "./styles.module.scss";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store";
+import { selected } from "reduxes/Selected";
 
 interface SidebarItem {
   name: string;
   icon: JSX.Element;
   link?: string;
-  children?: Array<{ name: string }>;
+  children?: Array<{ name: string; link: string }>;
 }
 
 interface SideBarItemList {
@@ -29,14 +32,39 @@ interface SelectedItem {
 
 export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   const navigate = useNavigate();
-  const [openItems, setOpenItems] = useState<number | null>(null);
-  const [selectedItem, setSelectedItem] = useState<SelectedItem>({
-    parentIndex: null,
-    childIndex: null
-  });
+  const dispatch = useDispatch();
+  const locationHook = useLocation();
+  const path = locationHook.pathname;
   const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
 
+  sideBar.map((item, index) => {
+    if (item.children) {
+      item.children.map((child, childIndex) => {
+        if (child.link === path) {
+          dispatch(selected({ parentIndex: index, childIndex: childIndex }));
+        }
+      });
+    } else {
+      if (item.link === path) {
+        dispatch(selected({ parentIndex: index, childIndex: 0 }));
+      }
+    }
+  });
+  const state = useSelector((state: RootState) => state.selected);
+  const [openItems, setOpenItems] = useState<number | null>(state.parentIndex);
+
+  const [selectedItem, setSelectedItem] = useState<SelectedItem>({
+    parentIndex: state.parentIndex,
+    childIndex: state.childIndex
+  });
+
   const handleClick = (index: number, sideBarItem: SidebarItem, child: Array<{ name: string }>) => {
+    if (index === state.parentIndex) {
+      return;
+    }
+    dispatch(selected({ parentIndex: index, childIndex: 0 }));
+    navigate(sideBarItem.link!!);
+    console.log(sideBarItem);
     if (openItems === index) {
       setOpenItems(null);
       if (selectedItem.childIndex == null) {
@@ -65,10 +93,6 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
               : item
           )
         );
-
-        if (sideBarItem && sideBarItem.link) {
-          navigate(sideBarItem.link);
-        }
       } else {
         if (selectedItem.parentIndex === null) {
           setSelectedItem({
@@ -85,6 +109,8 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
       parentIndex: parentIndex,
       childIndex: childIndex
     });
+    dispatch(selected({ parentIndex: parentIndex, childIndex: childIndex }));
+    navigate(sideBar[parentIndex].children!![childIndex].link);
   };
 
   return (

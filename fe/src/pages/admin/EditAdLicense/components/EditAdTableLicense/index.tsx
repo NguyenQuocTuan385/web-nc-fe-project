@@ -51,7 +51,9 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
     });
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -88,7 +90,11 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
 
   const emptyRows = rowsPerPage - dataList.length;
   function convertDateFormat(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    };
     return new Date(date).toLocaleDateString("en-GB", options);
   }
 
@@ -144,7 +150,7 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   };
 
   const handleClick = (row: Advertise) => {
-    navigate(`${routes.admin.reviewEdit.advertise}`.replace(":id", row.id.toString()));
+    navigate(`${routes.admin.reviewEdit.dcmsAdvertise}`.replace(":id", row.id.toString()));
   };
   return (
     <Box className={classes.boxContainer}>
@@ -181,10 +187,18 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
                   {row.adsType.name}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
-                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickAccept(e, row)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={(e) => handleClickAccept(e, row)}
+                  >
                     <CheckCircleIcon className={classes.checkIcon} />
                   </IconButton>
-                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickCancel(e, row)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={(e) => handleClickCancel(e, row)}
+                  >
                     <Cancel className={classes.cancelIcon} />
                   </IconButton>
                 </TableCell>

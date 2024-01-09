@@ -38,9 +38,14 @@ const sideBarItemListData = [
     name: "Xét duyệt",
     icon: <FontAwesomeIcon icon={faCircleCheck} size='lg' className={classes.itemIcon} />,
     children: [
-      { name: "Cấp phép quảng cáo" },
-      { name: "Chỉnh sửa địa điểm quảng cáo" },
-      { name: "Chỉnh sửa bảng quảng cáo" }
+      {
+        name: "Cấp phép quảng cáo",
+        link: routes.admin.reviewLisence.dcms
+      },
+      {
+        name: "Chỉnh sửa địa điểm, bảng quảng cáo",
+        link: routes.admin.reviewEdit.dcms
+      }
     ]
   },
   {
@@ -49,11 +54,13 @@ const sideBarItemListData = [
   },
   {
     name: "Tạo tài khoản",
-    icon: <FontAwesomeIcon icon={faUserPlus} size='lg' className={classes.itemIcon} />
+    icon: <FontAwesomeIcon icon={faUserPlus} size='lg' className={classes.itemIcon} />,
+    link: routes.admin.users.dcmsCreate
   },
   {
     name: "Phân công tài khoản",
-    icon: <FontAwesomeIcon icon={faUserPen} size='lg' className={classes.itemIcon} />
+    icon: <FontAwesomeIcon icon={faUserPen} size='lg' className={classes.itemIcon} />,
+    link: routes.admin.users.dcms
   }
 ];
 

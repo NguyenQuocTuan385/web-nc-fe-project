@@ -9,7 +9,9 @@ export default function AdLicense() {
     <div>
       <Box className={classes.boxContainer}>
         <SidebarDCMS />
-        <TabPanelFilter props={<AdTableLicense />} />
+        <Box component='main' sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${300}px)` } }}>
+          <TabPanelFilter props={<AdTableLicense />} />
+        </Box>{" "}
       </Box>
     </div>
   );
