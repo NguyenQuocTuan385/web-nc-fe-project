@@ -30,6 +30,7 @@ import AdvertiseFormManagement from "pages/admin/AdvertiseFormManagement";
 import AdvertiseTypeManagement from "pages/admin/AdvertiseTypeManagement";
 import DistrictContractList from "pages/admin/DistrictContractList";
 import Login from "pages/admin/Login";
+import ReportStatistic from "pages/admin/ReportStatistic";
 
 import LocationManagementDCMS from "pages/admin/LocationManagementDCMS";
 import { LocationEditCDMS } from "pages/admin/LocationEditDCMS";
@@ -74,17 +75,7 @@ function App() {
             <Route element={<RequireAuth availableRole={ERole.WARD} />}>
               <Route path={routes.admin.contracts.root} Component={ContractList} />
             </Route>
-            {/* Locations */}
-            <Route path={routes.admin.locations.root} Component={LocationManagement} />
-            <Route path={routes.admin.locations.edit} Component={LocationEdit} />
-
-            {/* Advertises */}
-            <Route
-              path={routes.admin.advertises.ofLocation}
-              Component={AdvertisesOfLocationManagement}
-            />
-            <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
-            <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
+         
             {/* Location DCMS  */}
             <Route path={routes.admin.locations.dcms} Component={LocationManagementDCMS} />
             <Route path={routes.admin.locations.dcmsEdit} Component={LocationEditCDMS} />
@@ -102,15 +93,17 @@ function App() {
             <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
             <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
-            {/* Reports */}
-            <Route path={routes.admin.reports.root} Component={ReportsManagement} />
-            <Route path={routes.admin.reports.edit} Component={ReportHandle} />
-            <Route path={routes.admin.reports.details} Component={ReportDetail} />
-            <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
-            <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
-            <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
-            <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
 
+          {/* Reports */}
+          <Route path={routes.admin.reports.root} Component={ReportsManagement} />
+          <Route path={routes.admin.reports.edit} Component={ReportHandle} />
+          <Route path={routes.admin.reports.details} Component={ReportDetail} />
+          <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
+          <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
+          <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
+          <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+          <Route path={routes.admin.statistic.root} Component={ReportStatistic} />
+          <Route path={routes.admin.statistic.detail} Component={ReportDetail} />
             {/* Districts */}
             <Route element={<RequireAuth availableRole={ERole.DISTRICT} />}>
               <Route path={routes.admin.contracts.district} Component={DistrictContractList} />

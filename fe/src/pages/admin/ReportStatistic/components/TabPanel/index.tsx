@@ -8,28 +8,29 @@ import SearchIcon from "@mui/icons-material/Search";
 import classes from "./styles.module.scss";
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import UserManagementTable from "../UserTable";
+import ReportTable from "../ReportTable";
 
 export default function TabPanel() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState("0");
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   const locationHook = useLocation();
   const params = new URLSearchParams(locationHook.search);
-  const role = params.get("roleId");
+  const tab = params.get("tab");
   React.useEffect(() => {
-    if (role) {
-      setValue(Number(role));
+    if (tab) {
+      setValue(tab);
     }
-  }, [role]);
+  }, [tab]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     navigate({
       pathname: locationHook.pathname,
       search: createSearchParams({
-        ...(newValue !== 0 && { roleId: newValue.toString() })
+        ...(newValue !== "0" && { tab: newValue.toString() })
       }).toString()
     });
     setValue(newValue);
@@ -40,9 +41,9 @@ export default function TabPanel() {
       <Box className={classes.boxContainer}>
         <Box className={classes.boxTabPanel}>
           <Tabs value={value} onChange={handleChange}>
-            <Tab label='Tất cả' value={0} />
-            <Tab label='Quận' value={3} />
-            <Tab label='Phường' value={2} />
+            <Tab label='Tất cả' value={"0"} />
+            <Tab label='Bảng quảng cáo' value={"ADVERTISE"} />
+            <Tab label='Địa điểm' value={"LOCATION"} />
           </Tabs>
 
           <TextField
@@ -59,7 +60,7 @@ export default function TabPanel() {
             className={classes.customTextField}
           />
         </Box>
-        <UserManagementTable role={value} fieldSearch={searchValue} />
+        <ReportTable tab={value} fieldSearch={searchValue} />
       </Box>
     </>
   );

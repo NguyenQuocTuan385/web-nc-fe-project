@@ -20,8 +20,8 @@ import queryString from "query-string";
 import AlertDialog from "components/admin/ConfirmDialog";
 
 interface FilterProps {
-  role: number;
-  fieldSearch: string;
+  role?: number;
+  fieldSearch?: string;
 }
 export default function UserManagementTable({ role, fieldSearch }: FilterProps) {
   const locationHook = useLocation();
