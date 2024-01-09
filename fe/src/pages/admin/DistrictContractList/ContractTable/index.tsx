@@ -27,6 +27,7 @@ import clsx from "clsx";
 import { useLocation, useNavigate, useResolvedPath, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 import { routes } from "routes/routes";
+import useIntercepts from "hooks/useIntercepts";
 
 // const rows = [...user];
 interface FilterProps {
@@ -75,41 +76,45 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const [dataList, setDataList] = useState<Contract[]>([]);
   const [totalElements, setTotalElements] = useState(1);
   const [selectedForDelete, setSelectedForDelete] = useState(-1);
+  const intercept = useIntercepts()
 
   // filter contract's status for Tab Panel
   useEffect(() => {
     // not licensed
     const getContractList = async () => {
-      ContractService.getContractByPropertyAndParent({
-        propertyId: filteredId,
-        parentId: [1],
-        search: fieldSearch,
-        status: Number(status) === 0 ? undefined : Number(status),
-        pageSize: Number(rowsPerPage),
-        current: Number(currentPage)
-      })
-        .then((res) => {
-          if (res.content.length === 0) setCurrentPage(1);
+      try {
+        const res = await ContractService.getContractByPropertyAndParent(
+          {
+            propertyId: filteredId,
+            parentId: [1],
+            search: fieldSearch,
+            status: Number(status) === 0 ? undefined : Number(status),
+            pageSize: Number(rowsPerPage),
+            current: Number(currentPage)
+          },
+          intercept
+        );
 
-          setDataList(res.content);
-          setTotalElements(res.totalElements);
-          setEmptyRows(Number(rowsPerPage) - res.numberOfElements);
+        if (res.content.length === 0) setCurrentPage(1);
 
-          if (status !== 0) searchParams.set("status", status.toString());
-          else searchParams.delete("status");
+        setDataList(res.content);
+        setTotalElements(res.totalElements);
+        setEmptyRows(Number(rowsPerPage) - res.numberOfElements);
 
-          if (fieldSearch !== "") searchParams.set("searchKey", fieldSearch.toString());
-          // else searchParams.delete("searchKey");
+        if (status !== 0) searchParams.set("status", status.toString());
+        else searchParams.delete("status");
 
-          searchParams.set("page", currentPage.toString());
-          searchParams.set("rowsNum", rowsPerPage.toString());
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+        if (fieldSearch !== "") searchParams.set("searchKey", fieldSearch.toString());
+
+        searchParams.set("page", currentPage.toString());
+        searchParams.set("rowsNum", rowsPerPage.toString());
+        setSearchParams(searchParams);
+      } catch (err: any) {}
     };
 
-    getContractList();
+    getContractList().catch((e) => {
+      console.log(e);
+    });
   }, [status, currentPage, rowsPerPage, fieldSearch, filteredId]);
 
   useEffect(() => {

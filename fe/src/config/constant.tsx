@@ -51,7 +51,8 @@ export const API = {
     UPDATE: "/api/users/:id",
     CREATE: "/api/users",
     DELETE: "/api/users/:id",
-    DETAIL: "/api/users/:id"
+    DETAIL: "/api/users/:id",
+    EMAIL: "/api/users/FindByEmail/:email"
   },
   REPORT: {
     DEFAULT: "/api/reports",
@@ -68,6 +69,12 @@ export const API = {
   },
   ADVERTISE_TYPE: {
     DEFAULT: "/api/advertise-types"
+  },
+  AUTH: {
+    LOGIN: "/api/authentication/login",
+    REGISTER: "/api/authentication/register",
+    REFRESH: "/api/authentication/refresh",
+    LOGOUT: "/api/authentication/logout"
   },
   EMAIL: {
     SEND_TEXT_EMAIL: "/api/email/text",

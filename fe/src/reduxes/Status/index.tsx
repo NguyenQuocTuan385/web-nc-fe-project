@@ -21,3 +21,5 @@ const statusSlice = createSlice({
 export const { openFilterDialog } = statusSlice.actions;
 
 export default statusSlice.reducer;
+
+export const selectOpenFilterDialogStatus = (state: any) => state.status.isOpenFilterDialog;
