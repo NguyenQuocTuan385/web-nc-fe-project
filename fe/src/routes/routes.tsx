@@ -67,6 +67,11 @@ export const routes = {
     },
     authentication: {
       login: "/admin/login"
+    },
+    forgotPassword: {
+      root: "/admin/recover",
+      verify: "admin/recover/code",
+      reset: "admin/recover/password"
     }
   }
 };

@@ -39,6 +39,9 @@ import AdvertisesOfLocationManagementDCMS from "pages/admin/AdvertisesOfLocation
 
 import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
 import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
+import ForgotPassword from "pages/admin/ForgotPassword";
+import VerifyOTP from "pages/admin/ForgotPassword/components/VerifyOTP";
+import ResetPassword from "pages/admin/ForgotPassword/components/ResetPassword";
 import { store } from "store";
 import { injectStore } from "services/configApi";
 import PersistLogin from "components/common/PersistLogin";
@@ -116,6 +119,12 @@ function App() {
           </Route>
 
           <Route path={routes.admin.authentication.login} Component={Login} />
+
+          {/* forgot password */}
+          <Route path={routes.admin.forgotPassword.root} Component={ForgotPassword} />
+          <Route path={routes.admin.forgotPassword.verify} Component={VerifyOTP} />
+          <Route path={routes.admin.forgotPassword.reset} Component={ResetPassword} />
+          
           <Route path={routes.general.notFound} Component={NotFound} />
           <Route path={routes.general.unAuthorized} Component={UnAuthorized} />
         </Routes>
