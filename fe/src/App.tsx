@@ -35,6 +35,7 @@ import DistrictReportsManagement from "pages/admin/DistrictReportManagement";
 import { store } from "store";
 import { injectStore } from "services/configApi";
 import PersistLogin from "components/common/PersistLogin";
+import NotFound from "pages/common/NotFound";
 
 function App() {
   injectStore(store);
@@ -84,11 +85,14 @@ function App() {
             <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
             <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
 
+            {/* Districts */}
             <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
             <Route path={routes.admin.locations.district} Component={DistrictLocationManagement} />
             <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
           </Route>
+
           <Route path={routes.admin.authentication.login} Component={Login} />
+          <Route path={routes.general} Component={NotFound} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

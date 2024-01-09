@@ -10,6 +10,7 @@ import companyAddress from "assets/img/icon/ic-comAddress.svg";
 import compamyEmail from "assets/img/icon/ic-comEmail.svg";
 import companyName from "assets/img/icon/ic-comName.svg";
 import companyPhone from "assets/img/icon/ic-comPhone.svg";
+import NotFoundError from "assets/img/NotFoundError.png";
 
 const images = {
   twitterIcon,
@@ -22,7 +23,8 @@ const images = {
   compamyEmail,
   companyAddress,
   companyName,
-  companyPhone
+  companyPhone,
+  NotFoundError
 };
 
 export default images;
