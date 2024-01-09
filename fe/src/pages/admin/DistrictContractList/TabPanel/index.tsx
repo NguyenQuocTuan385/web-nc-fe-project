@@ -15,10 +15,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import { openFilterDialog } from "reduxes/Status";
 import { string } from "yup";
+import DistrictService from "services/district";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import useIntercepts from "hooks/useIntercepts";
 
 export default function TabPanel() {
   const locationHook = useLocation();
   const dispatch = useDispatch();
+  const currentUser: User = useSelector(selectCurrentUser);
+  const intercept = useIntercepts();
   const [searchParams, setSearchParams] = useState(() => {
     const params = queryString.parse(locationHook.search);
 
@@ -39,6 +45,7 @@ export default function TabPanel() {
     return params.searchKey || "";
   });
   const openFilterDialogValue = useSelector((state: RootState) => state.status.isOpenFilterDialog);
+  const [wardList, setWardList] = useState([]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -49,6 +56,14 @@ export default function TabPanel() {
   const openFilterDialogHandle = () => {
     dispatch(openFilterDialog(true));
   };
+
+  useEffect(() => {
+    DistrictService.getWardWithParentId(currentUser.property.id, intercept)
+      .then((res) => {
+        setWardList(res.content);
+      })
+      .catch((e) => console.log(e));
+  }, []);
 
   useEffect(() => {
     const params = queryString.parse(locationHook.search);
@@ -95,44 +110,7 @@ export default function TabPanel() {
           aria-describedby='alert-dialog-description'
         >
           <DialogContent>
-            <WardFilter
-              selectedId={searchParams}
-              propertyList={[
-                {
-                  id: 3,
-                  name: "Phường Nguyễn Cư Trinh",
-                  code: "PHUONG",
-                  propertyParent: {
-                    id: 1,
-                    name: "Quận 5",
-                    code: "QUAN",
-                    propertyParent: undefined
-                  }
-                },
-                {
-                  id: 4,
-                  name: "Phường 4",
-                  code: "PHUONG",
-                  propertyParent: {
-                    id: 1,
-                    name: "Quận 5",
-                    code: "QUAN",
-                    propertyParent: undefined
-                  }
-                },
-                {
-                  id: 5,
-                  name: "Phường 3",
-                  code: "PHUONG",
-                  propertyParent: {
-                    id: 1,
-                    name: "Quận 5",
-                    code: "QUAN",
-                    propertyParent: undefined
-                  }
-                }
-              ]}
-            />
+            <WardFilter selectedId={searchParams} propertyList={wardList} />
           </DialogContent>
         </Dialog>
         <ContractTable status={Number(tabValue)} fieldSearch={String(searchValue)} />

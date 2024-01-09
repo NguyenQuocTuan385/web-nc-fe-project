@@ -38,7 +38,6 @@ const MenuAvatar = () => {
     setAnchorEl(null);
 
     AuthenticationService.logout().then(() => {
-      localStorage.clear();
       dispatch(logOut());
       dispatch(loginStatus(false));
       navigate(routes.admin.authentication.login);

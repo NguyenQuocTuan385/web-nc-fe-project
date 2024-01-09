@@ -39,6 +39,19 @@ export class DistrictService {
         return Promise.reject(e?.response?.data);
       });
   }
+
+  static async getWardWithParentId(id: number, api: any): Promise<any> {
+    return await api
+      .get(`${API.DISTRICT.GET_BY_PARENT_ID.replace(":id", `${id}`)}`, {
+        params: { pageSize: 999 }
+      })
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default DistrictService;
