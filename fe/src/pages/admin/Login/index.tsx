@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Button, Grid, Link, TextField, Typography } from "@mui/material";
 import classes from "./styles.module.scss";
 import picture from "../../../assets/img/login/login.jpg";
@@ -9,10 +9,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthenticationService } from "services/authentication";
 import { LoginRequest } from "models/authentication";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Userservice from "services/user";
 import { Token } from "@mui/icons-material";
-import { EStorageKey } from "models/general";
+import { ERole, EStorageKey } from "models/general";
 import { loginStatus, setLogin } from "reduxes/Auth";
 import { API } from "config/constant";
 import api from "services/configApi";
@@ -41,15 +41,19 @@ const Login: React.FC = () => {
         const userResponse = await api.get(`${API.USER.EMAIL.replace(":email", `${email}`)}`, {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
+        const userRole = userResponse.data.role.id;
 
         dispatch(setLogin({ user: userResponse.data, token: accessToken }));
         dispatch(loginStatus(true));
+
+        if (userRole === ERole.DEPARTMENT) navigate(routes.admin.contracts.district);
+        else if (userRole === ERole.DISTRICT) {
+          console.log("Yes district");
+          navigate(routes.admin.locations.district);
+        } else navigate(routes.admin.contracts.root);
       })
       .catch((e) => {
         console.log(e);
-      })
-      .finally(() => {
-        navigate(routes.admin.contracts.district);
       });
   };
   const schema = useMemo(() => {

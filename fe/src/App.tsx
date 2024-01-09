@@ -44,6 +44,7 @@ import PersistLogin from "components/common/PersistLogin";
 import NotFound from "pages/common/NotFound";
 import RequireAuth from "components/common/RequireAuth";
 import { ERole } from "models/general";
+import UnAuthorized from "pages/common/UnAuthorized";
 
 function App() {
   injectStore(store);
@@ -122,7 +123,8 @@ function App() {
           </Route>
 
           <Route path={routes.admin.authentication.login} Component={Login} />
-          <Route path={routes.general} Component={NotFound} />
+          <Route path={routes.general.notFound} Component={NotFound} />
+          <Route path={routes.general.unAuthorized} Component={UnAuthorized} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

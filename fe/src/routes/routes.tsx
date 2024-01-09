@@ -1,5 +1,8 @@
 export const routes = {
-  general: "*",
+  general: {
+    notFound: "*",
+    unAuthorized: "/Unauthorized"
+  },
   client: "/",
   admin: {
     root: "/admin",
