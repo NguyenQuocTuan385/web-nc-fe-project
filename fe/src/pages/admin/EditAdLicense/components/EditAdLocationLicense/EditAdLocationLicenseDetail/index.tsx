@@ -31,7 +31,11 @@ export default function EditAdLocationLicenseDetail() {
   console.log(locationDetail);
   console.log("edit: " + locationDetail?.locationEdit);
   function formatDateToDDMMYYYY(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    };
     return new Date(date).toLocaleDateString("en-GB", options);
   }
 
@@ -114,7 +118,7 @@ export default function EditAdLocationLicenseDetail() {
         <Box className={classes.boxContentDetail}>
           <Box className={classes.boxCurrentContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>TRƯỚC KHI THAY ĐỔI</ParagraphBody>
+              <ParagraphBody fontWeight={"bold"}>TRƯỚC KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
@@ -125,7 +129,10 @@ export default function EditAdLocationLicenseDetail() {
 
                 <ParagraphBody className={classes.infoContent}>
                   Địa chỉ:&nbsp;
-                  {renderCurrent(locationDetail?.address || "", locationDetail?.locationEdit?.address || "")}
+                  {renderCurrent(
+                    locationDetail?.address || "",
+                    locationDetail?.locationEdit?.address || ""
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Loại vị trí:&nbsp;
@@ -136,7 +143,10 @@ export default function EditAdLocationLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Hình thức quảng cáo:&nbsp;
-                  {renderCurrent(locationDetail?.adsForm.name || "", locationDetail?.locationEdit?.adsForm.name || "")}
+                  {renderCurrent(
+                    locationDetail?.adsForm.name || "",
+                    locationDetail?.locationEdit?.adsForm.name || ""
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   {renderCurrent(
@@ -152,7 +162,7 @@ export default function EditAdLocationLicenseDetail() {
           </Box>
           <Box className={classes.boxHistoryContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>SAU KHI THAY ĐỔI</ParagraphBody>
+              <ParagraphBody fontWeight={"bold"}>SAU KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
@@ -163,7 +173,10 @@ export default function EditAdLocationLicenseDetail() {
 
                 <ParagraphBody className={classes.infoContent}>
                   Địa chỉ:&nbsp;
-                  {renderEdit(locationDetail?.address || "", locationDetail?.locationEdit?.address || "")}
+                  {renderEdit(
+                    locationDetail?.address || "",
+                    locationDetail?.locationEdit?.address || ""
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Loại vị trí:&nbsp;
@@ -174,7 +187,10 @@ export default function EditAdLocationLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Hình thức quảng cáo:&nbsp;
-                  {renderEdit(locationDetail?.adsForm.name || "", locationDetail?.locationEdit?.adsForm.name || "")}
+                  {renderEdit(
+                    locationDetail?.adsForm.name || "",
+                    locationDetail?.locationEdit?.adsForm.name || ""
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   {renderEdit(
@@ -187,7 +203,7 @@ export default function EditAdLocationLicenseDetail() {
           </Box>
           <Box className={classes.boxMapContainer}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>VỊ TRÍ TRÊN BẢN ĐỒ</ParagraphBody>
+              <ParagraphBody fontWeight={"bold"}>VỊ TRÍ TRÊN BẢN ĐỒ</ParagraphBody>
             </Box>
             <Box className={classes.boxMap}>
               <img

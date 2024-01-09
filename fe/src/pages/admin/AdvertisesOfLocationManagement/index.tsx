@@ -1,6 +1,12 @@
-import { Box, Button, IconButton, Pagination } from "@mui/material";
+import { Box, Button, IconButton, Pagination, TablePagination } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useLocation,
+  useResolvedPath,
+  createSearchParams
+} from "react-router-dom";
 import queryString from "query-string";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,6 +25,7 @@ import { LocationView } from "models/location";
 import { Contract } from "models/contract";
 import ContractService from "services/contract";
 import { Advertise } from "models/advertise";
+import ParagraphBody from "components/common/text/ParagraphBody";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -37,7 +44,6 @@ const IconButtonBack = styled(IconButton)(() => ({
 const AdvertiseOfLocationManagement = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const itemsPerPage = 5;
   const [advertiseList, setAdvertiseList] = useState([]);
   const [infoContract, setInfoContract] = useState<Contract | null>(null);
   const [searchValue, setSearchValue] = useState("");
@@ -51,14 +57,27 @@ const AdvertiseOfLocationManagement = () => {
 
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
-  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
-    setCurrentPage(newPageValue);
-    navigate({
-      pathname: match,
-      search: createSearchParams({
-        page: newPageValue.toString()
-      }).toString()
-    });
+  const [rowsPerPage, setRowsPerPage] = useState(() => {
+    const params = queryString.parse(locationHook.search);
+    return params.rowsNum || 5;
+  });
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPageValue: number
+  ) => {
+    setCurrentPage(newPageValue + 1);
+    // navigate({
+    //   pathname: match,
+    //   search: createSearchParams({
+    //     page: newPageValue.toString()
+    //   }).toString()
+    // });
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -66,7 +85,7 @@ const AdvertiseOfLocationManagement = () => {
       try {
         const res = await AdvertiseService.getAdvertisesByLocationId(Number(id), {
           search: searchValue,
-          pageSize: itemsPerPage,
+          pageSize: Number(rowsPerPage),
           current: Number(currentPage)
         });
 
@@ -94,7 +113,7 @@ const AdvertiseOfLocationManagement = () => {
         console.log(error);
       }
     })();
-  }, [currentPage, searchValue]);
+  }, [currentPage, searchValue, rowsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -106,7 +125,9 @@ const AdvertiseOfLocationManagement = () => {
 
   const handleEditAdvertise = (idAdvertise: number) => {
     navigate(
-      `${routes.admin.advertises.edit.replace(":locationId", `${id}`).replace(":advertiseId", `${idAdvertise}`)}`
+      `${routes.admin.advertises.edit
+        .replace(":locationId", `${id}`)
+        .replace(":advertiseId", `${idAdvertise}`)}`
     );
   };
 
@@ -136,18 +157,25 @@ const AdvertiseOfLocationManagement = () => {
 
   const customHeading = [
     "STT",
-    "Mã",
     "Loại bảng quảng cáo",
     "Tên loại hình",
     "Kích thước",
-    "Số lượng trụ",
+    "SL trụ",
     "Trạng thái"
   ];
-  const customColumns = ["stt", "id", "adsType", "adsForm", "size", "pillarQuantity", "objectStatus"];
+  const customColumns = [
+    "stt",
+    "id",
+    "adsType",
+    "adsForm",
+    "size",
+    "pillarQuantity",
+    "objectStatus"
+  ];
 
   const dataInfoLocation: LocationView = advertiseList.map((ads: any, index: number) => {
     return {
-      stt: index,
+      stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
       id: ads.location.id,
       address: ads.location.address,
       adsForm: ads.location.adsForm.name,
@@ -155,10 +183,9 @@ const AdvertiseOfLocationManagement = () => {
       locationType: ads.location.locationType.name,
       latitude: ads.location.latitude,
       longtitude: ads.location.longitude,
-      images: ads.location.images
+      images: ads.location.images.length > 0 ? JSON.parse(ads.location.images) : []
     };
   })[0];
-  // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const goBack = () => {
     navigate(`${routes.admin.locations.root}`);
@@ -174,32 +201,58 @@ const AdvertiseOfLocationManagement = () => {
             <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
             Trở về
           </ButtonBack>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-          </Box>
+          {advertiseList.length > 0 && (
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+            </Box>
+          )}
           <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
 
-          <Box className={classes["table-container"]}>
+          {advertiseList.length > 0 && (
             <Box className={classes["table-container"]}>
-              <TableTemplate
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onViewDetailsClick={handleViewAdDetails}
-                onEditClick={handleEditAdvertise}
-                onAddClick={handleAddAdvertise}
-              />
+              <Box className={classes["table-container"]}>
+                <TableTemplate
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onViewDetailsClick={handleViewAdDetails}
+                  onEditClick={handleEditAdvertise}
+                  onAddClick={handleAddAdvertise}
+                />
 
-              <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(
-                  Number(currentPage) * itemsPerPage,
-                  totalElements
-                )} kết quả trên ${totalElements}`}</span>
-                <Pagination count={totalPage} page={Number(currentPage)} onChange={handleChangePage} />
+                <Box className={classes.pagination}>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 100]}
+                    component='div'
+                    count={totalElements}
+                    page={Number(currentPage) - 1}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={Number(rowsPerPage)}
+                    labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Box>
+
+                {/* <Box className={classes["pagination-custom"]}>
+                  <span>{`Hiển thị ${Math.min(
+                    Number(currentPage) * itemsPerPage,
+                    totalElements
+                  )} kết quả trên ${totalElements}`}</span>
+                  <Pagination
+                    count={totalPage}
+                    page={Number(currentPage)}
+                    onChange={handleChangePage}
+                  />
+                </Box> */}
               </Box>
             </Box>
-          </Box>
+          )}
+          {(advertiseList.length === 0 || !advertiseList) && (
+            <ParagraphBody className={classes.noList}>
+              Không có thông tin bảng quảng cáo
+            </ParagraphBody>
+          )}
         </Box>
       </div>
     </Box>

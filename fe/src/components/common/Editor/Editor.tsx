@@ -15,7 +15,6 @@ const Editor: React.FC<EditorProps> = ({ placeholder }) => {
 
   const handleChange = (html: string) => {
     setEditorHtml(html);
-    console.log(html);
   };
 
   const modules = {
@@ -24,15 +23,10 @@ const Editor: React.FC<EditorProps> = ({ placeholder }) => {
       [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-      ["link", "image", "video"],
       ["clean"]
     ],
     clipboard: {
       matchVisual: false
-    },
-    imageResize: {
-      parchment: Quill.import("parchment"),
-      modules: ["Resize", "DisplaySize"]
     }
   };
 
@@ -47,10 +41,7 @@ const Editor: React.FC<EditorProps> = ({ placeholder }) => {
     "blockquote",
     "list",
     "bullet",
-    "indent",
-    "link",
-    "image",
-    "video"
+    "indent"
   ];
 
   return (

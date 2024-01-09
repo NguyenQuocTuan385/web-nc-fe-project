@@ -26,7 +26,7 @@ export class ContractService {
   }
   static async getContractsByAdvertise(id: number, data: GetContract): Promise<any> {
     return await api
-      .get(`${API.CONTRACT.ByAdvertiseId.replace(":id", `${id}`)}`, { params: data })
+      .get(`${API.CONTRACT.BY_ADVERTISE_ID.replace(":id", `${id}`)}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -37,7 +37,7 @@ export class ContractService {
 
   static async getContractsByAdvertiseOne(id: number, data: GetContract): Promise<any> {
     return await api
-      .get(`${API.CONTRACT.ByAdvertiseIdOne.replace(":id", `${id}`)}`, { params: data })
+      .get(`${API.CONTRACT.BY_ADVERTISE_ID_ONE.replace(":id", `${id}`)}`, { params: data })
       .then((res) => {
         return Promise.resolve(res.data);
       })
@@ -78,6 +78,18 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
+
+  static async getContractByPropertyAndParent(data: GetContract, api: any): Promise<any> {
+    return await api
+      .get(`${API.CONTRACT.CONTRACTBYPROPERTY}`, { params: data })
+      .then((res:any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e:any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
   static async updateContractById(id: number, data: UpdateContractStatus): Promise<any> {
     return await api
       .put(`${API.CONTRACT.UPDATE_STATUS.replace(":id", `${id}`)}`, data)

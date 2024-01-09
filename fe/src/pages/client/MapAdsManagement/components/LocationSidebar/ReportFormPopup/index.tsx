@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Grid } from "@mui/material";
 import classes from "./styles.module.scss";
 import "react-quill/dist/quill.snow.css";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { Error } from "@mui/icons-material";
 import Heading4 from "components/common/text/Heading4";
 import InputTextfield from "components/common/inputs/InputTextField";
@@ -19,6 +19,13 @@ import * as yup from "yup";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import UploadImage from "components/common/UploadImage";
 import InputWysiwyg from "components/common/InputWysiwyg";
+import ReportFormService from "services/reportForm";
+import { ReportForm } from "models/reportForm";
+import InputSelect from "components/common/InputSelect";
+import ReportService from "services/report";
+import { EReportType, ReportCreateRequest } from "models/report";
+import { RandomLocation } from "models/location";
+import SnackbarAlert, { AlertType } from "components/common/SnackbarAlert";
 
 export const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -32,30 +39,45 @@ export const ReportDialog = styled(Dialog)(({ theme }) => ({
 interface ReportFormPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  advertiseId?: number;
+  reportTypeName: EReportType;
+  randomLocation?: RandomLocation | null;
 }
 interface FormData {
-  reportFormName: string;
-  fullname: string;
+  reportFormId: number;
+  fullName: string;
   email: string;
   phone: string;
   content: string;
   images: string[] | File[];
 }
 
-export default function ReportFormPopup({ setOpen, open }: ReportFormPopupProps) {
+export default function ReportFormPopup({
+  setOpen,
+  open,
+  advertiseId,
+  reportTypeName,
+  randomLocation
+}: ReportFormPopupProps) {
   const schema = useMemo(() => {
     return yup.object().shape({
-      reportFormName: yup.string().required("Bắt buộc nhập hình thức báo cáo"),
-      fullname: yup.string().required("Bắt buộc nhập họ và tên"),
+      reportFormId: yup.number().required("Bắt buộc nhập hình thức báo cáo"),
+      fullName: yup.string().required("Bắt buộc nhập họ và tên"),
       email: yup.string().required("Bắt buộc nhập email"),
       phone: yup.string().required("Bắt buộc nhập số điện thoại"),
       content: yup
         .string()
         .required("Bắt buộc nhập nội dung báo cáo")
-        .notOneOf(["<p><br></p>"], "Bắt buộc nhập nội dung báo cáo"),
+        .notOneOf(["<p><br></p>", "<p></p>"], "Bắt buộc nhập nội dung báo cáo"),
       images: yup.array().max(2, "Tối đa 2 ảnh")
     });
   }, []);
+  const [verified, setVerified] = useState(false);
+  const [reportForms, setReportForms] = useState<ReportForm[]>([]);
+  const [openSnackbarAlert, setOpenSnackbarAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState<string>();
+  const [alertType, setAlertType] = useState<AlertType>();
+
   const {
     register,
     handleSubmit,
@@ -71,7 +93,7 @@ export default function ReportFormPopup({ setOpen, open }: ReportFormPopupProps)
     reset();
     setVerified(false);
   };
-  const [verified, setVerified] = useState(false);
+
   const onSubmit = async (data: FormData) => {
     const files = data.images;
     const formSubmit: FormData = {
@@ -79,36 +101,88 @@ export default function ReportFormPopup({ setOpen, open }: ReportFormPopupProps)
       images: []
     };
 
-    await Promise.all(
-      files.map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("upload_preset", "test-react-uploads-unsigned");
-        formData.append("api_key", "487343349115581");
+    if (files) {
+      await Promise.all(
+        files.map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", "test-react-uploads-unsigned");
+          formData.append("api_key", process.env.REACT_APP_API_KEY_CLOUDINARY as string);
 
-        const URL = "https://api.cloudinary.com/v1_1/dacvpgdfi/image/upload";
-        const uploadDataResult = await fetch(URL, {
-          method: "POST",
-          body: formData
-        }).then((res) => res.json());
+          const URL = process.env.REACT_APP_URL_CLOUDINARY as string;
+          const uploadDataResult = await fetch(URL, {
+            method: "POST",
+            body: formData
+          }).then((res) => res.json());
 
-        formSubmit.images.push(uploadDataResult.secure_url);
+          formSubmit.images.push(uploadDataResult.secure_url);
+        })
+      );
+    }
+
+    let reportCreate: ReportCreateRequest = {
+      reportFormId: formSubmit.reportFormId,
+      fullName: formSubmit.fullName,
+      email: formSubmit.email,
+      phone: formSubmit.phone,
+      content: formSubmit.content,
+      images: JSON.stringify(formSubmit.images),
+      reportTypeName: reportTypeName
+    };
+
+    if (reportTypeName === EReportType.ADVERTISE) {
+      reportCreate = {
+        ...reportCreate,
+        advertiseId: advertiseId
+      };
+    } else {
+      reportCreate = {
+        ...reportCreate,
+        address: randomLocation?.address,
+        latitude: randomLocation?.latitude,
+        longitude: randomLocation?.longitude
+      };
+    }
+
+    ReportService.createReport(reportCreate)
+      .then((res) => {
+        setOpenSnackbarAlert(true);
+        setAlertContent("Đăng báo cáo thành công");
+        setAlertType(AlertType.Success);
       })
-    );
-
-    console.log(formSubmit);
+      .catch((err) => {
+        setOpenSnackbarAlert(true);
+        setAlertContent("Đăng báo cáo thất bại");
+        setAlertType(AlertType.Error);
+      });
   };
 
   function onChange() {
     setVerified(true);
   }
 
+  useEffect(() => {
+    ReportFormService.getAllReportForm({ pageSize: 999 })
+      .then((res) => {
+        setReportForms(res.content);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <ReportDialog onClose={onClose} aria-labelledby='customized-dialog-title' open={open} fullWidth maxWidth='md'>
+    <ReportDialog
+      onClose={onClose}
+      aria-labelledby='customized-dialog-title'
+      open={open}
+      fullWidth
+      maxWidth='md'
+    >
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Box className={classes.titleWrap}>
           <Error color='error' className={classes.errorIc} />
-          <Heading4 $colorName='--red-error'>Báo cáo vi phạm</Heading4>
+          <Heading4 colorName='--red-error'>Báo cáo vi phạm</Heading4>
         </Box>
       </DialogTitle>
       <IconButton
@@ -124,18 +198,23 @@ export default function ReportFormPopup({ setOpen, open }: ReportFormPopupProps)
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <Box component='form' className={classes.formWrap} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-          <InputTextfield
+        <Box
+          component='form'
+          className={classes.formWrap}
+          autoComplete='off'
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <InputSelect
+            name='reportFormId'
+            control={control}
             title='Hình thức báo cáo'
-            inputRef={register("reportFormName")}
-            errorMessage={errors.reportFormName?.message}
-            name='reportFormName'
-            type='text'
+            errorMessage={errors.reportFormId?.message}
+            elements={reportForms}
           />
           <InputTextfield
             title='Họ và tên'
-            inputRef={register("fullname")}
-            errorMessage={errors.fullname?.message}
+            inputRef={register("fullName")}
+            errorMessage={errors.fullName?.message}
             name='fullname'
             type='text'
           />
@@ -157,7 +236,7 @@ export default function ReportFormPopup({ setOpen, open }: ReportFormPopupProps)
             <Grid item xs={3}>
               <Box>
                 <TextTitle>Ảnh báo cáo</TextTitle>
-                <ParagraphSmall $colorName='--red-error' $fontWeight='bold'>
+                <ParagraphSmall colorName='--red-error' fontWeight='bold'>
                   (*Tối đa 2 ảnh)
                 </ParagraphSmall>
               </Box>
@@ -200,6 +279,12 @@ export default function ReportFormPopup({ setOpen, open }: ReportFormPopupProps)
           <Button disabled={!verified} type='submit' children='Nộp báo cáo' variant='contained' />
         </Box>
       </DialogContent>
+      <SnackbarAlert
+        open={openSnackbarAlert}
+        setOpen={setOpenSnackbarAlert}
+        type={alertType}
+        content={alertContent}
+      />
     </ReportDialog>
   );
 }

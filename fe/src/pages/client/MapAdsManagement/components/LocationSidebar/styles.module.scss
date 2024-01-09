@@ -23,3 +23,15 @@
   display: flex;
   flex-direction: column;
 }
+
+.boxEmptyContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 50px;
+}
+
+.imgEmpty {
+  width: 100px;
+  height: 100px;
+}

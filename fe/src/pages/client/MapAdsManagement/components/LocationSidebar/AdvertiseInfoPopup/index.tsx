@@ -42,7 +42,12 @@ export default function AdvertiseInfoPopup({ onClose, open, advertise }: Adverti
     getContracts();
   }, [advertise]);
   return (
-    <AdvertisePopup onClose={onClose} aria-labelledby='customized-dialog-title' open={open} maxWidth='lg'>
+    <AdvertisePopup
+      onClose={onClose}
+      aria-labelledby='customized-dialog-title'
+      open={open}
+      maxWidth='lg'
+    >
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
         <Heading4>Thông tin chi tiết bảng quảng cáo</Heading4>
       </DialogTitle>
@@ -61,14 +66,14 @@ export default function AdvertiseInfoPopup({ onClose, open, advertise }: Adverti
       <DialogContent dividers>
         <Box className={classes.boxContainer}>
           <Box className={classes.boxWrapInfo}>
-            <ParagraphBody $fontWeight={"bold"}>Ảnh bảng quảng cáo</ParagraphBody>
+            <ParagraphBody fontWeight={"bold"}>Ảnh bảng quảng cáo</ParagraphBody>
             <Box className={classes.imgContainer}>
               <img src={advertise.images} alt='ads-img' />
             </Box>
           </Box>
           {!!contract && (
             <Box className={classes.boxWrapInfo}>
-              <ParagraphBody $fontWeight={"bold"}>Ảnh bảng quảng cáo công ty</ParagraphBody>
+              <ParagraphBody fontWeight={"bold"}>Ảnh bảng quảng cáo công ty</ParagraphBody>
               <ParagraphBody>
                 Ngày hết hạn hợp đồng: <b>{contract.endAt.toString()}</b>
               </ParagraphBody>

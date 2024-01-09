@@ -13,6 +13,9 @@ import ReportService from "services/report";
 import { EReportType, Report, ReportEditRequest } from "models/report";
 import Editor from "components/common/Editor/EditWithQuill";
 import { EReportStatus } from "models/report";
+import MailService from "services/email";
+import { EmailRequest } from "models/email";
+import Heading3 from "components/common/text/Heading3";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -42,7 +45,7 @@ export const ReportHandle = () => {
   const navigate = useNavigate();
 
   const [replyText, setReplyText] = useState("");
-  const [handleStatus, setHandleStatus] = useState(false);
+  const [handleStatus, setHandleStatus] = useState(EReportStatus.NEW);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState<boolean | null>(null);
 
   const formatDateToString = (date: Date): string => {
@@ -81,21 +84,102 @@ export const ReportHandle = () => {
   };
 
   const handleStatusChange = (e: any) => {
+    console.log(e.target.value);
     setHandleStatus(e.target.value);
+  };
+
+  const getHandleStatus = (status: number) => {
+    let statusStr = "";
+    if (status == EReportStatus.NEW) {
+      statusStr = "Chưa xử lý";
+    } else if (status == EReportStatus.PROCESSING) {
+      statusStr = "Đang xử lý";
+    } else if (status == EReportStatus.DONE) {
+      statusStr = "Đã xử lý";
+    }
+    return statusStr;
+  };
+
+  const handleSendEmail = async () => {
+    if (dataReportDetail) {
+      const handleReportHtml = `
+                                <html>
+                                  <head>
+                                      <style>
+                                          body {
+                                            font-size: 16px;
+                                          }
+                                          h3 {
+                                              text-align: center;
+                                          }
+                                          h5{
+                                            font-size: 18px;
+                                          }
+                                          span {
+                                            font-weight: bold;
+                                          }
+                                      </style>
+                                  </head>
+                                  <body>
+                                      <h3>THÔNG BÁO TÌNH TRẠNG VÀ THÔNG TIN XỬ LÝ BÁO CÁO</h3>
+                                      <div>
+                                          <h5>Nội dung báo cáo của bạn</h5>
+                                          <p><span>- Loại báo cáo: </span>${
+                                            dataReportDetail?.reportTypeName ===
+                                            EReportType.ADVERTISE
+                                              ? "Bảng quảng cáo"
+                                              : "Điểm đặt quảng cáo"
+                                          }</p>
+                                          <p><span>- Địa chỉ: </span>${dataReportDetail?.advertise
+                                            ?.location.address}</p>
+                                          <p><span>- Nội dung báo cáo: </span>${dataReportDetail?.content}</p>
+                                      </div>
+                                      <br>
+                                      <div>
+                                          <h5>Nội dung phản hồi xử lý</h5>
+                                          <p><span>- Tình trạng: </span>${getHandleStatus(
+                                            handleStatus
+                                          )}</p>
+                                          <p><span>- Nội dung phản hồi: </span>${
+                                            replyText.length > 0
+                                              ? replyText
+                                              : dataReportDetail?.reply
+                                          }</p>
+                                      </div>
+                                  </body>
+                              </html>
+
+  `;
+
+      const data: EmailRequest = {
+        toEmail: dataReportDetail.email,
+        subject: "[CBP] - Thông tin tình trạng xử lý báo cáo",
+        body: handleReportHtml
+      };
+
+      MailService.sendHtmlEmail(data)
+        .then((res) => {
+          setIsUpdateSuccess(true);
+          console.log("Gửi email đến người dân gửi báo cáo thành công!");
+        })
+        .catch((err) => {
+          setIsUpdateSuccess(false);
+          console.log(err);
+        });
+    }
   };
 
   const handleSubmit = () => {
     const updateData: ReportEditRequest = {
       status: Number(handleStatus),
-      reply: replyText
+      reply: replyText.length > 0 ? replyText : dataReportDetail && dataReportDetail.reply
     };
 
     ReportService.updateReport(Number(id), updateData)
       .then((res) => {
-        setIsUpdateSuccess(true);
+        handleSendEmail();
       })
       .catch((err) => {
-        setIsUpdateSuccess(false);
         console.log(err);
       });
   };
@@ -113,7 +197,7 @@ export const ReportHandle = () => {
 
           {dataReportDetail && (
             <Box>
-              <h3>Thông tin xử lý</h3>
+              <Heading3>Thông tin xử lý</Heading3>
               <Box className={classes["info-handle-container"]}>
                 <div className={classes["input-container"]}>
                   <label>Loại báo cáo</label>
@@ -151,42 +235,61 @@ export const ReportHandle = () => {
 
                 <div className={classes["input-container"]}>
                   <label>Họ tên người gửi</label>
-                  <input className={classes["input-custom"]} type='text' value={dataReportDetail.fullName} readOnly />
+                  <input
+                    className={classes["input-custom"]}
+                    type='text'
+                    value={dataReportDetail.fullName}
+                    readOnly
+                  />
                 </div>
 
                 <div className={classes["input-container"]}>
                   <label>Email</label>
-                  <input className={classes["input-custom"]} type='text' value={dataReportDetail.email} readOnly />
+                  <input
+                    className={classes["input-custom"]}
+                    type='text'
+                    value={dataReportDetail.email}
+                    readOnly
+                  />
                 </div>
 
                 <div className={classes["input-container"]}>
                   <label>Số điện thoại</label>
-                  <input className={classes["input-custom"]} type='text' value={dataReportDetail.phone} readOnly />
+                  <input
+                    className={classes["input-custom"]}
+                    type='text'
+                    value={dataReportDetail.phone}
+                    readOnly
+                  />
                 </div>
 
                 {dataReportDetail.images && dataReportDetail.images.length > 0 && (
                   <div className={classes["image-container"]}>
                     <label>Hình ảnh báo cáo</label>
                     <Box className={classes["image-list"]}>
-                      {JSON.parse(dataReportDetail.images).map((imageUrl: string, index: number) => {
-                        return (
-                          <div className={classes["image-item"]}>
-                            <img
-                              src={imageUrl}
-                              width={"100%"}
-                              key={imageUrl + index}
-                              height={"100%"}
-                              alt='Hình ảnh báo cáo'
-                            />
-                          </div>
-                        );
-                      })}
+                      {JSON.parse(dataReportDetail.images).map(
+                        (imageUrl: string, index: number) => {
+                          return (
+                            <div className={classes["image-item"]}>
+                              <img
+                                src={imageUrl}
+                                width={"100%"}
+                                key={imageUrl + index}
+                                height={"100%"}
+                                alt='Hình ảnh báo cáo'
+                              />
+                            </div>
+                          );
+                        }
+                      )}
                     </Box>
                   </div>
                 )}
 
                 <Box>
-                  <Typography>Nội dung</Typography>
+                  <Typography>
+                    <span className={classes.title}>Nội dung</span>
+                  </Typography>
                   <Editor placeholder='' isAllowedType={false} content={dataReportDetail.content} />
                 </Box>
               </Box>
@@ -194,8 +297,13 @@ export const ReportHandle = () => {
           )}
 
           <Box mt={"30px"} mb={"30px"}>
-            <h3>Thông tin phản hồi</h3>
-            <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} mb={"20px"}>
+            <Heading3>Thông tin phản hồi</Heading3>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              mb={"20px"}
+            >
               <label>Tình trạng</label>
               <select onChange={(e) => handleStatusChange(e)} className={classes["select-custom"]}>
                 {dataReportDetail?.status === EReportStatus.NEW && (
@@ -239,7 +347,11 @@ export const ReportHandle = () => {
               )}
 
               {dataReportDetail && !dataReportDetail.reply && (
-                <Editor placeholder='Nhập phản hồi...' getValueOnChange={handleGetValueOnChange} isAllowedType={true} />
+                <Editor
+                  placeholder='Nhập phản hồi...'
+                  getValueOnChange={handleGetValueOnChange}
+                  isAllowedType={true}
+                />
               )}
             </Box>
           </Box>
@@ -249,9 +361,16 @@ export const ReportHandle = () => {
           </ButtonSubmit>
         </Box>
 
-        <Snackbar open={isUpdateSuccess !== null} autoHideDuration={3000} onClose={() => setIsUpdateSuccess(null)}>
-          <Alert severity={isUpdateSuccess ? "success" : "error"} onClose={() => setIsUpdateSuccess(null)}>
-            {isUpdateSuccess ? "Sửa thành công" : "Sửa thất bại"}
+        <Snackbar
+          open={isUpdateSuccess !== null}
+          autoHideDuration={3000}
+          onClose={() => setIsUpdateSuccess(null)}
+        >
+          <Alert
+            severity={isUpdateSuccess ? "success" : "error"}
+            onClose={() => setIsUpdateSuccess(null)}
+          >
+            {isUpdateSuccess ? "Gửi phản hồi báo cáo thành công" : "Gửi phản hồi báo cáo thất bại"}
           </Alert>
         </Snackbar>
       </div>

@@ -31,6 +31,8 @@ import { LocationEditRequest, LocationType } from "models/location";
 import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
 import userDetails from "userDetails.json";
+import Heading2 from "components/common/text/Heading2";
+import Editor from "components/common/Editor/EditWithQuill";
 
 interface FormData {
   propertyId: number;
@@ -105,7 +107,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   const userInfo = { ...userDetails };
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [originalImages, setOriginalImages] = useState(data.images);
+  const [originalImages, setOriginalImages] = useState(JSON.parse(data.images));
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
 
   const handleOpenDialog = () => {
@@ -120,7 +122,10 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     createLocationEditRequest(isSuccess);
   };
 
-  const createLocationEdit = async (locationId: number, locationEditRequest: LocationEditRequest) => {
+  const createLocationEdit = async (
+    locationId: number,
+    locationEditRequest: LocationEditRequest
+  ) => {
     LocationEditService.createLocationEditRequest(locationId, locationEditRequest)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -158,9 +163,9 @@ const MyForm: React.FC<FormEditLocationProps> = ({
         })
       );
 
-      savedImageUrls = formSubmit.imageUrls[0];
+      savedImageUrls = JSON.stringify(formSubmit.imageUrls);
     } else {
-      formSubmit.imageUrls.push(files[0]);
+      formSubmit.imageUrls.push(JSON.stringify(files));
     }
 
     const dataSubmit = {
@@ -176,7 +181,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       {/* Khu vực */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Khu vực:</label>
         <input
           className={classes["input-property"]}
@@ -184,10 +189,10 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           value={`${userInfo.property.name}, ${userInfo.property.propertyParent.name}`}
           readOnly
         />
-      </div>
+      </Box>
 
       {/* Địa chỉ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Địa chỉ:</label>
         <Controller
           control={control}
@@ -195,15 +200,22 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           defaultValue={data.address}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input {...field} {...register("address")} type='text' className={classes["input-custom"]} />
-              {errors.address && <div className={classes["error-text"]}>{errors.address.message}</div>}
+              <input
+                {...field}
+                {...register("address")}
+                type='text'
+                className={classes["input-custom"]}
+              />
+              {errors.address && (
+                <div className={classes["error-text"]}>{errors.address.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Tọa độ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Tọa độ:</label>
         <Box className={classes["coordinates-container"]}>
           <Box className={classes["input-small"]}>
@@ -214,8 +226,15 @@ const MyForm: React.FC<FormEditLocationProps> = ({
               defaultValue={data.latitude}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input {...field} {...register("latitude")} type='number' className={classes["input-custom"]} />
-                  {errors.latitude && <div className={classes["error-text"]}>{errors.latitude.message}</div>}
+                  <input
+                    {...field}
+                    {...register("latitude")}
+                    type='number'
+                    className={classes["input-custom"]}
+                  />
+                  {errors.latitude && (
+                    <div className={classes["error-text"]}>{errors.latitude.message}</div>
+                  )}
                 </div>
               )}
             />
@@ -229,17 +248,24 @@ const MyForm: React.FC<FormEditLocationProps> = ({
               defaultValue={data.longitude}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input {...field} {...register("longitude")} type='number' className={classes["input-custom"]} />
-                  {errors.longitude && <div className={classes["error-text"]}>{errors.longitude.message}</div>}
+                  <input
+                    {...field}
+                    {...register("longitude")}
+                    type='number'
+                    className={classes["input-custom"]}
+                  />
+                  {errors.longitude && (
+                    <div className={classes["error-text"]}>{errors.longitude.message}</div>
+                  )}
                 </div>
               )}
             />
           </Box>
         </Box>
-      </div>
+      </Box>
 
       {/* Loại vị trí */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Loại vị trí:</label>
         <Controller
           control={control}
@@ -247,7 +273,11 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           defaultValue={data.locationType.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field} {...register("locationTypeId")} className={classes["select-custom"]}>
+              <select
+                {...field}
+                {...register("locationTypeId")}
+                className={classes["select-custom"]}
+              >
                 <option value=''>Chọn loại vị trí</option>
                 {locationTypes.length > 0 &&
                   locationTypes.map((locationType: LocationType, index: number) => {
@@ -258,14 +288,16 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                     );
                   })}
               </select>
-              {errors.locationTypeId && <div className={classes["error-text"]}>{errors.locationTypeId.message}</div>}
+              {errors.locationTypeId && (
+                <div className={classes["error-text"]}>{errors.locationTypeId.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình thức quảng cáo */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình thức quảng cáo:</label>
         <Controller
           control={control}
@@ -273,7 +305,11 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           defaultValue={data.adsForm.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field} {...register("advertiseFormId")} className={classes["select-custom"]}>
+              <select
+                {...field}
+                {...register("advertiseFormId")}
+                className={classes["select-custom"]}
+              >
                 <option value=''>Chọn hình thức quảng cáo</option>
                 {adsForms.length > 0 &&
                   adsForms.map((adsForm: AdvertiseForm, index: number) => {
@@ -284,14 +320,16 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                     );
                   })}
               </select>
-              {errors.advertiseFormId && <div className={classes["error-text"]}>{errors.advertiseFormId.message}</div>}
+              {errors.advertiseFormId && (
+                <div className={classes["error-text"]}>{errors.advertiseFormId.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Quy hoạch */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Quy hoạch:</label>
         <Controller
           control={control}
@@ -304,30 +342,57 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                 <option value='false'>Chưa quy hoạch</option>
                 <option value='true'>Đã quy hoạch</option>
               </select>
-              {errors.planning && <div className={classes["error-text"]}>{errors.planning.message}</div>}
+              {errors.planning && (
+                <div className={classes["error-text"]}>{errors.planning.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Lí do chỉnh sửa */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Lí do chỉnh sửa:</label>
-        <Controller
+        {/* <Controller
           control={control}
           name='content'
           defaultValue={data.content}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <textarea {...field} {...register("content")} className={classes["textarea-custom"]}></textarea>
-              {errors.content && <div className={classes["error-text"]}>{errors.content.message}</div>}
+              <textarea
+                {...field}
+                {...register("content")}
+                className={classes["textarea-custom"]}
+              ></textarea>
+              {errors.content && (
+                <div className={classes["error-text"]}>{errors.content.message}</div>
+              )}
+            </div>
+          )}
+        /> */}
+        <Controller
+          control={control}
+          name='content'
+          defaultValue=''
+          render={({ field }) => (
+            <div className={classes["input-error-container"]}>
+              {/* Replace textarea with the Editor component */}
+              <Editor
+                placeholder='Nhập lí do chỉnh sửa...'
+                getValueOnChange={(html: string) => field.onChange(html)}
+                content={field.value}
+                isAllowedType={true}
+              />
+              {errors.content && (
+                <div className={classes["error-text"]}>{errors.content.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình ảnh */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình ảnh:</label>
         <Controller
           control={control}
@@ -343,27 +408,38 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                         src={image}
                         width={"200px"}
                         height={"150px"}
-                        style={{ borderRadius: "8px", margin: "0 15px 10px 0", border: "1px solid #ccc" }}
+                        style={{
+                          borderRadius: "8px",
+                          margin: "0 15px 10px 0",
+                          border: "1px solid #ccc"
+                        }}
                         alt='Image Loation'
                       />
                     );
                   })}
 
-                {data.images.length > 0 &&
+                {JSON.parse(data.images).length > 0 &&
                   selectedImages.length < 1 &&
-                  data.images.map((image: string, index: number) => {
+                  JSON.parse(data.images).map((image: string, index: number) => {
                     return (
                       <img
                         src={image}
                         width={"200px"}
                         height={"150px"}
-                        style={{ borderRadius: "8px", margin: "0 15px 10px 0", border: "1px solid #ccc" }}
+                        style={{
+                          borderRadius: "8px",
+                          margin: "0 15px 10px 0",
+                          border: "1px solid #ccc"
+                        }}
                         alt='Image Loation'
                       />
                     );
                   })}
               </Box>
-              <Button onClick={handleOpenDialog} style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}>
+              <Button
+                onClick={handleOpenDialog}
+                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
+              >
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -371,7 +447,6 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                 <DialogContent>
                   <UploadImage
                     files={field.value}
-                    maxFiles={1}
                     errorMessage={errors.imageUrls?.message}
                     onChange={(value) => {
                       field.onChange(value);
@@ -405,11 +480,13 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                 </DialogActions>
               </Dialog>
 
-              {errors.imageUrls && <div className={classes["error-text"]}>{errors.imageUrls.message}</div>}
+              {errors.imageUrls && (
+                <div className={classes["error-text"]}>{errors.imageUrls.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       <ButtonSubmit type='submit'>Gửi</ButtonSubmit>
     </form>
@@ -433,10 +510,7 @@ export const LocationEdit = () => {
     const getLocationById = async () => {
       LocationService.getLocationsById(Number(id))
         .then((res) => {
-          setLocationData({
-            ...res,
-            images: [res.images]
-          });
+          setLocationData(res);
         })
         .catch((e) => {
           console.log(e);
@@ -488,7 +562,7 @@ export const LocationEdit = () => {
 
           {locationData && (
             <Box className={classes["info-edit-container"]}>
-              <h2>Thông tin điểm đặt quảng cáo</h2>
+              <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
               <MyForm
                 data={locationData}
                 locationTypes={locationTypes}
@@ -499,8 +573,15 @@ export const LocationEdit = () => {
             </Box>
           )}
 
-          <Snackbar open={isCreateSuccess !== null} autoHideDuration={3000} onClose={() => setIsCreateSuccess(null)}>
-            <Alert severity={isCreateSuccess ? "success" : "error"} onClose={() => setIsCreateSuccess(null)}>
+          <Snackbar
+            open={isCreateSuccess !== null}
+            autoHideDuration={3000}
+            onClose={() => setIsCreateSuccess(null)}
+          >
+            <Alert
+              severity={isCreateSuccess ? "success" : "error"}
+              onClose={() => setIsCreateSuccess(null)}
+            >
               {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
             </Alert>
           </Snackbar>

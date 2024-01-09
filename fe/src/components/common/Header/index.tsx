@@ -2,6 +2,12 @@ import { Avatar, Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import classes from "./styles.module.scss";
 import styled from "styled-components";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut, loginStatus, selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import { useNavigate } from "react-router-dom";
+import { routes } from "routes/routes";
+import { AuthenticationService } from "services/authentication";
 
 const BoxAvatar = styled(Button)(() => ({
   display: "flex",
@@ -17,6 +23,8 @@ const MenuWrapper = styled("div")(() => ({
 }));
 
 const MenuAvatar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,6 +33,19 @@ const MenuAvatar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+
+    AuthenticationService.logout().then(() => {
+      localStorage.clear();
+      dispatch(logOut());
+      dispatch(loginStatus(false));
+      navigate(routes.admin.authentication.login);
+    });
+  };
+
+  const currentUser: User = useSelector(selectCurrentUser);
 
   return (
     <MenuWrapper>
@@ -35,7 +56,7 @@ const MenuAvatar = () => {
         aria-expanded={open ? "true" : undefined}
       >
         <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
-        <Typography pl={"10px"}>Hữu Lộc</Typography>
+        <Typography pl={"10px"}>{currentUser?.name}</Typography>
       </BoxAvatar>
 
       <Menu
@@ -49,7 +70,7 @@ const MenuAvatar = () => {
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </MenuWrapper>
   );

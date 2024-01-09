@@ -57,8 +57,8 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   };
 
   useEffect(() => {
-    const getAllUnauthorizedAdvertisement = async () => {
-      AdvertiseService.getAllUnauthorizedAdvertisement({
+    const getAllUnLicensingAdvertisement = async () => {
+      AdvertiseService.getAllUnLicensingAdvertisement({
         propertyId: ward ? Number(ward) : undefined,
         parentId: district ? Number(district) : undefined,
         search: fieldSearch,
@@ -83,7 +83,7 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
           console.log(err);
         });
     };
-    getAllUnauthorizedAdvertisement();
+    getAllUnLicensingAdvertisement();
   }, [fieldSearch, page, rowsPerPage, ward, district, update]);
 
   const emptyRows = rowsPerPage - dataList.length;

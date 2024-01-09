@@ -10,6 +10,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { EReportType, Report } from "models/report";
 import ReportService from "services/report";
+import Heading3 from "components/common/text/Heading3";
+import Editor from "components/common/Editor/EditWithQuill";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -77,7 +79,7 @@ export const ReportDetail = () => {
           </ButtonBack>
           {dataReportDetail && dataReportDetail.images && (
             <Box>
-              <h3>Hình ảnh báo cáo</h3>
+              <Heading3>Hình ảnh báo cáo</Heading3>
               <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
                 {dataReportDetail &&
                   JSON.parse(dataReportDetail.images).length > 0 &&
@@ -106,7 +108,7 @@ export const ReportDetail = () => {
           )}
           {dataReportDetail && (
             <Box mt={"20px"}>
-              <h3>Thông tin báo cáo</h3>
+              <Heading3>Thông tin báo cáo</Heading3>
               <Box display={"flex"} mt={"15px"}>
                 <Box width={"50%"}>
                   <Typography>
@@ -140,7 +142,9 @@ export const ReportDetail = () => {
                 </Box>
                 <Box width={"50%"}>
                   <span className={classes["title"]}>Nội dung báo cáo: </span>
-                  <Typography dangerouslySetInnerHTML={{ __html: dataReportDetail.content }}></Typography>
+                  <Typography
+                    dangerouslySetInnerHTML={{ __html: dataReportDetail.content }}
+                  ></Typography>
                 </Box>
               </Box>
             </Box>
@@ -148,17 +152,27 @@ export const ReportDetail = () => {
 
           {dataReportDetail && (
             <Box mt='20px'>
-              <h3>Thông tin xử lý của cán bộ</h3>
+              <Heading3>Thông tin xử lý của cán bộ</Heading3>
               <Typography mt={"15px"}>
                 <span className={classes["title"]}>Tình trạng: </span>
-                <span className={`${dataReportDetail.status ? classes["text-active"] : classes["text-inactive"]}`}>
+                <span
+                  className={`${
+                    dataReportDetail.status ? classes["text-active"] : classes["text-inactive"]
+                  }`}
+                >
                   {dataReportDetail.status ? "Đã xử lý" : "Chưa xử lý"}
                 </span>
               </Typography>
-              <Typography>
-                <span className={classes["title"]}>Phản hồi: </span>
-                <span dangerouslySetInnerHTML={{ __html: dataReportDetail?.reply || "Chưa có thông tin phản hồi" }} />
-              </Typography>
+              <Box>
+                <Typography>
+                  <span className={classes["title"]}>Phản hồi: </span>
+                </Typography>
+                <Editor
+                  placeholder=''
+                  isAllowedType={false}
+                  content={dataReportDetail?.reply || "Chưa có thông tin phản hồi"}
+                />
+              </Box>
             </Box>
           )}
         </Box>

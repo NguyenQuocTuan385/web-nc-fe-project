@@ -38,6 +38,8 @@ export enum EReportStatus {
 }
 
 export interface GetReports {
+  propertyId?: number[];
+  parentId?: number[];
   email?: string;
   locationId?: number;
   search?: string;
@@ -48,5 +50,20 @@ export interface GetReports {
 
 export interface ReportEditRequest {
   status: number;
-  reply: string;
+  reply: string | null | undefined;
+}
+
+export interface ReportCreateRequest {
+  reportFormId: number;
+  fullName: string;
+  email: string;
+  phone: string;
+  content: string;
+  images: string;
+  reportTypeName: EReportType;
+  address?: string;
+  longitude?: number;
+  latitude?: number;
+  advertiseId?: number;
+  userId?: number;
 }
