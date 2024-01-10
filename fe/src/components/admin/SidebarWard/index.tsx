@@ -89,7 +89,7 @@ export default function PersistentDrawerLeft({ children }: any) {
       link:
         currentUser?.role.id === ERole.WARD
           ? routes.admin.dashboard.wardDashboard
-          : routes.admin.dashboard.wardDashboard
+          : routes.admin.dashboard.district
     },
     {
       name: "QLý điểm đặt và bảng QC",
