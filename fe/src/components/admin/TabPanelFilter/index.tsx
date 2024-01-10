@@ -101,6 +101,7 @@ export default function TabPanelFilter({ props }: ComponentProps) {
           </Button>
 
           <TextField
+            fullWidth
             placeholder='Tìm kiếm'
             variant='outlined'
             InputProps={{

@@ -95,7 +95,9 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
     });
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -162,7 +164,11 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
                   <IconButton aria-label='edit' size='medium' onClick={() => handleClick(row.id)}>
                     <FontAwesomeIcon icon={faEdit} color='var(--blue-500)' />
                   </IconButton>
-                  <IconButton aria-label='delete' size='medium' onClick={() => handleClickDelete(row.id)}>
+                  <IconButton
+                    aria-label='delete'
+                    size='medium'
+                    onClick={() => handleClickDelete(row.id)}
+                  >
                     <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                   </IconButton>
                 </TableCell>
@@ -188,7 +194,9 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
-      {user && <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} user={user} onUpdated={getUsers} />}
+      {user && (
+        <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} user={user} onUpdated={getUsers} />
+      )}
       <AlertDialog
         open={open}
         setOpen={setOpen}

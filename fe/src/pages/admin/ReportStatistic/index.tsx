@@ -8,8 +8,9 @@ export default function ReportStatistic() {
   return (
     <div>
       <Box className={classes.boxContainer}>
-        <SidebarDCMS />
-        <TabPanel />
+        <SidebarDCMS>
+          <TabPanel />
+        </SidebarDCMS>
       </Box>
     </div>
   );

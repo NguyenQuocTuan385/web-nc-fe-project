@@ -7,19 +7,19 @@ export const routes = {
   admin: {
     root: "/admin",
     users: {
-      root: "/admin/users",
-      create: "/admin/users/create",
+      dcms: "/admin/dcms/users",
+      dcmsCreate: "/admin/dcms/users/create",
       edit: "/admin/users/edit",
       change_password: "/admin/users/change-password"
     },
     reviewEdit: {
-      root: "/admin/review/edit",
-      location: "/admin/review/edit/locations/:id",
-      advertise: "/admin/review/edit/advertises/:id"
+      dcms: "/admin/dcms/review/edit",
+      dcmsLocation: "/admin/dcms/review/edit/locations/:id",
+      dcmsAdvertise: "/admin/dcms/review/edit/advertises/:id"
     },
     reviewLisence: {
-      root: "/admin/review/license",
-      detail: "/admin/review/license/:id"
+      dcms: "/admin/dcms/review/license",
+      dcmsDetail: "/admin/dcms/review/license/:id"
     },
     advertises: {
       root: "/admin/advertises",
@@ -72,8 +72,8 @@ export const routes = {
       root: "/admin/advertise-types"
     },
     statistic: {
-      root: "/admin/statistic",
-      detail: "/admin/statistic/:id"
+      dcms: "/admin/dcms/statistic",
+      dcmsDetail: "/admin/dcms/statistic/:id"
     },
     authentication: {
       login: "/admin/login"

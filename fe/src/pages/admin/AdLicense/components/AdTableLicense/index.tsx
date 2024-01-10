@@ -76,14 +76,16 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
     });
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
   const navigate = useNavigate();
 
   const handleClick = (row: Contract) => {
-    navigate(`${routes.admin.reviewLisence.detail}`.replace(":id", row.id.toString()));
+    navigate(`${routes.admin.reviewLisence.dcmsDetail}`.replace(":id", row.id.toString()));
   };
   const updateAdvertisesById = async (row: Contract) => {
     AdvertiseService.updateAdvertiseLicense(row.advertise.id, {
@@ -158,10 +160,18 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
                   {row.advertise.adsType.description}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
-                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickAccept(e, row)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={(e) => handleClickAccept(e, row)}
+                  >
                     <CheckCircleIcon className={classes.checkIcon} />
                   </IconButton>
-                  <IconButton aria-label='edit' size='medium' onClick={(e) => handleClickCancel(e, row)}>
+                  <IconButton
+                    aria-label='edit'
+                    size='medium'
+                    onClick={(e) => handleClickCancel(e, row)}
+                  >
                     <Cancel className={classes.cancelIcon} />
                   </IconButton>
                 </TableCell>

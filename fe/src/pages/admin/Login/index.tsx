@@ -125,11 +125,11 @@ const Login: React.FC = () => {
       </Grid>
     </Box>
   ) : currentUser.role.id === ERole.DEPARTMENT ? (
-    <Navigate to={routes.admin.users.root} />
+    <Navigate to={routes.admin.locations.dcms} />
   ) : currentUser.role.id === ERole.DISTRICT ? (
     <Navigate to={routes.admin.locations.district} />
   ) : (
-    <Navigate to={routes.admin.locations.root} />
+    <Navigate to={routes.admin.locations.ward} />
   );
 };
 export default Login;

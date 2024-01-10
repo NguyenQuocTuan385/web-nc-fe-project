@@ -62,20 +62,23 @@ function App() {
         <Routes>
           <Route path={routes.client} Component={MapAdsManagement} />
           <Route element={<PersistLogin />}>
-            <Route path={routes.admin.users.root} Component={UserManagement} />
-            <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
+            <Route path={routes.admin.users.dcms} Component={UserManagement} />
+            <Route path={routes.admin.reviewEdit.dcms} Component={EditAdLicense} />
 
-            <Route path={routes.admin.users.create} Component={CreateAccount} />
+            <Route path={routes.admin.users.dcmsCreate} Component={CreateAccount} />
             <Route path={routes.admin.users.edit} Component={EditProfile} />
             <Route path={routes.admin.users.change_password} Component={ChangePassword} />
 
             <Route
-              path={routes.admin.reviewEdit.location}
+              path={routes.admin.reviewEdit.dcmsLocation}
               Component={EditAdLocationLicenseDetail}
             />
-            <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
-            <Route path={routes.admin.reviewLisence.root} Component={AdLicense} />
-            <Route path={routes.admin.reviewLisence.detail} Component={AdLicenseDetail} />
+            <Route
+              path={routes.admin.reviewEdit.dcmsAdvertise}
+              Component={EditAdTableLicenseDetail}
+            />
+            <Route path={routes.admin.reviewLisence.dcms} Component={AdLicense} />
+            <Route path={routes.admin.reviewLisence.dcmsDetail} Component={AdLicenseDetail} />
             <Route path={routes.admin.properties.district} Component={DistrictManagement} />
             <Route path={routes.admin.properties.ward} Component={WardManagement} />
             <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
@@ -125,8 +128,8 @@ function App() {
             <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
             <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
             <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
-            <Route path={routes.admin.statistic.root} Component={ReportStatistic} />
-            <Route path={routes.admin.statistic.detail} Component={ReportDetail} />
+            <Route path={routes.admin.statistic.dcms} Component={ReportStatistic} />
+            <Route path={routes.admin.statistic.dcmsDetail} Component={ReportDetail} />
 
             {/* Districts */}
             <Route element={<RequireAuth availableRole={ERole.DISTRICT} />}>

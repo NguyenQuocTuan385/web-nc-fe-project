@@ -8,6 +8,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import classes from "./styles.module.scss";
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import UserManagementTable from "../UserTable";
+import SideBarDCMS from "components/admin/SidebarDCMS";
 
 export default function TabPanel() {
   const [value, setValue] = React.useState(0);
@@ -36,31 +37,29 @@ export default function TabPanel() {
   };
 
   return (
-    <>
-      <Box className={classes.boxContainer}>
-        <Box className={classes.boxTabPanel}>
-          <Tabs value={value} onChange={handleChange}>
-            <Tab label='Tất cả' value={0} />
-            <Tab label='Quận' value={3} />
-            <Tab label='Phường' value={2} />
-          </Tabs>
+    <Box className={classes.boxContainer}>
+      <Box className={classes.boxTabPanel}>
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label='Tất cả' value={0} />
+          <Tab label='Quận' value={3} />
+          <Tab label='Phường' value={2} />
+        </Tabs>
 
-          <TextField
-            placeholder='Tìm kiếm'
-            variant='outlined'
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <SearchIcon color='primary' />
-                </InputAdornment>
-              )
-            }}
-            onChange={handleSearchChange}
-            className={classes.customTextField}
-          />
-        </Box>
-        <UserManagementTable role={value} fieldSearch={searchValue} />
+        <TextField
+          placeholder='Tìm kiếm'
+          variant='outlined'
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <SearchIcon color='primary' />
+              </InputAdornment>
+            )
+          }}
+          onChange={handleSearchChange}
+          className={classes.customTextField}
+        />
       </Box>
-    </>
+      <UserManagementTable role={value} fieldSearch={searchValue} />
+    </Box>
   );
 }
