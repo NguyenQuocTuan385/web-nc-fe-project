@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import queryString from "query-string";
 import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import { AdvertiseType } from "models/advertise";
+import useIntercepts from "hooks/useIntercepts";
 
 export default function ReportFormManagement() {
   const customHeading = ["STT", "Tên loại quảng cáo", "Mô tả"];
@@ -40,13 +41,18 @@ export default function ReportFormManagement() {
     return params.page || 1;
   });
 
+  const intercept = useIntercepts();
+
   const getAllAdvertiseType = async () => {
     try {
-      const res = await AdvertiseTypeService.getAllAdvertiseType({
-        search: searchValue,
-        pageSize: itemsPerPage,
-        current: Number(currentPage)
-      });
+      const res = await AdvertiseTypeService.getAllAdvertiseType(
+        {
+          search: searchValue,
+          pageSize: itemsPerPage,
+          current: Number(currentPage)
+        },
+        intercept
+      );
       const advertiseType: AdvertiseType[] = res.content;
       setAdvertiseType(advertiseType);
       setTotalPage(res.totalPages);
