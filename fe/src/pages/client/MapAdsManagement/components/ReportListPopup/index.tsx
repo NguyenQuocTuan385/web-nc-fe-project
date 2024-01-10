@@ -15,7 +15,6 @@ import { ReportDialog } from "../LocationSidebar/ReportFormPopup";
 import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
 import classes from "./styles.module.scss";
-import InfoIcon from "@mui/icons-material/Info";
 import { EReportStatus, EReportType, Report } from "models/report";
 import ReportService from "services/report";
 import { Error } from "@mui/icons-material";
@@ -81,7 +80,10 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
                   Loại báo cáo
                 </TableCell>
                 <TableCell align='left' className={classes.headerTable}>
-                  Ngày đăng
+                  Hình thức báo cáo
+                </TableCell>
+                <TableCell align='left' className={classes.headerTable}>
+                  Ngày báo cáo
                 </TableCell>
                 <TableCell align='left' className={classes.headerTable}>
                   Trạng thái
@@ -104,6 +106,9 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
                   </TableCell>
                   <TableCell align='left' className={classes.dataTable}>
                     {item.reportTypeName === EReportType.LOCATION ? "Địa điểm" : "Bảng quảng cáo"}
+                  </TableCell>
+                  <TableCell align='left' className={classes.dataTable}>
+                    {item.reportForm.name}
                   </TableCell>
                   <TableCell align='left' className={classes.dataTable}>
                     {DateHelper.formatDateToDDMMYYYY(item.createdAt)}
