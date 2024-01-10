@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pagination, Box, TablePagination } from "@mui/material";
+import { Box, TablePagination } from "@mui/material";
 import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import queryString from "query-string";
 
@@ -8,12 +8,17 @@ import classes from "./styles.module.scss";
 import SideBarWard from "components/admin/SidebarWard";
 import TableTemplate from "components/common/TableTemplate";
 import SearchAppBar from "components/common/Search";
-import { Header } from "components/common/Header";
 import LocationService from "services/location";
 import { routes } from "routes/routes";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import useIntercepts from "hooks/useIntercepts";
 
 const LocationManagement = () => {
   const navigate = useNavigate();
+  const currentUser: User = useSelector(selectCurrentUser);
+
   const [locationList, setLocationList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -49,13 +54,22 @@ const LocationManagement = () => {
     setCurrentPage(1);
   };
 
+  const intercept = useIntercepts();
+
   useEffect(() => {
     const getAllLocations = async () => {
-      LocationService.getLocations({
-        search: searchValue,
-        pageSize: Number(rowsPerPage),
-        current: Number(currentPage)
-      })
+      LocationService.getLocationsWithPropertyAndParent(
+        {
+          propertyId: [currentUser.property.id],
+          parentId: [currentUser.property.propertyParent?.id].filter(
+            (id): id is number => id !== undefined
+          ),
+          search: searchValue,
+          pageSize: Number(rowsPerPage),
+          current: Number(currentPage)
+        },
+        intercept
+      )
         .then((res) => {
           setLocationList(res.content);
           setTotalPage(res.totalPages);

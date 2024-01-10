@@ -7,13 +7,17 @@ import queryString from "query-string";
 import SideBarWard from "components/admin/SidebarWard";
 import TableTemplate from "components/common/TableTemplate";
 import SearchAppBar from "components/common/Search";
-import { Header } from "components/common/Header";
 import classes from "./styles.module.scss";
 import ReportService from "services/report";
 import { routes } from "routes/routes";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import useIntercepts from "hooks/useIntercepts";
 
 const ReportsManagement = () => {
   const navigate = useNavigate();
+  const currentUser: User = useSelector(selectCurrentUser);
   const [reportList, setReportList] = useState([]);
 
   const [searchValue, setSearchValue] = useState("");
@@ -51,13 +55,21 @@ const ReportsManagement = () => {
     setCurrentPage(1);
   };
 
+  const intercept = useIntercepts();
   useEffect(() => {
     const getAllReports = async () => {
-      ReportService.getReports({
-        search: searchValue,
-        pageSize: Number(rowsPerPage),
-        current: Number(currentPage)
-      })
+      ReportService.getReportsWithPropertyAndParent(
+        {
+          propertyId: [currentUser.property.id],
+          parentId: [currentUser.property.propertyParent?.id].filter(
+            (id): id is number => id !== undefined
+          ),
+          search: searchValue,
+          pageSize: Number(rowsPerPage),
+          current: Number(currentPage)
+        },
+        intercept
+      )
         .then((res) => {
           setReportList(res.content);
           setTotalPage(res.totalPages);
