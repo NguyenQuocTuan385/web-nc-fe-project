@@ -84,13 +84,6 @@ function App() {
             <Route path={routes.admin.properties.ward} Component={WardManagement} />
             <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
 
-            {/* Locations Ward*/}
-            <Route path={routes.admin.locations.ward} Component={LocationManagement} />
-            <Route path={routes.admin.locations.wardEdit} Component={LocationEdit} />
-            <Route element={<RequireAuth availableRole={ERole.WARD} />}>
-              <Route path={routes.admin.contracts.root} Component={ContractList} />
-            </Route>
-
             {/* Location DCMS  */}
             <Route path={routes.admin.locations.dcms} Component={LocationManagementDCMS} />
             <Route path={routes.admin.locations.dcmsEdit} Component={LocationEditCDMS} />
@@ -100,26 +93,39 @@ function App() {
               Component={AdvertisesOfLocationManagementDCMS}
             />
 
-            {/* Advertises */}
-            <Route
-              path={routes.admin.advertises.ofLocation}
-              Component={AdvertisesOfLocationManagement}
-            />
-            <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
-            <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
+            {/* Ward */}
+            <Route element={<RequireAuth availableRole={ERole.WARD} />}>
+              {/* Locations Ward*/}
+              <Route path={routes.admin.locations.ward} Component={LocationManagement} />
+              <Route path={routes.admin.locations.wardEdit} Component={LocationEdit} />
+              <Route element={<RequireAuth availableRole={ERole.WARD} />}>
+                <Route path={routes.admin.contracts.root} Component={ContractList} />
+              </Route>
 
-            {/* Advertises Ward*/}
-            <Route
-              path={routes.admin.advertises.wardOfLocation}
-              Component={AdvertisesOfLocationManagement}
-            />
-            <Route path={routes.admin.advertises.wardDetails} Component={AdvertiseDetail} />
-            <Route path={routes.admin.advertises.wardEdit} Component={AdvertiseEdit} />
+              {/* Advertises */}
+              <Route
+                path={routes.admin.advertises.ofLocation}
+                Component={AdvertisesOfLocationManagement}
+              />
+              <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
+              <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
-            {/* Reports Ward*/}
-            <Route path={routes.admin.reports.ward} Component={ReportsManagement} />
-            <Route path={routes.admin.reports.wardEdit} Component={ReportHandle} />
-            <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
+              {/* Advertises Ward*/}
+              <Route
+                path={routes.admin.advertises.wardOfLocation}
+                Component={AdvertisesOfLocationManagement}
+              />
+              <Route path={routes.admin.advertises.wardDetails} Component={AdvertiseDetail} />
+              <Route path={routes.admin.advertises.wardEdit} Component={AdvertiseEdit} />
+
+              {/* Reports Ward*/}
+              <Route path={routes.admin.reports.ward} Component={ReportsManagement} />
+              <Route path={routes.admin.reports.wardEdit} Component={ReportHandle} />
+              <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
+
+              {/* Dashboard Ward */}
+              <Route path={routes.admin.dashboard.wardDashboard} Component={WardDashBoard} />
+            </Route>
 
             {/* Reports */}
             <Route path={routes.admin.reports.root} Component={ReportsManagement} />
@@ -153,9 +159,6 @@ function App() {
 
           <Route path={routes.general.notFound} Component={NotFound} />
           <Route path={routes.general.unAuthorized} Component={UnAuthorized} />
-
-          {/* Dashboard */}
-          <Route path={routes.admin.dashboard.wardDashboard} Component={WardDashBoard} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

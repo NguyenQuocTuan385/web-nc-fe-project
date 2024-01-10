@@ -128,10 +128,13 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   return (
     <Box className={classes.boxContainer}>
       <Drawer variant='permanent' anchor='left' className={classes.sideBar}>
-        <Box className={classes.TitleContainer}>
+        <Box className={classes.TitleContainer} sx={{ padding: "0 16px" }}>
           <Avatar variant='rounded' src={images.agentIcon} />
           <Heading1 className={classes.agentText}>
-            Cán bộ {currentUser?.property.name} {currentUser?.property.propertyParent?.name}
+            Cán bộ
+            <Heading1 className={classes.agentText} sx={{ margin: "0 !important" }}>
+              {currentUser?.property.name} {currentUser?.property.propertyParent?.name}
+            </Heading1>
           </Heading1>
         </Box>
         <Box>
