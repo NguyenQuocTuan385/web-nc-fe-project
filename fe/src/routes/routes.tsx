@@ -8,7 +8,8 @@ export const routes = {
     root: "/admin",
     users: {
       root: "/admin/users",
-      create: "/admin/users/create"
+      create: "/admin/users/create",
+      edit: "/admin/users/edit"
     },
     reviewEdit: {
       root: "/admin/review/edit",
@@ -61,8 +62,17 @@ export const routes = {
     advertiseType: {
       root: "/admin/advertise-types"
     },
+    statistic: {
+      root: "/admin/statistic",
+      detail: "/admin/statistic/:id"
+    },
     authentication: {
       login: "/admin/login"
+    },
+    forgotPassword: {
+      root: "/admin/recover",
+      verify: "admin/recover/code",
+      reset: "admin/recover/password"
     }
   }
 };

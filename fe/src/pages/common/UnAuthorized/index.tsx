@@ -1,12 +1,17 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import Heading3 from "components/common/text/Heading3";
+import Heading4 from "components/common/text/Heading4";
 import images from "config/images";
+import classes from "./styles.module.scss";
 
 const UnAuthorized = () => {
   return (
-    <Box textAlign='center'>
-      <Box component='img' src={images.unauthorized} />
-      <Typography variant='h1'>Dừng lại</Typography>
-      <Typography variant='h2'>Bạn không có quyền truy cập vào trang này</Typography>
+    <Box className={classes.boxWrap}>
+      <Box className={classes.unauthorizedBox}>
+        <img src={images.unauthorized} alt='Unauthorized img' />
+      </Box>
+      <Heading3>Dừng lại</Heading3>
+      <Heading4>Bạn không có quyền truy cập vào trang này</Heading4>
       <Button variant='contained' sx={{ mt: 2, width: 200, height: 50 }}>
         Quay về
       </Button>

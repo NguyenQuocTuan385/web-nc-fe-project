@@ -53,6 +53,7 @@ export const API = {
     CREATE: "/api/users",
     DELETE: "/api/users/:id",
     DETAIL: "/api/users/:id",
+    CHECK_OTP: "/api/users/checkOTP",
     EMAIL: "/api/users/FindByEmail/:email"
   },
   REPORT: {
@@ -79,6 +80,7 @@ export const API = {
   },
   EMAIL: {
     SEND_TEXT_EMAIL: "/api/email/text",
-    SEND_HTML_EMAIL: "/api/email/html"
+    SEND_HTML_EMAIL: "/api/email/html",
+    SEND_OTP_TO_EMAIL: "/api/email/otp"
   }
 };

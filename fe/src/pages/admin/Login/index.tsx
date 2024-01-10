@@ -82,7 +82,6 @@ const Login: React.FC = () => {
           <Typography variant='h5' gutterBottom>
             Đăng nhập
           </Typography>
-
           <form onSubmit={handleSubmit(handleLogin)}>
             <TextField
               label='Email'
@@ -119,7 +118,7 @@ const Login: React.FC = () => {
             </Button>
           </form>
 
-          <Link href='#' className={classes.forgotPasswordLink}>
+          <Link href='/admin/recover' className={classes.forgotPasswordLink}>
             Quên mật khẩu
           </Link>
         </Grid>

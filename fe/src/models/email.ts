@@ -3,3 +3,7 @@ export interface EmailRequest {
   subject?: string;
   body: string;
 }
+
+export interface RequestOTP {
+  email: string;
+}

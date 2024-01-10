@@ -28,3 +28,8 @@ export interface UserRequest {
   roleId: number;
   propertyId: number;
 }
+
+export interface RequestOTPUser {
+  email: string;
+  otp: string;
+}
