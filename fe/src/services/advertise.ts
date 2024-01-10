@@ -3,7 +3,17 @@ import api from "./configApi";
 import { GetAdvertises, UpdateAdvertise, UpdateAdvertiseStatus, UpdateStatus } from "models/advertise";
 
 export class AdvertiseService {
-  static async getAdvertisesByLocationId(id: number, data: GetAdvertises): Promise<any> {
+  static async getAdvertisesByLocationId(id: number, data: GetAdvertises, api: any): Promise<any> {
+    return await api
+      .get(`${API.ADVERTISE.DEFAULT.replace(":id", `${id}`)}`, { params: data })
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async getAdvertisesByLocationIdForClient(id: number, data: GetAdvertises): Promise<any> {
     return await api
       .get(`${API.ADVERTISE.DEFAULT.replace(":id", `${id}`)}`, { params: data })
       .then((res) => {
@@ -24,13 +34,13 @@ export class AdvertiseService {
       });
   }
 
-  static async getAdvertiseById(id: number): Promise<any> {
+  static async getAdvertiseById(id: number, api: any): Promise<any> {
     return await api
       .get(`${API.ADVERTISE.GET_BY_ID.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

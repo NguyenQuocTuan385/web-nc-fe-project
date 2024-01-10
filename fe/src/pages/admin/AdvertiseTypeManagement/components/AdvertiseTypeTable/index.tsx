@@ -13,6 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ReportForm } from "models/reportForm";
 import AdvertiseType from "services/advertiseType";
+import useIntercepts from "hooks/useIntercepts";
 
 interface FilterProps {
   fieldSearch?: string;
@@ -22,6 +23,7 @@ export default function ReportFormTable({ fieldSearch }: FilterProps) {
   const [page, setPage] = useState({ currentPage: 1, totalPages: 1 });
   const [reportForm, setReportForm] = useState<ReportForm[]>([]);
   const [editFormOpen, setEditFormOpen] = useState(false);
+  const intercept = useIntercepts();
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage({ ...page, currentPage: value });
@@ -30,11 +32,14 @@ export default function ReportFormTable({ fieldSearch }: FilterProps) {
   useEffect(() => {
     const getReportForms = async () => {
       try {
-        const res = await AdvertiseType.getAllAdvertiseType({
-          search: fieldSearch ? fieldSearch : "",
-          current: page.currentPage,
-          pageSize: rowsPerPage
-        });
+        const res = await AdvertiseType.getAllAdvertiseType(
+          {
+            search: fieldSearch ? fieldSearch : "",
+            current: page.currentPage,
+            pageSize: rowsPerPage
+          },
+          intercept
+        );
         const reportForm: ReportForm[] = res.content;
         setReportForm(reportForm);
         setPage({ ...page, totalPages: res.totalPages });
@@ -57,7 +62,7 @@ export default function ReportFormTable({ fieldSearch }: FilterProps) {
                 Tên loại quảng cáo
               </TableCell>
               <TableCell align='left' className={classes.headerTable}>
-                Mô tả 
+                Mô tả
               </TableCell>
               <TableCell align='center' className={classes.headerTable}>
                 Chức năng

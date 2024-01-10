@@ -10,15 +10,18 @@ import Heading3 from "components/common/text/Heading3";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import LocationService from "services/location";
 import { Location, updateStatus } from "models/location";
+import useIntercepts from "hooks/useIntercepts";
 
 export default function EditAdLocationLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const locationId = location.pathname.split("/").pop();
   const [locationDetail, setLocationDetail] = useState<Location | null>(null);
+  const intercept = useIntercepts();
+
   useEffect(() => {
     const getLocationById = async () => {
-      LocationService.getLocationsById(Number(locationId))
+      LocationService.getLocationsById(Number(locationId), intercept)
         .then((res) => {
           setLocationDetail(res);
         })

@@ -35,13 +35,13 @@ export class ContractService {
       });
   }
 
-  static async getContractsByAdvertiseOne(id: number, data: GetContract): Promise<any> {
+  static async getContractsByAdvertiseOne(id: number, data: GetContract, api: any): Promise<any> {
     return await api
       .get(`${API.CONTRACT.BY_ADVERTISE_ID_ONE.replace(":id", `${id}`)}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
@@ -68,13 +68,13 @@ export class ContractService {
       });
   }
 
-  static async createContract(contractData: PutContract): Promise<any> {
+  static async createContract(contractData: PutContract, api: any): Promise<any> {
     return await api
       .post(`${API.CONTRACT.CREATE}`, contractData)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

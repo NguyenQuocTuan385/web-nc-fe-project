@@ -141,6 +141,7 @@ const DistrictLocationManagement = () => {
   const data = locationList.map((location: any, index: number) => {
     return {
       stt: location.id,
+      id: location.id,
       address: location.address,
       adsForm: location.adsForm.name,
       objectStatus: {
@@ -150,17 +151,17 @@ const DistrictLocationManagement = () => {
     };
   });
 
-  const customHeading = ["ID", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
-  const customColumns = ["stt", "address", "adsForm", "objectStatus"];
+  const customHeading = ["STT", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
+  const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
 
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const handleViewAds = (idLocation: number) => {
-    navigate(`${routes.admin.advertises.ofLocation.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${idLocation}`)}`);
   };
 
   const handleEditLocation = (idLocation: number) => {
-    navigate(`${routes.admin.locations.edit.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.locations.wardEdit.replace(":id", `${idLocation}`)}`);
   };
 
   const handleSearch = (query: string) => {
