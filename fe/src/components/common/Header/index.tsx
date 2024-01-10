@@ -72,7 +72,6 @@ const MenuAvatar = () => {
         }}
       >
         <MenuItem onClick={updateProfileHandler}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </MenuWrapper>

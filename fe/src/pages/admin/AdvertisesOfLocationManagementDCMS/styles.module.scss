@@ -5,7 +5,8 @@ $pacing-main: 15px;
   justify-content: center;
   background-color: #fff;
   padding: $pacing-main;
-  margin-top: 60px;
+  // margin-top: 60px;
+  height: 100%;
   background-color: var(--blue-50);
 }
 
@@ -14,7 +15,7 @@ $pacing-main: 15px;
 }
 
 .container-body {
-  width: calc(100% - 300px);
+  // width: calc(100% - 300px);
   background-color: #fff;
   border-radius: 8px;
   padding: $pacing-main;
@@ -29,4 +30,15 @@ $pacing-main: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.noList {
+  text-align: center;
+}
+
+.pagination {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
 }

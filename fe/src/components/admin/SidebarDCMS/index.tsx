@@ -34,16 +34,20 @@ const sideBarItemListData = [
         link: routes.admin.properties.district
       },
       {
+        name: "Các điểm đặt quảng cáo",
+        link: routes.admin.locations.dcms
+      },
+      {
         name: "Loại hình quảng cáo",
         link: routes.admin.advertiseType.root
       },
       {
-        name: "Loại hình thức báo cáo",
+        name: "Hình thức quảng cáo",
         link: routes.admin.advertisesForm.root
       },
       {
-        name: "Các điểm đặt quảng cáo",
-        link: routes.admin.locations.dcms
+        name: "Hình thức báo cáo",
+        link: routes.admin.reportForm.root
       }
     ]
   },

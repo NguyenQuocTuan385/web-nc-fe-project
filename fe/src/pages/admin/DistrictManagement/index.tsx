@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import { Header } from "components/common/Header";
 import SearchAppBar from "components/common/Search";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useNavigate } from "react-router-dom";
@@ -146,37 +145,38 @@ export default function DistrictManagement() {
   return (
     <div>
       <div className={classes["location-management-container"]}>
-        <SidebarDCMS />
-        <Box className={classes["container-body"]}>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-          </Box>
-          <Box className={classes["table-container"]}>
+        <SidebarDCMS>
+          <Box className={classes["container-body"]}>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+            </Box>
             <Box className={classes["table-container"]}>
-              <TableTemplateDCMS
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onViewWardInDistrictClick={handleViewWard}
-                onEditClick={handleEditProperty}
-                onDeleteClick={handleDeleteProperty}
-              />
-
-              <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(
-                  Number(currentPage) * itemsPerPage,
-                  totalElements
-                )} kết quả trên ${totalElements}`}</span>
-                <Pagination
-                  count={totalPage}
-                  page={Number(currentPage)}
-                  onChange={handleChangePage}
+              <Box className={classes["table-container"]}>
+                <TableTemplateDCMS
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onViewWardInDistrictClick={handleViewWard}
+                  onEditClick={handleEditProperty}
+                  onDeleteClick={handleDeleteProperty}
                 />
+
+                <Box className={classes["pagination-custom"]}>
+                  <span>{`Hiển thị ${Math.min(
+                    Number(currentPage) * itemsPerPage,
+                    totalElements
+                  )} kết quả trên ${totalElements}`}</span>
+                  <Pagination
+                    count={totalPage}
+                    page={Number(currentPage)}
+                    onChange={handleChangePage}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </SidebarDCMS>
       </div>
       <Dialog
         open={openDeleteDialog}
