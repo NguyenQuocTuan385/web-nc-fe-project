@@ -1,21 +1,19 @@
 .customTextField {
   & input {
     height: 10px;
-    width: 390px;
+    width: 100%;
   }
 
   & fieldset {
     border-radius: 40px;
     border-color: var(--blue-500);
   }
+  max-width: 400px;
 }
 .boxContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: white;
-  width: 100%;
 }
 
 .boxTabPanel {
@@ -24,8 +22,6 @@
   justify-content: start;
   margin-top: 10px;
   align-items: center;
-  padding: 0px 5px;
   gap: 20px;
   background-color: white;
-  padding-left: 20px;
 }

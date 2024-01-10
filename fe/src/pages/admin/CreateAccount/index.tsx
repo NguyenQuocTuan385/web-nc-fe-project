@@ -194,233 +194,236 @@ export default function CreateAccount() {
 
   return (
     <Box className={classes.boxContainer}>
-      <SidebarDCMS />
-      <form onSubmit={handleSubmit(SubmitHandler)}>
-        <Box className={classes.boxContent}>
-          {showAlert && (
-            <Alert className={classes.alert} severity='success'>
-              Đã tạo thành công
-            </Alert>
-          )}
-          <Box className={classes.boxForm}>
-            <Grid container spacing={5}>
-              <Grid item xs={6}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Ảnh đại diện</Box>
-                    <Box className={classes.imageContainer}>
-                      <img src={avatarPreview || avatar} alt='avatar' className={classes.image} />
-                      <label htmlFor='icon-button-file'>
-                        <Box className={classes.iconButton}>
-                          <input
-                            accept='image/*'
-                            className={classes.input}
-                            id='icon-button-file'
-                            type='file'
-                            onChange={handleClickAvatar}
-                            style={{ display: "none" }} // Hide the input
-                          />
-                          <CameraAltIcon />
-                        </Box>
-                      </label>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Phân hệ</Box>
+      <SidebarDCMS>
+        <form onSubmit={handleSubmit(SubmitHandler)}>
+          <Box className={classes.boxContent}>
+            {showAlert && (
+              <Alert className={classes.alert} severity='success'>
+                Đã tạo thành công
+              </Alert>
+            )}
+            <Box className={classes.boxForm}>
+              <Grid container spacing={5}>
+                <Grid item xs={6}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Ảnh đại diện</Box>
+                      <Box className={classes.imageContainer}>
+                        <img src={avatarPreview || avatar} alt='avatar' className={classes.image} />
+                        <label htmlFor='icon-button-file'>
+                          <Box className={classes.iconButton}>
+                            <input
+                              accept='image/*'
+                              className={classes.input}
+                              id='icon-button-file'
+                              type='file'
+                              onChange={handleClickAvatar}
+                              style={{ display: "none" }} // Hide the input
+                            />
+                            <CameraAltIcon />
+                          </Box>
+                        </label>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Phân hệ</Box>
 
-                    <Controller
-                      control={control}
-                      name='role'
-                      defaultValue='district'
-                      aria-invalid={errors.role ? "true" : "false"}
-                      rules={{ required: true }}
-                      render={({
-                        field: { ref, value, ...field },
-                        fieldState: { invalid, error }
-                      }) => (
-                        <>
-                          <RadioGroup
-                            value={value}
-                            row
-                            aria-labelledby='demo-row-radio-buttons-group-label'
-                            name='row-radio-buttons-group'
-                            onChange={(e) => {
-                              field.onChange(e); // cần gọi để cập nhật giá trị trong form
-                              setSelectedRole(e.target.value); // cập nhật giá trị trong state
-                            }}
-                          >
-                            <FormControlLabel value='district' control={<Radio />} label='Quận' />
-                            <FormControlLabel value='ward' control={<Radio />} label='Phường' />
-                          </RadioGroup>
-                          <div className={classes.errorText}>{error?.message}</div>
-                        </>
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Chọn khu vực</Box>
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <Controller
-                          control={control}
-                          name='district'
-                          aria-invalid={errors.district ? "true" : "false"}
-                          rules={{ required: true }}
-                          render={({ field: { onChange, value }, fieldState: { error } }) => (
-                            <>
-                              <Autocomplete
-                                id='filter-demo'
-                                options={districts}
-                                getOptionLabel={(option) => option.name}
-                                filterOptions={filterOptions}
-                                onChange={(event, newValue) => {
-                                  onChange(newValue); // cần gọi để cập nhật giá trị trong form
-                                  setSelectedDistrict(newValue);
-                                  setSelectedWard(null);
-                                }}
-                                value={selectedDistrict}
-                                renderInput={(params) => (
-                                  <TextField {...params} label='Quận' error={Boolean(error)} />
-                                )}
-                              />
-                              <div className={classes.errorText}>{error?.message}</div>
-                            </>
-                          )}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        {selectedRole === "ward" && (
+                      <Controller
+                        control={control}
+                        name='role'
+                        defaultValue='district'
+                        aria-invalid={errors.role ? "true" : "false"}
+                        rules={{ required: true }}
+                        render={({
+                          field: { ref, value, ...field },
+                          fieldState: { invalid, error }
+                        }) => (
+                          <>
+                            <RadioGroup
+                              value={value}
+                              row
+                              aria-labelledby='demo-row-radio-buttons-group-label'
+                              name='row-radio-buttons-group'
+                              onChange={(e) => {
+                                field.onChange(e); // cần gọi để cập nhật giá trị trong form
+                                setSelectedRole(e.target.value); // cập nhật giá trị trong state
+                              }}
+                            >
+                              <FormControlLabel value='district' control={<Radio />} label='Quận' />
+                              <FormControlLabel value='ward' control={<Radio />} label='Phường' />
+                            </RadioGroup>
+                            <div className={classes.errorText}>{error?.message}</div>
+                          </>
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Chọn khu vực</Box>
+                      <Grid container spacing={2}>
+                        <Grid item xs={6}>
                           <Controller
                             control={control}
-                            name='ward'
-                            aria-invalid={errors.ward ? "true" : "false"}
-                            rules={{ required: selectedRole === "ward" }}
+                            name='district'
+                            aria-invalid={errors.district ? "true" : "false"}
+                            rules={{ required: true }}
                             render={({ field: { onChange, value }, fieldState: { error } }) => (
                               <>
                                 <Autocomplete
                                   id='filter-demo'
-                                  options={wards}
+                                  options={districts}
                                   getOptionLabel={(option) => option.name}
+                                  filterOptions={filterOptions}
                                   onChange={(event, newValue) => {
                                     onChange(newValue); // cần gọi để cập nhật giá trị trong form
-                                    setSelectedWard(newValue);
+                                    setSelectedDistrict(newValue);
+                                    setSelectedWard(null);
                                   }}
-                                  renderInput={(params) => <TextField {...params} label='Phường' />}
-                                  value={selectedWard}
-                                  disabled={selectedDistrict === null}
+                                  value={selectedDistrict}
+                                  renderInput={(params) => (
+                                    <TextField {...params} label='Quận' error={Boolean(error)} />
+                                  )}
                                 />
                                 <div className={classes.errorText}>{error?.message}</div>
                               </>
                             )}
                           />
-                        )}
+                        </Grid>
+                        <Grid item xs={6}>
+                          {selectedRole === "ward" && (
+                            <Controller
+                              control={control}
+                              name='ward'
+                              aria-invalid={errors.ward ? "true" : "false"}
+                              rules={{ required: selectedRole === "ward" }}
+                              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                <>
+                                  <Autocomplete
+                                    id='filter-demo'
+                                    options={wards}
+                                    getOptionLabel={(option) => option.name}
+                                    onChange={(event, newValue) => {
+                                      onChange(newValue); // cần gọi để cập nhật giá trị trong form
+                                      setSelectedWard(newValue);
+                                    }}
+                                    renderInput={(params) => (
+                                      <TextField {...params} label='Phường' />
+                                    )}
+                                    value={selectedWard}
+                                    disabled={selectedDistrict === null}
+                                  />
+                                  <div className={classes.errorText}>{error?.message}</div>
+                                </>
+                              )}
+                            />
+                          )}
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item xs={6}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Họ và tên</Box>
-                    <TextField
-                      fullWidth
-                      variant='outlined'
-                      placeholder='Nhập họ và tên'
-                      {...register("name")}
-                      aria-invalid={errors.name ? "true" : "false"}
-                      error={Boolean(errors?.name)}
-                    />
-                    <p className={classes.errorText}>{errors?.name?.message}</p>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Email</Box>
-                    <TextField
-                      fullWidth
-                      variant='outlined'
-                      placeholder='Nhập email'
-                      {...register("email")}
-                      aria-invalid={errors.email ? "true" : "false"}
-                      error={Boolean(errors?.email)}
-                    />
-                    <p className={classes.errorText}>{errors?.email?.message}</p>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Số điện thoại</Box>
-                    <TextField
-                      fullWidth
-                      variant='outlined'
-                      placeholder='Nhập số điện thoại'
-                      {...register("phone")}
-                      aria-invalid={errors.phone ? "true" : "false"}
-                      error={Boolean(errors?.phone)}
-                    />
-                    <p className={classes.errorText}>{errors?.phone?.message}</p>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Ngày sinh</Box>
-                    <Controller
-                      defaultValue=''
-                      control={control}
-                      name='birthday'
-                      aria-invalid={errors.birthday ? "true" : "false"}
-                      rules={{ required: true }}
-                      render={({ field: { ref, ...field }, fieldState: { invalid, error } }) => (
-                        <>
-                          <DateTimePicker
-                            inputRef={ref}
-                            className={classes.datePickField}
-                            {...field}
-                            views={["year", "month", "day"]} // chỉ hiển thị chế độ xem ngày, tháng, và năm
-                            slotProps={{
-                              textField: {
-                                required: true,
-                                error: invalid
-                              }
-                            }}
-                          />
-                          <div className={classes.errorText}>{error?.message}</div>
-                        </>
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Mật khẩu</Box>
-                    <TextField
-                      type='password'
-                      fullWidth
-                      variant='outlined'
-                      placeholder='Nhập mật khẩu'
-                      {...register("password")}
-                      aria-invalid={errors.password ? "true" : "false"}
-                      error={Boolean(errors?.password)}
-                    />
-                    <p className={classes.errorText}>{errors?.password?.message}</p>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box className={classes.title}>Xác nhận mật khẩu</Box>
-                    <TextField
-                      type='password'
-                      fullWidth
-                      variant='outlined'
-                      placeholder='Nhập lại mật khẩu'
-                      {...register("confirmPassword")}
-                      aria-invalid={errors.confirmPassword ? "true" : "false"}
-                      error={Boolean(errors?.confirmPassword)}
-                    />
-                    <p className={classes.errorText}>{errors?.confirmPassword?.message}</p>
+                <Grid item xs={6}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Họ và tên</Box>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        placeholder='Nhập họ và tên'
+                        {...register("name")}
+                        aria-invalid={errors.name ? "true" : "false"}
+                        error={Boolean(errors?.name)}
+                      />
+                      <p className={classes.errorText}>{errors?.name?.message}</p>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Email</Box>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        placeholder='Nhập email'
+                        {...register("email")}
+                        aria-invalid={errors.email ? "true" : "false"}
+                        error={Boolean(errors?.email)}
+                      />
+                      <p className={classes.errorText}>{errors?.email?.message}</p>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Số điện thoại</Box>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        placeholder='Nhập số điện thoại'
+                        {...register("phone")}
+                        aria-invalid={errors.phone ? "true" : "false"}
+                        error={Boolean(errors?.phone)}
+                      />
+                      <p className={classes.errorText}>{errors?.phone?.message}</p>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Ngày sinh</Box>
+                      <Controller
+                        defaultValue=''
+                        control={control}
+                        name='birthday'
+                        aria-invalid={errors.birthday ? "true" : "false"}
+                        rules={{ required: true }}
+                        render={({ field: { ref, ...field }, fieldState: { invalid, error } }) => (
+                          <>
+                            <DateTimePicker
+                              inputRef={ref}
+                              className={classes.datePickField}
+                              {...field}
+                              views={["year", "month", "day"]} // chỉ hiển thị chế độ xem ngày, tháng, và năm
+                              slotProps={{
+                                textField: {
+                                  required: true,
+                                  error: invalid
+                                }
+                              }}
+                            />
+                            <div className={classes.errorText}>{error?.message}</div>
+                          </>
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Mật khẩu</Box>
+                      <TextField
+                        type='password'
+                        fullWidth
+                        variant='outlined'
+                        placeholder='Nhập mật khẩu'
+                        {...register("password")}
+                        aria-invalid={errors.password ? "true" : "false"}
+                        error={Boolean(errors?.password)}
+                      />
+                      <p className={classes.errorText}>{errors?.password?.message}</p>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box className={classes.title}>Xác nhận mật khẩu</Box>
+                      <TextField
+                        type='password'
+                        fullWidth
+                        variant='outlined'
+                        placeholder='Nhập lại mật khẩu'
+                        {...register("confirmPassword")}
+                        aria-invalid={errors.confirmPassword ? "true" : "false"}
+                        error={Boolean(errors?.confirmPassword)}
+                      />
+                      <p className={classes.errorText}>{errors?.confirmPassword?.message}</p>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            </Box>
+            <Box className={classes.boxButton}>
+              <Button variant='contained' type='submit'>
+                Tạo tài khoản
+              </Button>
+            </Box>
           </Box>
-          <Box className={classes.boxButton}>
-            <Button variant='contained' type='submit'>
-              Tạo tài khoản
-            </Button>
-          </Box>
-        </Box>
-      </form>
+        </form>
+      </SidebarDCMS>
     </Box>
   );
   // Remove the closing </Box> tag

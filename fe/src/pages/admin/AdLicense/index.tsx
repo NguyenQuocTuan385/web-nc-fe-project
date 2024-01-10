@@ -8,8 +8,9 @@ export default function AdLicense() {
   return (
     <div>
       <Box className={classes.boxContainer}>
-        <SidebarDCMS />
-        <TabPanelFilter props={<AdTableLicense />} />
+        <SidebarDCMS>
+          <TabPanelFilter props={<AdTableLicense />} />
+        </SidebarDCMS>
       </Box>
     </div>
   );

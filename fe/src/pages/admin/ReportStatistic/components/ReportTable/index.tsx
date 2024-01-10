@@ -58,7 +58,9 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
   };
   console.log(tab);
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -66,7 +68,12 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
   useEffect(() => {
     const getAllReports = async () => {
       ReportService.getReports({
-        reportTypeName: tab === "0" ? undefined : tab === "ADVERTISE" ? EReportType.ADVERTISE : EReportType.LOCATION,
+        reportTypeName:
+          tab === "0"
+            ? undefined
+            : tab === "ADVERTISE"
+              ? EReportType.ADVERTISE
+              : EReportType.LOCATION,
         search: fieldSearch,
         pageSize: rowsPerPage,
         current: Number(page) + 1
@@ -115,19 +122,24 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
   const emptyRows = rowsPerPage - dataList.length;
   console.log(emptyRows);
   function convertDateFormat(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    };
     return new Date(date).toLocaleDateString("en-GB", options);
   }
 
   const handleClick = (row: Report) => {
-    navigate(`${routes.admin.statistic.detail}`.replace(":id", row.id.toString()));
+    navigate(`${routes.admin.statistic.dcmsDetail}`.replace(":id", row.id.toString()));
   };
   return (
     <Box className={classes.boxContainer}>
       <PieChart
         series={[
           {
-            arcLabel: (item: { value: number; label?: string }) => `${item.label ?? ""} (${item.value})`,
+            arcLabel: (item: { value: number; label?: string }) =>
+              `${item.label ?? ""} (${item.value})`,
             arcLabelMinAngle: 45,
             data
           }

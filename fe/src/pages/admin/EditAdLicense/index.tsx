@@ -7,8 +7,9 @@ export default function EditAdLicense() {
   return (
     <div>
       <Box className={classes.boxContainer}>
-        <SideBarDCMS />
-        <TabPanelAdvertise />
+        <SideBarDCMS>
+          <TabPanelAdvertise />
+        </SideBarDCMS>
       </Box>
     </div>
   );
