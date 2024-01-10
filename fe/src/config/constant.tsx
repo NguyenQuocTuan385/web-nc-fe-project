@@ -19,7 +19,7 @@ export const API = {
     DELETE_ADVERTISE_EDIT: "/api/advertises/edit/:id",
     UPDATE_STATUS: "/api/advertises/:id/status",
     DETAILS: "/api/locations/:id",
-    EDIT: "/api/locations/:id"
+    EDIT: "/api/advertises/:id"
   },
   LOCATION_TYPE: {
     DEFAULT: "/api/location-types"

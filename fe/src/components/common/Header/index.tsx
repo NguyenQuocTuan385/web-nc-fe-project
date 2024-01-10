@@ -82,8 +82,9 @@ const MenuAvatar = () => {
 
 export const Header = () => {
   return (
-    <Box className={classes["header-wrapper"]}>
-      <MenuAvatar />
-    </Box>
+    <MenuAvatar />
+    // <Box className={classes["header-wrapper"]}>
+    //   <MenuAvatar />
+    // </Box>
   );
 };

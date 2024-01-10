@@ -49,6 +49,7 @@ import NotFound from "pages/common/NotFound";
 import RequireAuth from "components/common/RequireAuth";
 import { ERole } from "models/general";
 import UnAuthorized from "pages/common/UnAuthorized";
+import { WardDashBoard } from "pages/admin/WardDashboard";
 import EditProfile from "pages/admin/EditProfile";
 
 function App() {
@@ -77,6 +78,9 @@ function App() {
             <Route path={routes.admin.properties.ward} Component={WardManagement} />
             <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
 
+            {/* Locations Ward*/}
+            <Route path={routes.admin.locations.ward} Component={LocationManagement} />
+            <Route path={routes.admin.locations.wardEdit} Component={LocationEdit} />
             <Route element={<RequireAuth availableRole={ERole.WARD} />}>
               <Route path={routes.admin.contracts.root} Component={ContractList} />
             </Route>
@@ -98,6 +102,19 @@ function App() {
             <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
             <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
+            {/* Advertises Ward*/}
+            <Route
+              path={routes.admin.advertises.wardOfLocation}
+              Component={AdvertisesOfLocationManagement}
+            />
+            <Route path={routes.admin.advertises.wardDetails} Component={AdvertiseDetail} />
+            <Route path={routes.admin.advertises.wardEdit} Component={AdvertiseEdit} />
+
+            {/* Reports Ward*/}
+            <Route path={routes.admin.reports.ward} Component={ReportsManagement} />
+            <Route path={routes.admin.reports.wardEdit} Component={ReportHandle} />
+            <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
+
             {/* Reports */}
             <Route path={routes.admin.reports.root} Component={ReportsManagement} />
             <Route path={routes.admin.reports.edit} Component={ReportHandle} />
@@ -108,6 +125,7 @@ function App() {
             <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
             <Route path={routes.admin.statistic.root} Component={ReportStatistic} />
             <Route path={routes.admin.statistic.detail} Component={ReportDetail} />
+
             {/* Districts */}
             <Route element={<RequireAuth availableRole={ERole.DISTRICT} />}>
               <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
@@ -128,6 +146,9 @@ function App() {
 
           <Route path={routes.general.notFound} Component={NotFound} />
           <Route path={routes.general.unAuthorized} Component={UnAuthorized} />
+
+          {/* Dashboard */}
+          <Route path={routes.admin.dashboard.wardDashboard} Component={WardDashBoard} />
         </Routes>
       </BrowserRouter>
     </LocalizationProvider>

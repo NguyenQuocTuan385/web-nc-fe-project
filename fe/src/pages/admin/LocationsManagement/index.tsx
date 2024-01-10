@@ -11,7 +11,6 @@ import SearchAppBar from "components/common/Search";
 import { Header } from "components/common/Header";
 import LocationService from "services/location";
 import { routes } from "routes/routes";
-import ParagraphBody from "components/common/text/ParagraphBody";
 
 const LocationManagement = () => {
   const navigate = useNavigate();
@@ -97,11 +96,11 @@ const LocationManagement = () => {
   const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
 
   const handleViewAds = (idLocation: number) => {
-    navigate(`${routes.admin.advertises.ofLocation.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${idLocation}`)}`);
   };
 
   const handleEditLocation = (idLocation: number) => {
-    navigate(`${routes.admin.locations.edit.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.locations.wardEdit.replace(":id", `${idLocation}`)}`);
   };
 
   const handleSearch = (query: string) => {
@@ -110,38 +109,38 @@ const LocationManagement = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Box className={classes["location-management-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-          </Box>
-          <Box className={classes["table-container"]}>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+            </Box>
             <Box className={classes["table-container"]}>
-              <TableTemplate
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onViewAdsClick={handleViewAds}
-                onEditClick={handleEditLocation}
-              />
-
-              <Box className={classes.pagination}>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 100]}
-                  component='div'
-                  count={totalElements}
-                  page={Number(currentPage) - 1}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={Number(rowsPerPage)}
-                  labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+              <Box className={classes["table-container"]}>
+                <TableTemplate
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onViewAdsClick={handleViewAds}
+                  onEditClick={handleEditLocation}
                 />
-              </Box>
 
-              {/* <Box className={classes["pagination-custom"]}>
+                <Box className={classes.pagination}>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 100]}
+                    component='div'
+                    count={totalElements}
+                    page={Number(currentPage) - 1}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={Number(rowsPerPage)}
+                    labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Box>
+
+                {/* <Box className={classes["pagination-custom"]}>
                 <span>{`Hiển thị ${Math.min(
                   Number(currentPage) * itemsPerPage,
                   totalElements
@@ -152,9 +151,10 @@ const LocationManagement = () => {
                   onChange={handleChangePage}
                 />
               </Box> */}
+              </Box>
             </Box>
           </Box>
-        </Box>
+        </SideBarWard>
       </Box>
     </>
   );
