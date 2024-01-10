@@ -13,6 +13,7 @@ import { Contract, EContractStatus } from "models/contract";
 import ContractService from "services/contract";
 import { useEffect } from "react";
 import AdvertiseService from "services/advertise";
+import useIntercepts from "hooks/useIntercepts";
 
 export default function AdLicenseDetail() {
   const navigate = useNavigate();
@@ -20,9 +21,10 @@ export default function AdLicenseDetail() {
 
   const constractId = location.pathname.split("/").pop();
   const [state, setState] = React.useState<Contract | null>(null);
+  const intercept = useIntercepts();
   useEffect(() => {
     const getAllContractById = async () => {
-      ContractService.getContractById(Number(constractId)).then((res) => {
+      ContractService.getContractById(Number(constractId), intercept).then((res) => {
         setState(res);
       });
     };

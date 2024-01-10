@@ -28,7 +28,7 @@ const IconButtonBack = styled(IconButton)(() => ({
   }
 }));
 
-export const WardDashBoard = () => {
+export const DistrictDashBoard = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -36,19 +36,10 @@ export const WardDashBoard = () => {
   };
 
   return (
-    <Box>
-      {/* <Header /> */}
-      <div className={classes["ward-dashboard-container"]}>
-        <Box className={classes["ward-dashboard-container"]}>
-          <SideBarWard>
-            <Box
-              component='img'
-              src={images.NotFoundError}
-              className={classes["container-body"]}
-            ></Box>
-          </SideBarWard>
-        </Box>
-      </div>
+    <Box className={classes["ward-dashboard-container"]}>
+      <SideBarWard>
+        <Box component='img' src={images.NotFoundError} className={classes["container-body"]}></Box>
+      </SideBarWard>
     </Box>
   );
 };

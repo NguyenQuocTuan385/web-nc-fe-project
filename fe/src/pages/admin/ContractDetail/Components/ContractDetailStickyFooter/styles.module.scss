@@ -12,12 +12,11 @@
 }
 
 .footerItem {
-    display: flex;
-    justify-content: space-between;   
-    flex-direction: row;
-    align-items: center;
-    margin-left: 320px;
-    padding: 10px;
+  display: flex;
+  justify-content: space-between;   
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
 }
 
 .phantom {
@@ -29,7 +28,3 @@
 .stickyFooterContainer {
   position: relative;
 }
-
-// .itemIcon{
-//     color: var(--green-600);
-// }

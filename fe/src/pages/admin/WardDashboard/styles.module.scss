@@ -1,19 +1,32 @@
-$pacing-main: 15px;
+// $pacing-main: 15px;
+
+// .ward-dashboard-container {
+//   display: flex;
+//   justify-content: center;
+//   background-color: #fff;
+//   padding: $pacing-main;
+//   padding-bottom: 0;
+//   // margin-top: 60px;
+//   height: 100vh;
+//   background-color: var(--blue-50);
+// }
+
+// .container-body {
+//   // width: calc(100% - 300px);
+//   background-color: #fff;
+//   border-radius: 8px;
+//   padding: $pacing-main;
+// }
 
 .ward-dashboard-container {
-  display: flex;
-  justify-content: center;
   background-color: #fff;
-  padding: $pacing-main;
-  padding-bottom: 0;
-  // margin-top: 60px;
-  height: 100vh;
   background-color: var(--blue-50);
 }
 
 .container-body {
-  // width: calc(100% - 300px);
   background-color: #fff;
   border-radius: 8px;
-  padding: $pacing-main;
+  margin:  -24px -24px 0 -24px;
+  height: 100svh;
+  width: 100svw;
 }

@@ -52,6 +52,7 @@ import UnAuthorized from "pages/common/UnAuthorized";
 import { WardDashBoard } from "pages/admin/WardDashboard";
 import EditProfile from "pages/admin/EditProfile";
 import ChangePassword from "pages/admin/ChangePassword";
+import { DistrictDashBoard } from "pages/admin/DistrictDashboard";
 
 function App() {
   injectStore(store);
@@ -136,6 +137,7 @@ function App() {
                 Component={DistrictLocationManagement}
               />
               <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
+              <Route path={routes.admin.dashboard.district} Component={DistrictDashBoard} />
             </Route>
 
             <Route path={routes.admin.authentication.login} Component={Login} />

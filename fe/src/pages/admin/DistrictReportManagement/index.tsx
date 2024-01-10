@@ -25,7 +25,7 @@ import useIntercepts from "hooks/useIntercepts";
 import DistrictService from "services/district";
 import { User } from "models/user";
 import { selectCurrentUser } from "reduxes/Auth";
-import SideBarDistrict from "components/admin/SidebarDistrict";
+import { Report } from "models/report";
 
 const DistrictReportsManagement = () => {
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ const DistrictReportsManagement = () => {
   const currentUser: User = useSelector(selectCurrentUser);
   const [searchValue, setSearchValue] = useState("");
   const locationHook = useLocation();
-  const match = useResolvedPath("").pathname;
 
   const [currentPage, setCurrentPage] = useState(() => {
     const params = queryString.parse(locationHook.search);
@@ -142,16 +141,16 @@ const DistrictReportsManagement = () => {
     }
   }, [locationHook.search]);
 
-  const data = reportList.map((report: any, index: number) => {
+  const data = reportList.map((report: Report, index: number) => {
     return {
-      stt: index + 1,
+      stt: report.id,
       objectStatus: { value: report.status, name: report.status ? "Đã xử lí" : "Chưa xử lí" },
       ...report
     };
   });
 
-  const customHeading = ["STT", "Mã", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
-  const customColumns = ["stt", "id", "email", "fullName", "phone", "objectStatus"];
+  const customHeading = ["ID", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
+  const customColumns = ["stt", "email", "fullName", "phone", "objectStatus"];
 
   const handleSearch = (query: string) => {
     setSearchValue(query);
@@ -172,40 +171,40 @@ const DistrictReportsManagement = () => {
 
   return (
     <Box>
-      <Header />
       <div className={classes["reports-management-container"]}>
-        <SideBarDistrict />
-        <Box className={classes["container-body"]}>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-            <Button onClick={openFilterDialogHandle}>LỌC PHƯỜNG</Button>
-          </Box>
-          <Box className={classes["table-container"]}>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+              <Button onClick={openFilterDialogHandle}>LỌC PHƯỜNG</Button>
+            </Box>
             <Box className={classes["table-container"]}>
-              <TableTemplate
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onEditClick={handleReport}
-                onViewDetailsClick={handleViewDetails}
-              />
-
-              <Box className={classes["pagination-custom"]}>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 100]}
-                  component='div'
-                  count={totalElements}
-                  page={Number(currentPage) - 1}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={Number(rowsPerPage)}
-                  labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+              <Box className={classes["table-container"]}>
+                <TableTemplate
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onEditClick={handleReport}
+                  onViewDetailsClick={handleViewDetails}
                 />
+
+                <Box className={classes["pagination-custom"]}>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 100]}
+                    component='div'
+                    count={totalElements}
+                    page={Number(currentPage) - 1}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={Number(rowsPerPage)}
+                    labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </SideBarWard>
       </div>
 
       <Dialog

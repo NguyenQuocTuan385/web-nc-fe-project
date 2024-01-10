@@ -145,7 +145,6 @@ export default function DistrictManagement() {
 
   return (
     <div>
-      <Header />
       <div className={classes["location-management-container"]}>
         <SidebarDCMS />
         <Box className={classes["container-body"]}>

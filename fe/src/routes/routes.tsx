@@ -84,7 +84,8 @@ export const routes = {
       reset: "admin/recover/password"
     },
     dashboard: {
-      wardDashboard: "/admin/ward/dashboard"
+      wardDashboard: "/admin/ward/dashboard",
+      district: "/admin/district/dashboard"
     }
   }
 };

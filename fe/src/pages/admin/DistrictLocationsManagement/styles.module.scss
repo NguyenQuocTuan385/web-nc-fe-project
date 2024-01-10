@@ -5,12 +5,14 @@ $pacing-main: 15px;
   justify-content: center;
   background-color: #fff;
   padding: $pacing-main;
-  margin-top: 60px;
+  padding-bottom: 0;
+  // margin-top: 60px;
+  height: 100vh;
   background-color: var(--blue-50);
 }
 
 .container-body {
-  width: calc(100% - 300px);
+  // width: calc(100% - 300px);
   background-color: #fff;
   border-radius: 8px;
   padding: $pacing-main;
@@ -22,6 +24,7 @@ $pacing-main: 15px;
 
 .search-container {
   display: flex;
+  align-items: center;
 }
 
 .pagination-custom {
@@ -29,4 +32,15 @@ $pacing-main: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.pagination {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.noList {
+  text-align: center;
 }
