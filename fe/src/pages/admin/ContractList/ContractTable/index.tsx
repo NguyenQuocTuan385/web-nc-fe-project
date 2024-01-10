@@ -125,7 +125,7 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
   const deleteContractHandle = () => {
     ContractService.deleteContracts(selectedForDelete)
       .then((res) => {
-        const newList = dataList.filter((contract) => contract.id != selectedForDelete);
+        const newList = dataList.filter((contract) => contract.id !== selectedForDelete);
 
         setDataList(newList);
         setSelectedForDelete(-1);

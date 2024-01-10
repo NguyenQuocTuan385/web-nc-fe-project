@@ -22,6 +22,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import { openFilterDialog } from "reduxes/Status";
 import useIntercepts from "hooks/useIntercepts";
+import { selectCurrentUser } from "reduxes/Auth";
+import DistrictService from "services/district";
+import { User } from "models/user";
 
 const DistrictLocationManagement = () => {
   const navigate = useNavigate();
@@ -77,13 +80,23 @@ const DistrictLocationManagement = () => {
     searchParams.set("rowsNum", rowsPerPage.toString());
   };
   const intercept = useIntercepts();
+  const currentUser: User = useSelector(selectCurrentUser);
+  const [wardList, setWardList] = useState([]);
+
+  useEffect(() => {
+    DistrictService.getWardWithParentId(currentUser.property.id, intercept)
+      .then((res) => {
+        setWardList(res.content);
+      })
+      .catch((e) => console.log(e));
+  }, []);
 
   useEffect(() => {
     const getAllLocations = async () => {
       LocationService.getLocationsWithPropertyAndParent(
         {
           propertyId: filteredId,
-          parentId: [1],
+          parentId: [currentUser.property.id],
           search: searchValue,
           pageSize: Number(rowsPerPage),
           current: Number(currentPage)
@@ -212,44 +225,7 @@ const DistrictLocationManagement = () => {
         aria-describedby='alert-dialog-description'
       >
         <DialogContent>
-          <WardFilter
-            selectedId={searchParamFilter}
-            propertyList={[
-              {
-                id: 3,
-                name: "Phường Nguyễn Cư Trinh",
-                code: "PHUONG",
-                propertyParent: {
-                  id: 1,
-                  name: "Quận 5",
-                  code: "QUAN",
-                  propertyParent: undefined
-                }
-              },
-              {
-                id: 4,
-                name: "Phường 4",
-                code: "PHUONG",
-                propertyParent: {
-                  id: 1,
-                  name: "Quận 5",
-                  code: "QUAN",
-                  propertyParent: undefined
-                }
-              },
-              {
-                id: 5,
-                name: "Phường 3",
-                code: "PHUONG",
-                propertyParent: {
-                  id: 1,
-                  name: "Quận 5",
-                  code: "QUAN",
-                  propertyParent: undefined
-                }
-              }
-            ]}
-          />
+          <WardFilter selectedId={searchParamFilter} propertyList={wardList} />
         </DialogContent>
       </Dialog>
     </Box>
