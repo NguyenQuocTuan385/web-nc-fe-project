@@ -13,13 +13,16 @@ import PopoverHover from "./components/PopoverHover";
 import LocationSidebar from "./components/LocationSidebar";
 import RandomLocationSidebar from "./components/RandomLocationSidebar";
 import LocationService from "services/location";
-import { Box, Button, Switch } from "@mui/material";
+import { Box, Button, IconButton, Switch } from "@mui/material";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { EReportStatus, EReportType, Report } from "models/report";
 import ReportService from "services/report";
 import ReportInfoPopup from "./components/ReportListPopup";
 import ReactDOM from "react-dom/client";
 import { createPortal } from "react-dom";
+import PopoverHelper from "./components/PopoverHelper";
+import { Help } from "@mui/icons-material";
+import ReportIcon from "@mui/icons-material/Report";
 
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -37,10 +40,16 @@ const MapAdsManagement = () => {
   maptilersdk.config.apiKey = API_KEY;
   const [mapController, setMapController] = useState<MapController>();
   const popup = new MapLibreGL.Popup({});
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsPlanning: Feature[] = [];
+  const locationsIsPlanningNoAdvertises: Feature[] = [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsNotPlanning: Feature[] = [];
+  const locationsIsPlanningHasAdvertises: Feature[] = [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const locationsIsNotPlanningNoAdvertises: Feature[] = [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const locationsIsNotPlanningHasAdvertises: Feature[] = [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const reportLocations: Feature[] = [];
   const closeAdsSidebar = () => {
@@ -53,59 +62,67 @@ const MapAdsManagement = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
-      LocationService.getLocations({ pageSize: 9999 })
-        .then((res) => {
-          const locations_temp: Location[] = res.content;
-          if (lng === null && lat === null && locations_temp.length > 0) {
-            setLng(locations_temp[0].longitude);
-            setLat(locations_temp[0].latitude);
-          }
-          locations_temp.forEach((location: Location) => {
-            ReportService.getReports({
-              locationId: location.id,
-              pageSize: 999,
-              email: "nguyenvana@gmail.com"
-            })
-              .then((res) => {
-                if (res.content.length > 0) {
-                  const report: Report = res.content[res.content.length - 1];
-                  let reportStatus: string;
-                  if (report.status === EReportStatus.NEW) {
-                    reportStatus = "Chưa xử lý";
-                  } else if (report.status === EReportStatus.PROCESSING) {
-                    reportStatus = "Đang xử lý";
-                  } else {
-                    reportStatus = "Đã xử lý";
-                  }
-                  location.reportStatus = reportStatus;
-                }
-                const feature: Feature = {
-                  type: "Feature",
-                  geometry: {
-                    type: "Point",
-                    coordinates: [location.longitude, location.latitude]
-                  },
-                  properties: {
-                    ...location
-                  }
-                };
-                if (location.planning) {
-                  locationsIsPlanning.push(feature);
-                } else {
-                  locationsIsNotPlanning.push(feature);
-                }
-              })
-              .catch((e) => {
-                console.log(e);
-              });
+      const res = await LocationService.getLocations({ pageSize: 9999 });
+
+      const locations_temp: Location[] = res.content;
+      if (lng === null && lat === null && locations_temp.length > 0) {
+        setLng(locations_temp[0].longitude);
+        setLat(locations_temp[0].latitude);
+      }
+
+      await Promise.all(
+        locations_temp.map(async (location: Location) => {
+          const res = await ReportService.getReports({
+            locationId: location.id,
+            pageSize: 999,
+            email: "nguyenvana@gmail.com"
           });
+
+          const existsAdvertises = await LocationService.checkExistsAdvertises(location.id);
+
+          if (res.content.length > 0) {
+            const report: Report = res.content[res.content.length - 1];
+            let reportStatus: string;
+            if (report.status === EReportStatus.NEW) {
+              reportStatus = "Chưa xử lý";
+            } else if (report.status === EReportStatus.PROCESSING) {
+              reportStatus = "Đang xử lý";
+            } else {
+              reportStatus = "Đã xử lý";
+            }
+            location.reportStatus = reportStatus;
+          }
+
+          const feature: Feature = {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [location.longitude, location.latitude]
+            },
+            properties: {
+              ...location
+            }
+          };
+
+          if (location.planning) {
+            existsAdvertises
+              ? locationsIsPlanningHasAdvertises.push(feature)
+              : locationsIsPlanningNoAdvertises.push(feature);
+          } else {
+            existsAdvertises
+              ? locationsIsNotPlanningHasAdvertises.push(feature)
+              : locationsIsNotPlanningNoAdvertises.push(feature);
+          }
         })
-        .catch((e) => {
-          console.log(e);
-        });
+      );
     };
     getAllLocations();
-  }, [locationsIsNotPlanning, locationsIsPlanning]);
+  }, [
+    locationsIsPlanningHasAdvertises,
+    locationsIsPlanningNoAdvertises,
+    locationsIsNotPlanningHasAdvertises,
+    locationsIsNotPlanningNoAdvertises
+  ]);
 
   useEffect(() => {
     const getAllReportsTypeLocation = async () => {
@@ -166,15 +183,28 @@ const MapAdsManagement = () => {
     const visibility = currentMap.getLayoutProperty("report_location", "visibility");
     if (!visibility || visibility === "visible") {
       currentMap.setLayoutProperty("report_location", "visibility", "none");
-      currentMap.setLayoutProperty("locations_is_not_planning", "text-field", "");
-      currentMap.setLayoutProperty("locations_is_planning", "text-field", "");
+      currentMap.setLayoutProperty("locations_is_planning_no_advertises", "text-field", "");
+      currentMap.setLayoutProperty("locations_is_planning_has_advertises", "text-field", "");
+      currentMap.setLayoutProperty("locations_is_not_planning_no_advertises", "text-field", "");
+      currentMap.setLayoutProperty("locations_is_not_planning_has_advertises", "text-field", "");
     } else {
       currentMap.setLayoutProperty("report_location", "visibility", "visible");
-      currentMap.setLayoutProperty("locations_is_not_planning", "text-field", [
+      currentMap.setLayoutProperty("locations_is_planning_no_advertises", "text-field", [
         "get",
         "reportStatus"
       ]);
-      currentMap.setLayoutProperty("locations_is_planning", "text-field", ["get", "reportStatus"]);
+      currentMap.setLayoutProperty("locations_is_planning_has_advertises", "text-field", [
+        "get",
+        "reportStatus"
+      ]);
+      currentMap.setLayoutProperty("locations_is_not_planning_no_advertises", "text-field", [
+        "get",
+        "reportStatus"
+      ]);
+      currentMap.setLayoutProperty("locations_is_not_planning_has_advertises", "text-field", [
+        "get",
+        "reportStatus"
+      ]);
     }
   };
   const showPopup = (e: any) => {
@@ -237,7 +267,6 @@ const MapAdsManagement = () => {
   const loadLocationLayer = (
     imageUrl: string,
     imageName: string,
-    sourceName: string,
     layerName: string,
     features: Feature[]
   ) => {
@@ -246,7 +275,7 @@ const MapAdsManagement = () => {
       if (error) throw error;
       if (!map.current) return;
       map.current.addImage(imageName, image as HTMLImageElement);
-      map.current.addSource(sourceName, {
+      map.current.addSource(layerName, {
         type: "geojson",
         data: {
           type: "FeatureCollection",
@@ -257,7 +286,7 @@ const MapAdsManagement = () => {
       map.current.addLayer({
         id: layerName,
         type: "symbol",
-        source: sourceName,
+        source: layerName,
         layout: {
           "icon-image": imageName,
           "text-field": ["get", "reportStatus"],
@@ -303,23 +332,33 @@ const MapAdsManagement = () => {
           if (!map.current) return;
           loadLocationLayer(
             "https://i.ibb.co/5hWpBFR/icons8-circle-24-3.png",
-            "marker_is_planning",
-            "locations_is_planning",
-            "locations_is_planning",
-            locationsIsPlanning
+            "marker_is_planning_no_advertises",
+            "locations_is_planning_no_advertises",
+            locationsIsPlanningNoAdvertises
+          );
+          loadLocationLayer(
+            "https://i.ibb.co/BPbcShD/icons8-circle-24-7.png",
+            "marker_is_planning_has_advertises",
+            "locations_is_planning_has_advertises",
+            locationsIsPlanningHasAdvertises
           );
           loadLocationLayer(
             "https://i.ibb.co/LvJJcmX/icons8-circle-24-4.png",
-            "marker_is_not_planning",
-            "locations_is_not_planning",
-            "locations_is_not_planning",
-            locationsIsNotPlanning
+            "marker_is_not_planning_has_advertises",
+            "locations_is_not_planning_has_advertises",
+            locationsIsNotPlanningHasAdvertises
+          );
+          loadLocationLayer(
+            "https://i.ibb.co/JyWgyYt/icons8-circle-24-6.png",
+            "marker_is_not_planning_not_advertises",
+            "locations_is_not_planning_no_advertises",
+            locationsIsNotPlanningNoAdvertises
           );
           map.current.loadImage(
             "https://i.ibb.co/Jmm2yS2/icons8-circle-24-5.png",
             (error, image) => {
               if (!map.current) return;
-              map.current.addImage("marker-report-location", image as HTMLImageElement);
+              map.current.addImage("marker_report_location", image as HTMLImageElement);
               map.current.addSource("report_location", {
                 type: "geojson",
                 data: {
@@ -333,7 +372,7 @@ const MapAdsManagement = () => {
                 type: "symbol",
                 source: "report_location",
                 layout: {
-                  "icon-image": "marker-report-location",
+                  "icon-image": "marker_report_location",
                   "text-field": ["get", "reportStatus"],
                   "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
                   "text-offset": [0, 1.25],
@@ -371,7 +410,13 @@ const MapAdsManagement = () => {
           map.current.on("click", async (e) => {
             const map = e.target;
             const features = map.queryRenderedFeatures(e.point, {
-              layers: ["locations_is_planning", "locations_is_not_planning", "report_location"]
+              layers: [
+                "locations_is_planning_no_advertises",
+                "locations_is_planning_has_advertises",
+                "locations_is_not_planning_has_advertises",
+                "locations_is_not_planning_no_advertises",
+                "report_location"
+              ]
             });
             if (features.length > 0) {
               return;
@@ -415,32 +460,51 @@ const MapAdsManagement = () => {
       </Box>
       <Box ref={mapContainer} className={classes.map}></Box>
       <Box className={classes.botNavbar}>
-        <Box className={classes.botNavbarItem}>
-          <Switch
-            defaultChecked
-            onChange={() => handleClickSwitchLocationEvent("locations_is_planning")}
-          />
-          <ParagraphSmall>Điểm đặt QC đã quy hoạch</ParagraphSmall>
+        <Box className={classes.botNavbarLeftWrapper}>
+          <IconButton
+            size='small'
+            onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+              setAnchorEl(event.currentTarget)
+            }
+          >
+            <Help color='primary' />
+          </IconButton>
+
+          <Box className={classes.botNavbarItem}>
+            <Switch
+              defaultChecked
+              onChange={() => {
+                handleClickSwitchLocationEvent("locations_is_planning_no_advertises");
+                handleClickSwitchLocationEvent("locations_is_planning_has_advertises");
+              }}
+            />
+            <ParagraphSmall>Điểm đặt QC đã quy hoạch</ParagraphSmall>
+          </Box>
+          <Box className={classes.botNavbarItem}>
+            <Switch
+              defaultChecked
+              onChange={() => {
+                handleClickSwitchLocationEvent("locations_is_not_planning_has_advertises");
+                handleClickSwitchLocationEvent("locations_is_not_planning_no_advertises");
+              }}
+            />
+            <ParagraphSmall>Điểm đặt QC chưa quy hoạch</ParagraphSmall>
+          </Box>
+          <Box className={classes.botNavbarItem}>
+            <Switch defaultChecked onChange={changeHandleReportLocation} />
+            <ParagraphSmall>Địa điểm báo cáo</ParagraphSmall>
+          </Box>
+          <Button
+            variant='contained'
+            color='error'
+            size='small'
+            className={classes.errorBtn}
+            startIcon={<ReportIcon />}
+            onClick={() => setOpenReportInfoPopup(true)}
+          >
+            Xem báo cáo
+          </Button>
         </Box>
-        <Box className={classes.botNavbarItem}>
-          <Switch
-            defaultChecked
-            onChange={() => handleClickSwitchLocationEvent("locations_is_not_planning")}
-          />
-          <ParagraphSmall>Điểm đặt QC chưa quy hoạch</ParagraphSmall>
-        </Box>
-        <Box className={classes.botNavbarItem}>
-          <Switch defaultChecked onChange={changeHandleReportLocation} />
-          <ParagraphSmall>Địa điểm báo cáo</ParagraphSmall>
-        </Box>
-        <Button
-          variant='contained'
-          color='primary'
-          size='small'
-          onClick={() => setOpenReportInfoPopup(true)}
-        >
-          Xem báo cáo
-        </Button>
       </Box>
       <LocationSidebar
         isOpen={openLocationSidebar}
@@ -453,6 +517,7 @@ const MapAdsManagement = () => {
         randomLocation={randomLocation}
       />
       <ReportInfoPopup open={openReportInfoPopup} setOpen={setOpenReportInfoPopup} />
+      <PopoverHelper anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </Box>
   );
 };

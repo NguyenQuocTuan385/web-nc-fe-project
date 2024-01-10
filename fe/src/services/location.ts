@@ -1,7 +1,12 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { GetLocations, LocationCreateRequest,GetLocationsWithPropertyArray, putLocation, updateStatus } from "models/location";
-
+import {
+  GetLocations,
+  LocationCreateRequest,
+  GetLocationsWithPropertyArray,
+  putLocation,
+  updateStatus
+} from "models/location";
 
 export class LocationService {
   static async getLocations(data: GetLocations): Promise<any> {
@@ -76,7 +81,21 @@ export class LocationService {
       });
   }
 
-  static async getLocationsWithPropertyAndParent(data: GetLocationsWithPropertyArray, api: any): Promise<any> {
+  static async checkExistsAdvertises(locationId: number): Promise<any> {
+    return await api
+      .get(`${API.LOCATION.EXISTS_ADVERTISES.replace(":id", `${locationId}`)}`)
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
+  static async getLocationsWithPropertyAndParent(
+    data: GetLocationsWithPropertyArray,
+    api: any
+  ): Promise<any> {
     return await api
       .get(`${API.LOCATION.GET_WITH_PROPERTY_PARENT}`, { params: data })
       .then((res: any) => {

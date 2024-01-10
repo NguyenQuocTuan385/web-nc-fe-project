@@ -2,6 +2,7 @@ export const API = {
   LOCATION: {
     DEFAULT: "/api/locations",
     GET_ALL_REVIEW: "/api/locations/review",
+    EXISTS_ADVERTISES: "/api/locations/:id/exists-advertises",
     GET_BY_ID: "/api/locations/:id",
     UPDATE: "/api/locations/:id",
     UPDATE_STATUS: "/api/locations/:id/status",
