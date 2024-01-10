@@ -128,7 +128,6 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
   };
 
   const getWard = async () => {
-    console.log(selectedDistrict);
     WardService.getAllWardBy(Number(selectedDistrict), {
       search: "",
       current: 1,
@@ -144,7 +143,6 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
   };
 
   const createLocationByCDMS = async (locationCreateRequest: LocationCreateRequest) => {
-    console.log(locationCreateRequest);
     LocationService.createLocation(locationCreateRequest)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -157,7 +155,6 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
   };
 
   const submitHandler = async (data: any) => {
-    console.log("hehehehehehehe1");
     const files = data.imageUrls;
     const formSubmit: FormData = {
       ...data,
@@ -194,7 +191,6 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
       ...formSubmit,
       image: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0]
     };
-    console.log(dataSubmit);
     createLocationByCDMS(dataSubmit);
   };
 
@@ -218,7 +214,6 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
                       setSelectedDistrict(Number(e.target.value));
                       setIsWardDropdownDisabled(true);
                       getWard();
-                      console.log(e.target.value);
                     }}
                     className={classes["select-custom"]}
                   >

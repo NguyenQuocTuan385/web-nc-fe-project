@@ -1,4 +1,4 @@
-import { ChangePasswordRequest, LoginRequest } from "models/authentication";
+import { ChangePasswordRequest, LoginRequest, ResetPasswordRequest } from "models/authentication";
 import { apiAuth } from "./configApi";
 import { API } from "config/constant";
 import { GetUsers, UserRequest } from "models/user";
@@ -40,6 +40,17 @@ export class AuthenticationService {
   static async changePassword(data: ChangePasswordRequest): Promise<any> {
     return await apiAuth
       .put(`${API.AUTH.CHANGE_PASSWORD}`, data, { withCredentials: true })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
+  static async resetPassword(data: ResetPasswordRequest): Promise<any> {
+    return await apiAuth
+      .put(`${API.AUTH.RESET_PASSWORD}`, data, { withCredentials: true })
       .then((res) => {
         return Promise.resolve(res.data);
       })

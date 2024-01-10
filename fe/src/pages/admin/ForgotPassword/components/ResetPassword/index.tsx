@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import classes from "./styles.module.scss";
 import { Box, Button, TextField } from "@mui/material";
 import forgotpassword from "assets/img/forgotpassword/forgotpassword.jpg";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMemo } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { RequestOTPUser } from "models/user";
 import Userservice from "services/user";
+import { AuthenticationService } from "services/authentication";
+import { ResetPasswordRequest } from "models/authentication";
 
 interface FormData {
   email: string;
@@ -65,24 +65,14 @@ export default function ResetPassword() {
     }
   };
 
-  const isValidOTP = (status: number) => {
-    if (status === 0) {
-      setWarn("Mã OTP không hợp lệ");
-    } else if (status === 1) {
-      setWarn("Mã OTP đã hết hạn");
-    } else {
-      navigate("/admin/reccover/password");
-    }
-  };
-
   const onSubmit = (data: any) => {
-    const FormSubmit: RequestOTPUser = {
+    const FormSubmit: ResetPasswordRequest = {
       email: email!!,
-      otp: data.otp
+      password: data.password
     };
-    Userservice.checkOTP(FormSubmit)
+    AuthenticationService.resetPassword(FormSubmit)
       .then((res) => {
-        isValidOTP(res);
+        navigate("/admin/login");
       })
       .catch((err) => {
         console.log(err);
@@ -101,6 +91,7 @@ export default function ResetPassword() {
               <Box className={classes.formContentInput}>
                 <TextField
                   fullWidth
+                  type='password'
                   variant='outlined'
                   placeholder='Mật khẩu mới'
                   {...register("password")}
@@ -112,6 +103,7 @@ export default function ResetPassword() {
 
                 <TextField
                   fullWidth
+                  type='password'
                   variant='outlined'
                   placeholder='Xác nhận mật khẩu'
                   {...register("confirmPassword")}

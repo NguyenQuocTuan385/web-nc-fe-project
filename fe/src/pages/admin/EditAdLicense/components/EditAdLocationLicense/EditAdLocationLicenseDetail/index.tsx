@@ -31,8 +31,6 @@ export default function EditAdLocationLicenseDetail() {
     };
     getLocationById();
   }, []);
-  console.log(locationDetail);
-  console.log("edit: " + locationDetail?.locationEdit);
   function formatDateToDDMMYYYY(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
       day: "2-digit",

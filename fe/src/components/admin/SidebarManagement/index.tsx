@@ -9,20 +9,22 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import classes from "./styles.module.scss";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Heading1 from "components/common/text/Heading1";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import { ERole } from "models/general";
 import images from "config/images";
 import { Avatar } from "@mui/material";
+import { RootState } from "store";
+import { selected } from "reduxes/Selected";
 
 interface SidebarItem {
   name: string;
   icon: JSX.Element;
   link?: string;
-  children?: Array<{ name: string }>;
+  children?: Array<{ name: string; link: string }>;
 }
 
 interface SideBarItemList {
@@ -36,15 +38,41 @@ interface SelectedItem {
 
 export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   const navigate = useNavigate();
-  const [openItems, setOpenItems] = useState<number | null>(null);
-  const [selectedItem, setSelectedItem] = useState<SelectedItem>({
-    parentIndex: null,
-    childIndex: null
-  });
+  const dispatch = useDispatch();
+  const locationHook = useLocation();
+  const path = locationHook.pathname;
   const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
+  console.log(path);
+
+  sideBar.map((item, index) => {
+    if (item.children) {
+      item.children.map((child, childIndex) => {
+        if (child.link.includes(path)) {
+          dispatch(selected({ parentIndex: index, childIndex: childIndex }));
+          return;
+        }
+      });
+    } else {
+      if (item.link?.includes(path)) {
+        dispatch(selected({ parentIndex: index, childIndex: 0 }));
+        return;
+      }
+    }
+  });
+  const state = useSelector((state: RootState) => state.selected);
+  const [openItems, setOpenItems] = useState<number | null>(state.parentIndex);
+  const [selectedItem, setSelectedItem] = useState<SelectedItem>({
+    parentIndex: state.parentIndex,
+    childIndex: state.childIndex
+  });
   const currentUser: User = useSelector(selectCurrentUser);
 
   const handleClick = (index: number, sideBarItem: SidebarItem, child: Array<{ name: string }>) => {
+    if (index === state.parentIndex) {
+      return;
+    }
+    dispatch(selected({ parentIndex: index, childIndex: 0 }));
+    navigate(sideBarItem.link!!);
     if (openItems === index) {
       setOpenItems(null);
       if (selectedItem.childIndex == null) {
@@ -93,15 +121,20 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
       parentIndex: parentIndex,
       childIndex: childIndex
     });
+    dispatch(selected({ parentIndex: parentIndex, childIndex: childIndex }));
+    navigate(sideBar[parentIndex].children!![childIndex].link);
   };
 
   return (
     <Box className={classes.boxContainer}>
       <Drawer variant='permanent' anchor='left' className={classes.sideBar}>
-        <Box className={classes.TitleContainer}>
+        <Box className={classes.TitleContainer} sx={{ padding: "0 16px" }}>
           <Avatar variant='rounded' src={images.agentIcon} />
           <Heading1 className={classes.agentText}>
-            Cán bộ {currentUser?.property.name} {currentUser?.property.propertyParent?.name}
+            Cán bộ
+            <Heading1 className={classes.agentText} sx={{ margin: "0 !important" }}>
+              {currentUser?.property.name} {currentUser?.property.propertyParent?.name}
+            </Heading1>
           </Heading1>
         </Box>
         <Box>
