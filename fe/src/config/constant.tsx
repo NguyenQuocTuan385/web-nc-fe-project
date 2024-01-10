@@ -78,6 +78,7 @@ export const API = {
     REGISTER: "/api/authentication/register",
     REFRESH: "/api/authentication/refresh",
     CHANGE_PASSWORD: "/api/authentication/change-password",
+    RESET_PASSWORD: "/api/authentication/reset-password",
     LOGOUT: "/api/authentication/logout"
   },
   EMAIL: {
