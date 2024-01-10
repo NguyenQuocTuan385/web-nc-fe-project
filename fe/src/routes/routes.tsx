@@ -50,7 +50,7 @@ export const routes = {
       root: "/admin/contracts",
       createForm: "/admin/contracts/create-form/:id",
       detail: "/admin/contracts/:id",
-      district: "admin/district/contracts"
+      district: "/admin/district/contracts"
     },
     reports: {
       root: "/admin/reports",

@@ -43,7 +43,8 @@ const sideBarItemListData = [
   },
   {
     name: "Cấp phép quảng cáo",
-    icon: <FontAwesomeIcon icon={faCircleCheck} size='lg' className={classes.itemIcon} />
+    icon: <FontAwesomeIcon icon={faCircleCheck} size='lg' className={classes.itemIcon} />,
+    link: routes.admin.contracts.root
   }
 ];
 

@@ -28,6 +28,9 @@ import { useLocation, useNavigate, useResolvedPath, useSearchParams } from "reac
 import queryString from "query-string";
 import { routes } from "routes/routes";
 import useIntercepts from "hooks/useIntercepts";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
 
 // const rows = [...user];
 interface FilterProps {
@@ -37,6 +40,7 @@ interface FilterProps {
 
 export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const currentUser: User = useSelector(selectCurrentUser);
   const navigate = useNavigate();
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
@@ -76,7 +80,7 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   const [dataList, setDataList] = useState<Contract[]>([]);
   const [totalElements, setTotalElements] = useState(1);
   const [selectedForDelete, setSelectedForDelete] = useState(-1);
-  const intercept = useIntercepts()
+  const intercept = useIntercepts();
 
   // filter contract's status for Tab Panel
   useEffect(() => {
@@ -86,7 +90,7 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
         const res = await ContractService.getContractByPropertyAndParent(
           {
             propertyId: filteredId,
-            parentId: [1],
+            parentId: [currentUser.property.id],
             search: fieldSearch,
             status: Number(status) === 0 ? undefined : Number(status),
             pageSize: Number(rowsPerPage),

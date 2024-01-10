@@ -42,7 +42,6 @@ const MenuAvatar = () => {
     setAnchorEl(null);
 
     AuthenticationService.logout().then(() => {
-      localStorage.clear();
       dispatch(logOut());
       dispatch(loginStatus(false));
       navigate(routes.admin.authentication.login);
@@ -59,7 +58,7 @@ const MenuAvatar = () => {
         aria-haspopup='true'
         aria-expanded={open ? "true" : undefined}
       >
-        <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
+        <Avatar alt={currentUser?.name} src={currentUser?.avatar} />
         <Typography pl={"10px"}>{currentUser?.name}</Typography>
       </BoxAvatar>
 

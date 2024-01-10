@@ -13,6 +13,7 @@ import companyName from "assets/img/icon/ic-comName.svg";
 import companyPhone from "assets/img/icon/ic-comPhone.svg";
 import NotFoundError from "assets/img/NotFoundError.png";
 import unauthorized from "assets/img/unauthorized.png";
+import agentIcon from "assets/img/agentIcon.png";
 
 const images = {
   twitterIcon,
@@ -28,7 +29,8 @@ const images = {
   companyPhone,
   NotFoundError,
   emptyIcon,
-  unauthorized
+  unauthorized,
+  agentIcon
 };
 
 export default images;

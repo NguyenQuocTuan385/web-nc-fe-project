@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -9,10 +9,12 @@ import ContractTable from "../ContractTable";
 import classes from "./styles.module.scss";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
-
-const tempPropertyId = 2;
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
 
 export default function TabPanel() {
+  const currentUser: User = useSelector(selectCurrentUser);
   const locationHook = useLocation();
   const [tabValue, setTabValue] = React.useState(() => {
     const params = queryString.parse(locationHook.search);
@@ -58,7 +60,11 @@ export default function TabPanel() {
           />
         </Box>
 
-        <ContractTable propertyId={tempPropertyId} status={Number(tabValue)} fieldSearch={String(searchValue)} />
+        <ContractTable
+          propertyId={currentUser.property.id}
+          status={Number(tabValue)}
+          fieldSearch={String(searchValue)}
+        />
       </Box>
     </>
   );

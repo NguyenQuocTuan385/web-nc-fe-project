@@ -39,6 +39,7 @@ export const API = {
     DEFAULT: "/api/properties",
     UPDATE: "/api/properties/:id",
     DELETE: "/api/properties/:id",
+    GET_BY_PARENT_ID: "/api/properties/:id",
     ALL: "/api/properties/all"
   },
   WARD: {

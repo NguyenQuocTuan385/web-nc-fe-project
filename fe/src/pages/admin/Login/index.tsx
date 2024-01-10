@@ -3,7 +3,7 @@ import { Box, Button, Grid, Link, TextField, Typography } from "@mui/material";
 import classes from "./styles.module.scss";
 import picture from "../../../assets/img/login/login.jpg";
 import { routes } from "routes/routes";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,10 +13,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Userservice from "services/user";
 import { Token } from "@mui/icons-material";
 import { ERole, EStorageKey } from "models/general";
-import { loginStatus, setLogin } from "reduxes/Auth";
+import { loginStatus, selectCurrentUser, setLogin } from "reduxes/Auth";
 import { API } from "config/constant";
 import api from "services/configApi";
 import { jwtDecode } from "jwt-decode";
+import { User } from "models/user";
 
 interface FormData {
   email: string;
@@ -26,6 +27,7 @@ interface FormData {
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentUser: User = useSelector(selectCurrentUser);
   const handleLogin = (data: any) => {
     const loginData: LoginRequest = {
       email: data.email,
@@ -69,7 +71,7 @@ const Login: React.FC = () => {
     formState: { errors }
   } = useForm<FormData>({ resolver: yupResolver(schema) });
 
-  return (
+  return currentUser === null ? (
     <Box className={classes.loginContainer}>
       <Grid container spacing={2} className={classes.formBox}>
         <Grid item xs={6} className={classes.imageContainer}>
@@ -122,6 +124,12 @@ const Login: React.FC = () => {
         </Grid>
       </Grid>
     </Box>
+  ) : currentUser.role.id === ERole.DEPARTMENT ? (
+    <Navigate to={routes.admin.users.root} />
+  ) : currentUser.role.id === ERole.DISTRICT ? (
+    <Navigate to={routes.admin.locations.district} />
+  ) : (
+    <Navigate to={routes.admin.locations.root} />
   );
 };
 export default Login;

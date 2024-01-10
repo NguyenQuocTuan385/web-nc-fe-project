@@ -1,7 +1,7 @@
 import { User } from "models/user";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { selectCurrentUser, selectToken } from "reduxes/Auth";
+import { loginStatus, selectCurrentUser, selectToken } from "reduxes/Auth";
 import { routes } from "routes/routes";
 
 interface PropsData {
@@ -13,7 +13,7 @@ const RequireAuth = (props: PropsData) => {
   const currentUser: User = useSelector(selectCurrentUser);
   const location = useLocation();
 
-  return currentUser.role.id === props.availableRole ? (
+  return currentUser?.role && currentUser.role.id === props.availableRole ? (
     <Outlet />
   ) : token ? (
     <Navigate to={routes.general.unAuthorized} state={{ from: location }} replace />

@@ -10,6 +10,13 @@ import Collapse from "@mui/material/Collapse";
 import classes from "./styles.module.scss";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import Heading1 from "components/common/text/Heading1";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import { ERole } from "models/general";
+import images from "config/images";
+import { Avatar } from "@mui/material";
 
 interface SidebarItem {
   name: string;
@@ -35,6 +42,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
     childIndex: null
   });
   const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
+  const currentUser: User = useSelector(selectCurrentUser);
 
   const handleClick = (index: number, sideBarItem: SidebarItem, child: Array<{ name: string }>) => {
     if (openItems === index) {
@@ -90,6 +98,12 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   return (
     <Box className={classes.boxContainer}>
       <Drawer variant='permanent' anchor='left' className={classes.sideBar}>
+        <Box className={classes.TitleContainer}>
+          <Avatar variant='rounded' src={images.agentIcon} />
+          <Heading1 className={classes.agentText}>
+            Cán bộ {currentUser?.property.name} {currentUser?.property.propertyParent?.name}
+          </Heading1>
+        </Box>
         <Box>
           <List>
             {sideBar.map((list, index) => (

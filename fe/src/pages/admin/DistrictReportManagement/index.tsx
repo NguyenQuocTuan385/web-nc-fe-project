@@ -22,15 +22,18 @@ import { openFilterDialog } from "reduxes/Status";
 import WardFilter from "components/admin/WardFilter";
 import { RootState } from "store";
 import useIntercepts from "hooks/useIntercepts";
+import DistrictService from "services/district";
+import { User } from "models/user";
+import { selectCurrentUser } from "reduxes/Auth";
+import SideBarDistrict from "components/admin/SidebarDistrict";
 
 const DistrictReportsManagement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const openFilterDialogValue = useSelector((state: RootState) => state.status.isOpenFilterDialog);
   const [reportList, setReportList] = useState([]);
-
+  const currentUser: User = useSelector(selectCurrentUser);
   const [searchValue, setSearchValue] = useState("");
-
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
 
@@ -78,13 +81,22 @@ const DistrictReportsManagement = () => {
     setCurrentPage(1);
   };
   const intercept = useIntercepts();
+  const [wardList, setWardList] = useState([]);
+
+  useEffect(() => {
+    DistrictService.getWardWithParentId(currentUser.property.id, intercept)
+      .then((res) => {
+        setWardList(res.content);
+      })
+      .catch((e) => console.log(e));
+  }, []);
 
   useEffect(() => {
     const getAllReports = async () => {
       ReportService.getReportsWithPropertyAndParent(
         {
           propertyId: filteredId,
-          parentId: [1],
+          parentId: [currentUser.property.id],
           search: searchValue,
           pageSize: Number(rowsPerPage),
           current: Number(currentPage)
@@ -100,6 +112,7 @@ const DistrictReportsManagement = () => {
 
           searchParams.set("page", currentPage.toString());
           searchParams.set("rowsNum", rowsPerPage.toString());
+          setSearchParams(searchParams);
         })
         .catch((e) => {
           console.log(e);
@@ -161,7 +174,7 @@ const DistrictReportsManagement = () => {
     <Box>
       <Header />
       <div className={classes["reports-management-container"]}>
-        <SideBarWard></SideBarWard>
+        <SideBarDistrict />
         <Box className={classes["container-body"]}>
           <Box className={classes["search-container"]}>
             <SearchAppBar onSearch={handleSearch} />
@@ -201,44 +214,7 @@ const DistrictReportsManagement = () => {
         aria-describedby='alert-dialog-description'
       >
         <DialogContent>
-          <WardFilter
-            selectedId={searchParamFilter}
-            propertyList={[
-              {
-                id: 3,
-                name: "Phường Nguyễn Cư Trinh",
-                code: "PHUONG",
-                propertyParent: {
-                  id: 1,
-                  name: "Quận 5",
-                  code: "QUAN",
-                  propertyParent: undefined
-                }
-              },
-              {
-                id: 4,
-                name: "Phường 4",
-                code: "PHUONG",
-                propertyParent: {
-                  id: 1,
-                  name: "Quận 5",
-                  code: "QUAN",
-                  propertyParent: undefined
-                }
-              },
-              {
-                id: 5,
-                name: "Phường 3",
-                code: "PHUONG",
-                propertyParent: {
-                  id: 1,
-                  name: "Quận 5",
-                  code: "QUAN",
-                  propertyParent: undefined
-                }
-              }
-            ]}
-          />
+          <WardFilter selectedId={searchParamFilter} propertyList={wardList} />
         </DialogContent>
       </Dialog>
     </Box>

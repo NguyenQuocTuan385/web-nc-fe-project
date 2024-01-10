@@ -135,9 +135,9 @@ function App() {
               />
               <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
             </Route>
-          </Route>
 
-          <Route path={routes.admin.authentication.login} Component={Login} />
+            <Route path={routes.admin.authentication.login} Component={Login} />
+          </Route>
 
           {/* forgot password */}
           <Route path={routes.admin.forgotPassword.root} Component={ForgotPassword} />
