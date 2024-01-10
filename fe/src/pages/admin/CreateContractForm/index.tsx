@@ -7,13 +7,15 @@ import { Advertise } from "models/advertise";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AdvertiseService from "services/advertise";
+import useIntercepts from "hooks/useIntercepts";
 
 function ContractForm() {
   const { id } = useParams<{ id: string }>();
   const [advertise, setAdvertise] = useState<Advertise>();
+  const intercept = useIntercepts();
 
   useEffect(() => {
-    AdvertiseService.getAdvertiseById(Number(id))
+    AdvertiseService.getAdvertiseById(Number(id), intercept)
       .then((res) => {
         setAdvertise(res);
       })

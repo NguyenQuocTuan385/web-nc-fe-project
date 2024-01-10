@@ -37,6 +37,7 @@ import AdvertiseTypeService from "services/advertiseType";
 import AdvertiseEditService from "services/advertiseEdit";
 import Heading2 from "components/common/text/Heading2";
 import Editor from "components/common/Editor/EditWithQuill";
+import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   licensing: number;
@@ -478,6 +479,7 @@ export const AdvertiseEdit = () => {
   const [infoAds, setInfoAds] = useState<Advertise | null>(null);
   const [adsTypes, setAdsTypes] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
+  const intercept = useIntercepts();
 
   const goBack = () => {
     navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${locationId}`)}`);
@@ -485,7 +487,7 @@ export const AdvertiseEdit = () => {
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
-      ContractService.getContractsByAdvertiseOne(Number(advertiseId), {})
+      ContractService.getContractsByAdvertiseOne(Number(advertiseId), {}, intercept)
         .then((res) => {
           setInfoContract({
             companyName: res.companyName,
@@ -510,7 +512,7 @@ export const AdvertiseEdit = () => {
   }, []);
 
   useEffect(() => {
-    AdvertiseTypeService.getAllAdvertiseType({})
+    AdvertiseTypeService.getAllAdvertiseType({}, intercept)
       .then((res) => {
         setAdsTypes(res.content);
       })
