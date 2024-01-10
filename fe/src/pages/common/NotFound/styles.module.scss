@@ -1,0 +1,17 @@
+.notFoundImgBox {
+  width: 400px;
+  height: 400px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.boxWrap {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+}
