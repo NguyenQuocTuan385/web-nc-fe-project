@@ -12,7 +12,7 @@ const sideBarItemListData = [
     link: routes.admin.users.edit
   },
   {
-    name: "Quên mật khẩu",
+    name: "Đổi mật khẩu",
     icon: <FontAwesomeIcon icon={faLock} size='lg' className={classes.itemIcon} />
   }
 ];

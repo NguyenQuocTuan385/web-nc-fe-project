@@ -50,6 +50,7 @@ import RequireAuth from "components/common/RequireAuth";
 import { ERole } from "models/general";
 import UnAuthorized from "pages/common/UnAuthorized";
 import EditProfile from "pages/admin/EditProfile";
+import ChangePassword from "pages/admin/ChangePassword";
 
 function App() {
   injectStore(store);
@@ -65,6 +66,7 @@ function App() {
 
             <Route path={routes.admin.users.create} Component={CreateAccount} />
             <Route path={routes.admin.users.edit} Component={EditProfile} />
+            <Route path={routes.admin.users.change_password} Component={ChangePassword} />
 
             <Route
               path={routes.admin.reviewEdit.location}
