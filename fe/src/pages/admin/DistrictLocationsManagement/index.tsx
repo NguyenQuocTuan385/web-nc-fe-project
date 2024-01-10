@@ -25,6 +25,7 @@ import useIntercepts from "hooks/useIntercepts";
 import { selectCurrentUser } from "reduxes/Auth";
 import DistrictService from "services/district";
 import { User } from "models/user";
+import SideBarDistrict from "components/admin/SidebarDistrict";
 
 const DistrictLocationManagement = () => {
   const navigate = useNavigate();
@@ -177,7 +178,7 @@ const DistrictLocationManagement = () => {
     <Box>
       <Header />
       <div className={classes["location-management-container"]}>
-        <SideBarWard></SideBarWard>
+        <SideBarDistrict />
         <Box className={classes["container-body"]}>
           <Box className={classes["search-container"]}>
             <SearchAppBar onSearch={handleSearch} />

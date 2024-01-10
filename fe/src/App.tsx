@@ -120,9 +120,10 @@ function App() {
               />
               <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
             </Route>
+
+            <Route path={routes.admin.authentication.login} Component={Login} />
           </Route>
 
-          <Route path={routes.admin.authentication.login} Component={Login} />
           <Route path={routes.general.notFound} Component={NotFound} />
           <Route path={routes.general.unAuthorized} Component={UnAuthorized} />
         </Routes>
