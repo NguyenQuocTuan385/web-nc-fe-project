@@ -9,7 +9,8 @@ export const routes = {
     users: {
       root: "/admin/users",
       create: "/admin/users/create",
-      edit: "/admin/users/edit"
+      edit: "/admin/users/edit",
+      change_password: "/admin/users/change-password"
     },
     reviewEdit: {
       root: "/admin/review/edit",
