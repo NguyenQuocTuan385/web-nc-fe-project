@@ -26,6 +26,7 @@ import { Contract } from "models/contract";
 import ContractService from "services/contract";
 import { Advertise } from "models/advertise";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
+import useIntercepts from "hooks/useIntercepts";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -50,6 +51,7 @@ const AdvertiseOfLocationManagementDCMS = () => {
   const [searchValue, setSearchValue] = useState("");
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
+  const intercept = useIntercepts();
 
   const [currentPage, setCurrentPage] = useState(() => {
     const params = queryString.parse(locationHook.search);
@@ -71,15 +73,23 @@ const AdvertiseOfLocationManagementDCMS = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await AdvertiseService.getAdvertisesByLocationId(Number(id), {
-          search: searchValue,
-          pageSize: itemsPerPage,
-          current: Number(currentPage)
-        });
+        const res = await AdvertiseService.getAdvertisesByLocationId(
+          Number(id),
+          {
+            search: searchValue,
+            pageSize: itemsPerPage,
+            current: Number(currentPage)
+          },
+          intercept
+        );
 
         const updatedAdvertises: any = await Promise.all(
           res.content.map(async (advertise: Advertise) => {
-            const contractData = await ContractService.getContractsByAdvertiseOne(advertise.id, {});
+            const contractData = await ContractService.getContractsByAdvertiseOne(
+              advertise.id,
+              {},
+              intercept
+            );
             return {
               ...advertise,
               contract: contractData

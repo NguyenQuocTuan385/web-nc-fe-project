@@ -19,13 +19,13 @@ export class LocationService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getLocationsById(id: number): Promise<any> {
+  static async getLocationsById(id: number, api: any): Promise<any> {
     return await api
       .get(`${API.LOCATION.GET_BY_ID.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

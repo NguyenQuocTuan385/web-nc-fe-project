@@ -3,13 +3,13 @@ import api from "./configApi";
 import { GetAdvertiseTypes } from "models/advertiseType";
 
 export class AdvertiseTypeService {
-  static async getAllAdvertiseType(data: GetAdvertiseTypes): Promise<any> {
+  static async getAllAdvertiseType(data: GetAdvertiseTypes, api: any): Promise<any> {
     return await api
       .get(`${API.ADVERTISE_TYPE.DEFAULT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

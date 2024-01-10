@@ -33,6 +33,7 @@ import LocationEditService from "services/locationEdit";
 import userDetails from "userDetails.json";
 import clsx from "clsx";
 import Heading2 from "components/common/text/Heading2";
+import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   propertyId: number;
@@ -462,10 +463,11 @@ export const LocationEditCDMS = () => {
   const [locationTypes, setLocationTypes] = useState([]);
   const [adsForms, setAdsForms] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
+  const intercept = useIntercepts();
 
   useEffect(() => {
     const getLocationById = async () => {
-      LocationService.getLocationsById(Number(id))
+      LocationService.getLocationsById(Number(id), intercept)
         .then((res) => {
           setLocationData(res);
         })

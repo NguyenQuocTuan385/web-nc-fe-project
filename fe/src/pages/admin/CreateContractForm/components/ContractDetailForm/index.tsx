@@ -12,6 +12,12 @@ import { useNavigate } from "react-router-dom";
 import ContractService from "services/contract";
 import { PutContract } from "models/contract";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import { ERole } from "models/general";
+import { routes } from "routes/routes";
+import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   signDate: string;
@@ -30,6 +36,7 @@ interface PropsData {
 function ContractDetailForm(propsData: PropsData) {
   const navigate = useNavigate();
   const [createLoading, setCreateLoading] = useState(false);
+  const intercept = useIntercepts();
   const schema = useMemo(() => {
     return yup.object().shape({
       signDate: yup.string().required("Vui lòng nhập ngày ký hợp đồng"),
@@ -85,7 +92,7 @@ function ContractDetailForm(propsData: PropsData) {
       endAt: dayjs(formSubmit.endDate).format("YYYY-MM-DD hh:mm:ss"),
       advertiseId: propsData.contractId
     };
-    ContractService.createContract(newContract)
+    ContractService.createContract(newContract, intercept)
       .then((res) => {
         setCreateLoading(false);
         navigate(-1);
@@ -94,6 +101,10 @@ function ContractDetailForm(propsData: PropsData) {
         setCreateLoading(false);
         console.log(e);
       });
+  };
+
+  const handleCancel = () => {
+    navigate(-1);
   };
 
   return (
@@ -238,7 +249,7 @@ function ContractDetailForm(propsData: PropsData) {
       <div className={classes.stickyFooterContainer}>
         <div className={classes.phantom} />
         <div className={classes.stickyFooterItem}>
-          <Button variant='contained' className={classes.cancelButton}>
+          <Button variant='contained' className={classes.cancelButton} onClick={handleCancel}>
             Hủy bỏ
           </Button>
           <Button variant='contained' type='submit'>

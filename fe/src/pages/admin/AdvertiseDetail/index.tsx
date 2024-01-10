@@ -13,6 +13,7 @@ import { Header } from "components/common/Header";
 import AdvertiseService from "services/advertise";
 import ContractService from "services/contract";
 import Heading4 from "components/common/text/Heading4";
+import useIntercepts from "hooks/useIntercepts";
 
 const InfoAdsBox = styled(Box)(() => ({
   display: "flex",
@@ -65,10 +66,11 @@ export const AdvertiseDetail = () => {
 
   const [infoAds, setInfoAds] = useState<InfoAds | null>(null);
   const [infoContract, setInfoContract] = useState<InfoContract | null>(null);
+  const intercept = useIntercepts();
 
   useEffect(() => {
     const getAdvertiseDetails = async () => {
-      AdvertiseService.getAdvertiseById(Number(id))
+      AdvertiseService.getAdvertiseById(Number(id), intercept)
         .then((res) => {
           setInfoAds({
             adsType: res.adsType.name,
@@ -89,7 +91,7 @@ export const AdvertiseDetail = () => {
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
-      ContractService.getContractsByAdvertiseOne(Number(id), {})
+      ContractService.getContractsByAdvertiseOne(Number(id), {}, intercept)
         .then((res) => {
           setInfoContract({
             companyName: res.companyName,

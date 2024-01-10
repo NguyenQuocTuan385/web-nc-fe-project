@@ -5,14 +5,15 @@ import { LocationEditRequest, LocationEditByCDMSRequest } from "models/location"
 export class LocationEditService {
   static async createLocationEditRequest(
     locationId: number,
-    locationEditRequest: LocationEditRequest
+    locationEditRequest: LocationEditRequest,
+    api: any
   ): Promise<any> {
     return await api
       .post(`${API.LOCATION.EDIT}`.replace(":id", `${locationId}`), locationEditRequest)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

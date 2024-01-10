@@ -36,6 +36,7 @@ import LocationEditService from "services/locationEdit";
 import userDetails from "userDetails.json";
 import Heading2 from "components/common/text/Heading2";
 import Editor from "components/common/Editor/EditWithQuill";
+import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   propertyId: number;
@@ -124,12 +125,13 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   const handleEmitSuccessState = (isSuccess: boolean) => {
     createLocationEditRequest(isSuccess);
   };
+  const intercept = useIntercepts();
 
   const createLocationEdit = async (
     locationId: number,
     locationEditRequest: LocationEditRequest
   ) => {
-    LocationEditService.createLocationEditRequest(locationId, locationEditRequest)
+    LocationEditService.createLocationEditRequest(locationId, locationEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
       })
@@ -513,10 +515,11 @@ export const LocationEdit = () => {
   const [locationTypes, setLocationTypes] = useState([]);
   const [adsForms, setAdsForms] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
+  const intercept = useIntercepts();
 
   useEffect(() => {
     const getLocationById = async () => {
-      LocationService.getLocationsById(Number(id))
+      LocationService.getLocationsById(Number(id), intercept)
         .then((res) => {
           setLocationData(res);
         })
