@@ -76,13 +76,13 @@ export class LocationService {
       });
   }
 
-  static async getLocationsWithPropertyAndParent(data: GetLocationsWithPropertyArray): Promise<any> {
+  static async getLocationsWithPropertyAndParent(data: GetLocationsWithPropertyArray, api: any): Promise<any> {
     return await api
       .get(`${API.LOCATION.GET_WITH_PROPERTY_PARENT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

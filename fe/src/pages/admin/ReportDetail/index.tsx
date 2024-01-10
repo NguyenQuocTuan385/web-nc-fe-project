@@ -70,35 +70,33 @@ export const ReportDetail = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["report-detail-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
-          {dataReportDetail && dataReportDetail.images && (
-            <Box>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Hình ảnh báo cáo
-              </Heading3>
-              <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
-                {dataReportDetail &&
-                  JSON.parse(dataReportDetail.images).length > 0 &&
-                  JSON.parse(dataReportDetail.images).map((image: string) => {
-                    return (
-                      <img
-                        width={"48%"}
-                        height={"250px"}
-                        className={classes["image"]}
-                        src={image}
-                        alt='Hình ảnh bảng QC'
-                        style={{ border: "1px solid #ccc" }}
-                      />
-                    );
-                  })}
-                {/* <img
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
+            {dataReportDetail && dataReportDetail.images && (
+              <Box>
+                <Heading3>Hình ảnh báo cáo</Heading3>
+                <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
+                  {dataReportDetail &&
+                    JSON.parse(dataReportDetail.images).length > 0 &&
+                    JSON.parse(dataReportDetail.images).map((image: string) => {
+                      return (
+                        <img
+                          width={"48%"}
+                          height={"250px"}
+                          className={classes["image"]}
+                          src={image}
+                          alt='Hình ảnh bảng QC'
+                          style={{ border: "1px solid #ccc" }}
+                        />
+                      );
+                    })}
+                  {/* <img
                   width={"48%"}
                   height={"250px"}
                   className={classes["image"]}
@@ -106,83 +104,80 @@ export const ReportDetail = () => {
                   alt='Hình ảnh bảng QC'
                   style={{ border: "1px solid #ccc" }}
                 /> */}
-              </BoxFlex>
-            </Box>
-          )}
-          {dataReportDetail && (
-            <Box mt={"20px"}>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Thông tin báo cáo
-              </Heading3>
-              <Box display={"flex"} mt={"15px"}>
-                <Box width={"50%"}>
-                  <Typography>
-                    <span className={classes["title"]}>Loại báo cáo: </span>
-                    <span>
-                      {dataReportDetail.reportTypeName === EReportType.ADVERTISE
-                        ? "Báo cáo bảng quảng cáo"
-                        : "Báo cáo địa điểm quảng cáo"}
-                    </span>
-                  </Typography>
-                  <Typography>
-                    <span className={classes["title"]}>Thời điểm gửi: </span>
-                    <span>{formatDateToString(new Date(dataReportDetail.createdAt))}</span>
-                  </Typography>
-                  <Typography>
-                    <span className={classes["title"]}>Hình thức báo cáo: </span>
-                    <span>{dataReportDetail.reportForm.name}</span>
-                  </Typography>
-                  <Typography>
-                    <span className={classes["title"]}>Họ tên người gửi: </span>
-                    <span>{dataReportDetail.fullName}</span>
-                  </Typography>
-                  <Typography>
-                    <span className={classes["title"]}>Email: </span>
-                    <span>{dataReportDetail.email}</span>
-                  </Typography>
-                  <Typography>
-                    <span className={classes["title"]}>Số điện thoại: </span>
-                    <span>{dataReportDetail.phone}</span>
-                  </Typography>
-                </Box>
-                <Box width={"50%"}>
-                  <span className={classes["title"]}>Nội dung báo cáo: </span>
-                  <Typography
-                    dangerouslySetInnerHTML={{ __html: dataReportDetail.content }}
-                  ></Typography>
+                </BoxFlex>
+              </Box>
+            )}
+            {dataReportDetail && (
+              <Box mt={"20px"}>
+                <Heading3>Thông tin báo cáo</Heading3>
+                <Box display={"flex"} mt={"15px"}>
+                  <Box width={"50%"}>
+                    <Typography>
+                      <span className={classes["title"]}>Loại báo cáo: </span>
+                      <span>
+                        {dataReportDetail.reportTypeName === EReportType.ADVERTISE
+                          ? "Báo cáo bảng quảng cáo"
+                          : "Báo cáo địa điểm quảng cáo"}
+                      </span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes["title"]}>Thời điểm gửi: </span>
+                      <span>{formatDateToString(new Date(dataReportDetail.createdAt))}</span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes["title"]}>Hình thức báo cáo: </span>
+                      <span>{dataReportDetail.reportForm.name}</span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes["title"]}>Họ tên người gửi: </span>
+                      <span>{dataReportDetail.fullName}</span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes["title"]}>Email: </span>
+                      <span>{dataReportDetail.email}</span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes["title"]}>Số điện thoại: </span>
+                      <span>{dataReportDetail.phone}</span>
+                    </Typography>
+                  </Box>
+                  <Box width={"50%"}>
+                    <span className={classes["title"]}>Nội dung báo cáo: </span>
+                    <Typography
+                      dangerouslySetInnerHTML={{ __html: dataReportDetail.content }}
+                    ></Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          )}
+            )}
 
-          {dataReportDetail && (
-            <Box mt='20px'>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Thông tin xử lý của cán bộ
-              </Heading3>
-              <Typography mt={"15px"}>
-                <span className={classes["title"]}>Tình trạng: </span>
-                <span
-                  className={`${
-                    dataReportDetail.status ? classes["text-active"] : classes["text-inactive"]
-                  }`}
-                >
-                  {dataReportDetail.status ? "Đã xử lý" : "Chưa xử lý"}
-                </span>
-              </Typography>
-              <Box>
-                <Typography>
-                  <span className={classes["title"]}>Phản hồi: </span>
+            {dataReportDetail && (
+              <Box mt='20px'>
+                <Heading3>Thông tin xử lý của cán bộ</Heading3>
+                <Typography mt={"15px"}>
+                  <span className={classes["title"]}>Tình trạng: </span>
+                  <span
+                    className={`${
+                      dataReportDetail.status ? classes["text-active"] : classes["text-inactive"]
+                    }`}
+                  >
+                    {dataReportDetail.status ? "Đã xử lý" : "Chưa xử lý"}
+                  </span>
                 </Typography>
-                <Editor
-                  placeholder=''
-                  isAllowedType={false}
-                  content={dataReportDetail?.reply || "Chưa có thông tin phản hồi"}
-                />
+                <Box>
+                  <Typography>
+                    <span className={classes["title"]}>Phản hồi: </span>
+                  </Typography>
+                  <Editor
+                    placeholder=''
+                    isAllowedType={false}
+                    content={dataReportDetail?.reply || "Chưa có thông tin phản hồi"}
+                  />
+                </Box>
               </Box>
-            </Box>
-          )}
-        </Box>
+            )}
+          </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

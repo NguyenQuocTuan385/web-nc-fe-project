@@ -559,43 +559,42 @@ export const LocationEdit = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["location-edit-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
 
-          {locationData && (
-            <Box className={classes["info-edit-container"]}>
-              <Heading2 fontSize={"24px"} fontWeight={600}>
-                Thông tin điểm đặt quảng cáo
-              </Heading2>
-              <MyForm
-                data={locationData}
-                locationTypes={locationTypes}
-                adsForms={adsForms}
-                createLocationEditRequest={handleGetSuccessState}
-                locationId={Number(id)}
-              />
-            </Box>
-          )}
+            {locationData && (
+              <Box className={classes["info-edit-container"]}>
+                <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
+                <MyForm
+                  data={locationData}
+                  locationTypes={locationTypes}
+                  adsForms={adsForms}
+                  createLocationEditRequest={handleGetSuccessState}
+                  locationId={Number(id)}
+                />
+              </Box>
+            )}
 
-          <Snackbar
-            open={isCreateSuccess !== null}
-            autoHideDuration={3000}
-            onClose={() => setIsCreateSuccess(null)}
-          >
-            <Alert
-              severity={isCreateSuccess ? "success" : "error"}
+            <Snackbar
+              open={isCreateSuccess !== null}
+              autoHideDuration={3000}
               onClose={() => setIsCreateSuccess(null)}
             >
-              {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
-            </Alert>
-          </Snackbar>
-        </Box>
+              <Alert
+                severity={isCreateSuccess ? "success" : "error"}
+                onClose={() => setIsCreateSuccess(null)}
+              >
+                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+              </Alert>
+            </Snackbar>
+          </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

@@ -107,51 +107,52 @@ const ReportsManagement = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["reports-management-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-          </Box>
-          <Box className={classes["table-container"]}>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+            </Box>
             <Box className={classes["table-container"]}>
-              <TableTemplate
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onEditClick={handleReport}
-                onViewDetailsClick={handleViewDetails}
-              />
-
-              <Box className={classes.pagination}>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 100]}
-                  component='div'
-                  count={totalElements}
-                  page={Number(currentPage) - 1}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={Number(rowsPerPage)}
-                  labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+              <Box className={classes["table-container"]}>
+                <TableTemplate
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onEditClick={handleReport}
+                  onViewDetailsClick={handleViewDetails}
                 />
-              </Box>
 
-              <Box className={classes["pagination-custom"]}>
-                {/* <span>{`Hiển thị ${Math.min(
+                <Box className={classes.pagination}>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 100]}
+                    component='div'
+                    count={totalElements}
+                    page={Number(currentPage) - 1}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={Number(rowsPerPage)}
+                    labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </Box>
+
+                <Box className={classes["pagination-custom"]}>
+                  {/* <span>{`Hiển thị ${Math.min(
                   Number(currentPage) * rowsPerPage,
                   totalElements
                 )} kết quả trên ${totalElements}`}</span> */}
-                {/* <Pagination
+                  {/* <Pagination
                   count={totalPage}
                   page={Number(currentPage)}
                   onChange={handleChangePage}
                 /> */}
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

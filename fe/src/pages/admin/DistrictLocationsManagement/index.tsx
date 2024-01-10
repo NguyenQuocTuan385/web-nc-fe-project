@@ -21,6 +21,7 @@ import WardFilter from "components/admin/WardFilter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import { openFilterDialog } from "reduxes/Status";
+import useIntercepts from "hooks/useIntercepts";
 
 const DistrictLocationManagement = () => {
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ const DistrictLocationManagement = () => {
   const [locationList, setLocationList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const locationHook = useLocation();
-  const match = useResolvedPath("").pathname;
   const [searchParamFilter, setSearchParamFilter] = useState(() => {
     const params = queryString.parse(locationHook.search);
 
@@ -44,7 +45,6 @@ const DistrictLocationManagement = () => {
     const params = queryString.parse(locationHook.search);
     return params.rowsNum || 5;
   });
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [filteredId, setFilterdId] = useState(() => {
     const params = queryString.parse(locationHook.search);
@@ -66,31 +66,36 @@ const DistrictLocationManagement = () => {
     newPageValue: number
   ) => {
     setCurrentPage(newPageValue + 1);
+    searchParams.set("page", (newPageValue + 1).toString());
+    setSearchParams(searchParams);
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1);
+    searchParams.set("rowsNum", rowsPerPage.toString());
   };
+  const intercept = useIntercepts();
+
   useEffect(() => {
     const getAllLocations = async () => {
-      LocationService.getLocationsWithPropertyAndParent({
-        propertyId: filteredId,
-        parentId: [1],
-        search: searchValue,
-        pageSize: Number(rowsPerPage),
-        current: Number(currentPage)
-      })
+      LocationService.getLocationsWithPropertyAndParent(
+        {
+          propertyId: filteredId,
+          parentId: [1],
+          search: searchValue,
+          pageSize: Number(rowsPerPage),
+          current: Number(currentPage)
+        },
+        intercept
+      )
         .then((res) => {
           if (res.content.length === 0) setCurrentPage(1);
 
           setLocationList(res.content);
           setTotalPage(res.totalPages);
           setTotalElements(res.totalElements);
-
-          searchParams.set("page", currentPage.toString());
-          searchParams.set("rowsNum", rowsPerPage.toString());
         })
         .catch((e) => {
           console.log(e);
@@ -99,9 +104,9 @@ const DistrictLocationManagement = () => {
     getAllLocations();
   }, [currentPage, searchValue, filteredId, rowsPerPage]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchValue]);
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  // }, [searchValue]);
 
   useEffect(() => {
     const params = queryString.parse(locationHook.search);

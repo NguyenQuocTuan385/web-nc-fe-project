@@ -66,14 +66,14 @@ export default function AdvertiseInfoPopup({ onClose, open, advertise }: Adverti
       <DialogContent dividers>
         <Box className={classes.boxContainer}>
           <Box className={classes.boxWrapInfo}>
-            <ParagraphBody $fontWeight={"bold"}>Ảnh bảng quảng cáo</ParagraphBody>
+            <ParagraphBody fontWeight={"bold"}>Ảnh bảng quảng cáo</ParagraphBody>
             <Box className={classes.imgContainer}>
               <img src={advertise.images} alt='ads-img' />
             </Box>
           </Box>
           {!!contract && (
             <Box className={classes.boxWrapInfo}>
-              <ParagraphBody $fontWeight={"bold"}>Ảnh bảng quảng cáo công ty</ParagraphBody>
+              <ParagraphBody fontWeight={"bold"}>Ảnh bảng quảng cáo công ty</ParagraphBody>
               <ParagraphBody>
                 Ngày hết hạn hợp đồng: <b>{contract.endAt.toString()}</b>
               </ParagraphBody>

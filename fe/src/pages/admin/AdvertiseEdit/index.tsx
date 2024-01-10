@@ -525,71 +525,75 @@ export const AdvertiseEdit = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["advertise-edit-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
 
-          <Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              {infoContract && (
-                <img
-                  src={infoContract.images}
-                  alt='Hình ảnh công ty'
-                  width={"50%"}
-                  height={"250px"}
-                />
-              )}
-              <Box sx={{ marginLeft: "24px" }}>
-                {infoContract && <InfoContract data={infoContract} />}
+            <Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 {infoContract && (
-                  <Typography>
-                    <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
-                    <span>{infoContract.startAt}</span>
-                  </Typography>
+                  <img
+                    className={classes.image}
+                    src={infoContract.images}
+                    alt='Hình ảnh công ty'
+                    width={"50%"}
+                    height={"250px"}
+                  />
                 )}
-                {infoContract && (
-                  <Typography>
-                    <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
-                    <span>{infoContract.endAt}</span>
-                  </Typography>
-                )}
+                <Box
+                  sx={{
+                    marginLeft: "24px"
+                  }}
+                >
+                  {infoContract && <InfoContract data={infoContract} />}
+                  {infoContract && (
+                    <Typography>
+                      <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
+                      <span>{infoContract.startAt}</span>
+                    </Typography>
+                  )}
+                  {infoContract && (
+                    <Typography>
+                      <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
+                      <span>{infoContract.endAt}</span>
+                    </Typography>
+                  )}
+                </Box>
               </Box>
             </Box>
-          </Box>
 
-          <Box mt='30px'>
-            <Heading2 fontSize={"24px"} fontWeight={600}>
-              Thông tin quảng cáo
-            </Heading2>
-            {infoAds && (
-              <MyForm
-                data={infoAds}
-                createAdvertiseEditRequest={handleGetSuccessState}
-                adsTypes={adsTypes}
-                locationId={Number(locationId)}
-                advertiseId={Number(advertiseId)}
-              />
-            )}
-          </Box>
+            <Box mt='30px'>
+              <Heading2>Thông tin quảng cáo</Heading2>
+              {infoAds && (
+                <MyForm
+                  data={infoAds}
+                  createAdvertiseEditRequest={handleGetSuccessState}
+                  adsTypes={adsTypes}
+                  locationId={Number(locationId)}
+                  advertiseId={Number(advertiseId)}
+                />
+              )}
+            </Box>
 
-          <Snackbar
-            open={isCreateSuccess !== null}
-            autoHideDuration={3000}
-            onClose={() => setIsCreateSuccess(null)}
-          >
-            <Alert
-              severity={isCreateSuccess ? "success" : "error"}
+            <Snackbar
+              open={isCreateSuccess !== null}
+              autoHideDuration={3000}
               onClose={() => setIsCreateSuccess(null)}
             >
-              {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
-            </Alert>
-          </Snackbar>
-        </Box>
+              <Alert
+                severity={isCreateSuccess ? "success" : "error"}
+                onClose={() => setIsCreateSuccess(null)}
+              >
+                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+              </Alert>
+            </Snackbar>
+          </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

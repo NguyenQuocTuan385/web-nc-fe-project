@@ -3,14 +3,11 @@
   overflow: auto;
   flex-shrink: 0;
   height: 100%;
-  & .MuiDrawer-paper {
+  & [class~="MuiDrawer-paper"] {
     width: 300px;
+    top: 60px !important;
     box-sizing: border-box;
   }
-}
-
-:global(.MuiPaper-root.MuiDrawer-paper) {
-  top: 60px !important;
 }
 
 .boxContainer {

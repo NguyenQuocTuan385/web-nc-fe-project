@@ -19,8 +19,8 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
 
   return (
     <Box className={classes.boxContainer}>
-      <ParagraphBody $fontWeight={"bold"}>{advertise.adsType.name}</ParagraphBody>
-      <ParagraphBody $colorName='--gray-50'>{advertise.location.address}</ParagraphBody>
+      <ParagraphBody fontWeight={"bold"}>{advertise.adsType.name}</ParagraphBody>
+      <ParagraphBody colorName='--gray-50'>{advertise.location.address}</ParagraphBody>
       <Box className={classes.advertiseInfo}>
         <ParagraphBody>
           Kích thước:{" "}
@@ -53,7 +53,7 @@ const AdvertiseInfo = ({ advertise }: AdvertiseInfoProps) => {
           startIcon={<Error className={classes.errorIc} />}
           onClick={() => setOpenReportPopup(true)}
         >
-          <ParagraphSmall $colorName='--red-error' $fontWeight='bold'>
+          <ParagraphSmall colorName='--red-error' fontWeight='bold'>
             Báo cáo vi phạm
           </ParagraphSmall>
         </Button>

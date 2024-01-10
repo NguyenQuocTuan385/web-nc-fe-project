@@ -24,6 +24,7 @@ import { UserRequest } from "models/user";
 import Userservice from "services/user";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import { AuthenticationService } from "services/authentication";
 
 interface FormData {
   name: string;
@@ -142,7 +143,7 @@ export default function CreateAccount() {
     return new Date(formattedDate);
   }
   const createUser = async (data: UserRequest) => {
-    Userservice.createUser(data)
+    AuthenticationService.register(data)
       .then((res) => {
         handleAddSuccess();
         resetForm();
@@ -233,7 +234,10 @@ export default function CreateAccount() {
                       defaultValue='district'
                       aria-invalid={errors.role ? "true" : "false"}
                       rules={{ required: true }}
-                      render={({ field: { ref, value, ...field }, fieldState: { invalid, error } }) => (
+                      render={({
+                        field: { ref, value, ...field },
+                        fieldState: { invalid, error }
+                      }) => (
                         <>
                           <RadioGroup
                             value={value}
@@ -275,7 +279,9 @@ export default function CreateAccount() {
                                   setSelectedWard(null);
                                 }}
                                 value={selectedDistrict}
-                                renderInput={(params) => <TextField {...params} label='Quận' error={Boolean(error)} />}
+                                renderInput={(params) => (
+                                  <TextField {...params} label='Quận' error={Boolean(error)} />
+                                )}
                               />
                               <div className={classes.errorText}>{error?.message}</div>
                             </>

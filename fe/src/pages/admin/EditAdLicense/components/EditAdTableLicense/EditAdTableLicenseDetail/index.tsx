@@ -45,7 +45,11 @@ export default function EditAdTableLicenseDetail() {
     }
   };
   function formatDateToDDMMYYYY(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    };
     return new Date(date).toLocaleDateString("en-GB", options);
   }
 
@@ -110,7 +114,7 @@ export default function EditAdTableLicenseDetail() {
         <Box className={classes.boxContentDetail}>
           <Box className={classes.boxCurrentContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>TRƯỚC KHI THAY ĐỔI</ParagraphBody>
+              <ParagraphBody fontWeight={"bold"}>TRƯỚC KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
@@ -124,16 +128,28 @@ export default function EditAdTableLicenseDetail() {
                 <Heading3>Thông tin bảng</Heading3>
 
                 <ParagraphBody className={classes.infoContent}>
-                  {renderCurrent(advertise?.adsType.name!!, advertise?.advertiseEdit?.adsType.name!!)}
+                  {renderCurrent(
+                    advertise?.adsType.name!!,
+                    advertise?.advertiseEdit?.adsType.name!!
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
-                  {renderCurrent(advertise?.location.address!!, advertise?.advertiseEdit?.location.address!!)}
+                  {renderCurrent(
+                    advertise?.location.address!!,
+                    advertise?.advertiseEdit?.location.address!!
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Kích thước:&nbsp;
-                  {renderCurrent(advertise?.width.toString()!!, advertise?.advertiseEdit?.width.toString()!!)}{" "}
+                  {renderCurrent(
+                    advertise?.width.toString()!!,
+                    advertise?.advertiseEdit?.width.toString()!!
+                  )}{" "}
                   <span>x</span>{" "}
-                  {renderCurrent(advertise?.height.toString()!!, advertise?.advertiseEdit?.height.toString()!!)}{" "}
+                  {renderCurrent(
+                    advertise?.height.toString()!!,
+                    advertise?.advertiseEdit?.height.toString()!!
+                  )}{" "}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Số lượng:&nbsp;
@@ -141,7 +157,10 @@ export default function EditAdTableLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Hình thức:&nbsp;
-                  {renderCurrent(advertise?.location.adsForm.name!!, advertise?.advertiseEdit?.location.adsForm.name!!)}
+                  {renderCurrent(
+                    advertise?.location.adsForm.name!!,
+                    advertise?.advertiseEdit?.location.adsForm.name!!
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Phân loại:&nbsp;
@@ -158,7 +177,7 @@ export default function EditAdTableLicenseDetail() {
           </Box>
           <Box className={classes.boxHistoryContent}>
             <Box className={classes.boxTitle}>
-              <ParagraphBody $fontWeight={"bold"}>SAU KHI THAY ĐỔI</ParagraphBody>
+              <ParagraphBody fontWeight={"bold"}>SAU KHI THAY ĐỔI</ParagraphBody>
             </Box>
             <Box className={classes.imageInfoContainer}>
               <Box className={classes.imageContainer}>
@@ -174,13 +193,22 @@ export default function EditAdTableLicenseDetail() {
                   {renderEdit(advertise?.adsType.name!!, advertise?.advertiseEdit?.adsType.name!!)}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
-                  {renderEdit(advertise?.location.address!!, advertise?.advertiseEdit?.location.address!!)}
+                  {renderEdit(
+                    advertise?.location.address!!,
+                    advertise?.advertiseEdit?.location.address!!
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Kích thước:&nbsp;
-                  {renderEdit(advertise?.width.toString()!!, advertise?.advertiseEdit?.width.toString()!!)}
+                  {renderEdit(
+                    advertise?.width.toString()!!,
+                    advertise?.advertiseEdit?.width.toString()!!
+                  )}
                   <span>x</span>{" "}
-                  {renderEdit(advertise?.height.toString()!!, advertise?.advertiseEdit?.height.toString()!!)}
+                  {renderEdit(
+                    advertise?.height.toString()!!,
+                    advertise?.advertiseEdit?.height.toString()!!
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Số lượng:&nbsp;
@@ -188,7 +216,10 @@ export default function EditAdTableLicenseDetail() {
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Hình thức:&nbsp;
-                  {renderEdit(advertise?.location.adsForm.name!!, advertise?.advertiseEdit?.location.adsForm.name!!)}
+                  {renderEdit(
+                    advertise?.location.adsForm.name!!,
+                    advertise?.advertiseEdit?.location.adsForm.name!!
+                  )}
                 </ParagraphBody>
                 <ParagraphBody className={classes.infoContent}>
                   Phân loại:&nbsp;
@@ -205,7 +236,8 @@ export default function EditAdTableLicenseDetail() {
               <ParagraphBody className={classes.infoContent}>
                 Thời điểm chỉnh sửa:&nbsp;
                 <span>
-                  {advertise?.advertiseEdit?.createdAt && formatDateToDDMMYYYY(advertise?.advertiseEdit?.createdAt)}
+                  {advertise?.advertiseEdit?.createdAt &&
+                    formatDateToDDMMYYYY(advertise?.advertiseEdit?.createdAt)}
                 </span>
               </ParagraphBody>
               <Box>

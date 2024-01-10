@@ -202,189 +202,192 @@ export const ReportHandle = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["report-handle-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
 
-          {dataReportDetail && (
-            <Box>
-              <Heading3 fontSize={"22px"} fontWeight={600}>
-                Thông tin xử lý
-              </Heading3>
-              <Box className={classes["info-handle-container"]}>
-                <div className={classes["input-container"]}>
-                  <label>Loại báo cáo: </label>
-                  <TextField
-                    className={classes["input-custom"]}
-                    defaultValue={dataReportDetail.reportForm.name}
-                    id='outlined-required'
-                    InputProps={{ readOnly: true }}
-                    fullWidth
-                  />
-                </div>
-
-                <div className={classes["input-container"]}>
-                  <label>Thời điểm gửi: </label>
-                  <TextField
-                    className={classes["input-custom"]}
-                    defaultValue={formatDateToString(new Date(dataReportDetail.createdAt))}
-                    id='outlined-required'
-                    InputProps={{ readOnly: true }}
-                    fullWidth
-                  />
-                </div>
-
-                <div className={classes["input-container"]}>
-                  <label>Hình thức báo cáo: </label>
-                  <TextField
-                    className={classes["input-custom"]}
-                    defaultValue={
-                      dataReportDetail.reportTypeName === EReportType.ADVERTISE
-                        ? "Báo cáo bảng quảng cáo"
-                        : "Báo cáo địa điểm đặt quảng cáo"
-                    }
-                    id='outlined-required'
-                    InputProps={{ readOnly: true }}
-                    fullWidth
-                  />
-                </div>
-
-                <div className={classes["input-container"]}>
-                  <label>Họ tên người gửi: </label>
-                  <TextField
-                    className={classes["input-custom"]}
-                    defaultValue={dataReportDetail.fullName}
-                    id='outlined-required'
-                    InputProps={{ readOnly: true }}
-                    fullWidth
-                  />
-                </div>
-
-                <div className={classes["input-container"]}>
-                  <label>Email: </label>
-                  <TextField
-                    className={classes["input-custom"]}
-                    defaultValue={dataReportDetail.email}
-                    id='outlined-required'
-                    InputProps={{ readOnly: true }}
-                    fullWidth
-                  />
-                </div>
-
-                <div className={classes["input-container"]}>
-                  <label>Số điện thoại: </label>
-                  <TextField
-                    className={classes["input-custom"]}
-                    defaultValue={dataReportDetail.phone}
-                    id='outlined-required'
-                    InputProps={{ readOnly: true }}
-                    fullWidth
-                  />
-                </div>
-
-                {dataReportDetail.images && dataReportDetail.images.length > 0 && (
-                  <div className={classes["image-container"]}>
-                    <label>Hình ảnh báo cáo: </label>
-                    <Box className={classes["image-list"]}>
-                      {JSON.parse(dataReportDetail.images).map(
-                        (imageUrl: string, index: number) => {
-                          return (
-                            <div className={classes["image-item"]}>
-                              <img
-                                src={imageUrl}
-                                width={"100%"}
-                                key={imageUrl + index}
-                                height={"100%"}
-                                alt='Hình ảnh báo cáo'
-                              />
-                            </div>
-                          );
-                        }
-                      )}
-                    </Box>
+            {dataReportDetail && (
+              <Box>
+                <Heading3>Thông tin xử lý</Heading3>
+                <Box className={classes["info-handle-container"]}>
+                  <div className={classes["input-container"]}>
+                    <label>Loại báo cáo: </label>
+                    <TextField
+                      className={classes["input-custom"]}
+                      defaultValue={dataReportDetail.reportForm.name}
+                      id='outlined-required'
+                      InputProps={{ readOnly: true }}
+                      fullWidth
+                    />
                   </div>
-                )}
 
-                <Box>
-                  <Typography>
-                    <span className={classes.title}>Nội dung: </span>
-                  </Typography>
-                  <Editor placeholder='' isAllowedType={false} content={dataReportDetail.content} />
+                  <div className={classes["input-container"]}>
+                    <label>Thời điểm gửi: </label>
+                    <TextField
+                      className={classes["input-custom"]}
+                      defaultValue={formatDateToString(new Date(dataReportDetail.createdAt))}
+                      id='outlined-required'
+                      InputProps={{ readOnly: true }}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div className={classes["input-container"]}>
+                    <label>Hình thức báo cáo: </label>
+                    <TextField
+                      className={classes["input-custom"]}
+                      defaultValue={
+                        dataReportDetail.reportTypeName === EReportType.ADVERTISE
+                          ? "Báo cáo bảng quảng cáo"
+                          : "Báo cáo địa điểm đặt quảng cáo"
+                      }
+                      id='outlined-required'
+                      InputProps={{ readOnly: true }}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div className={classes["input-container"]}>
+                    <label>Họ tên người gửi: </label>
+                    <TextField
+                      className={classes["input-custom"]}
+                      defaultValue={dataReportDetail.fullName}
+                      id='outlined-required'
+                      InputProps={{ readOnly: true }}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div className={classes["input-container"]}>
+                    <label>Email: </label>
+                    <TextField
+                      className={classes["input-custom"]}
+                      defaultValue={dataReportDetail.email}
+                      id='outlined-required'
+                      InputProps={{ readOnly: true }}
+                      fullWidth
+                    />
+                  </div>
+
+                  <div className={classes["input-container"]}>
+                    <label>Số điện thoại: </label>
+                    <TextField
+                      className={classes["input-custom"]}
+                      defaultValue={dataReportDetail.phone}
+                      id='outlined-required'
+                      InputProps={{ readOnly: true }}
+                      fullWidth
+                    />
+                  </div>
+
+                  {dataReportDetail.images && dataReportDetail.images.length > 0 && (
+                    <div className={classes["image-container"]}>
+                      <label>Hình ảnh báo cáo: </label>
+                      <Box className={classes["image-list"]}>
+                        {JSON.parse(dataReportDetail.images).map(
+                          (imageUrl: string, index: number) => {
+                            return (
+                              <div className={classes["image-item"]}>
+                                <img
+                                  src={imageUrl}
+                                  width={"100%"}
+                                  key={imageUrl + index}
+                                  height={"100%"}
+                                  alt='Hình ảnh báo cáo'
+                                />
+                              </div>
+                            );
+                          }
+                        )}
+                      </Box>
+                    </div>
+                  )}
+
+                  <Box>
+                    <Typography>
+                      <span className={classes.title}>Nội dung: </span>
+                    </Typography>
+                    <Editor
+                      placeholder=''
+                      isAllowedType={false}
+                      content={dataReportDetail.content}
+                    />
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          )}
+            )}
 
-          <Box mt={"30px"} mb={"30px"}>
-            <Heading3 fontSize={"22px"} fontWeight={600}>
-              Thông tin phản hồi
-            </Heading3>
-            <Box
-              display={"flex"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-              mb={"20px"}
-            >
-              <label>Tình trạng: </label>
-              {dataReportDetail && (
-                <Select
-                  fullWidth
-                  className={classes["input-custom"]}
-                  value={handleStatus}
-                  onChange={(e) => handleStatusChange(e)}
-                >
-                  {reportStatus.length > 0 &&
-                    reportStatus.map((status: any) => (
-                      <MenuItem value={status.value} key={status.value}>
-                        {status.name}
-                      </MenuItem>
-                    ))}
-                </Select>
-              )}
-            </Box>
-            <Box>
-              <label>Phản hồi báo cáo:</label>
-              {dataReportDetail && dataReportDetail.reply && (
-                <Editor
-                  placeholder=''
-                  getValueOnChange={handleGetValueOnChange}
-                  isAllowedType={true}
-                  content={dataReportDetail.reply}
-                />
-              )}
+            <Box mt={"30px"} mb={"30px"}>
+              <Heading3>Thông tin phản hồi</Heading3>
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                mb={"20px"}
+              >
+                <label>Tình trạng: </label>
+                {dataReportDetail && (
+                  <Select
+                    fullWidth
+                    className={classes["input-custom"]}
+                    value={handleStatus}
+                    onChange={(e) => handleStatusChange(e)}
+                  >
+                    {reportStatus.length > 0 &&
+                      reportStatus.map((status: any) => (
+                        <MenuItem value={status.value} key={status.value}>
+                          {status.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                )}
+              </Box>
+              <Box>
+                <label>Phản hồi báo cáo:</label>
+                {dataReportDetail && dataReportDetail.reply && (
+                  <Editor
+                    placeholder=''
+                    getValueOnChange={handleGetValueOnChange}
+                    isAllowedType={true}
+                    content={dataReportDetail.reply}
+                  />
+                )}
 
-              {dataReportDetail && !dataReportDetail.reply && (
-                <Editor
-                  placeholder='Nhập phản hồi...'
-                  getValueOnChange={handleGetValueOnChange}
-                  isAllowedType={true}
-                />
-              )}
+                {dataReportDetail && !dataReportDetail.reply && (
+                  <Editor
+                    placeholder='Nhập phản hồi...'
+                    getValueOnChange={handleGetValueOnChange}
+                    isAllowedType={true}
+                  />
+                )}
+              </Box>
             </Box>
+
+            <ButtonSubmit type='button' onClick={handleSubmit}>
+              Gửi
+            </ButtonSubmit>
           </Box>
 
-          <ButtonSubmit type='button' onClick={handleSubmit}>
-            Gửi
-          </ButtonSubmit>
-        </Box>
-
-        <Snackbar
-          open={isUpdateSuccess !== null}
-          autoHideDuration={3000}
-          onClose={() => setIsUpdateSuccess(null)}
-        >
-          <Alert
-            severity={isUpdateSuccess ? "success" : "error"}
+          <Snackbar
+            open={isUpdateSuccess !== null}
+            autoHideDuration={3000}
             onClose={() => setIsUpdateSuccess(null)}
           >
-            {isUpdateSuccess ? "Gửi phản hồi báo cáo thành công" : "Gửi phản hồi báo cáo thất bại"}
-          </Alert>
-        </Snackbar>
+            <Alert
+              severity={isUpdateSuccess ? "success" : "error"}
+              onClose={() => setIsUpdateSuccess(null)}
+            >
+              {isUpdateSuccess
+                ? "Gửi phản hồi báo cáo thành công"
+                : "Gửi phản hồi báo cáo thất bại"}
+            </Alert>
+          </Snackbar>
+        </SideBarWard>
       </div>
     </Box>
   );
