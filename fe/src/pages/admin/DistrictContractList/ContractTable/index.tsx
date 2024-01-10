@@ -163,29 +163,29 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.sizeTable} aria-label='simple table'>
-          <TableHead>
+          <TableHead className={classes["table-head"]}>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell className={classes.headerTable}>ID</TableCell>
+              <TableCell align='left' className={classes.headerTable}>
                 Loại bảng quảng cáo
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Địa chỉ bảng
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
-                Tên công ty ký hợp đồng
+              <TableCell align='left' className={classes.headerTable}>
+                Tên công ty
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Email công ty
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Ngày ký
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Ngày hết hạn
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
-                Tình trạng cấp phép
+              <TableCell align='left' className={classes.headerTable}>
+                Cấp phép
               </TableCell>
               <TableCell align='center' className={classes.headerTable}>
                 Thao tác
@@ -210,13 +210,13 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
                 <TableCell align='left' className={classes.dataTable}>
                   {contract.companyEmail}
                 </TableCell>
-                <TableCell align='center' className={classes.dataTable}>
+                <TableCell align='left' className={classes.dataTable}>
                   {contract.startAt.toLocaleString()}
                 </TableCell>
-                <TableCell align='center' className={classes.dataTable}>
+                <TableCell align='left' className={classes.dataTable}>
                   {contract.endAt.toLocaleString()}
                 </TableCell>
-                <TableCell align='center' className={classes.dataTable}>
+                <TableCell align='left' className={classes.dataTable}>
                   {contract.status === EContractStatus.licensed ? (
                     <Heading6 colorName='--green-600'>Đã cấp phép</Heading6>
                   ) : contract.status === EContractStatus.notLicensed ? (

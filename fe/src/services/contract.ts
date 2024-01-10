@@ -3,13 +3,13 @@ import api from "./configApi";
 import { GetContract, PutContract, UpdateContractStatus } from "models/contract";
 
 export class ContractService {
-  static async getContracts(data: GetContract, propertyId: Number): Promise<any> {
+  static async getContracts(data: GetContract, propertyId: Number, api: any): Promise<any> {
     return await api
       .get(`${API.CONTRACT.DEFAULT.replace(":id", `${propertyId}`)}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
@@ -57,13 +57,13 @@ export class ContractService {
       });
   }
 
-  static async getContractById(id: number): Promise<any> {
+  static async getContractById(id: number, api: any): Promise<any> {
     return await api
       .get(`${API.CONTRACT.ById.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

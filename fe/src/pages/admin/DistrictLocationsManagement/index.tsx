@@ -25,7 +25,6 @@ import useIntercepts from "hooks/useIntercepts";
 import { selectCurrentUser } from "reduxes/Auth";
 import DistrictService from "services/district";
 import { User } from "models/user";
-import SideBarDistrict from "components/admin/SidebarDistrict";
 
 const DistrictLocationManagement = () => {
   const navigate = useNavigate();
@@ -141,8 +140,7 @@ const DistrictLocationManagement = () => {
 
   const data = locationList.map((location: any, index: number) => {
     return {
-      stt: index + 1,
-      id: location.id,
+      stt: location.id,
       address: location.address,
       adsForm: location.adsForm.name,
       objectStatus: {
@@ -152,8 +150,8 @@ const DistrictLocationManagement = () => {
     };
   });
 
-  const customHeading = ["STT", "Mã", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
-  const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
+  const customHeading = ["ID", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
+  const customColumns = ["stt", "address", "adsForm", "objectStatus"];
 
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
@@ -176,48 +174,42 @@ const DistrictLocationManagement = () => {
 
   return (
     <Box>
-      <Header />
       <div className={classes["location-management-container"]}>
-        <SideBarDistrict />
-        <Box className={classes["container-body"]}>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-            <Button onClick={openFilterDialogHandle}>LỌC PHƯỜNG</Button>
-          </Box>
-          <Box className={classes["table-container"]}>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+              <Button onClick={openFilterDialogHandle}>LỌC PHƯỜNG</Button>
+            </Box>
             <Box className={classes["table-container"]}>
-              <TableTemplate
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onViewAdsClick={handleViewAds}
-                onEditClick={handleEditLocation}
-              />
+              <Box className={classes["table-container"]}>
+                <TableTemplate
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onViewAdsClick={handleViewAds}
+                  onEditClick={handleEditLocation}
+                />
 
-              <Box className={classes["pagination-custom"]}>
-                <Box className={classes.pagination}>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 10, 25, 100]}
-                    component='div'
-                    count={totalElements}
-                    page={Number(currentPage) - 1}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={Number(rowsPerPage)}
-                    labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
+                <Box className={classes["pagination-custom"]}>
+                  <Box className={classes.pagination}>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25, 100]}
+                      component='div'
+                      count={totalElements}
+                      page={Number(currentPage) - 1}
+                      onPageChange={handleChangePage}
+                      rowsPerPage={Number(rowsPerPage)}
+                      labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </Box>
                 </Box>
-
-                {/* <Pagination
-                  count={totalPage}
-                  page={Number(currentPage)}
-                  onChange={handleChangePage}
-                /> */}
               </Box>
             </Box>
           </Box>
-        </Box>
+        </SideBarWard>
       </div>
 
       <Dialog

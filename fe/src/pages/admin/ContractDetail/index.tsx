@@ -10,6 +10,7 @@ import Heading6 from "components/common/text/Heading6";
 import ShowContractImage from "./Components/ContractImageShow";
 import ContractDetailStickyFooter from "./Components/ContractDetailStickyFooter";
 import { useParams } from "react-router-dom";
+import useIntercepts from "hooks/useIntercepts";
 
 interface dataListObjectItem {
   imageIcon: any;
@@ -23,9 +24,10 @@ function ContractDetail() {
   const [contractData, setContractData] = useState<Contract>();
   const [companyDataList, setCompanyDataList] = useState<dataListObjectItem[]>([]);
   const [advertiseDataList, setAdvertiseDataList] = useState<dataListObjectItem[]>([]);
+  const intercept = useIntercepts();
 
   useEffect(() => {
-    ContractService.getContractById(Number(id))
+    ContractService.getContractById(Number(id), intercept)
       .then((res) => {
         setContractData(res);
       })
@@ -85,31 +87,31 @@ function ContractDetail() {
 
   return (
     <div>
-      <SideBarWard />
+      <SideBarWard>
+        <Card className={classes.rightComponent}>
+          <Box className={classes.detailGroup}>
+            <Heading6 id='general' fontSize={"20px"} fontWeight={500}>
+              {contractData?.advertise.adsType.name}
+            </Heading6>
+            <Heading6 fontWeight={50}>{contractData?.advertise.location.address}</Heading6>
+          </Box>
 
-      <Card className={classes.rightComponent}>
-        <Box className={classes.detailGroup}>
-          <Heading6 id='general' fontSize={"20px"} fontWeight={500}>
-            {contractData?.advertise.adsType.name}
-          </Heading6>
-          <Heading6 fontWeight={50}>{contractData?.advertise.location.address}</Heading6>
-        </Box>
+          <Divider className={classes.divider} variant='middle' />
+          <DetailCard heading='Thông tin chi tiết bảng quảng cáo' data={advertiseDataList} />
 
-        <Divider className={classes.divider} variant='middle' />
-        <DetailCard heading='Thông tin chi tiết bảng quảng cáo' data={advertiseDataList} />
+          <Divider className={classes.divider} variant='middle' />
+          <DetailCard heading='Thông tin về công ty' data={companyDataList} />
 
-        <Divider className={classes.divider} variant='middle' />
-        <DetailCard heading='Thông tin về công ty' data={companyDataList} />
-
-        <Divider className={classes.divider} variant='middle' />
-        <ShowContractImage imageSrc={String(contractData?.images)} />
-        <ContractDetailStickyFooter
-          startDate={contractData?.startAt}
-          endDate={contractData?.endAt}
-          status={contractData?.status}
-          deleteId={Number(id)}
-        />
-      </Card>
+          <Divider className={classes.divider} variant='middle' />
+          <ShowContractImage imageSrc={String(contractData?.images)} />
+          <ContractDetailStickyFooter
+            startDate={contractData?.startAt}
+            endDate={contractData?.endAt}
+            status={contractData?.status}
+            deleteId={Number(id)}
+          />
+        </Card>
+      </SideBarWard>
     </div>
   );
 }

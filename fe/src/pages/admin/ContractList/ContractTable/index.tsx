@@ -27,6 +27,7 @@ import clsx from "clsx";
 import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import queryString from "query-string";
 import { routes } from "routes/routes";
+import useIntercepts from "hooks/useIntercepts";
 
 // const rows = [...user];
 interface FilterProps {
@@ -72,6 +73,7 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
   const [dataList, setDataList] = useState<Contract[]>([]);
   const [totalElements, setTotalElements] = useState(1);
   const [selectedForDelete, setSelectedForDelete] = useState(-1);
+  const intercept = useIntercepts();
 
   // filter contract's status for Tab Panel
   useEffect(() => {
@@ -84,7 +86,8 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
           pageSize: Number(rowsPerPage),
           current: Number(currentPage)
         },
-        propertyId
+        propertyId,
+        intercept
       )
         .then((res) => {
           if (res.content.length === 0) setCurrentPage(1);
@@ -145,29 +148,29 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
     <Box className={classes.boxContainer}>
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.sizeTable} aria-label='simple table'>
-          <TableHead>
+          <TableHead className={classes["table-head"]}>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell className={classes.headerTable}>ID</TableCell>
+              <TableCell align='left' className={classes.headerTable}>
                 Loại bảng quảng cáo
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Địa chỉ bảng
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
-                Tên công ty ký hợp đồng
+              <TableCell align='left' className={classes.headerTable}>
+                Tên công ty
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Email công ty
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Ngày ký
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
+              <TableCell align='left' className={classes.headerTable}>
                 Ngày hết hạn
               </TableCell>
-              <TableCell align='center' className={classes.headerTable}>
-                Tình trạng cấp phép
+              <TableCell align='left' className={classes.headerTable}>
+                Cấp phép
               </TableCell>
               <TableCell align='center' className={classes.headerTable}>
                 Thao tác

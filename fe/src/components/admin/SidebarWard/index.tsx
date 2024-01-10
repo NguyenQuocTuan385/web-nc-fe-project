@@ -22,32 +22,12 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import SidebarManagement from "../SidebarManagement";
 import { Header } from "components/common/Header";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import { ERole } from "models/general";
 
 const drawerWidth = 300;
-const sideBarItemListData = [
-  {
-    name: "Dashboard",
-    icon: <FontAwesomeIcon icon={faPeopleRoof} size='lg' className={classes.itemIcon} />,
-    link: routes.admin.dashboard.wardDashboard
-  },
-  {
-    name: "QLý điểm đặt và bảng QC",
-    icon: <FontAwesomeIcon icon={faRectangleAd} size='lg' className={classes.itemIcon} />,
-    link: routes.admin.locations.ward
-    // children: [{ name: "QLý bảng quảng cáo" }, { name: "QLý điểm đặt quảng cáo" }]
-  },
-  {
-    name: "QLý báo cáo của người dân",
-    icon: <FontAwesomeIcon icon={faFlag} size='lg' className={classes.itemIcon} />,
-    link: routes.admin.reports.ward
-  },
-  {
-    name: "Cấp phép quảng cáo",
-    icon: <FontAwesomeIcon icon={faCircleCheck} size='lg' className={classes.itemIcon} />,
-    link: routes.admin.contracts.root
-  }
-];
-
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
 }>(({ theme, open }) => ({
@@ -101,6 +81,42 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function PersistentDrawerLeft({ children }: any) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const currentUser: User = useSelector(selectCurrentUser);
+  const sideBarItemListData = [
+    {
+      name: "Dashboard",
+      icon: <FontAwesomeIcon icon={faPeopleRoof} size='lg' className={classes.itemIcon} />,
+      link:
+        currentUser?.role.id === ERole.WARD
+          ? routes.admin.dashboard.wardDashboard
+          : routes.admin.dashboard.wardDashboard
+    },
+    {
+      name: "QLý điểm đặt và bảng QC",
+      icon: <FontAwesomeIcon icon={faRectangleAd} size='lg' className={classes.itemIcon} />,
+      link:
+        currentUser?.role.id === ERole.WARD
+          ? routes.admin.locations.ward
+          : routes.admin.locations.district
+      // children: [{ name: "QLý bảng quảng cáo" }, { name: "QLý điểm đặt quảng cáo" }]
+    },
+    {
+      name: "QLý báo cáo của người dân",
+      icon: <FontAwesomeIcon icon={faFlag} size='lg' className={classes.itemIcon} />,
+      link:
+        currentUser?.role.id === ERole.WARD
+          ? routes.admin.reports.ward
+          : routes.admin.reports.district
+    },
+    {
+      name: "Cấp phép quảng cáo",
+      icon: <FontAwesomeIcon icon={faCircleCheck} size='lg' className={classes.itemIcon} />,
+      link:
+        currentUser?.role.id === ERole.WARD
+          ? routes.admin.contracts.root
+          : routes.admin.contracts.district
+    }
+  ];
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -132,7 +148,7 @@ export default function PersistentDrawerLeft({ children }: any) {
               <MenuIcon />
             </IconButton>
             <Typography variant='h6' noWrap component='div' color={"black"}>
-              Cán Bộ Phường
+              Cán Bộ {currentUser?.role.id === ERole.WARD ? "Phường" : "Quận"}
             </Typography>
           </Box>
           <Header></Header>
