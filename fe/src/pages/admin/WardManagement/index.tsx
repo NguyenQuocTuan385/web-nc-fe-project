@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import { Header } from "components/common/Header";
 import SearchAppBar from "components/common/Search";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useNavigate, useParams } from "react-router-dom";
@@ -158,42 +157,42 @@ export default function WardManagement() {
 
   return (
     <div>
-      <Header />
       <div className={classes["location-management-container"]}>
-        <SidebarDCMS />
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-          </Box>
-          <Box className={classes["table-container"]}>
+        <SidebarDCMS>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+            </Box>
             <Box className={classes["table-container"]}>
-              <TableTemplateDCMS
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onEditClick={handleEditProperty}
-                onDeleteClick={handleDeleteProperty}
-              />
-
-              <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(
-                  Number(currentPage) * itemsPerPage,
-                  totalElements
-                )} kết quả trên ${totalElements}`}</span>
-                <Pagination
-                  count={totalPage}
-                  page={Number(currentPage)}
-                  onChange={handleChangePage}
+              <Box className={classes["table-container"]}>
+                <TableTemplateDCMS
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onEditClick={handleEditProperty}
+                  onDeleteClick={handleDeleteProperty}
                 />
+
+                <Box className={classes["pagination-custom"]}>
+                  <span>{`Hiển thị ${Math.min(
+                    Number(currentPage) * itemsPerPage,
+                    totalElements
+                  )} kết quả trên ${totalElements}`}</span>
+                  <Pagination
+                    count={totalPage}
+                    page={Number(currentPage)}
+                    onChange={handleChangePage}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </SidebarDCMS>
       </div>
       <Dialog
         open={openDeleteDialog}

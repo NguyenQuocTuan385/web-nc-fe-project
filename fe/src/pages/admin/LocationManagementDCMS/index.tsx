@@ -99,38 +99,39 @@ const LocationManagementDCMS = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["location-management-container"]}>
-        <SideBarDCMS></SideBarDCMS>
-        <Box className={classes["container-body"]}>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-          </Box>
-          <Box className={classes["table-container"]}>
+        <SideBarDCMS>
+          <Box className={classes["container-body"]}>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+            </Box>
             <Box className={classes["table-container"]}>
-              <TableTemplateDCMS
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onViewAdsClick={handleViewAds}
-                onEditClick={handleEditLocation}
-              />
-
-              <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(
-                  Number(currentPage) * itemsPerPage,
-                  totalElements
-                )} kết quả trên ${totalElements}`}</span>
-                <Pagination
-                  count={totalPage}
-                  page={Number(currentPage)}
-                  onChange={handleChangePage}
+              <Box className={classes["table-container"]}>
+                <TableTemplateDCMS
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onViewAdsClick={handleViewAds}
+                  onEditClick={handleEditLocation}
                 />
+
+                <Box className={classes["pagination-custom"]}>
+                  <span>{`Hiển thị ${Math.min(
+                    Number(currentPage) * itemsPerPage,
+                    totalElements
+                  )} kết quả trên ${totalElements}`}</span>
+                  <Pagination
+                    count={totalPage}
+                    page={Number(currentPage)}
+                    onChange={handleChangePage}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </SideBarDCMS>
       </div>
     </Box>
   );

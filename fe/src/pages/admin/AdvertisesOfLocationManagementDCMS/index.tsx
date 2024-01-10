@@ -14,9 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
 
 import SideBarWard from "components/admin/SidebarWard";
-import TableTemplate from "components/common/TableTemplate";
 import InfoLocation from "./components/InfoLocation";
-import { Header } from "components/common/Header";
 import SearchAppBar from "components/common/Search";
 import AdvertiseService from "services/advertise";
 import { routes } from "routes/routes";
@@ -182,45 +180,45 @@ const AdvertiseOfLocationManagementDCMS = () => {
 
   return (
     <Box>
-      <Header />
       <div className={classes["advertise-management-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
-          <Box className={classes["search-container"]}>
-            <SearchAppBar onSearch={handleSearch} />
-          </Box>
-          <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
+            <Box className={classes["search-container"]}>
+              <SearchAppBar onSearch={handleSearch} />
+            </Box>
+            <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
 
-          <Box className={classes["table-container"]}>
             <Box className={classes["table-container"]}>
-              <TableTemplateDCMS
-                data={data}
-                customHeading={customHeading}
-                customColumns={customColumns}
-                isActionColumn={true}
-                onViewDetailsClick={handleViewAdDetails}
-                onEditClick={handleEditAdvertise}
-                onAddClick={handleAddAdvertise}
-              />
-
-              <Box className={classes["pagination-custom"]}>
-                <span>{`Hiển thị ${Math.min(
-                  Number(currentPage) * itemsPerPage,
-                  totalElements
-                )} kết quả trên ${totalElements}`}</span>
-                <Pagination
-                  count={totalPage}
-                  page={Number(currentPage)}
-                  onChange={handleChangePage}
+              <Box className={classes["table-container"]}>
+                <TableTemplateDCMS
+                  data={data}
+                  customHeading={customHeading}
+                  customColumns={customColumns}
+                  isActionColumn={true}
+                  onViewDetailsClick={handleViewAdDetails}
+                  onEditClick={handleEditAdvertise}
+                  onAddClick={handleAddAdvertise}
                 />
+
+                <Box className={classes["pagination-custom"]}>
+                  <span>{`Hiển thị ${Math.min(
+                    Number(currentPage) * itemsPerPage,
+                    totalElements
+                  )} kết quả trên ${totalElements}`}</span>
+                  <Pagination
+                    count={totalPage}
+                    page={Number(currentPage)}
+                    onChange={handleChangePage}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </SideBarWard>
       </div>
     </Box>
   );
