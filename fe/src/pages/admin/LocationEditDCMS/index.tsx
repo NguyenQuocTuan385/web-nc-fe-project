@@ -7,7 +7,10 @@ import {
   DialogContent,
   DialogActions,
   Snackbar,
-  Alert
+  Alert,
+  TextField,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +19,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 
-import { Header } from "components/common/Header";
 import classes from "./styles.module.scss";
 import SideBarWard from "components/admin/SidebarWard";
 import styled from "styled-components";
@@ -31,7 +33,6 @@ import { LocationEditByCDMSRequest, LocationType } from "models/location";
 import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
 import userDetails from "userDetails.json";
-import clsx from "clsx";
 import Heading2 from "components/common/text/Heading2";
 
 interface FormData {
@@ -77,19 +78,19 @@ const ButtonSubmit = styled(Button)(() => ({
   float: "right"
 }));
 
-interface FormEditLocationDCMSProps {
+interface FormEditLocationProps {
   data: any;
   locationTypes: LocationType[];
   adsForms: AdvertiseForm[];
-  updateLocationByCDMSRequest: (isSuccess: boolean) => void;
+  createLocationEditRequest: (isSuccess: boolean) => void;
   locationId: number;
 }
 
-const MyForm: React.FC<FormEditLocationDCMSProps> = ({
+const MyForm: React.FC<FormEditLocationProps> = ({
   data,
   locationTypes,
   adsForms,
-  updateLocationByCDMSRequest,
+  createLocationEditRequest,
   locationId
 }: any) => {
   const {
@@ -117,14 +118,14 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
   };
 
   const handleEmitSuccessState = (isSuccess: boolean) => {
-    updateLocationByCDMSRequest(isSuccess);
+    createLocationEditRequest(isSuccess);
   };
 
-  const updateLocationByCDMS = async (
+  const createLocationEdit = async (
     locationId: number,
-    locationEditByCDMSRequest: LocationEditByCDMSRequest
+    locationEditRequest: LocationEditByCDMSRequest
   ) => {
-    LocationEditService.updateLocationByCDMS(locationId, locationEditByCDMSRequest)
+    LocationEditService.updateLocationByCDMS(locationId, locationEditRequest)
       .then((res) => {
         handleEmitSuccessState(true);
       })
@@ -173,24 +174,27 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
       userId: userInfo.id
     };
 
-    updateLocationByCDMS(locationId, dataSubmit);
+    createLocationEdit(locationId, dataSubmit);
   };
 
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       {/* Khu vực */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Khu vực:</label>
-        <input
-          className={classes["input-property"]}
-          type='text'
-          value={`${userInfo.property.name}, ${userInfo.property.propertyParent.name}`}
-          readOnly
-        />
-      </div>
+        <div className={classes["input-error-container"]}>
+          <TextField
+            required
+            id='outlined-required'
+            defaultValue={`${userInfo.property.name}, ${userInfo.property.propertyParent.name}`}
+            InputProps={{ readOnly: true }}
+            fullWidth
+          />
+        </div>
+      </Box>
 
       {/* Địa chỉ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Địa chỉ:</label>
         <Controller
           control={control}
@@ -198,38 +202,43 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
           defaultValue={data.address}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input
+              <TextField
+                required
+                id='outlined-required'
                 {...field}
                 {...register("address")}
-                type='text'
-                className={classes["input-custom"]}
+                fullWidth
               />
+
               {errors.address && (
                 <div className={classes["error-text"]}>{errors.address.message}</div>
               )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Tọa độ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Tọa độ:</label>
         <Box className={classes["coordinates-container"]}>
           <Box className={classes["input-small"]}>
-            <label>Vĩ độ: </label>
             <Controller
               control={control}
               name='latitude'
               defaultValue={data.latitude}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
+                  <TextField
+                    required
+                    id='outlined-required'
+                    label='Vĩ độ'
+                    type='number'
                     {...field}
                     {...register("latitude")}
-                    type='number'
-                    className={classes["input-custom"]}
+                    fullWidth
                   />
+
                   {errors.latitude && (
                     <div className={classes["error-text"]}>{errors.latitude.message}</div>
                   )}
@@ -239,18 +248,20 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
           </Box>
 
           <Box className={classes["input-small"]}>
-            <label>Tung độ: </label>
             <Controller
               control={control}
               name='longitude'
               defaultValue={data.longitude}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
-                    {...field}
-                    {...register("longitude")}
+                  <TextField
+                    required
+                    id='outlined-required'
+                    label='Tung độ'
                     type='number'
-                    className={classes["input-custom"]}
+                    {...field}
+                    {...register("latitude")}
+                    fullWidth
                   />
                   {errors.longitude && (
                     <div className={classes["error-text"]}>{errors.longitude.message}</div>
@@ -260,10 +271,10 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
             />
           </Box>
         </Box>
-      </div>
+      </Box>
 
       {/* Loại vị trí */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Loại vị trí:</label>
         <Controller
           control={control}
@@ -271,31 +282,33 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
           defaultValue={data.locationType.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select
+              <Select
                 {...field}
                 {...register("locationTypeId")}
-                className={classes["select-custom"]}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
               >
-                <option value=''>Chọn loại vị trí</option>
+                <MenuItem value='' disabled>
+                  Chọn loại vị trí
+                </MenuItem>
                 {locationTypes.length > 0 &&
-                  locationTypes.map((locationType: LocationType, index: number) => {
-                    return (
-                      <option value={locationType.id} key={locationType.id}>
-                        {locationType.name}
-                      </option>
-                    );
-                  })}
-              </select>
+                  locationTypes.map((locationType: LocationType, index: number) => (
+                    <MenuItem value={locationType.id} key={locationType.id}>
+                      {locationType.name}
+                    </MenuItem>
+                  ))}
+              </Select>
               {errors.locationTypeId && (
                 <div className={classes["error-text"]}>{errors.locationTypeId.message}</div>
               )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình thức quảng cáo */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình thức quảng cáo:</label>
         <Controller
           control={control}
@@ -303,31 +316,33 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
           defaultValue={data.adsForm.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select
+              <Select
                 {...field}
                 {...register("advertiseFormId")}
-                className={classes["select-custom"]}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
               >
-                <option value=''>Chọn hình thức quảng cáo</option>
+                <MenuItem value='' disabled>
+                  Chọn hình thức quảng cáo
+                </MenuItem>
                 {adsForms.length > 0 &&
-                  adsForms.map((adsForm: AdvertiseForm, index: number) => {
-                    return (
-                      <option value={adsForm.id} key={adsForm.id}>
-                        {adsForm.name}
-                      </option>
-                    );
-                  })}
-              </select>
+                  adsForms.map((adsForm: AdvertiseForm, index: number) => (
+                    <MenuItem value={adsForm.id} key={adsForm.id}>
+                      {adsForm.name}
+                    </MenuItem>
+                  ))}
+              </Select>
               {errors.advertiseFormId && (
                 <div className={classes["error-text"]}>{errors.advertiseFormId.message}</div>
               )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Quy hoạch */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Quy hoạch:</label>
         <Controller
           control={control}
@@ -335,21 +350,29 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
           defaultValue={data.planning}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field} {...register("planning")} className={classes["select-custom"]}>
-                <option value=''>Chọn quy hoạch</option>
-                <option value='false'>Chưa quy hoạch</option>
-                <option value='true'>Đã quy hoạch</option>
-              </select>
+              <Select
+                {...field}
+                {...register("planning")}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
+              >
+                <MenuItem value='' disabled>
+                  Chọn quy hoạch
+                </MenuItem>
+                <MenuItem value='false'>Chưa quy hoạch</MenuItem>
+                <MenuItem value='true'>Đã quy hoạch</MenuItem>
+              </Select>
               {errors.planning && (
                 <div className={classes["error-text"]}>{errors.planning.message}</div>
               )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình ảnh */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình ảnh:</label>
         <Controller
           control={control}
@@ -443,7 +466,7 @@ const MyForm: React.FC<FormEditLocationDCMSProps> = ({
             </div>
           )}
         />
-      </div>
+      </Box>
 
       <ButtonSubmit type='submit'>Cập nhật</ButtonSubmit>
     </form>
@@ -455,7 +478,7 @@ export const LocationEditCDMS = () => {
   const { id } = useParams<{ id: string }>();
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.dcms.replace(":id", `${id}`)}`);
+    navigate(`${routes.admin.locations.dcms}`);
   };
 
   const [locationData, setLocationData] = useState(null);
@@ -508,41 +531,42 @@ export const LocationEditCDMS = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["location-edit-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
 
-          {locationData && (
-            <Box className={classes["info-edit-container"]}>
-              <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
-              <MyForm
-                data={locationData}
-                locationTypes={locationTypes}
-                adsForms={adsForms}
-                updateLocationByCDMSRequest={handleGetSuccessState}
-                locationId={Number(id)}
-              />
-            </Box>
-          )}
+            {locationData && (
+              <Box className={classes["info-edit-container"]}>
+                <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
+                <MyForm
+                  data={locationData}
+                  locationTypes={locationTypes}
+                  adsForms={adsForms}
+                  createLocationEditRequest={handleGetSuccessState}
+                  locationId={Number(id)}
+                />
+              </Box>
+            )}
 
-          <Snackbar
-            open={isCreateSuccess !== null}
-            autoHideDuration={3000}
-            onClose={() => setIsCreateSuccess(null)}
-          >
-            <Alert
-              severity={isCreateSuccess ? "success" : "error"}
+            <Snackbar
+              open={isCreateSuccess !== null}
+              autoHideDuration={3000}
               onClose={() => setIsCreateSuccess(null)}
             >
-              {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
-            </Alert>
-          </Snackbar>
-        </Box>
+              <Alert
+                severity={isCreateSuccess ? "success" : "error"}
+                onClose={() => setIsCreateSuccess(null)}
+              >
+                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+              </Alert>
+            </Snackbar>
+          </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

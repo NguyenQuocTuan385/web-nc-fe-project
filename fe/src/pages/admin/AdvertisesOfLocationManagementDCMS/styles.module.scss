@@ -1,14 +1,17 @@
 $pacing-main: 15px;
 
-.location-management-container {
+.advertise-management-container {
   display: flex;
   justify-content: center;
   background-color: #fff;
   padding: $pacing-main;
-  padding-bottom: 0;
   // margin-top: 60px;
-  height: 100vh;
+  height: 100%;
   background-color: var(--blue-50);
+}
+
+.search-container {
+  margin-bottom: 15px;
 }
 
 .container-body {
@@ -22,11 +25,6 @@ $pacing-main: 15px;
   margin-top: calc($pacing-main * 2);
 }
 
-.search-container {
-  display: flex;
-  align-items: center;
-}
-
 .pagination-custom {
   margin-top: $pacing-main;
   display: flex;
@@ -34,13 +32,13 @@ $pacing-main: 15px;
   justify-content: space-between;
 }
 
+.noList {
+  text-align: center;
+}
+
 .pagination {
   width: 100%;
   background-color: white;
   display: flex;
   justify-content: center;
-}
-
-.noList {
-  text-align: center;
 }
