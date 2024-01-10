@@ -8,7 +8,7 @@
   color: var(--red-error) !important;
 }
 [class~="MuiDialog-paper"] {
-  max-width: 1000px !important;
+  max-width: 1200px !important;
 }
 
 .sizeTable {
@@ -27,12 +27,15 @@
 
 .blue {
   color: var(--blue-500);
+  font-weight: bold;
 }
 
 .green {
   color: var(--green-600);
+  font-weight: bold;
 }
 
 .red {
   color: var(--red-error);
+  font-weight: bold;
 }

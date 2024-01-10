@@ -34,6 +34,10 @@ const MenuAvatar = () => {
     setAnchorEl(null);
   };
 
+  const updateProfileHandler = () => {
+    navigate(routes.admin.users.edit);
+  };
+
   const handleLogout = () => {
     setAnchorEl(null);
 
@@ -68,7 +72,7 @@ const MenuAvatar = () => {
           "aria-labelledby": "basic-button"
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={updateProfileHandler}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>

@@ -8,7 +8,8 @@ export const routes = {
     root: "/admin",
     users: {
       root: "/admin/users",
-      create: "/admin/users/create"
+      create: "/admin/users/create",
+      edit: "/admin/users/edit"
     },
     reviewEdit: {
       root: "/admin/review/edit",

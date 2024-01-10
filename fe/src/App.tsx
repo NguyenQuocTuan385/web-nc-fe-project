@@ -50,6 +50,7 @@ import RequireAuth from "components/common/RequireAuth";
 import { ERole } from "models/general";
 import UnAuthorized from "pages/common/UnAuthorized";
 import { WardDashBoard } from "pages/admin/WardDashboard";
+import EditProfile from "pages/admin/EditProfile";
 
 function App() {
   injectStore(store);
@@ -64,6 +65,7 @@ function App() {
             <Route path={routes.admin.reviewEdit.root} Component={EditAdLicense} />
 
             <Route path={routes.admin.users.create} Component={CreateAccount} />
+            <Route path={routes.admin.users.edit} Component={EditProfile} />
 
             <Route
               path={routes.admin.reviewEdit.location}
@@ -113,6 +115,10 @@ function App() {
             <Route path={routes.admin.reports.wardEdit} Component={ReportHandle} />
             <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
 
+            {/* Reports */}
+            <Route path={routes.admin.reports.root} Component={ReportsManagement} />
+            <Route path={routes.admin.reports.edit} Component={ReportHandle} />
+            <Route path={routes.admin.reports.details} Component={ReportDetail} />
             <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
             <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
             <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
