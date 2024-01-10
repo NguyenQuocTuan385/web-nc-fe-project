@@ -7,7 +7,11 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  InputAdornment,
+  MenuItem,
+  Select,
   Snackbar,
+  TextField,
   Typography
 } from "@mui/material";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
@@ -172,19 +176,26 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         <Controller
           control={control}
           name='adsTypeId'
-          defaultValue={data.adsTypeId}
+          defaultValue={data.adsType.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field} {...register("adsTypeId")} className={classes["select-custom"]}>
+              <Select
+                {...field}
+                {...register("adsTypeId")}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
+              >
+                <MenuItem value='' disabled>
+                  Chọn hình thức quảng cáo
+                </MenuItem>
                 {adsTypes.length > 0 &&
-                  adsTypes.map((adsType: AdvertiseType) => {
-                    return (
-                      <option value={adsType.id} key={adsType.id}>
-                        {adsType.name}
-                      </option>
-                    );
-                  })}
-              </select>
+                  adsTypes.map((adsType: AdvertiseType) => (
+                    <MenuItem value={adsType.id} key={adsType.id}>
+                      {adsType.name}
+                    </MenuItem>
+                  ))}
+              </Select>
               {errors.adsTypeId && (
                 <div className={classes["error-text"]}>{errors.adsTypeId.message}</div>
               )}
@@ -202,10 +213,19 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
           defaultValue={data.licensing}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field} {...register("licensing")} className={classes["select-custom"]}>
-                <option value='false'>Chưa cấp phép</option>
-                <option value='true'>Đã cấp phép</option>
-              </select>
+              <Select
+                {...field}
+                {...register("licensing")}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
+              >
+                <MenuItem value='' disabled>
+                  Chọn tình trạng cấp phép
+                </MenuItem>
+                <MenuItem value='false'>Chưa cấp phép</MenuItem>
+                <MenuItem value='true'>Đã cấp phép</MenuItem>
+              </Select>
               {errors.licensing && (
                 <div className={classes["error-text"]}>{errors.licensing.message}</div>
               )}
@@ -219,18 +239,23 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         <label>Kích thước:</label>
         <Box className={classes["size-container"]}>
           <Box className={classes["input-small"]}>
-            <label>Độ dài: </label>
             <Controller
               control={control}
               name='width'
               defaultValue={data.width}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
+                  <TextField
+                    required
+                    InputProps={{
+                      endAdornment: <InputAdornment position='end'>m</InputAdornment>
+                    }}
+                    id='outlined-required'
+                    label='Độ dài'
+                    type='number'
                     {...field}
                     {...register("width")}
-                    type='number'
-                    className={classes["input-custom"]}
+                    fullWidth
                   />
                   {errors.width && (
                     <div className={classes["error-text"]}>{errors.width.message}</div>
@@ -241,18 +266,23 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
           </Box>
 
           <Box className={classes["input-small"]}>
-            <label>Độ cao: </label>
             <Controller
               control={control}
               name='height'
               defaultValue={data.height}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
+                  <TextField
+                    required
+                    InputProps={{
+                      endAdornment: <InputAdornment position='end'>m</InputAdornment>
+                    }}
+                    id='outlined-required'
+                    label='Độ cao'
+                    type='number'
                     {...field}
                     {...register("height")}
-                    type='number'
-                    className={classes["input-custom"]}
+                    fullWidth
                   />
                   {errors.height && (
                     <div className={classes["error-text"]}>{errors.height.message}</div>
@@ -273,11 +303,13 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
           defaultValue={data.pillarQuantity ? data.pillarQuantity : 0}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input
+              <TextField
+                required
+                id='outlined-required'
                 {...field}
                 {...register("pillarQuantity")}
+                fullWidth
                 type='number'
-                className={classes["input-custom"]}
               />
               {errors.pillarQuantity && (
                 <div className={classes["error-text"]}>{errors.pillarQuantity.message}</div>
@@ -290,22 +322,6 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
       {/* Lý do chỉnh sửa */}
       <Box className={classes["input-container"]}>
         <label>Lý do chỉnh sửa:</label>
-        {/* <Controller
-          control={control}
-          name='content'
-          render={({ field }) => (
-            <div className={classes["input-error-container"]}>
-              <textarea
-                {...field}
-                {...register("content")}
-                className={classes["textarea-custom"]}
-              ></textarea>
-              {errors.content && (
-                <div className={classes["error-text"]}>{errors.content.message}</div>
-              )}
-            </div>
-          )}
-        /> */}
         <Controller
           control={control}
           name='content'
@@ -449,6 +465,7 @@ interface InfoContract {
   companyEmail: string;
   companyPhone: string;
   companyAddress: string;
+  images: string;
   startAt: string;
   endAt: string;
 }
@@ -457,14 +474,13 @@ export const AdvertiseEdit = () => {
   const navigate = useNavigate();
   const { locationId, advertiseId } = useParams<{ locationId: string; advertiseId: string }>();
 
-  // const infoContract = advertiseDetail.contracts[0];
   const [infoContract, setInfoContract] = useState<InfoContract | null>(null);
   const [infoAds, setInfoAds] = useState<Advertise | null>(null);
   const [adsTypes, setAdsTypes] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
 
   const goBack = () => {
-    navigate(`${routes.admin.advertises.ofLocation.replace(":id", `${locationId}`)}`);
+    navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${locationId}`)}`);
   };
 
   useEffect(() => {
@@ -476,6 +492,7 @@ export const AdvertiseEdit = () => {
             companyAddress: res.companyAddress,
             companyEmail: res.companyEmail,
             companyPhone: res.companyPhone,
+            images: res.images,
             startAt: res.startAt,
             endAt: res.endAt
           });
@@ -508,58 +525,75 @@ export const AdvertiseEdit = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["advertise-edit-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
 
-          <Box>
-            <Heading2>Thông tin công ty</Heading2>
-            {infoContract && <InfoContract data={infoContract} />}
-            {infoContract && (
-              <Typography>
-                <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
-                <span>{infoContract.startAt}</span>
-              </Typography>
-            )}
-            {infoContract && (
-              <Typography>
-                <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
-                <span>{infoContract.endAt}</span>
-              </Typography>
-            )}
-          </Box>
+            <Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                {infoContract && (
+                  <img
+                    className={classes.image}
+                    src={infoContract.images}
+                    alt='Hình ảnh công ty'
+                    width={"50%"}
+                    height={"250px"}
+                  />
+                )}
+                <Box
+                  sx={{
+                    marginLeft: "24px"
+                  }}
+                >
+                  {infoContract && <InfoContract data={infoContract} />}
+                  {infoContract && (
+                    <Typography>
+                      <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
+                      <span>{infoContract.startAt}</span>
+                    </Typography>
+                  )}
+                  {infoContract && (
+                    <Typography>
+                      <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
+                      <span>{infoContract.endAt}</span>
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+            </Box>
 
-          <Box mt='30px'>
-            <Heading2>Thông tin quảng cáo</Heading2>
-            {infoAds && (
-              <MyForm
-                data={infoAds}
-                createAdvertiseEditRequest={handleGetSuccessState}
-                adsTypes={adsTypes}
-                locationId={Number(locationId)}
-                advertiseId={Number(advertiseId)}
-              />
-            )}
-          </Box>
+            <Box mt='30px'>
+              <Heading2>Thông tin quảng cáo</Heading2>
+              {infoAds && (
+                <MyForm
+                  data={infoAds}
+                  createAdvertiseEditRequest={handleGetSuccessState}
+                  adsTypes={adsTypes}
+                  locationId={Number(locationId)}
+                  advertiseId={Number(advertiseId)}
+                />
+              )}
+            </Box>
 
-          <Snackbar
-            open={isCreateSuccess !== null}
-            autoHideDuration={3000}
-            onClose={() => setIsCreateSuccess(null)}
-          >
-            <Alert
-              severity={isCreateSuccess ? "success" : "error"}
+            <Snackbar
+              open={isCreateSuccess !== null}
+              autoHideDuration={3000}
               onClose={() => setIsCreateSuccess(null)}
             >
-              {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
-            </Alert>
-          </Snackbar>
-        </Box>
+              <Alert
+                severity={isCreateSuccess ? "success" : "error"}
+                onClose={() => setIsCreateSuccess(null)}
+              >
+                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+              </Alert>
+            </Snackbar>
+          </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

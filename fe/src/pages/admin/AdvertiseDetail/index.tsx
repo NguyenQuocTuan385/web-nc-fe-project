@@ -20,8 +20,8 @@ const InfoAdsBox = styled(Box)(() => ({
 }));
 
 const BoxFlex = styled(Box)(() => ({
-  display: "flex"
-  // alignItems: "center"
+  display: "flex",
+  alignItems: "center"
 }));
 
 const ButtonBack = styled(Button)(() => ({
@@ -53,6 +53,7 @@ interface InfoContract {
   companyEmail: string;
   companyPhone: string;
   companyAddress: string;
+  images: string;
   startAt: string;
   endAt: string;
 }
@@ -95,6 +96,7 @@ export const AdvertiseDetail = () => {
             companyEmail: res.companyEmail,
             companyPhone: res.companyPhone,
             companyAddress: res.companyAddress,
+            images: res.images,
             startAt: res.startAt,
             endAt: res.endAt
           });
@@ -112,48 +114,97 @@ export const AdvertiseDetail = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["advertise-detail-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
-          <BoxFlex>
-            <InfoAdsBox>
-              {/* {infoAds?.images && infoAds?.images.length > 0 && <SlideShowImages images={infoAds.images} />} */}
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
+            <BoxFlex>
               {infoAds && (
-                <img src={infoAds.images} alt='Bảng quảng cáo' width={"400px"} height={"250px"} />
+                <img
+                  src={infoAds.images}
+                  className={classes.image}
+                  alt='Bảng quảng cáo'
+                  width={"50%"}
+                  height={"250px"}
+                />
               )}
-              <BoxFlex ml={"15px"}>{infoAds && <InfoAdvertise data={infoAds} />}</BoxFlex>
-            </InfoAdsBox>
-            <Box>{infoContract && infoContract && <InfoContract data={infoContract} />}</Box>
-          </BoxFlex>
-
-          <Box mt={"15px"}>
-            <Heading4>Vị trí trên bản đồ</Heading4>
-            <img
-              src='https://inuvcuon.vn/images/2018/08/voi-nhung-cong-cu-rat-huu-ich-ban-da-co-the-in-truc-tiep-ngay-tren-google-map.jpg'
-              alt='Bản đồ'
-              width={"100%"}
-              height={"250px"}
-            />
-
-            {infoContract && (
-              <Box mt={"15px"}>
-                <Typography>
-                  <span className={classes.title}>Bắt đầu hợp đồng: </span>{" "}
-                  <span>{infoContract.startAt}</span>
-                </Typography>
-                <Typography>
-                  <span className={classes.title}>Kết thúc hợp đồng: </span>{" "}
-                  <span>{infoContract.endAt}</span>
-                </Typography>
+              <Box
+                width={"50%"}
+                ml={"15px"}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  height: "350px",
+                  alignItems: "center",
+                  padding: "15px"
+                }}
+              >
+                {infoAds && <InfoAdvertise data={infoAds} />}
               </Box>
-            )}
+            </BoxFlex>
+
+            <BoxFlex
+              sx={{
+                justifyContent: "flex-end",
+                marginTop: "24px"
+              }}
+            >
+              {infoContract && (
+                <img
+                  className={`${classes.image} ${classes.smallImage}`}
+                  src={infoContract.images}
+                  alt='Hình ảnh công ty'
+                  width={"50%"}
+                  height={"250px"}
+                />
+              )}
+              <Box
+                width={"50%"}
+                ml={"15px"}
+                sx={{
+                  display: "flex",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  height: "350px",
+                  alignItems: "center",
+                  padding: "15px"
+                }}
+              >
+                {infoContract && infoContract && <InfoContract data={infoContract} />}
+              </Box>
+            </BoxFlex>
+
+            <Box mt={"15px"}>
+              <Heading4>Vị trí trên bản đồ</Heading4>
+              <img
+                className={classes.imageMap}
+                src='https://inuvcuon.vn/images/2018/08/voi-nhung-cong-cu-rat-huu-ich-ban-da-co-the-in-truc-tiep-ngay-tren-google-map.jpg'
+                alt='Bản đồ'
+                width={"100%"}
+                height={"250px"}
+              />
+
+              {infoContract && (
+                <Box mt={"15px"}>
+                  <Typography>
+                    <span className={classes.title}>Bắt đầu hợp đồng: </span>{" "}
+                    <span>{infoContract.startAt}</span>
+                  </Typography>
+                  <Typography>
+                    <span className={classes.title}>Kết thúc hợp đồng: </span>{" "}
+                    <span>{infoContract.endAt}</span>
+                  </Typography>
+                </Box>
+              )}
+            </Box>
           </Box>
-        </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

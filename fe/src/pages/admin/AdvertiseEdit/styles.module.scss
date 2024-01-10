@@ -5,15 +5,18 @@ $pacing-main: 15px;
   justify-content: center;
   background-color: #fff;
   padding: $pacing-main;
-  margin-top: 60px;
+  padding-bottom: 0;
+  height: 100vh;
+  // margin-top: 60px;
   background-color: var(--blue-50);
 }
 
 .container-body {
-  width: calc(100% - 300px);
+  // width: calc(100% - 300px);
   background-color: #fff;
   border-radius: 8px;
   padding: $pacing-main;
+  padding-bottom: calc($pacing-main * 4);
 }
 
 .title {
@@ -33,7 +36,6 @@ form {
   display: flex;
   justify-content: space-between;
   margin-bottom: $pacing-main;
-  align-items: center;
 }
 
 .input-error-container {
@@ -85,4 +87,10 @@ label {
 .input-small:nth-child(2) {
   display: flex;
   justify-content: flex-end;
+}
+
+.image {
+  border-radius: 8px;
+  width: 50%;
+  height: 350px;
 }

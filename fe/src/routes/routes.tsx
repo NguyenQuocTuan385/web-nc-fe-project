@@ -25,7 +25,10 @@ export const routes = {
       create: "/admin/advertises/create",
       edit: "/admin/advertises/edit/:locationId/:advertiseId",
       details: "/admin/advertises/:id",
-      ofLocation: "/admin/advertises/locations/:id"
+      ofLocation: "/admin/advertises/locations/:id",
+      wardOfLocation: "/admin/ward/locations/:id/advertises",
+      wardDetails: "/admin/ward/advertises/:id",
+      wardEdit: "/admin/ward/advertises/edit/:locationId/:advertiseId"
     },
     locations: {
       dcms: "/admin/dcms/locations",
@@ -35,7 +38,9 @@ export const routes = {
       root: "/admin/locations",
       create: "/admin/locations/create",
       edit: "/admin/locations/edit/:id",
-      district: "/admin/district/locations"
+      district: "/admin/district/locations",
+      ward: "/admin/ward/locations",
+      wardEdit: "/admin/ward/locations/edit/:id"
     },
     properties: {
       district: "/admin/districts",
@@ -51,7 +56,10 @@ export const routes = {
       root: "/admin/reports",
       edit: "/admin/reports/edit/:id",
       details: "/admin/report/:id",
-      district: "/admin/district/reports"
+      district: "/admin/district/reports",
+      ward: "/admin/ward/reports",
+      wardEdit: "/admin/ward/reports/edit/:id",
+      wardDetails: "/admin/ward/report/:id"
     },
     reportForm: {
       root: "/admin/report-forms"
@@ -73,6 +81,9 @@ export const routes = {
       root: "/admin/recover",
       verify: "admin/recover/code",
       reset: "admin/recover/password"
+    },
+    dashboard: {
+      wardDashboard: "/admin/ward/dashboard"
     }
   }
 };
