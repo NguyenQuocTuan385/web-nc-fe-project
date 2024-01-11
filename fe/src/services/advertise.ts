@@ -1,6 +1,11 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { GetAdvertises, UpdateAdvertise, UpdateAdvertiseStatus, UpdateStatus } from "models/advertise";
+import {
+  GetAdvertises,
+  UpdateAdvertise,
+  UpdateAdvertiseStatus,
+  UpdateStatus
+} from "models/advertise";
 
 export class AdvertiseService {
   static async getAdvertisesByLocationId(id: number, data: GetAdvertises, api: any): Promise<any> {
@@ -23,18 +28,43 @@ export class AdvertiseService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async updateAdvertiseLicense(id: number, data: UpdateAdvertiseStatus): Promise<any> {
+  static async updateAdvertiseLicense(
+    id: number,
+    data: UpdateAdvertiseStatus,
+    api: any
+  ): Promise<any> {
     return await api
       .put(`${API.ADVERTISE.UPDATE_LICENSE.replace(":id", `${id}`)}`, data)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
 
-  static async getAdvertiseById(id: number, api: any): Promise<any> {
+  static async updateAdvertisesId(id: number, data: UpdateAdvertiseStatus, api: any): Promise<any> {
+    return await api
+      .put(`${API.ADVERTISE.UPDATE_LICENSE.replace(":id", `${id}`)}`, data)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
+  static async getAllUnLicensingAdvertisement(data: GetAdvertises, api: any): Promise<any> {
+    return await api
+      .get(`${API.ADVERTISE.GET_ALL_UNLICENSING}`, { params: data })
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async getAdvertisesById(id: number, api: any): Promise<any> {
     return await api
       .get(`${API.ADVERTISE.GET_BY_ID.replace(":id", `${id}`)}`)
       .then((res: any) => {
@@ -44,65 +74,33 @@ export class AdvertiseService {
         return Promise.reject(e?.response?.data);
       });
   }
-
-  static async updateAdvertisesId(id: number, data: UpdateAdvertiseStatus): Promise<any> {
-    return await api
-      .put(`${API.ADVERTISE.UPDATE_LICENSE.replace(":id", `${id}`)}`, data)
-      .then((res) => {
-        return Promise.resolve(res.data);
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      });
-  }
-
-  static async getAllUnLicensingAdvertisement(data: GetAdvertises): Promise<any> {
-    return await api
-      .get(`${API.ADVERTISE.GET_ALL_UNLICENSING}`, { params: data })
-      .then((res) => {
-        return Promise.resolve(res.data);
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      });
-  }
-  static async getAdvertisesById(id: number): Promise<any> {
-    return await api
-      .get(`${API.ADVERTISE.GET_BY_ID.replace(":id", `${id}`)}`)
-      .then((res) => {
-        return Promise.resolve(res.data);
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      });
-  }
-  static async updateStatus(id: number, data: UpdateStatus): Promise<any> {
+  static async updateStatus(id: number, data: UpdateStatus, api: any): Promise<any> {
     return await api
       .put(`${API.ADVERTISE.UPDATE_STATUS.replace(":id", `${id}`)}`, data)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async updateAdvertise(id: number, data: UpdateAdvertise): Promise<any> {
+  static async updateAdvertise(id: number, data: UpdateAdvertise, api: any): Promise<any> {
     return await api
       .put(`${API.ADVERTISE.UPDATE.replace(":id", `${id}`)}`, data)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async deleteAdvertiseEditById(id: number): Promise<any> {
+  static async deleteAdvertiseEditById(id: number, api: any): Promise<any> {
     return await api
       .delete(`${API.ADVERTISE.DELETE_ADVERTISE_EDIT.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

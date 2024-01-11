@@ -15,7 +15,7 @@ function ContractForm() {
   const intercept = useIntercepts();
 
   useEffect(() => {
-    AdvertiseService.getAdvertiseById(Number(id), intercept)
+    AdvertiseService.getAdvertisesById(Number(id), intercept)
       .then((res) => {
         setAdvertise(res);
       })

@@ -3,63 +3,53 @@ import api from "./configApi";
 import { User, GetUsers, UserRequest, RequestOTPUser } from "models/user";
 
 export class Userservice {
-  static async getUsers(data: GetUsers): Promise<any> {
+  static async getUsers(data: GetUsers, api: any): Promise<any> {
     return await api
       .get(`${API.USER.DEFAULT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getUserbyId(id: Number): Promise<any> {
+  static async getUserbyId(id: Number, api: any): Promise<any> {
     return await api
       .get(`${API.USER.DETAIL.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async createUser(userRequest: UserRequest): Promise<any> {
-    return await api
-      .post(`${API.USER.CREATE}`, userRequest)
-      .then((res) => {
-        return Promise.resolve(res.data);
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      });
-  }
-  static async updateUser(id: Number, userRequest: UserRequest): Promise<any> {
+  static async updateUser(id: Number, userRequest: UserRequest, api: any): Promise<any> {
     return await api
       .put(`${API.USER.UPDATE.replace(":id", `${id}`)}`, userRequest)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async deleteUser(id: Number): Promise<any> {
+  static async deleteUser(id: Number, api: any): Promise<any> {
     return await api
       .delete(`${API.USER.DELETE.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async checkOTP(data: RequestOTPUser): Promise<any> {
+  static async checkOTP(data: RequestOTPUser, api: any): Promise<any> {
     return await api
       .post(`${API.USER.CHECK_OTP}`, data)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

@@ -70,7 +70,7 @@ export const AdvertiseDetail = () => {
 
   useEffect(() => {
     const getAdvertiseDetails = async () => {
-      AdvertiseService.getAdvertiseById(Number(id), intercept)
+      AdvertiseService.getAdvertisesById(Number(id), intercept)
         .then((res) => {
           setInfoAds({
             adsType: res.adsType.name,

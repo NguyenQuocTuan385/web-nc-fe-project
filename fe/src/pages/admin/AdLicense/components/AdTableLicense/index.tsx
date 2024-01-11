@@ -17,7 +17,7 @@ import { Contract, EContractStatus } from "models/contract";
 import ContractService from "services/contract";
 import queryString from "query-string";
 import AdvertiseService from "services/advertise";
-import dayjs from "dayjs";
+import useIntercepts from "hooks/useIntercepts";
 interface FilterProps {
   district?: number;
   ward?: number;
@@ -27,6 +27,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
   const [update, setUpdate] = useState(false);
+  const intercept = useIntercepts();
 
   const [page, setPage] = React.useState(() => {
     const params = queryString.parse(locationHook.search);
@@ -88,9 +89,13 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
     navigate(`${routes.admin.reviewLisence.dcmsDetail}`.replace(":id", row.id.toString()));
   };
   const updateAdvertisesById = async (row: Contract) => {
-    AdvertiseService.updateAdvertiseLicense(row.advertise.id, {
-      licensing: true
-    })
+    AdvertiseService.updateAdvertiseLicense(
+      row.advertise.id,
+      {
+        licensing: true
+      },
+      intercept
+    )
       .then((res) => {
         console.log(res);
       })

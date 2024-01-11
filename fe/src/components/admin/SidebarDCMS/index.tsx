@@ -133,7 +133,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function SideBarDCMS({ children }: any) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -165,7 +165,7 @@ export default function SideBarDCMS({ children }: any) {
               <MenuIcon />
             </IconButton>
             <Typography variant='h6' noWrap component='div' color={"black"}>
-              Cán Bộ Phường
+              Sở văn hóa
             </Typography>
           </Box>
           <Header></Header>

@@ -17,8 +17,8 @@ import { routes } from "routes/routes";
 import AdvertiseService from "services/advertise";
 import queryString from "query-string";
 import { Advertise, TAB_ADVERTISE, UpdateStatus } from "models/advertise";
-
-const rows = [...ads];
+import useIntercepts from "hooks/useIntercepts";
+import { DateHelper } from "helpers/date";
 interface FilterProps {
   district?: string;
   ward?: string;
@@ -37,6 +37,7 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   const [dataList, setDataList] = useState<Advertise[]>([]);
   const [update, setUpdate] = useState(false);
   const navigate = useNavigate();
+  const intercept = useIntercepts();
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -60,13 +61,16 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
 
   useEffect(() => {
     const getAllUnLicensingAdvertisement = async () => {
-      AdvertiseService.getAllUnLicensingAdvertisement({
-        propertyId: ward ? Number(ward) : undefined,
-        parentId: district ? Number(district) : undefined,
-        search: fieldSearch,
-        pageSize: rowsPerPage,
-        current: Number(page) + 1
-      })
+      AdvertiseService.getAllUnLicensingAdvertisement(
+        {
+          propertyId: ward ? Number(ward) : undefined,
+          parentId: district ? Number(district) : undefined,
+          search: fieldSearch,
+          pageSize: rowsPerPage,
+          current: Number(page) + 1
+        },
+        intercept
+      )
         .then((res) => {
           setUpdate(false);
           setDataList(res.content);
@@ -89,17 +93,9 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   }, [fieldSearch, page, rowsPerPage, ward, district, update]);
 
   const emptyRows = rowsPerPage - dataList.length;
-  function convertDateFormat(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    };
-    return new Date(date).toLocaleDateString("en-GB", options);
-  }
 
   const deleteAdvertiseEdit = async (id: number) => {
-    await AdvertiseService.deleteAdvertiseEditById(id)
+    await AdvertiseService.deleteAdvertiseEditById(id, intercept)
       .then((res) => {
         console.log(res);
       })
@@ -108,7 +104,7 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
       });
   };
   const updateStatus = async (id: number, updateStatus: UpdateStatus) => {
-    await AdvertiseService.updateStatus(id, updateStatus)
+    await AdvertiseService.updateStatus(id, updateStatus, intercept)
       .then((res) => {
         console.log(res);
       })
@@ -119,15 +115,19 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   const handleClickAccept = async (event: React.MouseEvent, data: Advertise) => {
     event.stopPropagation();
     const updateAdvertise = async (data: Advertise) => {
-      await AdvertiseService.updateAdvertise(data.id, {
-        licensing: data.licensing,
-        width: data.advertiseEdit?.width!!,
-        height: data.advertiseEdit?.height!!,
-        images: data.advertiseEdit?.images!!,
-        locationId: data.advertiseEdit?.location.id!!,
-        adsTypeId: data.advertiseEdit?.adsType.id!!,
-        pillarQuantity: data.pillarQuantity!!
-      })
+      await AdvertiseService.updateAdvertise(
+        data.id,
+        {
+          licensing: data.licensing,
+          width: data.advertiseEdit?.width!!,
+          height: data.advertiseEdit?.height!!,
+          images: data.advertiseEdit?.images!!,
+          locationId: data.advertiseEdit?.location.id!!,
+          adsTypeId: data.advertiseEdit?.adsType.id!!,
+          pillarQuantity: data.pillarQuantity!!
+        },
+        intercept
+      )
         .then((res) => {
           console.log(res);
         })
@@ -181,7 +181,8 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
                   <div className={classes.textOverflow}>{row.location.address}</div>
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.advertiseEdit?.createdAt && convertDateFormat(row.advertiseEdit?.createdAt)}
+                  {row.advertiseEdit?.createdAt &&
+                    DateHelper.formatDateToDDMMYYYY(row.advertiseEdit?.createdAt)}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
                   {row.adsType.name}

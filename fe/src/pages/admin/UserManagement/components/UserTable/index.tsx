@@ -18,6 +18,7 @@ import Userservice from "services/user";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import AlertDialog from "components/admin/ConfirmDialog";
+import useIntercepts from "hooks/useIntercepts";
 
 interface FilterProps {
   role?: number;
@@ -37,9 +38,10 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
   const [openPopup, setOpenPopup] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [id, setId] = useState(0);
+  const intercept = useIntercepts();
   const handleClick = (id: number) => {
     const getUserById = async () => {
-      Userservice.getUserbyId(id)
+      Userservice.getUserbyId(id, intercept)
         .then((res) => {
           setUser(res);
           setOpenPopup(true);
@@ -57,12 +59,15 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
   };
   const navigate = useNavigate();
   const getUsers = async () => {
-    Userservice.getUsers({
-      search: fieldSearch,
-      ...(role && { roleId: role }),
-      pageSize: rowsPerPage,
-      current: Number(page) + 1
-    })
+    Userservice.getUsers(
+      {
+        search: fieldSearch,
+        ...(role && { roleId: role }),
+        pageSize: rowsPerPage,
+        current: Number(page) + 1
+      },
+      intercept
+    )
       .then((res) => {
         setDataList(res.content);
         setTotalPage(res.totalPages);
@@ -84,6 +89,10 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
     getUsers();
   }, [role, rowsPerPage, page, fieldSearch]);
 
+  useEffect(() => {
+    setPage(0);
+  }, [role]);
+
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
     navigate({
@@ -101,9 +110,18 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const getDynamicColor = (roleId: number) => {
+    if (roleId === 2) {
+      return <span style={{ color: "#008000", fontWeight: "bold" }}>Phường</span>;
+    } else {
+      return <span style={{ color: "var(--blue-500)", fontWeight: "bold" }}>Quận</span>;
+    }
+  };
+
   const confirmDelete = (id: number) => {
     const deleteUser = async () => {
-      Userservice.deleteUser(id)
+      Userservice.deleteUser(id, intercept)
         .then((res) => {
           getUsers();
         })
@@ -153,7 +171,7 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
                   {row.email}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.role.id === 2 ? "Phường" : "Quận"}
+                  {getDynamicColor(row.role.id)}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
                   {row.property.propertyParent === null

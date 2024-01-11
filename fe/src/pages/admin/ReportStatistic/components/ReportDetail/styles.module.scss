@@ -1,0 +1,40 @@
+$pacing-main: 15px;
+
+.report-detail-container {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: $pacing-main;
+  padding-bottom: 0;
+  // margin-top: 60px;
+  height: 100vh;
+  background-color: var(--blue-50);
+}
+
+.container-body {
+  // width: calc(100% - 300px);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: $pacing-main;
+}
+
+.title {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600 !important;
+}
+
+span {
+  font-family: Inter, sans-serif;
+}
+
+img {
+  border-radius: 8px;
+}
+
+.text-active {
+  color: #00ba00 !important;
+}
+
+.text-inactive {
+  color: rgb(241, 35, 35) !important;
+}

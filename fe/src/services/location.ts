@@ -29,43 +29,43 @@ export class LocationService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async updateLocationsById(id: number, data: putLocation): Promise<any> {
+  static async updateLocationsById(id: number, data: putLocation, api: any): Promise<any> {
     return await api
       .put(`${API.LOCATION.UPDATE.replace(":id", `${id}`)}`, data)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async updateStatus(id: number, data: updateStatus): Promise<any> {
+  static async updateStatus(id: number, data: updateStatus, api: any): Promise<any> {
     return await api
       .put(`${API.LOCATION.UPDATE_STATUS.replace(":id", `${id}`)}`, data)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async deleteLocationEditById(id: number): Promise<any> {
+  static async deleteLocationEditById(id: number, api: any): Promise<any> {
     return await api
       .delete(`${API.LOCATION.DELETE.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getLocationsReview(data: GetLocations): Promise<any> {
+  static async getLocationsReview(data: GetLocations, api: any): Promise<any> {
     return await api
       .get(`${API.LOCATION.GET_ALL_REVIEW}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

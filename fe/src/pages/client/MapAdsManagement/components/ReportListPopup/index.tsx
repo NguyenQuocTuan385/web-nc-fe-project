@@ -23,6 +23,7 @@ import { DateHelper } from "helpers/date";
 import ReportViewPopup from "./ReportViewPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import useIntercepts from "hooks/useIntercepts";
 interface ReportInfoPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -34,10 +35,11 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
   const [reports, setReports] = useState<Report[]>([]);
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<Report | null>(null);
+  const intercept = useIntercepts();
 
   useEffect(() => {
     const getReportsUser = async () => {
-      ReportService.getReports({ pageSize: 999, email: "nguyenvana@gmail.com" })
+      ReportService.getReports({ pageSize: 999, email: "nguyenvana@gmail.com" }, intercept)
         .then((res) => {
           setReports(res.content);
         })
