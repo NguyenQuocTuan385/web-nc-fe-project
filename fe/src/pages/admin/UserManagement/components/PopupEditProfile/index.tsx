@@ -26,6 +26,8 @@ import DistrictService from "services/district";
 import WardService from "services/ward";
 import dayjs, { Dayjs } from "dayjs";
 import Userservice from "services/user";
+import useIntercepts from "hooks/useIntercepts";
+import { DateHelper } from "helpers/date";
 
 interface PopupProps {
   openPopup: boolean;
@@ -74,6 +76,7 @@ export default function Popup(props: PopupProps) {
   const [fileImage, setFileImage] = useState<File | null>(null);
   const [districts, setDistricts] = useState<Property[]>([]);
   const [wards, setWards] = useState<Property[]>([]);
+  const intercept = useIntercepts();
 
   const handleClickAvatar = async (event: any) => {
     const files = event.target.files;
@@ -81,7 +84,7 @@ export default function Popup(props: PopupProps) {
     setAvatarPreview(URL.createObjectURL(files[0]));
   };
   const updateUser = async (id: number, data: UserRequest) => {
-    Userservice.updateUser(id, data)
+    Userservice.updateUser(id, data, intercept)
       .then((res) => {
         setOpenPopup(false);
         resetForm();
@@ -91,15 +94,7 @@ export default function Popup(props: PopupProps) {
         console.log(err);
       });
   };
-  function convertToYYYYMMDD(dateString: string): Date {
-    const dateObject = new Date(dateString);
-    const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
-    const day = dateObject.getDate().toString().padStart(2, "0");
 
-    const formattedDate = `${year}-${month}-${day}`;
-    return new Date(formattedDate);
-  }
   const resetForm = () => {
     reset({
       name: user.name,
@@ -108,7 +103,8 @@ export default function Popup(props: PopupProps) {
       phone: user.phone,
       birthday: dayjs(user.birthday),
       role: user.role.code === "DISTRICT" ? "district" : "ward",
-      district: user.property.propertyParent === null ? user.property : user.property.propertyParent,
+      district:
+        user.property.propertyParent === null ? user.property : user.property.propertyParent,
       ward: user.property
     });
   };
@@ -117,7 +113,7 @@ export default function Popup(props: PopupProps) {
       name: data.name,
       email: data.email,
       phone: data.phone,
-      birthday: convertToYYYYMMDD(data.birthday),
+      birthday: DateHelper.convertStringToDate(data.birthday),
       avatar: user.avatar,
       roleId: selectedRole === "district" ? 3 : 2,
       propertyId: 0
@@ -143,7 +139,9 @@ export default function Popup(props: PopupProps) {
     setAvatarPreview("");
     updateUser(user.id, formSubmit);
   };
-  const [selectedRole, setSelectedRole] = useState(user.role.code === "DISTRICT" ? "district" : "ward");
+  const [selectedRole, setSelectedRole] = useState(
+    user.role.code === "DISTRICT" ? "district" : "ward"
+  );
   const [selectedDistrict, setSelectedDistrict] = React.useState<Property | null>(null);
   const [selectedWard, setSelectedWard] = React.useState<Property | null>(null);
   const getAllWard = async (id: Number) => {
@@ -166,12 +164,12 @@ export default function Popup(props: PopupProps) {
   }, [user.role.code]);
 
   useEffect(() => {
-    if (user.property.code === "QUAN") {
+    if (user.property.code === "DISTRICT") {
       setSelectedDistrict(user.property);
       setSelectedWard(null);
     } else {
       setSelectedWard(user.property);
-      setSelectedDistrict(user.property.propertyParent || null);
+      setSelectedDistrict(user.property.propertyParent!!);
     }
   }, [user.property]);
 
@@ -217,7 +215,11 @@ export default function Popup(props: PopupProps) {
               <Grid container spacing={5}>
                 <Grid item xs={12}>
                   <Box className={classes.imageContainer}>
-                    <img src={avatarPreview || user.avatar} alt='FormData' className={classes.image} />
+                    <img
+                      src={avatarPreview || user.avatar}
+                      alt='FormData'
+                      className={classes.image}
+                    />
                     <label htmlFor='icon-button-file'>
                       <Box className={classes.iconButton}>
                         <input
@@ -269,7 +271,10 @@ export default function Popup(props: PopupProps) {
                           name='birthday'
                           aria-invalid={errors.birthday ? "true" : "false"}
                           rules={{ required: true }}
-                          render={({ field: { ref, ...field }, fieldState: { invalid, error } }) => (
+                          render={({
+                            field: { ref, ...field },
+                            fieldState: { invalid, error }
+                          }) => (
                             <>
                               <DateTimePicker
                                 inputRef={ref}
@@ -310,7 +315,10 @@ export default function Popup(props: PopupProps) {
                           defaultValue={selectedRole}
                           aria-invalid={errors.role ? "true" : "false"}
                           rules={{ required: true }}
-                          render={({ field: { ref, value, ...field }, fieldState: { invalid, error } }) => (
+                          render={({
+                            field: { ref, value, ...field },
+                            fieldState: { invalid, error }
+                          }) => (
                             <>
                               <RadioGroup
                                 value={value}
@@ -322,7 +330,11 @@ export default function Popup(props: PopupProps) {
                                   setSelectedRole(e.target.value); // cập nhật giá trị trong state
                                 }}
                               >
-                                <FormControlLabel value='district' control={<Radio />} label='Quận' />
+                                <FormControlLabel
+                                  value='district'
+                                  control={<Radio />}
+                                  label='Quận'
+                                />
                                 <FormControlLabel value='ward' control={<Radio />} label='Phường' />
                               </RadioGroup>
                               <div className={classes.errorText}>{error?.message}</div>
@@ -339,7 +351,9 @@ export default function Popup(props: PopupProps) {
                               aria-invalid={errors.district ? "true" : "false"}
                               rules={{ required: true }}
                               defaultValue={
-                                user.property.propertyParent === null ? user.property : user.property.propertyParent
+                                user.property.propertyParent === null
+                                  ? user.property
+                                  : user.property.propertyParent
                               }
                               render={({ field: { onChange, value }, fieldState: { error } }) => (
                                 <>
@@ -382,7 +396,11 @@ export default function Popup(props: PopupProps) {
                                         setSelectedWard(newValue);
                                       }}
                                       renderInput={(params) => (
-                                        <TextField {...params} label='Phường' error={Boolean(error)} />
+                                        <TextField
+                                          {...params}
+                                          label='Phường'
+                                          error={Boolean(error)}
+                                        />
                                       )}
                                       value={selectedWard}
                                       disabled={selectedDistrict === null}

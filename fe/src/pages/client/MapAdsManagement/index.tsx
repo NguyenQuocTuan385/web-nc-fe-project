@@ -23,6 +23,7 @@ import { createPortal } from "react-dom";
 import PopoverHelper from "./components/PopoverHelper";
 import { Help } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
+import useIntercepts from "hooks/useIntercepts";
 
 enum ELocationCheckedSwitch {
   BOTH = 1,
@@ -75,6 +76,8 @@ const MapAdsManagement = () => {
     setOpenRandomLocationSidebar(false);
   };
 
+  const intercepts = useIntercepts();
+
   useEffect(() => {
     const getAllLocations = async () => {
       const res = await LocationService.getLocations({ pageSize: 9999 });
@@ -87,11 +90,14 @@ const MapAdsManagement = () => {
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          const res = await ReportService.getReports({
-            locationId: location.id,
-            pageSize: 999,
-            email: "nguyenvana@gmail.com"
-          });
+          const res = await ReportService.getReports(
+            {
+              locationId: location.id,
+              pageSize: 999,
+              email: "nguyenvana@gmail.com"
+            },
+            intercepts
+          );
 
           if (res.content.length > 0) {
             const report: Report = res.content[res.content.length - 1];
@@ -143,10 +149,13 @@ const MapAdsManagement = () => {
 
   useEffect(() => {
     const getAllReportsTypeLocation = async () => {
-      ReportService.getReports({
-        reportTypeName: EReportType.LOCATION,
-        pageSize: 999
-      })
+      ReportService.getReports(
+        {
+          reportTypeName: EReportType.LOCATION,
+          pageSize: 999
+        },
+        intercepts
+      )
         .then((res) => {
           res.content.forEach((report: Report) => {
             let reportStatus: string;

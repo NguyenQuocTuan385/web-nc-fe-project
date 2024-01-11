@@ -21,11 +21,9 @@ import DistrictService from "services/district";
 import { useEffect } from "react";
 import avatar from "assets/img/avatar/default.jpg";
 import { UserRequest } from "models/user";
-import Userservice from "services/user";
 import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 import { AuthenticationService } from "services/authentication";
-
+import { DateHelper } from "helpers/date";
 interface FormData {
   name: string;
   avatar: string;
@@ -133,15 +131,7 @@ export default function CreateAccount() {
     setFileImage(files[0]);
     setAvatarPreview(URL.createObjectURL(files[0]));
   };
-  function convertToYYYYMMDD(dateString: string): Date {
-    const dateObject = new Date(dateString);
-    const year = dateObject.getFullYear();
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
-    const day = dateObject.getDate().toString().padStart(2, "0");
 
-    const formattedDate = `${year}-${month}-${day}`;
-    return new Date(formattedDate);
-  }
   const createUser = async (data: UserRequest) => {
     AuthenticationService.register(data)
       .then((res) => {
@@ -157,7 +147,7 @@ export default function CreateAccount() {
       name: data.name,
       email: data.email,
       phone: data.phone,
-      birthday: convertToYYYYMMDD(data.birthday),
+      birthday: DateHelper.convertStringToDate(data.birthday),
       avatar: "",
       password: data.password,
       roleId: selectedRole === "district" ? 3 : 2,
@@ -374,6 +364,7 @@ export default function CreateAccount() {
                               className={classes.datePickField}
                               {...field}
                               views={["year", "month", "day"]} // chỉ hiển thị chế độ xem ngày, tháng, và năm
+                              format='DD/MM/YYYY'
                               slotProps={{
                                 textField: {
                                   required: true,

@@ -35,9 +35,13 @@ export default function AdLicenseDetail() {
   const endAt = new Date(state?.endAt ?? "").toLocaleDateString("en-GB");
 
   const updateAdvertisesById = async (row: Contract) => {
-    AdvertiseService.updateAdvertiseLicense(row.advertise.id, {
-      licensing: true
-    })
+    AdvertiseService.updateAdvertiseLicense(
+      row.advertise.id,
+      {
+        licensing: true
+      },
+      intercept
+    )
       .then((res) => {
         console.log(res);
       })

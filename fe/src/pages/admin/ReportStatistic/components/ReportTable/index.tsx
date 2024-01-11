@@ -15,6 +15,8 @@ import queryString from "query-string";
 import ReportService from "services/report";
 import { EReportType, Report } from "models/report";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import useIntercepts from "hooks/useIntercepts";
+import { DateHelper } from "helpers/date";
 
 interface FilterProps {
   tab?: string;
@@ -44,8 +46,9 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [dataList, setDataList] = useState<Report[]>([]);
-  const [update, setUpdate] = useState(false);
   const navigate = useNavigate();
+
+  const intercepts = useIntercepts();
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -56,7 +59,16 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
       }).toString()
     });
   };
-  console.log(tab);
+
+  const getDynamicColor = (status: number) => {
+    if (status === 1) {
+      return <span style={{ color: "#FF0000", fontWeight: "bold" }}>Chờ xử lý</span>;
+    } else if (status === 2) {
+      return <span style={{ color: "#FFA500", fontWeight: "bold" }}>Đang xử lí</span>;
+    } else {
+      return <span style={{ color: "#008000", fontWeight: "bold" }}>Đã xử lí</span>;
+    }
+  };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,21 +79,23 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
 
   useEffect(() => {
     const getAllReports = async () => {
-      ReportService.getReports({
-        reportTypeName:
-          tab === "0"
-            ? undefined
-            : tab === "ADVERTISE"
-              ? EReportType.ADVERTISE
-              : EReportType.LOCATION,
-        search: fieldSearch,
-        pageSize: rowsPerPage,
-        current: Number(page) + 1
-      })
+      ReportService.getReports(
+        {
+          reportTypeName:
+            tab === "0"
+              ? undefined
+              : tab === "ADVERTISE"
+                ? EReportType.ADVERTISE
+                : EReportType.LOCATION,
+          search: fieldSearch,
+          pageSize: rowsPerPage,
+          current: Number(page) + 1
+        },
+        intercepts
+      )
         .then((res) => {
           setDataList(res.content);
           setTotalPage(res.totalPages);
-          console.log(res.content);
 
           navigate({
             pathname: match,
@@ -120,15 +134,6 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
   }, [dataList]);
 
   const emptyRows = rowsPerPage - dataList.length;
-  console.log(emptyRows);
-  function convertDateFormat(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    };
-    return new Date(date).toLocaleDateString("en-GB", options);
-  }
 
   const handleClick = (row: Report) => {
     navigate(`${routes.admin.statistic.dcmsDetail}`.replace(":id", row.id.toString()));
@@ -162,7 +167,7 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
                 Họ và tên
               </TableCell>
               <TableCell align='left' className={classes.headerTable}>
-                Hình thức quảng cáo
+                Hình thức báo cáo
               </TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Điểm đặt
@@ -183,7 +188,7 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
                   {row.fullName}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.advertise?.adsType.name}
+                  {row.reportForm.name}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
                   <div className={classes.textOverflow}>
@@ -191,10 +196,10 @@ export default function ReportTable({ tab, fieldSearch }: FilterProps) {
                   </div>
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.createdAt ? convertDateFormat(row.createdAt) : ""}
+                  {DateHelper.formatDateToDDMMYYYY(row.createdAt!!)}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
-                  {row.status === 1 ? "Mới" : row.status === 2 ? "Đang xử lí" : "Đã xử lí"}
+                  {getDynamicColor(row.status)}
                 </TableCell>
               </TableRow>
             ))}

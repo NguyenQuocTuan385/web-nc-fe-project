@@ -3,13 +3,13 @@ import api from "./configApi";
 import { GetReports, ReportCreateRequest, ReportEditRequest } from "models/report";
 
 export class ReportService {
-  static async getReports(data: GetReports): Promise<any> {
+  static async getReports(data: GetReports, api?: any): Promise<any> {
     return await api
       .get(`${API.REPORT.DEFAULT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

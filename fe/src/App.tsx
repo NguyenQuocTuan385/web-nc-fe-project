@@ -53,6 +53,7 @@ import { WardDashBoard } from "pages/admin/WardDashboard";
 import EditProfile from "pages/admin/EditProfile";
 import ChangePassword from "pages/admin/ChangePassword";
 import { DistrictDashBoard } from "pages/admin/DistrictDashboard";
+import { ReportDetailDCMS } from "pages/admin/ReportStatistic/components/ReportDetail";
 import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
 
 function App() {
@@ -65,35 +66,53 @@ function App() {
           <Route path={routes.client} Component={MapAdsManagement} />
           <Route path={routes.adminMap} Component={MapAdsManagementAdmin} />
           <Route element={<PersistLogin />}>
-            <Route path={routes.admin.users.dcms} Component={UserManagement} />
-            <Route path={routes.admin.reviewEdit.dcms} Component={EditAdLicense} />
+            {/* DEPARTMENT */}
+            <Route element={<RequireAuth availableRoles={[ERole.DEPARTMENT]} />}>
+              <Route path={routes.admin.users.dcms} Component={UserManagement} />
+              <Route path={routes.admin.reviewEdit.dcms} Component={EditAdLicense} />
+              <Route path={routes.admin.users.dcmsCreate} Component={CreateAccount} />
+              <Route
+                path={routes.admin.reviewEdit.dcmsLocation}
+                Component={EditAdLocationLicenseDetail}
+              />
+              <Route
+                path={routes.admin.reviewEdit.dcmsAdvertise}
+                Component={EditAdTableLicenseDetail}
+              />
+              <Route path={routes.admin.reviewLisence.dcms} Component={AdLicense} />
+              <Route path={routes.admin.reviewLisence.dcmsDetail} Component={AdLicenseDetail} />
 
-            <Route path={routes.admin.users.dcmsCreate} Component={CreateAccount} />
-            <Route path={routes.admin.users.edit} Component={EditProfile} />
-            <Route path={routes.admin.users.change_password} Component={ChangePassword} />
+              {/* Location DCMS  */}
+              <Route path={routes.admin.locations.dcms} Component={LocationManagementDCMS} />
+              <Route path={routes.admin.locations.dcmsEdit} Component={LocationEditCDMS} />
+              <Route path={routes.admin.locations.dcmsCreate} Component={LocationCreateCDMS} />
+              <Route
+                path={routes.admin.locations.dcmsDetail}
+                Component={AdvertisesOfLocationManagementDCMS}
+              />
 
-            <Route
-              path={routes.admin.reviewEdit.dcmsLocation}
-              Component={EditAdLocationLicenseDetail}
-            />
-            <Route
-              path={routes.admin.reviewEdit.dcmsAdvertise}
-              Component={EditAdTableLicenseDetail}
-            />
-            <Route path={routes.admin.reviewLisence.dcms} Component={AdLicense} />
-            <Route path={routes.admin.reviewLisence.dcmsDetail} Component={AdLicenseDetail} />
+              {/* REVIEW LOCATION, ADVERTISE */}
+
+              <Route
+                path={routes.admin.reviewEdit.dcmsLocation}
+                Component={EditAdLocationLicenseDetail}
+              />
+              <Route
+                path={routes.admin.reviewEdit.dcmsAdvertise}
+                Component={EditAdTableLicenseDetail}
+              />
+
+              {/* REPORT */}
+              <Route path={routes.admin.statistic.dcms} Component={ReportStatistic} />
+              <Route path={routes.admin.statistic.dcmsDetail} Component={ReportDetailDCMS} />
+            </Route>
+
             <Route path={routes.admin.properties.district} Component={DistrictManagement} />
             <Route path={routes.admin.properties.ward} Component={WardManagement} />
             <Route path={routes.admin.contracts.createFormWard} element={<ContractForm />} />
 
-            {/* Location DCMS  */}
-            <Route path={routes.admin.locations.dcms} Component={LocationManagementDCMS} />
-            <Route path={routes.admin.locations.dcmsEdit} Component={LocationEditCDMS} />
-            <Route path={routes.admin.locations.dcmsCreate} Component={LocationCreateCDMS} />
-            <Route
-              path={routes.admin.locations.dcmsDetail}
-              Component={AdvertisesOfLocationManagementDCMS}
-            />
+            <Route path={routes.admin.users.edit} Component={EditProfile} />
+            <Route path={routes.admin.users.change_password} Component={ChangePassword} />
 
             {/* Ward */}
             <Route element={<RequireAuth availableRoles={[ERole.WARD]} />}>
