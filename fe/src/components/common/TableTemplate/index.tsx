@@ -15,6 +15,10 @@ import classes from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
 import ParagraphBody from "../text/ParagraphBody";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import { ERole } from "models/general";
 interface TableTemplateProps {
   data: Array<{ [key: string]: any }>;
   customHeading: string[];
@@ -39,6 +43,7 @@ function TableTemplate({
   linkToMove
 }: TableTemplateProps) {
   const navigate = useNavigate();
+  const currentUser: User = useSelector(selectCurrentUser);
   const handleViewAdsClick = (rowId: number) => {
     if (onViewAdsClick) {
       onViewAdsClick(rowId);
@@ -60,7 +65,10 @@ function TableTemplate({
   const handleAddClick = (rowId: number) => {
     if (onAddClick) {
       onAddClick(rowId);
-      navigate(`${routes.admin.contracts.createForm.replace(":id", `${rowId}`)}`);
+
+      currentUser.role.id === ERole.WARD
+        ? navigate(`${routes.admin.contracts.createFormWard.replace(":id", `${rowId}`)}`)
+        : navigate(`${routes.admin.contracts.createFormDistrict.replace(":id", `${rowId}`)}`);
     }
   };
 

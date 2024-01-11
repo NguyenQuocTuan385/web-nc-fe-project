@@ -29,8 +29,11 @@ export const routes = {
       details: "/admin/advertises/:id",
       ofLocation: "/admin/advertises/locations/:id",
       wardOfLocation: "/admin/ward/locations/:id/advertises",
+      districtOfLocation: "/admin/district/locations/:id/advertises",
       wardDetails: "/admin/ward/advertises/:id",
-      wardEdit: "/admin/ward/advertises/edit/:locationId/:advertiseId"
+      districtDetails: "/admin/district/advertises/:id",
+      wardEdit: "/admin/ward/advertises/edit/:locationId/:advertiseId",
+      districtEdit: "/admin/district/locations/:locationId/advertises/edit/:advertiseId"
     },
     locations: {
       dcms: "/admin/dcms/locations",
@@ -42,7 +45,8 @@ export const routes = {
       edit: "/admin/locations/edit/:id",
       district: "/admin/district/locations",
       ward: "/admin/ward/locations",
-      wardEdit: "/admin/ward/locations/edit/:id"
+      wardEdit: "/admin/ward/locations/edit/:id",
+      districtEdit: "/admin/district/locations/edit/:id"
     },
     properties: {
       district: "/admin/districts",
@@ -50,8 +54,10 @@ export const routes = {
     },
     contracts: {
       root: "/admin/contracts",
-      createForm: "/admin/contracts/create-form/:id",
-      detail: "/admin/contracts/:id",
+      createFormWard: "/admin/ward/contracts/create-form/:id",
+      createFormDistrict: "/admin/district/contracts/create-form/:id",
+      detailWard: "/admin/ward/contracts/:id",
+      detailDistrict: "/admin/district/contracts/:id",
       district: "/admin/district/contracts"
     },
     reports: {
@@ -61,7 +67,9 @@ export const routes = {
       district: "/admin/district/reports",
       ward: "/admin/ward/reports",
       wardEdit: "/admin/ward/reports/edit/:id",
-      wardDetails: "/admin/ward/report/:id"
+      districtEdit: "/admin/district/reports/edit/:id",
+      wardDetails: "/admin/ward/report/:id",
+      districtDetails: "/admin/district/report/:id"
     },
     reportForm: {
       root: "/admin/report-forms"

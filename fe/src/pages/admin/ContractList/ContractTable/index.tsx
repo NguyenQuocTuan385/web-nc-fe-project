@@ -28,6 +28,10 @@ import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "r
 import queryString from "query-string";
 import { routes } from "routes/routes";
 import useIntercepts from "hooks/useIntercepts";
+import { User } from "models/user";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { ERole } from "models/general";
 
 // const rows = [...user];
 interface FilterProps {
@@ -38,6 +42,7 @@ interface FilterProps {
 
 export default function ContractTable({ propertyId, status, fieldSearch }: FilterProps) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const currentUser: User = useSelector(selectCurrentUser);
   const navigate = useNavigate();
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
@@ -141,7 +146,9 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
   };
 
   const viewContractDetailHandle = (contractDetailId: number) => {
-    navigate(`${routes.admin.contracts.detail.replace(":id", `${contractDetailId}`)}`);
+    currentUser.role.id === ERole.WARD
+      ? navigate(`${routes.admin.contracts.detailWard.replace(":id", `${contractDetailId}`)}`)
+      : navigate(`${routes.admin.contracts.detailDistrict.replace(":id", `${contractDetailId}`)}`);
   };
 
   return (
@@ -233,8 +240,10 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
               </TableRow>
             ))}
             {emptyRows > 0 && (
-              <TableRow style={{ height: 73 * emptyRows }}>
-                <TableCell colSpan={6} />
+              <TableRow style={{ height: 73 }}>
+                <TableCell colSpan={9} align='center'>
+                  Không có dữ liệu
+                </TableCell>
               </TableRow>
             )}
           </TableBody>

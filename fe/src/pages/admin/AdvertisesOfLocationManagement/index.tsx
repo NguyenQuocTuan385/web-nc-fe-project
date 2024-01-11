@@ -27,6 +27,10 @@ import ContractService from "services/contract";
 import { Advertise } from "models/advertise";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import useIntercepts from "hooks/useIntercepts";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { User } from "models/user";
+import { ERole } from "models/general";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -44,6 +48,8 @@ const IconButtonBack = styled(IconButton)(() => ({
 
 const AdvertiseOfLocationManagement = () => {
   const navigate = useNavigate();
+  const currentUser: User = useSelector(selectCurrentUser);
+  const isWard = currentUser.role.id === ERole.WARD ? true : false;
   const { id } = useParams<{ id: string }>();
   const [advertiseList, setAdvertiseList] = useState([]);
   const [infoContract, setInfoContract] = useState<Contract | null>(null);
@@ -130,15 +136,23 @@ const AdvertiseOfLocationManagement = () => {
   }, [searchValue]);
 
   const handleViewAdDetails = (idAdvertise: number) => {
-    navigate(`${routes.admin.advertises.wardDetails.replace(":id", `${idAdvertise}`)}`);
+    isWard
+      ? navigate(`${routes.admin.advertises.wardDetails.replace(":id", `${idAdvertise}`)}`)
+      : navigate(`${routes.admin.advertises.districtDetails.replace(":id", `${idAdvertise}`)}`);
   };
 
   const handleEditAdvertise = (idAdvertise: number) => {
-    navigate(
-      `${routes.admin.advertises.wardEdit
-        .replace(":locationId", `${id}`)
-        .replace(":advertiseId", `${idAdvertise}`)}`
-    );
+    isWard
+      ? navigate(
+          `${routes.admin.advertises.wardEdit
+            .replace(":locationId", `${id}`)
+            .replace(":advertiseId", `${idAdvertise}`)}`
+        )
+      : navigate(
+          `${routes.admin.advertises.districtEdit
+            .replace(":locationId", `${id}`)
+            .replace(":advertiseId", `${idAdvertise}`)}`
+        );
   };
 
   const handleAddAdvertise = (idAdvertise: number) => {
@@ -198,7 +212,9 @@ const AdvertiseOfLocationManagement = () => {
   })[0];
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.ward}`);
+    isWard
+      ? navigate(`${routes.admin.locations.ward}`)
+      : navigate(`${routes.admin.locations.district}`);
   };
 
   return (
