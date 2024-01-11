@@ -17,6 +17,8 @@ import queryString from "query-string";
 import LocationService from "services/location";
 import { Location, updateStatus } from "models/location";
 import { TAB_ADVERTISE } from "models/advertise";
+import useIntercepts from "hooks/useIntercepts";
+import { DateHelper } from "helpers/date";
 
 interface FilterProps {
   district?: string;
@@ -35,6 +37,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
 
   const [dataList, setDataList] = useState<Location[]>([]);
   const [update, setUpdate] = useState(false);
+  const intercept = useIntercepts();
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -54,27 +57,21 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
     setPage(0);
   };
   const navigate = useNavigate();
-  function formatDateToDDMMYYYY(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    };
-    return new Date(date).toLocaleDateString("en-GB", options);
-  }
-
   const handleClick = (row: Location) => {
     navigate(`${routes.admin.reviewEdit.dcmsLocation}`.replace(":id", row.id.toString()));
   };
   useEffect(() => {
     const getAllLocationReview = async () => {
-      LocationService.getLocationsReview({
-        propertyId: ward ? Number(ward) : undefined,
-        parentId: district ? Number(district) : undefined,
-        search: fieldSearch,
-        pageSize: rowsPerPage,
-        current: Number(page) + 1
-      })
+      LocationService.getLocationsReview(
+        {
+          propertyId: ward ? Number(ward) : undefined,
+          parentId: district ? Number(district) : undefined,
+          search: fieldSearch,
+          pageSize: rowsPerPage,
+          current: Number(page) + 1
+        },
+        intercept
+      )
         .then((res) => {
           setDataList(res.content);
           setTotalPage(res.totalPages);
@@ -98,7 +95,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
   const emptyRows = rowsPerPage - dataList.length;
 
   const deleteLocationEdit = async (id: number) => {
-    await LocationService.deleteLocationEditById(id)
+    await LocationService.deleteLocationEditById(id, intercept)
       .then((res) => {
         console.log(res);
       })
@@ -107,7 +104,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
       });
   };
   const updateStatus = async (id: number, updateStatus: updateStatus) => {
-    await LocationService.updateStatus(id, updateStatus)
+    await LocationService.updateStatus(id, updateStatus, intercept)
       .then((res) => {
         console.log(res);
       })
@@ -118,16 +115,20 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
   const handleClickAccept = async (event: React.MouseEvent, data: Location) => {
     event.stopPropagation();
     const updateLocation = async (data: Location) => {
-      await LocationService.updateLocationsById(data.id, {
-        planning: data.locationEdit?.planning!!,
-        latitude: data.locationEdit?.latitude!!,
-        longitude: data.locationEdit?.longitude!!,
-        address: data.locationEdit?.address!!,
-        advertiseFormId: data.locationEdit?.adsForm.id!!,
-        locationTypeId: data.locationEdit?.locationType.id!!,
-        propertyId: data.locationEdit?.property.id!!,
-        imageUrls: data.locationEdit?.images!!
-      })
+      await LocationService.updateLocationsById(
+        data.id,
+        {
+          planning: data.locationEdit?.planning!!,
+          latitude: data.locationEdit?.latitude!!,
+          longitude: data.locationEdit?.longitude!!,
+          address: data.locationEdit?.address!!,
+          advertiseFormId: data.locationEdit?.adsForm.id!!,
+          locationTypeId: data.locationEdit?.locationType.id!!,
+          propertyId: data.locationEdit?.property.id!!,
+          imageUrls: data.locationEdit?.images!!
+        },
+        intercept
+      )
         .then((res) => {
           console.log(res);
         })
@@ -183,7 +184,8 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
                   <div className={classes.textOverflow}>{row.address}</div>
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
-                  {row.locationEdit?.updatedAt && formatDateToDDMMYYYY(row.locationEdit?.updatedAt)}
+                  {row.locationEdit?.createdAt &&
+                    DateHelper.formatDateToDDMMYYYY(row.locationEdit?.createdAt)}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
                   {row.planning ? "ĐÃ QUY HOẠCH" : "CHƯA QUY HOẠCH"}

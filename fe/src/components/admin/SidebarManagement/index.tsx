@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -31,7 +31,7 @@ interface SideBarItemList {
   sideBarItem: SidebarItem[];
 }
 
-interface SelectedItem {
+interface state {
   parentIndex: number | null;
   childIndex: number | null;
 }
@@ -43,27 +43,25 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   const path = locationHook.pathname;
   const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
 
-  sideBar.map((item, index) => {
-    if (item.children) {
-      item.children.map((child, childIndex) => {
-        if (child.link.includes(path)) {
-          dispatch(selected({ parentIndex: index, childIndex: childIndex }));
+  useEffect(() => {
+    sideBar.map((item, index) => {
+      if (item.children) {
+        item.children.map((child, childIndex) => {
+          if (child.link.includes(path)) {
+            dispatch(selected({ parentIndex: index, childIndex: childIndex }));
+            return;
+          }
+        });
+      } else {
+        if (item.link?.includes(path)) {
+          dispatch(selected({ parentIndex: index, childIndex: 0 }));
           return;
         }
-      });
-    } else {
-      if (item.link?.includes(path)) {
-        dispatch(selected({ parentIndex: index, childIndex: 0 }));
-        return;
       }
-    }
-  });
+    });
+  }, [path]);
   const state = useSelector((state: RootState) => state.selected);
   const [openItems, setOpenItems] = useState<number | null>(state.parentIndex);
-  const [selectedItem, setSelectedItem] = useState<SelectedItem>({
-    parentIndex: state.parentIndex,
-    childIndex: state.childIndex
-  });
   const currentUser: User = useSelector(selectCurrentUser);
 
   const handleClick = (index: number, sideBarItem: SidebarItem, child: Array<{ name: string }>) => {
@@ -74,20 +72,10 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
     navigate(sideBarItem.link!!);
     if (openItems === index) {
       setOpenItems(null);
-      if (selectedItem.childIndex == null) {
-        setSelectedItem({
-          parentIndex: index,
-          childIndex: null
-        });
-      }
     } else {
       setOpenItems(index);
       setSidebar(sideBarItemList.sideBarItem);
       if (child.length === 0) {
-        setSelectedItem({
-          parentIndex: index,
-          childIndex: null
-        });
         setSidebar((prevSideBar) =>
           prevSideBar.map((item, i) =>
             i === index
@@ -104,22 +92,11 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
         if (sideBarItem && sideBarItem.link) {
           navigate(sideBarItem.link);
         }
-      } else {
-        if (selectedItem.parentIndex === null) {
-          setSelectedItem({
-            parentIndex: index,
-            childIndex: null
-          });
-        }
       }
     }
   };
 
   const handleClickChild = (parentIndex: number, childIndex: number) => {
-    setSelectedItem({
-      parentIndex: parentIndex,
-      childIndex: childIndex
-    });
     dispatch(selected({ parentIndex: parentIndex, childIndex: childIndex }));
     navigate(sideBar[parentIndex].children!![childIndex].link);
   };
@@ -129,12 +106,16 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
       <Drawer variant='permanent' anchor='left' className={classes.sideBar}>
         <Box className={classes.TitleContainer} sx={{ padding: "0 16px" }}>
           <Avatar variant='rounded' src={images.agentIcon} />
-          <Heading1 className={classes.agentText}>
-            Cán bộ
-            <Heading1 className={classes.agentText} sx={{ margin: "0 !important" }}>
-              {currentUser?.property.name} {currentUser?.property.propertyParent?.name}
+          {currentUser?.role.id === ERole.DEPARTMENT ? (
+            <Heading1 className={classes.agentText}>Sở văn hóa </Heading1>
+          ) : (
+            <Heading1 className={classes.agentText}>
+              Cán bộ
+              <Heading1 className={classes.agentText} sx={{ margin: "0 !important" }}>
+                {currentUser?.property.name} {currentUser?.property.propertyParent?.name}
+              </Heading1>
             </Heading1>
-          </Heading1>
+          )}
         </Box>
         <Box>
           <List>
@@ -144,7 +125,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
                   <ListItemButton
                     onClick={() => handleClick(index, list, list.children || [])}
                     className={classes.item}
-                    selected={selectedItem.parentIndex === index && list.children === undefined}
+                    selected={state.parentIndex === index && state.childIndex === 0}
                   >
                     <ListItemIcon>{list.icon}</ListItemIcon>
                     <ListItemText primary={list.name} className={classes.itemText} />
@@ -159,10 +140,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
                           key={childIndex}
                           onClick={() => handleClickChild(index, childIndex)}
                           className={classes.childItem}
-                          selected={
-                            selectedItem.parentIndex === index &&
-                            selectedItem.childIndex === childIndex
-                          }
+                          selected={state.parentIndex === index && state.childIndex === childIndex}
                         >
                           <ListItemText secondary={item.name} />
                         </ListItemButton>
