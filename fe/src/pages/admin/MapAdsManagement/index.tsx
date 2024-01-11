@@ -13,29 +13,24 @@ import PopoverHover from "./components/PopoverHover";
 import LocationSidebar from "./components/LocationSidebar";
 import RandomLocationSidebar from "./components/RandomLocationSidebar";
 import LocationService from "services/location";
-import { Box, Button, IconButton, Switch } from "@mui/material";
+import { Box, IconButton, Switch } from "@mui/material";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import { EReportStatus, EReportType, Report } from "models/report";
-import ReportService from "services/report";
-import ReportInfoPopup from "./components/ReportListPopup";
 import ReactDOM from "react-dom/client";
 import { createPortal } from "react-dom";
 import PopoverHelper from "./components/PopoverHelper";
 import { Help } from "@mui/icons-material";
-import ReportIcon from "@mui/icons-material/Report";
-import useIntercepts from "hooks/useIntercepts";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
+import { Property } from "models/property";
+import { User } from "models/user";
 
 enum ELocationCheckedSwitch {
   BOTH = 1,
-  LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING = 2,
-  LOCATION_IS_PLANNING_AND_REPORT_LOCATION = 3,
-  LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION = 4,
-  LOCATION_IS_PLANNING = 5,
-  LOCATION_IS_NOT_PLANNING = 6,
-  REPORT_LOCATION = 7,
-  NOT_AT_ALL = 8
+  LOCATION_IS_PLANNING = 2,
+  LOCATION_IS_NOT_PLANNING = 3,
+  NOT_AT_ALL = 4
 }
-const MapAdsManagement = () => {
+const MapAdsManagementAdmin = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<MapLibre | null>(null);
   const [lng, setLng] = useState<number | null>(null);
@@ -43,7 +38,6 @@ const MapAdsManagement = () => {
   const [zoom] = useState<number>(14);
   const [API_KEY] = useState<string>(process.env.REACT_APP_API_KEY_MAPTILER as string);
   const [openLocationSidebar, setOpenLocationSidebar] = useState<boolean>(false);
-  const [openReportInfoPopup, setOpenReportInfoPopup] = useState<boolean>(false);
   const [location, setLocationData] = useState<Location | null>(null);
   const [randomLocation, setRandomLocationData] = useState<RandomLocation | null>(null);
   const [openRandomLocationSidebar, setOpenRandomLocationSidebar] = useState<boolean>(false);
@@ -61,12 +55,12 @@ const MapAdsManagement = () => {
   const locationsIsNotPlanningNoAdvertises: Feature[] = [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const locationsIsNotPlanningHasAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const reportLocations: Feature[] = [];
   let clusters = useRef<Feature[]>([]);
   const [locationCheckedSwitch, setLocationCheckedSwitch] = useState<ELocationCheckedSwitch>(
     ELocationCheckedSwitch.BOTH
   );
+
+  const user: User | null = useSelector((state: RootState) => state.auth.currentUser);
 
   const closeAdsSidebar = () => {
     setOpenLocationSidebar(false);
@@ -76,11 +70,14 @@ const MapAdsManagement = () => {
     setOpenRandomLocationSidebar(false);
   };
 
-  const intercepts = useIntercepts();
-
   useEffect(() => {
     const getAllLocations = async () => {
-      const res = await LocationService.getLocations({ pageSize: 9999 });
+      if (!user?.property?.id) {
+        return;
+      }
+      const res = await LocationService.getLocationsByPropertyId(user?.property?.id, {
+        pageSize: 9999
+      });
 
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
@@ -90,28 +87,6 @@ const MapAdsManagement = () => {
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          const res = await ReportService.getReports(
-            {
-              locationId: location.id,
-              pageSize: 999,
-              email: "nguyenvana@gmail.com"
-            },
-            intercepts
-          );
-
-          if (res.content.length > 0) {
-            const report: Report = res.content[res.content.length - 1];
-            let reportStatus: string;
-            if (report.status === EReportStatus.NEW) {
-              reportStatus = "Chưa xử lý";
-            } else if (report.status === EReportStatus.PROCESSING) {
-              reportStatus = "Đang xử lý";
-            } else {
-              reportStatus = "Đã xử lý";
-            }
-            location.reportStatus = reportStatus;
-          }
-
           const existsAdvertises = await LocationService.checkExistsAdvertises(location.id);
           location.existsAdvertises = existsAdvertises;
 
@@ -147,52 +122,6 @@ const MapAdsManagement = () => {
     locationsIsNotPlanningNoAdvertises
   ]);
 
-  useEffect(() => {
-    const getAllReportsTypeLocation = async () => {
-      ReportService.getReports(
-        {
-          reportTypeName: EReportType.LOCATION,
-          pageSize: 999
-        },
-        intercepts
-      )
-        .then((res) => {
-          res.content.forEach((report: Report) => {
-            let reportStatus: string;
-            if (report.status === EReportStatus.NEW) {
-              reportStatus = "Chưa xử lý";
-            } else if (report.status === EReportStatus.PROCESSING) {
-              reportStatus = "Đang xử lý";
-            } else {
-              reportStatus = "Đã xử lý";
-            }
-            const reportLocation: RandomLocation = {
-              address: report.address as string,
-              longitude: report.longitude as number,
-              latitude: report.latitude as number,
-              reportStatus: reportStatus
-            };
-            const feature: Feature = {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [reportLocation.longitude, reportLocation.latitude]
-              },
-              properties: {
-                ...reportLocation,
-                isAdvertiseLocation: false
-              }
-            };
-            reportLocations.push(feature);
-          });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getAllReportsTypeLocation();
-  }, [reportLocations]);
-
   const handleClickSwitchLocationEvent = (propertyName: string) => {
     const currentMap = map.current;
     if (!currentMap) return;
@@ -209,40 +138,14 @@ const MapAdsManagement = () => {
       clusters.current = locationsIsNotPlanningHasAdvertises.concat(
         locationsIsNotPlanningNoAdvertises,
         locationsIsPlanningHasAdvertises,
-        locationsIsPlanningNoAdvertises,
-        reportLocations
+        locationsIsPlanningNoAdvertises
       );
-    } else if (
-      locationCheckedChange ===
-      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-    ) {
-      clusters.current = locationsIsPlanningHasAdvertises.concat(
-        locationsIsPlanningNoAdvertises,
-        locationsIsNotPlanningNoAdvertises,
-        locationsIsNotPlanningHasAdvertises
-      );
-    } else if (
-      locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-    ) {
-      clusters.current = locationsIsPlanningHasAdvertises.concat(
-        locationsIsPlanningNoAdvertises,
-        reportLocations
-      );
-    } else if (
-      locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-    ) {
-      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-        locationsIsNotPlanningNoAdvertises,
-        reportLocations
-      );
+    } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
+      clusters.current = locationsIsPlanningHasAdvertises.concat(locationsIsPlanningNoAdvertises);
     } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING) {
       clusters.current = locationsIsNotPlanningHasAdvertises.concat(
         locationsIsNotPlanningNoAdvertises
       );
-    } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
-      clusters.current = locationsIsPlanningHasAdvertises.concat(locationsIsPlanningNoAdvertises);
-    } else if (locationCheckedChange === ELocationCheckedSwitch.REPORT_LOCATION) {
-      clusters.current = reportLocations;
     } else {
       clusters.current = [];
     }
@@ -348,8 +251,7 @@ const MapAdsManagement = () => {
         clusters.current = locationsIsNotPlanningHasAdvertises.concat(
           locationsIsNotPlanningNoAdvertises,
           locationsIsPlanningHasAdvertises,
-          locationsIsPlanningNoAdvertises,
-          reportLocations
+          locationsIsPlanningNoAdvertises
         );
 
         const clustersGeojson: GeoJson = {
@@ -667,7 +569,7 @@ const MapAdsManagement = () => {
   }, [API_KEY, lng, lat, zoom]);
 
   return (
-    <Box>
+    <Box className={classes.mapWrap}>
       <Box className={classes.geocoding}>
         <GeocodingControl apiKey={API_KEY} language={"vi"} mapController={mapController} />
       </Box>
@@ -688,53 +590,18 @@ const MapAdsManagement = () => {
               defaultChecked
               onChange={(e: any) => {
                 if (e.target.checked === true) {
-                  if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                  ) {
+                  if (locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.BOTH);
                     changeSourceDataLocation(ELocationCheckedSwitch.BOTH);
                   } else if (locationCheckedSwitch === ELocationCheckedSwitch.NOT_AT_ALL) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
-                  } else if (
-                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING
-                  ) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                    );
-                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.REPORT_LOCATION) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                    );
                   }
                 } else {
                   if (locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.NOT_AT_ALL);
                     changeSourceDataLocation(ELocationCheckedSwitch.NOT_AT_ALL);
                   } else if (locationCheckedSwitch === ELocationCheckedSwitch.BOTH) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                    );
-                  } else if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                  ) {
-                    setLocationCheckedSwitch(ELocationCheckedSwitch.REPORT_LOCATION);
-                    changeSourceDataLocation(ELocationCheckedSwitch.REPORT_LOCATION);
-                  } else if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                  ) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
                   }
@@ -757,53 +624,18 @@ const MapAdsManagement = () => {
               defaultChecked
               onChange={(e: any) => {
                 if (e.target.checked === true) {
-                  if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                  ) {
+                  if (locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.BOTH);
                     changeSourceDataLocation(ELocationCheckedSwitch.BOTH);
                   } else if (locationCheckedSwitch === ELocationCheckedSwitch.NOT_AT_ALL) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
-                  } else if (
-                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_PLANNING
-                  ) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                    );
-                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.REPORT_LOCATION) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                    );
                   }
                 } else {
                   if (locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.NOT_AT_ALL);
                     changeSourceDataLocation(ELocationCheckedSwitch.NOT_AT_ALL);
                   } else if (locationCheckedSwitch === ELocationCheckedSwitch.BOTH) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                    );
-                  } else if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                  ) {
-                    setLocationCheckedSwitch(ELocationCheckedSwitch.REPORT_LOCATION);
-                    changeSourceDataLocation(ELocationCheckedSwitch.REPORT_LOCATION);
-                  } else if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                  ) {
                     setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
                   }
@@ -825,85 +657,6 @@ const MapAdsManagement = () => {
             />
             <ParagraphSmall>Điểm đặt QC chưa quy hoạch</ParagraphSmall>
           </Box>
-          <Box className={classes.botNavbarItem}>
-            <Switch
-              defaultChecked
-              onChange={(e: any) => {
-                if (e.target.checked === true) {
-                  if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                  ) {
-                    setLocationCheckedSwitch(ELocationCheckedSwitch.BOTH);
-                    changeSourceDataLocation(ELocationCheckedSwitch.BOTH);
-                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.NOT_AT_ALL) {
-                    setLocationCheckedSwitch(ELocationCheckedSwitch.REPORT_LOCATION);
-                    changeSourceDataLocation(ELocationCheckedSwitch.REPORT_LOCATION);
-                  } else if (
-                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_PLANNING
-                  ) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                    );
-                  } else if (
-                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING
-                  ) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                    );
-                  }
-                } else {
-                  if (locationCheckedSwitch === ELocationCheckedSwitch.REPORT_LOCATION) {
-                    setLocationCheckedSwitch(ELocationCheckedSwitch.NOT_AT_ALL);
-                    changeSourceDataLocation(ELocationCheckedSwitch.NOT_AT_ALL);
-                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.BOTH) {
-                    setLocationCheckedSwitch(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                    );
-                    changeSourceDataLocation(
-                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
-                    );
-                  } else if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
-                  ) {
-                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
-                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
-                  } else if (
-                    locationCheckedSwitch ===
-                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
-                  ) {
-                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
-                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
-                  }
-                }
-
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_has_advertises"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_no_advertises"
-                );
-              }}
-            />
-            <ParagraphSmall>Địa điểm báo cáo</ParagraphSmall>
-          </Box>
-          <Button
-            variant='contained'
-            color='error'
-            size='small'
-            className={classes.errorBtn}
-            startIcon={<ReportIcon />}
-            onClick={() => setOpenReportInfoPopup(true)}
-          >
-            Xem báo cáo
-          </Button>
         </Box>
       </Box>
       <LocationSidebar
@@ -916,10 +669,9 @@ const MapAdsManagement = () => {
         closeSidebar={closeAddressSidebar}
         randomLocation={randomLocation}
       />
-      <ReportInfoPopup open={openReportInfoPopup} setOpen={setOpenReportInfoPopup} />
       <PopoverHelper anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </Box>
   );
 };
 
-export default MapAdsManagement;
+export default MapAdsManagementAdmin;

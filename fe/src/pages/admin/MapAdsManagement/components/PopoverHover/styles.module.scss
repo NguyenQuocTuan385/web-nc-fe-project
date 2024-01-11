@@ -1,0 +1,15 @@
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.paragraphExtraSmall {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.015em;
+  color: var(--eerie-black-00);
+}

@@ -1,0 +1,16 @@
+.item {
+  display: flex;
+  gap: 20px;
+  img {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+  }
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+}

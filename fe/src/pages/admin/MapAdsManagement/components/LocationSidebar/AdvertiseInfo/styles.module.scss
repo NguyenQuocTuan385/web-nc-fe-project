@@ -1,0 +1,23 @@
+.boxContainer {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  gap: 15px;
+  border-bottom: 1px solid var(--gray-50);
+}
+
+.advertiseInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.errorIc {
+  color: var(--red-error) !important;
+}

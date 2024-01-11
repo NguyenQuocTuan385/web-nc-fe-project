@@ -1,0 +1,12 @@
+.boxContainer {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #e5f6fd;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: flex-end;
+}

@@ -7,7 +7,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import classes from "./styles.module.scss";
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
-import UserManagementTable from "../UserTable";
 import ReportTable from "../ReportTable";
 
 export default function TabPanel() {

@@ -4,6 +4,7 @@ export const routes = {
     unAuthorized: "/Unauthorized"
   },
   client: "/",
+  adminMap: "/admin/map",
   admin: {
     root: "/admin",
     users: {

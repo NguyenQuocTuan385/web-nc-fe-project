@@ -1,12 +1,9 @@
-import { Box, Button, Drawer, IconButton } from "@mui/material";
-import { ChevronLeft, Error } from "@mui/icons-material";
+import { Box, Drawer, IconButton } from "@mui/material";
+import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfomation";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { RandomLocation } from "models/location";
-import ReportFormPopup from "../LocationSidebar/ReportFormPopup";
-import { EReportType } from "models/report";
-import { useState } from "react";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -19,9 +16,20 @@ const RandomLocationSidebar = ({
   closeSidebar,
   randomLocation
 }: LocalAddressPopoverProps) => {
-  const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   return (
-    <Drawer variant='persistent' hideBackdrop={true} open={isOpen}>
+    <Drawer
+      variant='persistent'
+      hideBackdrop={true}
+      open={isOpen}
+      sx={{
+        "& .MuiDrawer-root": {
+          position: "absolute"
+        },
+        "& .MuiPaper-root": {
+          position: "absolute"
+        }
+      }}
+    >
       <Box className={classes.sidebarContainer}>
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
@@ -35,25 +43,9 @@ const RandomLocationSidebar = ({
               Thông tin địa điểm
             </ParagraphBody>
             <ParagraphBody colorName='--green-500'>{randomLocation?.address}</ParagraphBody>
-            <Box className={classes.btnContainer}>
-              <Button
-                variant='outlined'
-                color='error'
-                startIcon={<Error />}
-                onClick={() => setOpenReportPopup(true)}
-              >
-                Báo cáo vi phạm
-              </Button>
-            </Box>
           </Box>
         </Box>
       </Box>
-      <ReportFormPopup
-        open={openReportPopup}
-        setOpen={setOpenReportPopup}
-        randomLocation={randomLocation}
-        reportTypeName={EReportType.LOCATION}
-      />
     </Drawer>
   );
 };

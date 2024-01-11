@@ -1,0 +1,37 @@
+.sidebarContainer {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+
+  .imgContainer {
+    width: 100%;
+    height: 306px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .iconBack {
+    display: flex;
+    justify-content: right;
+  }
+}
+
+.adsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.boxEmptyContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 50px;
+}
+
+.imgEmpty {
+  width: 100px;
+  height: 100px;
+}
