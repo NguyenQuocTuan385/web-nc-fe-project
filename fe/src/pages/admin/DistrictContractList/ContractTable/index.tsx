@@ -31,6 +31,7 @@ import useIntercepts from "hooks/useIntercepts";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
+import { ERole } from "models/general";
 
 // const rows = [...user];
 interface FilterProps {
@@ -156,7 +157,9 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
   };
 
   const viewContractDetailHandle = (contractDetailId: number) => {
-    navigate(`${routes.admin.contracts.detail.replace(":id", `${contractDetailId}`)}`);
+    currentUser.role.id === ERole.WARD
+      ? navigate(`${routes.admin.contracts.detailWard.replace(":id", `${contractDetailId}`)}`)
+      : navigate(`${routes.admin.contracts.detailDistrict.replace(":id", `${contractDetailId}`)}`);
   };
 
   return (
@@ -248,8 +251,10 @@ export default function ContractTable({ status, fieldSearch }: FilterProps) {
               </TableRow>
             ))}
             {emptyRows > 0 && (
-              <TableRow style={{ height: 73 * emptyRows }}>
-                <TableCell colSpan={6} />
+              <TableRow style={{ height: 73 }}>
+                <TableCell colSpan={9} align='center'>
+                  Không có dữ liệu
+                </TableCell>
               </TableRow>
             )}
           </TableBody>

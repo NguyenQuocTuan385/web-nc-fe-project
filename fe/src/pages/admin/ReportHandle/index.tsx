@@ -27,6 +27,9 @@ import MailService from "services/email";
 import { EmailRequest } from "models/email";
 import Heading3 from "components/common/text/Heading3";
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { ERole } from "models/general";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -71,6 +74,7 @@ export const ReportHandle = () => {
   };
 
   const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
+  const currentUser = useSelector(selectCurrentUser);
 
   useEffect(() => {
     const getReportById = async () => {
@@ -87,7 +91,9 @@ export const ReportHandle = () => {
   }, []);
 
   const goBack = () => {
-    navigate(`${routes.admin.reports.ward}`);
+    currentUser.role.id === ERole.WARD
+      ? navigate(`${routes.admin.reports.ward}`)
+      : navigate(`${routes.admin.reports.district}`);
   };
 
   const handleGetValueOnChange = (value: string) => {
@@ -100,11 +106,11 @@ export const ReportHandle = () => {
 
   const getHandleStatus = (status: number) => {
     let statusStr = "";
-    if (status == EReportStatus.NEW) {
+    if (status === EReportStatus.NEW) {
       statusStr = "Chưa xử lý";
-    } else if (status == EReportStatus.PROCESSING) {
+    } else if (status === EReportStatus.PROCESSING) {
       statusStr = "Đang xử lý";
-    } else if (status == EReportStatus.DONE) {
+    } else if (status === EReportStatus.DONE) {
       statusStr = "Đã xử lý";
     }
     return statusStr;

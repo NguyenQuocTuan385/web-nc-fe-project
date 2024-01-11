@@ -109,7 +109,7 @@ function App() {
 
             <Route path={routes.admin.properties.district} Component={DistrictManagement} />
             <Route path={routes.admin.properties.ward} Component={WardManagement} />
-            <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
+            <Route path={routes.admin.contracts.createFormWard} element={<ContractForm />} />
 
             <Route path={routes.admin.users.edit} Component={EditProfile} />
             <Route path={routes.admin.users.change_password} Component={ChangePassword} />
@@ -125,32 +125,10 @@ function App() {
 
               {/* Dashboard Ward */}
               <Route path={routes.admin.dashboard.wardDashboard} Component={WardDashBoard} />
-            </Route>
 
-            {/* Reports */}
-            <Route path={routes.admin.reports.root} Component={ReportsManagement} />
-            <Route path={routes.admin.reports.edit} Component={ReportHandle} />
-            <Route path={routes.admin.reports.details} Component={ReportDetail} />
-            <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
-            <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
-            <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
-            <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
-
-            {/* Districts */}
-            <Route element={<RequireAuth availableRoles={[ERole.DISTRICT]} />}>
-              <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
-              <Route
-                path={routes.admin.locations.district}
-                Component={DistrictLocationManagement}
-              />
-              <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
-              <Route path={routes.admin.dashboard.district} Component={DistrictDashBoard} />
-            </Route>
-
-            <Route element={<RequireAuth availableRoles={[ERole.WARD, ERole.DISTRICT]} />}>
               <Route path={routes.admin.properties.ward} Component={WardManagement} />
-              <Route path={routes.admin.contracts.createForm} element={<ContractForm />} />
-              <Route path={routes.admin.contracts.detail} Component={ContractDetail} />
+              <Route path={routes.admin.contracts.createFormWard} element={<ContractForm />} />
+              <Route path={routes.admin.contracts.detailWard} Component={ContractDetail} />
 
               <Route path={routes.admin.locations.wardEdit} Component={LocationEdit} />
 
@@ -175,6 +153,51 @@ function App() {
               <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
             </Route>
 
+            {/* Reports */}
+            <Route path={routes.admin.reports.root} Component={ReportsManagement} />
+            <Route path={routes.admin.reports.edit} Component={ReportHandle} />
+            <Route path={routes.admin.reports.details} Component={ReportDetail} />
+            <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
+            <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
+            <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+            <Route path={routes.admin.statistic.dcms} Component={ReportStatistic} />
+            <Route path={routes.admin.statistic.dcmsDetail} Component={ReportDetail} />
+
+            {/* Districts */}
+            <Route element={<RequireAuth availableRoles={[ERole.DISTRICT]} />}>
+              <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
+              <Route
+                path={routes.admin.locations.district}
+                Component={DistrictLocationManagement}
+              />
+              <Route path={routes.admin.reports.district} Component={DistrictReportsManagement} />
+              <Route path={routes.admin.dashboard.district} Component={DistrictDashBoard} />
+
+              <Route path={routes.admin.contracts.createFormDistrict} element={<ContractForm />} />
+              <Route path={routes.admin.contracts.detailDistrict} Component={ContractDetail} />
+
+              <Route path={routes.admin.locations.districtEdit} Component={LocationEdit} />
+
+              {/* Advertises Ward*/}
+              <Route
+                path={routes.admin.advertises.districtOfLocation}
+                Component={AdvertisesOfLocationManagement}
+              />
+              <Route path={routes.admin.advertises.districtDetails} Component={AdvertiseDetail} />
+              <Route path={routes.admin.advertises.districtEdit} Component={AdvertiseEdit} />
+
+              {/* Reports Ward*/}
+              <Route path={routes.admin.reports.districtEdit} Component={ReportHandle} />
+              <Route path={routes.admin.reports.districtDetails} Component={ReportDetail} />
+            </Route>
+
+            {/* <Route
+              path={routes.admin.reviewEdit.location}
+              Component={EditAdLocationLicenseDetail}
+            />
+            <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
+            <Route path={routes.admin.reviewLisence.root} Component={AdLicense} />
+            <Route path={routes.admin.reviewLisence.detail} Component={AdLicenseDetail} /> */}
             <Route path={routes.admin.properties.district} Component={DistrictManagement} />
 
             {/* Locations Ward*/}
@@ -187,11 +210,6 @@ function App() {
             <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
 
             {/* Advertises Ward*/}
-
-            <Route
-              path={routes.admin.advertises.wardOfLocation}
-              Component={AdvertisesOfLocationManagement}
-            />
             <Route path={routes.admin.advertises.wardDetails} Component={AdvertiseDetail} />
             <Route path={routes.admin.advertises.wardEdit} Component={AdvertiseEdit} />
 

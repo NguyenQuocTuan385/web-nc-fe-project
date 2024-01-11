@@ -37,6 +37,9 @@ import userDetails from "userDetails.json";
 import Heading2 from "components/common/text/Heading2";
 import Editor from "components/common/Editor/EditWithQuill";
 import useIntercepts from "hooks/useIntercepts";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { ERole } from "models/general";
 
 interface FormData {
   propertyId: number;
@@ -505,10 +508,13 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
 export const LocationEdit = () => {
   const navigate = useNavigate();
+  const currentUser = useSelector(selectCurrentUser);
   const { id } = useParams<{ id: string }>();
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.ward.replace(":id", `${id}`)}`);
+    currentUser.role.id === ERole.WARD
+      ? navigate(`${routes.admin.locations.ward.replace(":id", `${id}`)}`)
+      : navigate(`${routes.admin.locations.district.replace(":id", `${id}`)}`);
   };
 
   const [locationData, setLocationData] = useState(null);

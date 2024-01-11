@@ -13,6 +13,9 @@ import ReportService from "services/report";
 import Heading3 from "components/common/text/Heading3";
 import Editor from "components/common/Editor/EditWithQuill";
 import { routes } from "routes/routes";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { ERole } from "models/general";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -50,6 +53,7 @@ export const ReportDetail = () => {
   const navigate = useNavigate();
 
   const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
+  const currentUser = useSelector(selectCurrentUser);
 
   useEffect(() => {
     const getReportById = async () => {
@@ -65,7 +69,9 @@ export const ReportDetail = () => {
   }, []);
 
   const goBack = () => {
-    navigate(`${routes.admin.reports.ward}`);
+    currentUser.role.id === ERole.WARD
+      ? navigate(`${routes.admin.reports.ward}`)
+      : navigate(`${routes.admin.reports.district}`);
   };
 
   return (

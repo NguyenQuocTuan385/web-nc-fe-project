@@ -158,11 +158,11 @@ const DistrictReportsManagement = () => {
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const handleReport = (idReport: number) => {
-    navigate(`${routes.admin.reports.edit.replace(":id", `${idReport}`)}`);
+    navigate(`${routes.admin.reports.districtEdit.replace(":id", `${idReport}`)}`);
   };
 
   const handleViewDetails = (idReport: number) => {
-    navigate(`${routes.admin.reports.details.replace(":id", `${idReport}`)}`);
+    navigate(`${routes.admin.reports.districtDetails.replace(":id", `${idReport}`)}`);
   };
 
   const openFilterDialogHandle = () => {

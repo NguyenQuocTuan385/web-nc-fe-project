@@ -38,6 +38,10 @@ import AdvertiseEditService from "services/advertiseEdit";
 import Heading2 from "components/common/text/Heading2";
 import Editor from "components/common/Editor/EditWithQuill";
 import useIntercepts from "hooks/useIntercepts";
+import { User } from "models/user";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { ERole } from "models/general";
 
 interface FormData {
   licensing: number;
@@ -474,7 +478,7 @@ interface InfoContract {
 export const AdvertiseEdit = () => {
   const navigate = useNavigate();
   const { locationId, advertiseId } = useParams<{ locationId: string; advertiseId: string }>();
-
+  const currentUser: User = useSelector(selectCurrentUser);
   const [infoContract, setInfoContract] = useState<InfoContract | null>(null);
   const [infoAds, setInfoAds] = useState<Advertise | null>(null);
   const [adsTypes, setAdsTypes] = useState([]);
@@ -482,7 +486,9 @@ export const AdvertiseEdit = () => {
   const intercept = useIntercepts();
 
   const goBack = () => {
-    navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${locationId}`)}`);
+    currentUser.role.id === ERole.WARD
+      ? navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${locationId}`)}`)
+      : navigate(`${routes.admin.advertises.districtOfLocation.replace(":id", `${locationId}`)}`);
   };
 
   useEffect(() => {

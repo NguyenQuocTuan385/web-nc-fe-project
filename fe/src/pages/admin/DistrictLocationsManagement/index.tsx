@@ -157,11 +157,11 @@ const DistrictLocationManagement = () => {
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const handleViewAds = (idLocation: number) => {
-    navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.advertises.districtOfLocation.replace(":id", `${idLocation}`)}`);
   };
 
   const handleEditLocation = (idLocation: number) => {
-    navigate(`${routes.admin.locations.wardEdit.replace(":id", `${idLocation}`)}`);
+    navigate(`${routes.admin.locations.districtEdit.replace(":id", `${idLocation}`)}`);
   };
 
   const handleSearch = (query: string) => {
