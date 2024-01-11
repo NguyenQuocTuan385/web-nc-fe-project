@@ -65,13 +65,16 @@ export const API = {
     GET_WITH_PROPERTY_PARENT: "/api/properties/reports"
   },
   REPORT_FORM: {
-    DEFAULT: "/api/report-forms"
+    DEFAULT: "/api/report-forms",
+    DELETE: "/api/report-forms/:id"
   },
   ADVERTISE_FORM: {
-    DEFAULT: "/api/advertise-forms"
+    DEFAULT: "/api/advertise-forms",
+    DELETE: "/api/advertise-forms/:id"
   },
   ADVERTISE_TYPE: {
-    DEFAULT: "/api/advertise-types"
+    DEFAULT: "/api/advertise-types",
+    DELETE: "/api/advertise-types/:id"
   },
   AUTH: {
     LOGIN: "/api/authentication/login",

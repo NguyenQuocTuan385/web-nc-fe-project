@@ -7,7 +7,13 @@ import {
   DialogContent,
   DialogActions,
   Snackbar,
-  Alert
+  Alert,
+  TextField,
+  Select,
+  MenuItem,
+  RadioGroup,
+  FormControlLabel,
+  Radio
 } from "@mui/material";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +22,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 
-import { Header } from "components/common/Header";
 import classes from "./styles.module.scss";
 import SideBarWard from "components/admin/SidebarWard";
 import styled from "styled-components";
@@ -29,14 +34,16 @@ import LocationTypeService from "services/locationType";
 import AdvertiseFormService from "services/advertiseForm";
 import { LocationCreateRequest, LocationType } from "models/location";
 import { AdvertiseForm } from "models/advertise";
-import userDetails from "userDetails.json";
+import Heading2 from "components/common/text/Heading2";
+import useIntercepts from "hooks/useIntercepts";
+import { User } from "models/user";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import WardService from "services/ward";
 import DistrictService from "services/district";
 import { Property } from "models/property";
-import WardService from "services/ward";
-import Heading2 from "components/common/text/Heading2";
 
 interface FormData {
-  districtId: number;
   propertyId: number;
   address: string;
   locationTypeId: number;
@@ -45,11 +52,12 @@ interface FormData {
   imageUrls: any[];
   latitude: number;
   longitude: number;
+  userId: number;
+  districtId: number;
+  wardId: number;
 }
 
 const schema: any = Yup.object().shape({
-  districtId: Yup.number().required("Quận là trường bắt buộc"),
-  propertyId: Yup.number().required("Phường là trường bắt buộc"),
   address: Yup.string().required("Địa chỉ là trường bắt buộc"),
   locationTypeId: Yup.number().required("Loại vị trí là trường bắt buộc"),
   advertiseFormId: Yup.number().required("Hình thức quảng cáo là trường bắt buộc"),
@@ -80,20 +88,16 @@ const ButtonSubmit = styled(Button)(() => ({
   float: "right"
 }));
 
-interface FormCreateLocationDCMSProps {
-  district: Property[];
+interface FormCreateLocationProps {
   locationTypes: LocationType[];
   adsForms: AdvertiseForm[];
-  createLocationByCDMSRequest: (isSuccess: boolean) => void;
-  locationId: number;
+  createLocationEditRequest: (isSuccess: boolean) => void;
 }
 
-const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
-  district,
+const MyForm: React.FC<FormCreateLocationProps> = ({
   locationTypes,
   adsForms,
-  createLocationByCDMSRequest,
-  locationId
+  createLocationCreateRequest
 }: any) => {
   const {
     handleSubmit,
@@ -104,16 +108,16 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
     resolver: yupResolver(schema)
   });
 
-  // Khi có login thì lấy thông tin từ login
-  const userInfo = { ...userDetails };
+  const currentUser: User = useSelector(selectCurrentUser);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [originalImages, setOriginalImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
-  const [selectedDistrict, setSelectedDistrict] = useState<Number>();
-  const [isWardDropdownDisabled, setIsWardDropdownDisabled] = useState(true);
-  const [wards, setWards] = useState<any>([]);
-  const navigate = useNavigate();
+  const [districts, setDistricts] = useState<Property[]>([]);
+  const [wards, setWards] = useState<Property[]>([]);
+  const [selectedDistrict, setSelectedDistrict] = useState<Property | null>(null);
+  const [selectedWard, setSelectedWard] = useState<Property | null>(null);
+  const [selectedWardId, setSelectedWardId] = useState<number | null>(null);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -124,29 +128,13 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
   };
 
   const handleEmitSuccessState = (isSuccess: boolean) => {
-    createLocationByCDMSRequest(isSuccess);
+    createLocationCreateRequest(isSuccess);
   };
 
-  const getWard = async () => {
-    WardService.getAllWardBy(Number(selectedDistrict), {
-      search: "",
-      current: 1,
-      pageSize: 999
-    })
-      .then((res) => {
-        setWards(res.content);
-        setIsWardDropdownDisabled(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const createLocationByCDMS = async (locationCreateRequest: LocationCreateRequest) => {
+  const createLocation = async (locationCreateRequest: LocationCreateRequest) => {
     LocationService.createLocation(locationCreateRequest)
       .then((res) => {
         handleEmitSuccessState(true);
-        navigate(-1);
       })
       .catch((err) => {
         handleEmitSuccessState(false);
@@ -155,6 +143,7 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
   };
 
   const submitHandler = async (data: any) => {
+    console.log(data);
     const files = data.imageUrls;
     const formSubmit: FormData = {
       ...data,
@@ -187,222 +176,298 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
     }
 
     const dataSubmit = {
-      // lay data tu form nhung bỏ districtId
       ...formSubmit,
-      image: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0]
+      image: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
+      propertyId: selectedWard?.id ? selectedWard.id : currentUser.property.id,
+      userId: currentUser.id
     };
-    createLocationByCDMS(dataSubmit);
+
+    console.log(dataSubmit);
+
+    createLocation(dataSubmit);
   };
+
+  const getAllWard = async (id: Number) => {
+    WardService.getAllWardBy(Number(id), {
+      search: "",
+      pageSize: 999
+    })
+      .then((res) => {
+        setWards(res.content);
+        return res.content;
+      })
+      .catch((err: any) => console.log(err));
+  };
+
+  useEffect(() => {
+    const getAllDistrict = async () => {
+      DistrictService.getAllDistrict({
+        search: "",
+        pageSize: 999
+      })
+        .then((res) => {
+          setDistricts(res.content);
+          return res.content;
+        })
+        .catch((err: any) => console.log(err));
+    };
+    getAllDistrict();
+  }, []);
+
+  useEffect(() => {
+    if (selectedDistrict) {
+      getAllWard(selectedDistrict.id);
+    }
+  }, [selectedDistrict]);
 
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
-      {/* Quận huyện */}
-      <div className={classes["input-container"]}>
-        <label>Địa điểm:</label>
-        <Box className={classes["coordinates-container"]}>
-          <Box className={classes["input-small"]}>
-            <label>Quận: </label>
-            <Controller
-              control={control}
-              name='districtId'
-              render={({ field }) => (
-                <div className={classes["input-error-container"]}>
-                  <select
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e.target.value);
-                      setSelectedDistrict(Number(e.target.value));
-                      setIsWardDropdownDisabled(true);
-                      getWard();
-                    }}
-                    className={classes["select-custom"]}
-                  >
-                    <option value=''>Chọn quận</option>
-                    {district.length > 0 &&
-                      district.map((district: Property, index: number) => {
-                        return (
-                          <option value={district.id} key={district.id}>
-                            {district.name}
-                          </option>
-                        );
-                      })}
-                  </select>
-                  {errors.districtId && <div className={classes["error-text"]}></div>}
-                </div>
+      {/* Khu vực */}
+      <Box className={classes["input-container"]}>
+        <label>Quận:</label>
+        <Controller
+          control={control}
+          name='districtId'
+          render={({ field }) => (
+            <div className={classes["input-error-container"]}>
+              <Select
+                {...field}
+                {...register("districtId")}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
+                onChange={(e) => {
+                  const selectedDistrict = districts.find(
+                    (district) => district.id === e.target.value
+                  );
+                  if (selectedDistrict) {
+                    setSelectedDistrict(selectedDistrict);
+                  }
+                  if (selectedDistrict) {
+                    getAllWard(selectedDistrict.id);
+                  }
+                }}
+              >
+                <MenuItem value=''>Chọn quận</MenuItem>
+                {districts.map((district) => (
+                  <MenuItem value={district.id} key={district.id}>
+                    {district.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.districtId && (
+                <div className={classes["error-text"]}>{errors.districtId.message}</div>
               )}
-            />
-          </Box>
+            </div>
+          )}
+        />
+      </Box>
 
-          <Box className={classes["input-small"]}>
-            <label>Phường: </label>
-            <Controller
-              control={control}
-              name='propertyId'
-              render={({ field }) => (
-                <div className={classes["input-error-container"]}>
-                  <select
-                    {...field}
-                    disabled={isWardDropdownDisabled}
-                    className={classes["select-custom"]}
-                  >
-                    <option value=''>Chọn phường</option>
-                    {wards.length > 0 &&
-                      wards.map((ward: Property, index: number) => {
-                        return (
-                          <option value={ward.id} key={ward.id}>
-                            {ward.name}
-                          </option>
-                        );
-                      })}
-                  </select>
-                  {errors.propertyId && <div className={classes["error-text"]}></div>}
-                </div>
+      <Box className={classes["input-container"]}>
+        <label>Phường:</label>
+        <Controller
+          control={control}
+          name='wardId'
+          render={({ field }) => (
+            <div className={classes["input-error-container"]}>
+              <Select
+                {...field}
+                {...register("wardId")}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
+                onChange={(e) => {
+                  const selectedWard = wards.find((ward) => ward.id === e.target.value);
+                  if (selectedWard) {
+                    setSelectedWard(selectedWard);
+                  }
+                }}
+              >
+                <MenuItem value=''>Chọn phường</MenuItem>
+                {wards.map((ward) => (
+                  <MenuItem value={ward.id} key={ward.id}>
+                    {ward.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.wardId && (
+                <div className={classes["error-text"]}>{errors.wardId.message}</div>
               )}
-            />
-          </Box>
-        </Box>
-      </div>
+            </div>
+          )}
+        />
+      </Box>
 
       {/* Địa chỉ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Địa chỉ:</label>
         <Controller
           control={control}
           name='address'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <input
+              <TextField
+                required
+                id='outlined-required'
                 {...field}
                 {...register("address")}
-                type='text'
-                className={classes["input-custom"]}
+                fullWidth
               />
-              {errors.address && <div className={classes["error-text"]}></div>}
+
+              {errors.address && (
+                <div className={classes["error-text"]}>{errors.address.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Tọa độ */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Tọa độ:</label>
         <Box className={classes["coordinates-container"]}>
           <Box className={classes["input-small"]}>
-            <label>Vĩ độ: </label>
             <Controller
               control={control}
               name='latitude'
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
+                  <TextField
+                    required
+                    id='outlined-required'
+                    label='Vĩ độ'
+                    type='number'
                     {...field}
                     {...register("latitude")}
-                    type='number'
-                    className={classes["input-custom"]}
+                    fullWidth
                   />
+
+                  {errors.latitude && (
+                    <div className={classes["error-text"]}>{errors.latitude.message}</div>
+                  )}
                 </div>
               )}
             />
           </Box>
 
           <Box className={classes["input-small"]}>
-            <label>Tung độ: </label>
             <Controller
               control={control}
               name='longitude'
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
-                  <input
+                  <TextField
+                    required
+                    id='outlined-required'
+                    label='Tung độ'
+                    type='number'
                     {...field}
                     {...register("longitude")}
-                    type='number'
-                    className={classes["input-custom"]}
+                    fullWidth
                   />
+                  {errors.longitude && (
+                    <div className={classes["error-text"]}>{errors.longitude.message}</div>
+                  )}
                 </div>
               )}
             />
           </Box>
         </Box>
-      </div>
+      </Box>
 
       {/* Loại vị trí */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Loại vị trí:</label>
         <Controller
           control={control}
           name='locationTypeId'
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select
+              <Select
                 {...field}
                 {...register("locationTypeId")}
-                className={classes["select-custom"]}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
               >
-                <option value=''>Chọn loại vị trí</option>
+                <MenuItem>Chọn loại vị trí</MenuItem>
                 {locationTypes.length > 0 &&
-                  locationTypes.map((locationType: LocationType, index: number) => {
-                    return (
-                      <option value={locationType.id} key={locationType.id}>
-                        {locationType.name}
-                      </option>
-                    );
-                  })}
-              </select>
-              {errors.locationTypeId && <div className={classes["error-text"]}></div>}
+                  locationTypes.map((locationType: LocationType, index: number) => (
+                    <MenuItem value={locationType.id} key={locationType.id}>
+                      {locationType.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+              {errors.locationTypeId && (
+                <div className={classes["error-text"]}>{errors.locationTypeId.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình thức quảng cáo */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình thức quảng cáo:</label>
         <Controller
           control={control}
           name='advertiseFormId'
+          // defaultValue={data.adsForm.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select
+              <Select
                 {...field}
                 {...register("advertiseFormId")}
-                className={classes["select-custom"]}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
               >
-                <option value=''>Chọn hình thức quảng cáo</option>
+                <MenuItem>Chọn hình thức quảng cáo</MenuItem>
                 {adsForms.length > 0 &&
-                  adsForms.map((adsForm: AdvertiseForm, index: number) => {
-                    return (
-                      <option value={adsForm.id} key={adsForm.id}>
-                        {adsForm.name}
-                      </option>
-                    );
-                  })}
-              </select>
-              {errors.advertiseFormId && <div className={classes["error-text"]}></div>}
+                  adsForms.map((adsForm: AdvertiseForm, index: number) => (
+                    <MenuItem value={adsForm.id} key={adsForm.id}>
+                      {adsForm.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+              {errors.advertiseFormId && (
+                <div className={classes["error-text"]}>{errors.advertiseFormId.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Quy hoạch */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Quy hoạch:</label>
         <Controller
           control={control}
           name='planning'
+          // defaultValue={data.planning}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
-              <select {...field} {...register("planning")} className={classes["select-custom"]}>
-                <option value=''>Chọn quy hoạch</option>
-                <option value='false'>Chưa quy hoạch</option>
-                <option value='true'>Đã quy hoạch</option>
-              </select>
+              <Select
+                {...field}
+                {...register("planning")}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth
+              >
+                <MenuItem>Chọn quy hoạch</MenuItem>
+                <MenuItem value='false'>Chưa quy hoạch</MenuItem>
+                <MenuItem value='true'>Đã quy hoạch</MenuItem>
+              </Select>
+              {errors.planning && (
+                <div className={classes["error-text"]}>{errors.planning.message}</div>
+              )}
             </div>
           )}
         />
-      </div>
+      </Box>
 
       {/* Hình ảnh */}
-      <div className={classes["input-container"]}>
+      <Box className={classes["input-container"]}>
         <label>Hình ảnh:</label>
         <Controller
           control={control}
@@ -495,38 +560,23 @@ const MyForm: React.FC<FormCreateLocationDCMSProps> = ({
             </div>
           )}
         />
-      </div>
+      </Box>
 
-      <ButtonSubmit type='submit'>Tạo</ButtonSubmit>
+      <ButtonSubmit type='submit'>Tạo địa điểm</ButtonSubmit>
     </form>
   );
 };
 
 export const LocationCreateCDMS = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.dcms.replace(":id", `${id}`)}`);
+    navigate(`${routes.admin.locations.dcms}`);
   };
-
-  const [district, setDistrict] = useState<any>([]);
   const [locationTypes, setLocationTypes] = useState([]);
   const [adsForms, setAdsForms] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const getDistrict = async () => {
-      DistrictService.getAllDistrict({})
-        .then((res) => {
-          setDistrict(res.content);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getDistrict();
-  }, []);
+  const intercept = useIntercepts();
 
   useEffect(() => {
     const getAllLocationTypes = async () => {
@@ -560,39 +610,38 @@ export const LocationCreateCDMS = () => {
 
   return (
     <Box>
-      <Header />
+      {/* <Header /> */}
       <div className={classes["location-edit-container"]}>
-        <SideBarWard></SideBarWard>
-        <Box className={classes["container-body"]}>
-          <ButtonBack onClick={() => goBack()}>
-            <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-            Trở về
-          </ButtonBack>
+        <SideBarWard>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
 
-          <Box className={classes["info-edit-container"]}>
-            <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
-            <MyForm
-              district={district}
-              locationTypes={locationTypes}
-              adsForms={adsForms}
-              createLocationByCDMSRequest={handleGetSuccessState}
-              locationId={Number(id)}
-            />
-          </Box>
+            <Box className={classes["info-edit-container"]}>
+              <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
+              <MyForm
+                locationTypes={locationTypes}
+                adsForms={adsForms}
+                createLocationEditRequest={handleGetSuccessState}
+              />
+            </Box>
 
-          <Snackbar
-            open={isCreateSuccess !== null}
-            autoHideDuration={3000}
-            onClose={() => setIsCreateSuccess(null)}
-          >
-            <Alert
-              severity={isCreateSuccess ? "success" : "error"}
+            <Snackbar
+              open={isCreateSuccess !== null}
+              autoHideDuration={3000}
               onClose={() => setIsCreateSuccess(null)}
             >
-              {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
-            </Alert>
-          </Snackbar>
-        </Box>
+              <Alert
+                severity={isCreateSuccess ? "success" : "error"}
+                onClose={() => setIsCreateSuccess(null)}
+              >
+                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+              </Alert>
+            </Snackbar>
+          </Box>
+        </SideBarWard>
       </div>
     </Box>
   );

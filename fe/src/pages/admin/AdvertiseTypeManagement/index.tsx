@@ -1,4 +1,13 @@
-import { Box, Pagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Pagination
+} from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
 import SearchAppBar from "components/common/Search";
@@ -21,6 +30,8 @@ export default function ReportFormManagement() {
   const [advertiseType, setAdvertiseType] = useState<AdvertiseType[]>([]);
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
+  const [advertiseTypeId, setAdvertiseTypeId] = useState(0);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const handleSearch = (query: string) => {
     setSearchValue(query);
@@ -42,6 +53,24 @@ export default function ReportFormManagement() {
   });
 
   const intercept = useIntercepts();
+
+  const deleteAdvertiseType = (id: number) => {
+    AdvertiseTypeService.deleteAdvertiseTypeById(id, intercept)
+      .then(() => {
+        getAllAdvertiseType();
+        setOpenDeleteDialog(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handleDeleteAdvertiseType = (id: number) => {
+    setAdvertiseTypeId(id);
+    setOpenDeleteDialog(true);
+  };
+  const closeDeleteDialogHandle = () => {
+    setOpenDeleteDialog(false);
+  };
 
   const getAllAdvertiseType = async () => {
     try {
@@ -90,6 +119,7 @@ export default function ReportFormManagement() {
                   customHeading={customHeading}
                   customColumns={customColumns}
                   isActionColumn={true}
+                  onDeleteClick={handleDeleteAdvertiseType}
                 />
 
                 <Box className={classes["pagination-custom"]}>
@@ -108,6 +138,34 @@ export default function ReportFormManagement() {
           </Box>
         </SidebarDCMS>
       </div>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={closeDeleteDialogHandle}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa loại quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
+            Hủy bỏ
+          </Button>
+          <Button
+            variant='contained'
+            onClick={() => {
+              deleteAdvertiseType(advertiseTypeId);
+            }}
+            autoFocus
+            color='success'
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

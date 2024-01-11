@@ -13,6 +13,16 @@ export class AdvertiseFormService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async deleteAdvertiseFormById(id: number, api: any): Promise<any> {
+    return await api
+      .delete(`${API.ADVERTISE_FORM.DELETE.replace(":id", `${id}`)}`)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default AdvertiseFormService;

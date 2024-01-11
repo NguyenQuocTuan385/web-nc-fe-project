@@ -13,6 +13,16 @@ export class ReportFormService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async deleteReportFormById(id: number, api: any): Promise<any> {
+    return await api
+      .delete(`${API.REPORT_FORM.DELETE.replace(":id", `${id}`)}`)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default ReportFormService;

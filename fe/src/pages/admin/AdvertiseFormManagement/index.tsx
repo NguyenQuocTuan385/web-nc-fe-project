@@ -1,4 +1,4 @@
-import { Box, Pagination } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Pagination } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
 import SearchAppBar from "components/common/Search";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import queryString from "query-string";
 import AdvertiseFormService from "services/advertiseForm";
 import { AdvertiseForm } from "models/advertise";
+import useIntercepts from "hooks/useIntercepts";
 
 export default function ReportFormManagement() {
   const customHeading = ["STT", "Tên hình thức quảng cáo", "Mô tả"];
@@ -69,6 +70,31 @@ export default function ReportFormManagement() {
     };
   });
 
+   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [advertiseFormId, setAdvertiseFormId] = useState(0);
+
+
+  const intercept = useIntercepts();
+
+  const deleteAdvertiseForm = (id: number) => {
+    AdvertiseFormService.deleteAdvertiseFormById(id, intercept)
+      .then(() => {
+        getAllAdvertiseForm();
+        setOpenDeleteDialog(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handleDeleteAdvertiseForm = (id: number) => {
+    setAdvertiseFormId(id);
+    setOpenDeleteDialog(true);
+  };
+  const closeDeleteDialogHandle = () => {
+    setOpenDeleteDialog(false);
+  };
+
+
   return (
     <div>
       <div className={classes["location-management-container"]}>
@@ -84,6 +110,7 @@ export default function ReportFormManagement() {
                   customHeading={customHeading}
                   customColumns={customColumns}
                   isActionColumn={true}
+                  onDeleteClick={handleDeleteAdvertiseForm}
                 />
 
                 <Box className={classes["pagination-custom"]}>
@@ -102,6 +129,34 @@ export default function ReportFormManagement() {
           </Box>
         </SidebarDCMS>
       </div>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={closeDeleteDialogHandle}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa hình thức quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
+            Hủy bỏ
+          </Button>
+          <Button
+            variant='contained'
+            onClick={() => {
+              deleteAdvertiseForm(advertiseFormId);
+            }}
+            autoFocus
+            color='success'
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
