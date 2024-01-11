@@ -1,4 +1,13 @@
-import { Box, Pagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Pagination
+} from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
 import SearchAppBar from "components/common/Search";
@@ -8,6 +17,7 @@ import ReportFormService from "services/reportForm";
 import queryString from "query-string";
 import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import { ReportForm } from "models/report";
+import useIntercepts from "hooks/useIntercepts";
 
 export default function ReportFormManagement() {
   const customHeading = ["STT", "Tên hình thức báo cáo", "Mô tả"];
@@ -20,6 +30,8 @@ export default function ReportFormManagement() {
   const [reportForm, setReportForm] = useState<ReportForm[]>([]);
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [reportFormId, setReportFormId] = useState(0);
 
   const [currentPage, setCurrentPage] = useState(() => {
     const params = queryString.parse(locationHook.search);
@@ -29,7 +41,7 @@ export default function ReportFormManagement() {
     setSearchValue(query);
   };
 
-const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
+  const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: number) => {
     setCurrentPage(newPageValue);
     navigate({
       pathname: match,
@@ -68,6 +80,28 @@ const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: numbe
     };
   });
 
+  const closeDeleteDialogHandle = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleDeleteReportForm = (id: number) => {
+    setReportFormId(id);
+    setOpenDeleteDialog(true);
+  };
+
+  const intercept = useIntercepts();
+
+  const deleteReportForm = (id: number) => {
+    ReportFormService.deleteReportFormById(id, intercept)
+      .then(() => {
+        getAllReportForm();
+        setOpenDeleteDialog(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div>
       <div className={classes["location-management-container"]}>
@@ -83,8 +117,7 @@ const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: numbe
                   customHeading={customHeading}
                   customColumns={customColumns}
                   isActionColumn={true}
-                  // onEditClick={handleEditProperty}
-                  // onDeleteClick={handleDeleteProperty}
+                  onDeleteClick={handleDeleteReportForm}
                 />
 
                 <Box className={classes["pagination-custom"]}>
@@ -103,6 +136,34 @@ const handleChangePage = (event: React.ChangeEvent<unknown>, newPageValue: numbe
           </Box>
         </SidebarDCMS>
       </div>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={closeDeleteDialogHandle}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa hình thức báo cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
+            Hủy bỏ
+          </Button>
+          <Button
+            variant='contained'
+            onClick={() => {
+              deleteReportForm(reportFormId);
+            }}
+            autoFocus
+            color='success'
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

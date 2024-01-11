@@ -13,6 +13,16 @@ export class AdvertiseTypeService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async deleteAdvertiseTypeById(id: number, api: any): Promise<any> {
+    return await api
+      .delete(`${API.ADVERTISE_TYPE.DELETE.replace(":id", `${id}`)}`)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default AdvertiseTypeService;
