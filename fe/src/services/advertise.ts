@@ -1,9 +1,14 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { GetAdvertises, UpdateAdvertise, UpdateAdvertiseStatus, UpdateStatus } from "models/advertise";
+import {
+  GetAdvertises,
+  UpdateAdvertise,
+  UpdateAdvertiseStatus,
+  UpdateStatus
+} from "models/advertise";
 
 export class AdvertiseService {
-  static async getAdvertisesByLocationId(id: number, data: GetAdvertises, api: any): Promise<any> {
+  static async getAdvertisesByLocationId(id: number, data: GetAdvertises, api?: any): Promise<any> {
     return await api
       .get(`${API.ADVERTISE.DEFAULT.replace(":id", `${id}`)}`, { params: data })
       .then((res: any) => {

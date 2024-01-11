@@ -23,6 +23,7 @@ export interface Location {
   locationEdit?: LocationEdit;
   createdAt?: string;
   reportStatus?: string;
+  existsAdvertises?: boolean;
 }
 
 export interface LocationView {

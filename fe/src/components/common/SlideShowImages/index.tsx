@@ -31,7 +31,12 @@ const SlideShowImages: React.FC<SlideShowKImagesProps> = ({ images }: any) => {
 
   return (
     <Box sx={{ maxWidth: 500, flexGrow: 1, borderRadius: "8px", overflow: "hidden" }}>
-      <AutoPlaySwipeableViews axis='x' index={activeStep} onChangeIndex={handleStepChange} enableMouseEvents>
+      <AutoPlaySwipeableViews
+        axis='x'
+        index={activeStep}
+        onChangeIndex={handleStepChange}
+        enableMouseEvents
+      >
         {images.map((step: string, index: number) => (
           <div key={step + index} style={{ borderRadius: "8px" }}>
             {Math.abs(activeStep - index) <= 2 ? (

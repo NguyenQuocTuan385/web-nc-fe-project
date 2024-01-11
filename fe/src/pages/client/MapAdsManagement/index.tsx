@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import MapLibreGL, { MapGeoJSONFeature, Map as MapLibre, Marker } from "maplibre-gl";
+import MapLibreGL, { GeoJSONSource, MapGeoJSONFeature, Map as MapLibre, Marker } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import "@maptiler/geocoding-control/style.css";
@@ -7,7 +7,7 @@ import classes from "./styles.module.scss";
 import * as maptilersdk from "@maptiler/sdk";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import { MapController } from "@maptiler/geocoding-control/types";
-import { Feature } from "models/geojson";
+import { Feature, GeoJson } from "models/geojson";
 import { Location, RandomLocation } from "models/location";
 import PopoverHover from "./components/PopoverHover";
 import LocationSidebar from "./components/LocationSidebar";
@@ -24,6 +24,16 @@ import PopoverHelper from "./components/PopoverHelper";
 import { Help } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
 
+enum ELocationCheckedSwitch {
+  BOTH = 1,
+  LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING = 2,
+  LOCATION_IS_PLANNING_AND_REPORT_LOCATION = 3,
+  LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION = 4,
+  LOCATION_IS_PLANNING = 5,
+  LOCATION_IS_NOT_PLANNING = 6,
+  REPORT_LOCATION = 7,
+  NOT_AT_ALL = 8
+}
 const MapAdsManagement = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<MapLibre | null>(null);
@@ -52,6 +62,11 @@ const MapAdsManagement = () => {
   const locationsIsNotPlanningHasAdvertises: Feature[] = [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const reportLocations: Feature[] = [];
+  let clusters = useRef<Feature[]>([]);
+  const [locationCheckedSwitch, setLocationCheckedSwitch] = useState<ELocationCheckedSwitch>(
+    ELocationCheckedSwitch.BOTH
+  );
+
   const closeAdsSidebar = () => {
     setOpenLocationSidebar(false);
   };
@@ -78,8 +93,6 @@ const MapAdsManagement = () => {
             email: "nguyenvana@gmail.com"
           });
 
-          const existsAdvertises = await LocationService.checkExistsAdvertises(location.id);
-
           if (res.content.length > 0) {
             const report: Report = res.content[res.content.length - 1];
             let reportStatus: string;
@@ -93,6 +106,9 @@ const MapAdsManagement = () => {
             location.reportStatus = reportStatus;
           }
 
+          const existsAdvertises = await LocationService.checkExistsAdvertises(location.id);
+          location.existsAdvertises = existsAdvertises;
+
           const feature: Feature = {
             type: "Feature",
             geometry: {
@@ -100,7 +116,8 @@ const MapAdsManagement = () => {
               coordinates: [location.longitude, location.latitude]
             },
             properties: {
-              ...location
+              ...location,
+              isAdvertiseLocation: true
             }
           };
 
@@ -153,7 +170,8 @@ const MapAdsManagement = () => {
                 coordinates: [reportLocation.longitude, reportLocation.latitude]
               },
               properties: {
-                ...reportLocation
+                ...reportLocation,
+                isAdvertiseLocation: false
               }
             };
             reportLocations.push(feature);
@@ -177,6 +195,53 @@ const MapAdsManagement = () => {
     }
   };
 
+  const changeSourceDataLocation = (locationCheckedChange: ELocationCheckedSwitch) => {
+    if (locationCheckedChange === ELocationCheckedSwitch.BOTH) {
+      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
+        locationsIsNotPlanningNoAdvertises,
+        locationsIsPlanningHasAdvertises,
+        locationsIsPlanningNoAdvertises,
+        reportLocations
+      );
+    } else if (
+      locationCheckedChange ===
+      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+    ) {
+      clusters.current = locationsIsPlanningHasAdvertises.concat(
+        locationsIsPlanningNoAdvertises,
+        locationsIsNotPlanningNoAdvertises,
+        locationsIsNotPlanningHasAdvertises
+      );
+    } else if (
+      locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+    ) {
+      clusters.current = locationsIsPlanningHasAdvertises.concat(
+        locationsIsPlanningNoAdvertises,
+        reportLocations
+      );
+    } else if (
+      locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+    ) {
+      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
+        locationsIsNotPlanningNoAdvertises,
+        reportLocations
+      );
+    } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING) {
+      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
+        locationsIsNotPlanningNoAdvertises
+      );
+    } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
+      clusters.current = locationsIsPlanningHasAdvertises.concat(locationsIsPlanningNoAdvertises);
+    } else if (locationCheckedChange === ELocationCheckedSwitch.REPORT_LOCATION) {
+      clusters.current = reportLocations;
+    } else {
+      clusters.current = [];
+    }
+    (map.current?.getSource("locations") as GeoJSONSource)?.setData({
+      type: "FeatureCollection",
+      features: clusters.current as any
+    });
+  };
   const changeHandleReportLocation = () => {
     const currentMap = map.current;
     if (!currentMap) return;
@@ -264,193 +329,361 @@ const MapAdsManagement = () => {
     }
   };
 
-  const loadLocationLayer = (
-    imageUrl: string,
-    imageName: string,
-    layerName: string,
-    features: Feature[]
-  ) => {
+  const loadLocationLayerFunction = (layerId: string) => {
     if (!map.current) return;
-    map.current.loadImage(imageUrl, (error, image) => {
-      if (error) throw error;
-      if (!map.current) return;
-      map.current.addImage(imageName, image as HTMLImageElement);
-      map.current.addSource(layerName, {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: features
-        }
-      });
+    map.current.on("mouseenter", layerId, (e) => showPopup(e));
+    map.current.on("mouseleave", layerId, () => {
+      hidePopup();
+    });
 
-      map.current.addLayer({
-        id: layerName,
-        type: "symbol",
-        source: layerName,
-        layout: {
-          "icon-image": imageName,
-          "text-field": ["get", "reportStatus"],
-          "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-          "text-offset": [0, 1.25],
-          "text-size": 10,
-          "text-anchor": "top"
-        }
-      });
-      map.current.on("mouseenter", layerName, (e) => showPopup(e));
-      map.current.on("mouseleave", layerName, () => {
-        hidePopup();
-      });
-
-      map.current.on("click", layerName, (e) => {
-        clickHandler(e, layerName);
-      });
+    map.current.on("click", layerId, (e) => {
+      clickHandler(e, layerId);
     });
   };
+
   useEffect(() => {
-    const initMap = () => {
-      if (map.current) return; // stops map from initializing more than once
-      if (lng && lat) {
-        map.current = new MapLibre({
-          container: mapContainer.current as HTMLDivElement,
-          style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${API_KEY}`,
-          center: [lng, lat],
-          zoom: zoom
+    if (map.current) return; // stops map from initializing more than once
+    if (lng && lat) {
+      map.current = new MapLibre({
+        container: mapContainer.current as HTMLDivElement,
+        style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${API_KEY}`,
+        center: [lng, lat],
+        zoom: zoom
+      });
+
+      map.current.addControl(new MapLibreGL.NavigationControl(), "top-right");
+      map.current.addControl(new MapLibreGL.FullscreenControl());
+      map.current.addControl(
+        new MapLibreGL.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true
+          },
+          trackUserLocation: true
+        })
+      );
+      setMapController(createMapLibreGlMapController(map.current, MapLibreGL));
+      map.current.on("load", () => {
+        if (!map.current) return;
+
+        clusters.current = locationsIsNotPlanningHasAdvertises.concat(
+          locationsIsNotPlanningNoAdvertises,
+          locationsIsPlanningHasAdvertises,
+          locationsIsPlanningNoAdvertises,
+          reportLocations
+        );
+
+        const clustersGeojson: GeoJson = {
+          type: "FeatureCollection",
+          features: clusters.current
+        };
+
+        map.current.addSource("locations", {
+          type: "geojson",
+          data: clustersGeojson,
+          cluster: true,
+          clusterMaxZoom: 14,
+          clusterRadius: 50
         });
 
-        map.current.addControl(new MapLibreGL.NavigationControl(), "top-right");
-        map.current.addControl(new MapLibreGL.FullscreenControl());
-        map.current.addControl(
-          new MapLibreGL.GeolocateControl({
-            positionOptions: {
-              enableHighAccuracy: true
-            },
-            trackUserLocation: true
-          })
-        );
-        setMapController(createMapLibreGlMapController(map.current, MapLibreGL));
-        map.current.on("load", () => {
-          if (!map.current) return;
-          loadLocationLayer(
-            "https://i.ibb.co/5hWpBFR/icons8-circle-24-3.png",
-            "marker_is_planning_no_advertises",
-            "locations_is_planning_no_advertises",
-            locationsIsPlanningNoAdvertises
-          );
-          loadLocationLayer(
-            "https://i.ibb.co/BPbcShD/icons8-circle-24-7.png",
-            "marker_is_planning_has_advertises",
-            "locations_is_planning_has_advertises",
-            locationsIsPlanningHasAdvertises
-          );
-          loadLocationLayer(
-            "https://i.ibb.co/LvJJcmX/icons8-circle-24-4.png",
-            "marker_is_not_planning_has_advertises",
-            "locations_is_not_planning_has_advertises",
-            locationsIsNotPlanningHasAdvertises
-          );
-          loadLocationLayer(
-            "https://i.ibb.co/JyWgyYt/icons8-circle-24-6.png",
-            "marker_is_not_planning_not_advertises",
-            "locations_is_not_planning_no_advertises",
-            locationsIsNotPlanningNoAdvertises
-          );
-          map.current.loadImage(
-            "https://i.ibb.co/Jmm2yS2/icons8-circle-24-5.png",
-            (error, image) => {
-              if (!map.current) return;
-              map.current.addImage("marker_report_location", image as HTMLImageElement);
-              map.current.addSource("report_location", {
-                type: "geojson",
-                data: {
-                  type: "FeatureCollection",
-                  features: reportLocations
-                }
-              });
+        map.current.addLayer({
+          id: "clusters",
+          type: "circle",
+          source: "locations",
+          filter: ["has", "point_count"],
+          paint: {
+            "circle-color": [
+              "step",
+              ["get", "point_count"],
+              "#51bbd6",
+              5,
+              "#f1f075",
+              10,
+              "#f28cb1"
+            ],
+            "circle-radius": ["step", ["get", "point_count"], 15, 5, 25, 10, 35]
+          }
+        });
 
-              map.current.addLayer({
-                id: "report_location",
-                type: "symbol",
-                source: "report_location",
-                layout: {
-                  "icon-image": "marker_report_location",
-                  "text-field": ["get", "reportStatus"],
-                  "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-                  "text-offset": [0, 1.25],
-                  "text-size": 10,
-                  "text-anchor": "top"
-                }
-              });
+        map.current.addLayer({
+          id: "cluster-count",
+          type: "symbol",
+          source: "locations",
+          filter: ["has", "point_count"],
+          layout: {
+            "text-field": "{point_count_abbreviated}",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 12
+          }
+        });
 
-              map.current.on("mouseenter", "report_location", (e) => {
-                if (map.current) map.current.getCanvas().style.cursor = "pointer";
-              });
-              map.current.on("mouseleave", "report_location", () => {
-                if (map.current) map.current.getCanvas().style.cursor = "";
-              });
+        map.current.addLayer({
+          id: "unclustered-location_is_planning_no_advertises",
+          type: "circle",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", true],
+            ["==", "existsAdvertises", false]
+          ],
+          paint: {
+            "circle-color": "	#001aff",
+            "circle-radius": 8
+          }
+        });
 
-              map.current.on("click", "report_location", (e) => {
-                const map = e.target;
-                const features: MapGeoJSONFeature[] = map.queryRenderedFeatures(e.point, {
-                  layers: ["report_location"]
-                });
-                if (features.length > 0) {
-                  closeAdsSidebar();
-                  setOpenRandomLocationSidebar(true);
-                  const { longitude, address, latitude } = features[0].properties;
-                  const randomLocationTemp: RandomLocation = {
-                    address: address,
-                    longitude: longitude,
-                    latitude: latitude
-                  };
-                  setRandomLocationData(randomLocationTemp);
-                }
-              });
-            }
-          );
-          map.current.on("click", async (e) => {
-            const map = e.target;
-            const features = map.queryRenderedFeatures(e.point, {
-              layers: [
-                "locations_is_planning_no_advertises",
-                "locations_is_planning_has_advertises",
-                "locations_is_not_planning_has_advertises",
-                "locations_is_not_planning_no_advertises",
-                "report_location"
-              ]
-            });
-            if (features.length > 0) {
-              return;
+        map.current.addLayer({
+          id: "unclustered-location_is_planning_no_advertises-text",
+          type: "symbol",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", true],
+            ["==", "existsAdvertises", false]
+          ],
+          layout: {
+            "text-field": "QC",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 6
+          },
+          paint: {
+            "text-color": "white"
+          }
+        });
+
+        loadLocationLayerFunction("unclustered-location_is_planning_no_advertises");
+
+        map.current.addLayer({
+          id: "unclustered_location_is_planning_has_advertises",
+          type: "circle",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", true],
+            ["==", "existsAdvertises", true]
+          ],
+          paint: {
+            "circle-color": "#fcc419",
+            "circle-radius": 8
+          }
+        });
+
+        map.current.addLayer({
+          id: "unclustered_location_is_planning_has_advertises-text",
+          type: "symbol",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", true],
+            ["==", "existsAdvertises", true]
+          ],
+          layout: {
+            "text-field": "QC",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 6
+          },
+          paint: {
+            "text-color": "white"
+          }
+        });
+
+        loadLocationLayerFunction("unclustered_location_is_planning_has_advertises");
+
+        map.current.addLayer({
+          id: "unclustered_location_is_not_planning_has_advertises",
+          type: "circle",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", false],
+            ["==", "existsAdvertises", true]
+          ],
+          paint: {
+            "circle-color": "#ff0000",
+            "circle-radius": 8
+          }
+        });
+
+        loadLocationLayerFunction("unclustered_location_is_not_planning_has_advertises");
+
+        map.current.addLayer({
+          id: "unclustered_location_is_not_planning_has_advertises-text",
+          type: "symbol",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", false],
+            ["==", "existsAdvertises", true]
+          ],
+          layout: {
+            "text-field": "QC",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 6
+          },
+          paint: {
+            "text-color": "white"
+          }
+        });
+
+        map.current.addLayer({
+          id: "unclustered_location_is_not_planning_no_advertises",
+          type: "circle",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", false],
+            ["==", "existsAdvertises", false]
+          ],
+          paint: {
+            "circle-color": "#f033c9",
+            "circle-radius": 8
+          }
+        });
+
+        map.current.addLayer({
+          id: "unclustered_location_is_not_planning_no_advertises-text",
+          type: "symbol",
+          source: "locations",
+          filter: [
+            "all",
+            ["!has", "point_count"],
+            ["==", "planning", false],
+            ["==", "existsAdvertises", false]
+          ],
+          layout: {
+            "text-field": "QC",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 6
+          },
+          paint: {
+            "text-color": "white"
+          }
+        });
+
+        loadLocationLayerFunction("unclustered_location_is_not_planning_no_advertises");
+
+        map.current.addLayer({
+          id: "unclustered_report_location",
+          type: "circle",
+          source: "locations",
+          filter: ["all", ["!has", "point_count"], ["==", "isAdvertiseLocation", false]],
+          paint: {
+            "circle-color": "#00b100",
+            "circle-radius": 8
+          }
+        });
+
+        map.current.addLayer({
+          id: "unclustered_report_location-text",
+          type: "symbol",
+          source: "locations",
+          filter: ["all", ["!has", "point_count"], ["==", "isAdvertiseLocation", false]],
+          layout: {
+            "text-field": "RP",
+            "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+            "text-size": 6
+          },
+          paint: {
+            "text-color": "white"
+          }
+        });
+
+        map.current.on("mouseenter", "unclustered_report_location", (e) => {
+          if (map.current) map.current.getCanvas().style.cursor = "pointer";
+        });
+        map.current.on("mouseleave", "unclustered_report_location", () => {
+          if (map.current) map.current.getCanvas().style.cursor = "";
+        });
+
+        map.current.on("click", "unclustered_report_location", (e) => {
+          const map = e.target;
+          const features: MapGeoJSONFeature[] = map.queryRenderedFeatures(e.point, {
+            layers: ["unclustered_report_location"]
+          });
+          if (features.length > 0) {
+            closeAdsSidebar();
+            setOpenRandomLocationSidebar(true);
+            const { longitude, address, latitude } = features[0].properties;
+            const randomLocationTemp: RandomLocation = {
+              address: address,
+              longitude: longitude,
+              latitude: latitude
+            };
+            setRandomLocationData(randomLocationTemp);
+          }
+        });
+
+        map.current.on("click", async (e) => {
+          const map = e.target;
+          const features = map.queryRenderedFeatures(e.point, {
+            layers: [
+              "unclustered_location_is_not_planning_has_advertises",
+              "unclustered_location_is_not_planning_no_advertises",
+              "unclustered-location_is_planning_no_advertises",
+              "unclustered_location_is_planning_has_advertises",
+              "unclustered_report_location",
+              "clusters"
+            ]
+          });
+          if (features.length > 0) {
+            return;
+          } else {
+            const { lng, lat } = e.lngLat;
+            const results: any = await maptilersdk.geocoding.reverse([lng, lat]);
+            closeAdsSidebar();
+            setOpenRandomLocationSidebar(true);
+            if (marker.current) {
+              marker.current.setLngLat([lng, lat]);
+              const { place_name_vi } = results.features[0];
+              const randomLocationTemp: RandomLocation = {
+                address: place_name_vi,
+                longitude: lng,
+                latitude: lat
+              };
+              setRandomLocationData(randomLocationTemp);
             } else {
-              const { lng, lat } = e.lngLat;
-              const results: any = await maptilersdk.geocoding.reverse([lng, lat]);
-              closeAdsSidebar();
-              setOpenRandomLocationSidebar(true);
-              if (marker.current) {
-                marker.current.setLngLat([lng, lat]);
-                const { place_name_vi } = results.features[0];
-                const randomLocationTemp: RandomLocation = {
-                  address: place_name_vi,
-                  longitude: lng,
-                  latitude: lat
-                };
-                setRandomLocationData(randomLocationTemp);
-              } else {
-                const { place_name_vi } = results.features[0];
-                const coordinates = results.features[0].geometry.coordinates.slice();
-                const randomLocationTemp: RandomLocation = {
-                  address: place_name_vi,
-                  longitude: coordinates[0],
-                  latitude: coordinates[1]
-                };
-                setRandomLocationData(randomLocationTemp);
-                marker.current = new MapLibreGL.Marker().setLngLat(coordinates).addTo(map);
-              }
+              const { place_name_vi } = results.features[0];
+              const coordinates = results.features[0].geometry.coordinates.slice();
+              const randomLocationTemp: RandomLocation = {
+                address: place_name_vi,
+                longitude: coordinates[0],
+                latitude: coordinates[1]
+              };
+              setRandomLocationData(randomLocationTemp);
+              marker.current = new MapLibreGL.Marker().setLngLat(coordinates).addTo(map);
             }
+          }
+        });
+
+        map.current.on("mouseenter", "clusters", (e) => {
+          if (map.current) map.current.getCanvas().style.cursor = "pointer";
+        });
+        map.current.on("mouseleave", "clusters", () => {
+          if (map.current) map.current.getCanvas().style.cursor = "";
+        });
+        map.current.on("click", "clusters", function (e) {
+          if (!map.current) return;
+          const features: any = map.current.queryRenderedFeatures(e.point, {
+            layers: ["clusters"]
+          });
+          const clusterId = features[0].properties.cluster_id;
+          const source: any = map.current.getSource("locations");
+          source?.getClusterExpansionZoom(clusterId, function (err: any, zoom: any) {
+            if (err || !map.current) return;
+            map.current.easeTo({
+              center: features[0].geometry.coordinates,
+              zoom: zoom
+            });
           });
         });
-      }
-    };
-    initMap();
+      });
+    }
   }, [API_KEY, lng, lat, zoom]);
 
   return (
@@ -473,9 +706,68 @@ const MapAdsManagement = () => {
           <Box className={classes.botNavbarItem}>
             <Switch
               defaultChecked
-              onChange={() => {
-                handleClickSwitchLocationEvent("locations_is_planning_no_advertises");
-                handleClickSwitchLocationEvent("locations_is_planning_has_advertises");
+              onChange={(e: any) => {
+                if (e.target.checked === true) {
+                  if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.BOTH);
+                    changeSourceDataLocation(ELocationCheckedSwitch.BOTH);
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.NOT_AT_ALL) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
+                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
+                  } else if (
+                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING
+                  ) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                    );
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.REPORT_LOCATION) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                    );
+                  }
+                } else {
+                  if (locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.NOT_AT_ALL);
+                    changeSourceDataLocation(ELocationCheckedSwitch.NOT_AT_ALL);
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.BOTH) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                    );
+                  } else if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.REPORT_LOCATION);
+                    changeSourceDataLocation(ELocationCheckedSwitch.REPORT_LOCATION);
+                  } else if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
+                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
+                  }
+                }
+
+                handleClickSwitchLocationEvent("unclustered-location_is_planning_no_advertises");
+                handleClickSwitchLocationEvent("unclustered_location_is_planning_has_advertises");
+                handleClickSwitchLocationEvent(
+                  "unclustered-location_is_planning_no_advertises_text"
+                );
+                handleClickSwitchLocationEvent(
+                  "unclustered_location_is_planning_has_advertises_text"
+                );
               }}
             />
             <ParagraphSmall>Điểm đặt QC đã quy hoạch</ParagraphSmall>
@@ -483,15 +775,143 @@ const MapAdsManagement = () => {
           <Box className={classes.botNavbarItem}>
             <Switch
               defaultChecked
-              onChange={() => {
-                handleClickSwitchLocationEvent("locations_is_not_planning_has_advertises");
-                handleClickSwitchLocationEvent("locations_is_not_planning_no_advertises");
+              onChange={(e: any) => {
+                if (e.target.checked === true) {
+                  if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.BOTH);
+                    changeSourceDataLocation(ELocationCheckedSwitch.BOTH);
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.NOT_AT_ALL) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
+                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
+                  } else if (
+                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_PLANNING
+                  ) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                    );
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.REPORT_LOCATION) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                    );
+                  }
+                } else {
+                  if (locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.NOT_AT_ALL);
+                    changeSourceDataLocation(ELocationCheckedSwitch.NOT_AT_ALL);
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.BOTH) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                    );
+                  } else if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.REPORT_LOCATION);
+                    changeSourceDataLocation(ELocationCheckedSwitch.REPORT_LOCATION);
+                  } else if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
+                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
+                  }
+                }
+
+                handleClickSwitchLocationEvent(
+                  "unclustered_location_is_not_planning_has_advertises"
+                );
+                handleClickSwitchLocationEvent(
+                  "unclustered_location_is_not_planning_no_advertises"
+                );
+                handleClickSwitchLocationEvent(
+                  "unclustered_location_is_not_planning_has_advertises_text"
+                );
+                handleClickSwitchLocationEvent(
+                  "unclustered_location_is_not_planning_no_advertises_text"
+                );
               }}
             />
             <ParagraphSmall>Điểm đặt QC chưa quy hoạch</ParagraphSmall>
           </Box>
           <Box className={classes.botNavbarItem}>
-            <Switch defaultChecked onChange={changeHandleReportLocation} />
+            <Switch
+              defaultChecked
+              onChange={(e: any) => {
+                if (e.target.checked === true) {
+                  if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.BOTH);
+                    changeSourceDataLocation(ELocationCheckedSwitch.BOTH);
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.NOT_AT_ALL) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.REPORT_LOCATION);
+                    changeSourceDataLocation(ELocationCheckedSwitch.REPORT_LOCATION);
+                  } else if (
+                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_PLANNING
+                  ) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                    );
+                  } else if (
+                    locationCheckedSwitch === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING
+                  ) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                    );
+                  }
+                } else {
+                  if (locationCheckedSwitch === ELocationCheckedSwitch.REPORT_LOCATION) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.NOT_AT_ALL);
+                    changeSourceDataLocation(ELocationCheckedSwitch.NOT_AT_ALL);
+                  } else if (locationCheckedSwitch === ELocationCheckedSwitch.BOTH) {
+                    setLocationCheckedSwitch(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                    );
+                    changeSourceDataLocation(
+                      ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
+                    );
+                  } else if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
+                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
+                  } else if (
+                    locationCheckedSwitch ===
+                    ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
+                  ) {
+                    setLocationCheckedSwitch(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
+                    changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
+                  }
+                }
+
+                handleClickSwitchLocationEvent(
+                  "unclustered_location_is_not_planning_has_advertises"
+                );
+                handleClickSwitchLocationEvent(
+                  "unclustered_location_is_not_planning_no_advertises"
+                );
+              }}
+            />
             <ParagraphSmall>Địa điểm báo cáo</ParagraphSmall>
           </Box>
           <Button

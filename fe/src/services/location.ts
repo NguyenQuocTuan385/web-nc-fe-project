@@ -92,6 +92,17 @@ export class LocationService {
       });
   }
 
+  static async getLocationsByPropertyId(id: number, data: GetLocations): Promise<any> {
+    return await api
+      .get(`${API.LOCATION.GET_BY_PROPERTY_ID.replace(":id", `${id}`)}`, { params: data })
+      .then((res) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
   static async getLocationsWithPropertyAndParent(
     data: GetLocationsWithPropertyArray,
     api: any
