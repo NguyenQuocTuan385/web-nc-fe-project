@@ -53,6 +53,7 @@ import { WardDashBoard } from "pages/admin/WardDashboard";
 import EditProfile from "pages/admin/EditProfile";
 import ChangePassword from "pages/admin/ChangePassword";
 import { DistrictDashBoard } from "pages/admin/DistrictDashboard";
+import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
 
 function App() {
   injectStore(store);
@@ -62,6 +63,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={routes.client} Component={MapAdsManagement} />
+          <Route path={routes.adminMap} Component={MapAdsManagementAdmin} />
           <Route element={<PersistLogin />}>
             <Route path={routes.admin.users.dcms} Component={UserManagement} />
             <Route path={routes.admin.reviewEdit.dcms} Component={EditAdLicense} />

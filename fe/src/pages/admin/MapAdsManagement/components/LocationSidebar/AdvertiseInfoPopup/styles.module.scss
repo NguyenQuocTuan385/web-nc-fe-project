@@ -1,0 +1,23 @@
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0px 10px;
+}
+
+.imgContainer {
+  width: 100%;
+  height: 306px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.boxWrapInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
