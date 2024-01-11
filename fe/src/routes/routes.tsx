@@ -32,7 +32,7 @@ export const routes = {
       districtOfLocation: "/admin/district/locations/:id/advertises",
       wardDetails: "/admin/ward/advertises/:id",
       districtDetails: "/admin/district/advertises/:id",
-      wardEdit: "/admin/ward/advertises/edit/:locationId/:advertiseId",
+      wardEdit: "/admin/ward/locations/:locationId/advertises/edit/:advertiseId",
       districtEdit: "/admin/district/locations/:locationId/advertises/edit/:advertiseId"
     },
     locations: {

@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
+import { EReportType } from "models/report";
+import { DateHelper } from "helpers/date";
 
 const ReportsManagement = () => {
   const navigate = useNavigate();
@@ -95,14 +97,37 @@ const ReportsManagement = () => {
 
   const data = reportList.map((report: any, index: number) => {
     return {
+      ...report,
       stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
       objectStatus: { value: report.status, name: report.status ? "Đã xử lí" : "Chưa xử lí" },
-      ...report
+      reportTypeName:
+        report.reportTypeName === EReportType.ADVERTISE ? "Bảng quảng cáo" : "Điểm đặt quảng cáo",
+      createdAt: DateHelper.formatDateToDDMMYYYY(report.createdAt),
+      address: report.address ? report.address : "Không có"
     };
   });
 
-  const customHeading = ["STT", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
-  const customColumns = ["stt", "id", "email", "fullName", "phone", "objectStatus"];
+  const customHeading = [
+    "STT",
+    "Loại báo cáo",
+    "Email",
+    "Tên",
+    "Điện thoại",
+    "Địa chỉ",
+    "Thời điểm gửi",
+    "Tình trạng xử lý"
+  ];
+  const customColumns = [
+    "stt",
+    "reportTypeName",
+    "id",
+    "email",
+    "fullName",
+    "phone",
+    "address",
+    "createdAt",
+    "objectStatus"
+  ];
 
   const handleSearch = (query: string) => {
     setSearchValue(query);

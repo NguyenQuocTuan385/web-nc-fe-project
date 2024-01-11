@@ -16,6 +16,7 @@ import { routes } from "routes/routes";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
+import { DateHelper } from "helpers/date";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -38,17 +39,6 @@ const IconButtonBack = styled(IconButton)(() => ({
 
 export const ReportDetail = () => {
   const { id } = useParams<{ id: string }>();
-
-  const formatDateToString = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const seconds = date.getSeconds().toString().padStart(2, "0");
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
 
   const navigate = useNavigate();
 
@@ -128,7 +118,7 @@ export const ReportDetail = () => {
                     </Typography>
                     <Typography>
                       <span className={classes["title"]}>Thời điểm gửi: </span>
-                      <span>{formatDateToString(new Date(dataReportDetail.createdAt))}</span>
+                      <span>{DateHelper.formatDateToDDMMYYYY(dataReportDetail.createdAt)}</span>
                     </Typography>
                     <Typography>
                       <span className={classes["title"]}>Hình thức báo cáo: </span>

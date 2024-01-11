@@ -30,6 +30,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
+import { DateHelper } from "../../../helpers/date";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -236,7 +237,7 @@ export const ReportHandle = () => {
                     <label>Thời điểm gửi: </label>
                     <TextField
                       className={classes["input-custom"]}
-                      defaultValue={formatDateToString(new Date(dataReportDetail.createdAt))}
+                      defaultValue={DateHelper.formatDateToDDMMYYYY(dataReportDetail.createdAt)}
                       id='outlined-required'
                       InputProps={{ readOnly: true }}
                       fullWidth
