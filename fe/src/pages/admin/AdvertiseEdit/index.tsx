@@ -25,13 +25,11 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 import { InfoContract } from "../AdvertiseDetail/components/InfoContract";
-import { Header } from "components/common/Header";
 import SideBarWard from "components/admin/SidebarWard";
 import classes from "./styles.module.scss";
 import { routes } from "routes/routes";
 import { Advertise, AdvertiseEditRequest, AdvertiseType } from "models/advertise";
 import UploadImage from "components/common/UploadImage";
-import userDetails from "userDetails.json";
 import ContractService from "services/contract";
 import AdvertiseTypeService from "services/advertiseType";
 import AdvertiseEditService from "services/advertiseEdit";
@@ -42,6 +40,8 @@ import { User } from "models/user";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
+import ParagraphBody from "components/common/text/ParagraphBody";
+import AdvertiseService from "services/advertise";
 
 interface FormData {
   licensing: number;
@@ -98,8 +98,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     resolver: yupResolver(schema)
   });
 
-  // Khi có login thì lấy thông tin từ login
-  const userInfo = { ...userDetails };
+  const currentUser: User = useSelector(selectCurrentUser);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [originalImages, setOriginalImages] = useState(data.images);
@@ -166,7 +165,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     const dataSubmit = {
       ...formSubmit,
       imageUrls: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
-      userId: userInfo.id,
+      userId: currentUser.id,
       locationId: locationId
     };
 
@@ -511,6 +510,13 @@ export const AdvertiseEdit = () => {
           });
         })
         .catch((e) => {
+          // Lỗi khi không có contract --> Call API lấy chi tiết quảng cáo
+          AdvertiseService.getAdvertisesById(Number(advertiseId), intercept).then((res) => {
+            setInfoAds({
+              ...res,
+              images: [res.images]
+            });
+          });
           console.log(e);
         });
     };
@@ -542,64 +548,76 @@ export const AdvertiseEdit = () => {
               Trở về
             </ButtonBack>
 
-            <Box>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {infoContract && (
-                  <img
-                    className={classes.image}
-                    src={infoContract.images}
-                    alt='Hình ảnh công ty'
-                    width={"50%"}
-                    height={"250px"}
-                  />
-                )}
-                <Box
-                  sx={{
-                    marginLeft: "24px"
-                  }}
-                >
-                  {infoContract && <InfoContract data={infoContract} />}
+            {infoContract && (
+              <Box>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
                   {infoContract && (
-                    <Typography>
-                      <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
-                      <span>{infoContract.startAt}</span>
-                    </Typography>
+                    <img
+                      className={classes.image}
+                      src={infoContract.images}
+                      alt='Hình ảnh công ty'
+                      width={"50%"}
+                      height={"250px"}
+                    />
                   )}
-                  {infoContract && (
-                    <Typography>
-                      <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
-                      <span>{infoContract.endAt}</span>
-                    </Typography>
-                  )}
+                  <Box
+                    sx={{
+                      marginLeft: "24px"
+                    }}
+                  >
+                    {infoContract && <InfoContract data={infoContract} />}
+                    {infoContract && (
+                      <Typography>
+                        <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
+                        <span>{infoContract.startAt}</span>
+                      </Typography>
+                    )}
+                    {infoContract && (
+                      <Typography>
+                        <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
+                        <span>{infoContract.endAt}</span>
+                      </Typography>
+                    )}
+                  </Box>
                 </Box>
               </Box>
-            </Box>
+            )}
 
-            <Box mt='30px'>
-              <Heading2>Thông tin quảng cáo</Heading2>
-              {infoAds && (
-                <MyForm
-                  data={infoAds}
-                  createAdvertiseEditRequest={handleGetSuccessState}
-                  adsTypes={adsTypes}
-                  locationId={Number(locationId)}
-                  advertiseId={Number(advertiseId)}
-                />
-              )}
-            </Box>
+            {infoAds && (
+              <Box mt='30px'>
+                <Heading2>Thông tin quảng cáo</Heading2>
+                {infoAds && (
+                  <MyForm
+                    data={infoAds}
+                    createAdvertiseEditRequest={handleGetSuccessState}
+                    adsTypes={adsTypes}
+                    locationId={Number(locationId)}
+                    advertiseId={Number(advertiseId)}
+                  />
+                )}
+              </Box>
+            )}
 
-            <Snackbar
-              open={isCreateSuccess !== null}
-              autoHideDuration={3000}
-              onClose={() => setIsCreateSuccess(null)}
-            >
-              <Alert
-                severity={isCreateSuccess ? "success" : "error"}
+            {infoAds && (
+              <Snackbar
+                open={isCreateSuccess !== null}
+                autoHideDuration={3000}
                 onClose={() => setIsCreateSuccess(null)}
               >
-                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
-              </Alert>
-            </Snackbar>
+                <Alert
+                  severity={isCreateSuccess ? "success" : "error"}
+                  onClose={() => setIsCreateSuccess(null)}
+                >
+                  {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+                </Alert>
+              </Snackbar>
+            )}
+
+            {!infoAds && !infoContract && (
+              <ParagraphBody className={classes.noList}>
+                Không có thông tin bảng quảng cáo
+              </ParagraphBody>
+            )}
           </Box>
         </SideBarWard>
       </div>

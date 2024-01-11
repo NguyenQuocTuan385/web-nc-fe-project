@@ -103,11 +103,15 @@ const AdvertiseOfLocationManagement = () => {
 
         const updatedAdvertises: any = await Promise.all(
           res.content.map(async (advertise: Advertise) => {
-            const contractData = await ContractService.getContractsByAdvertiseOne(
+            let contractData = await ContractService.getContractsByAdvertiseOne(
               advertise.id,
               {},
               intercept
             );
+
+            if (!contractData) {
+              contractData = null;
+            }
             return {
               ...advertise,
               contract: contractData
@@ -126,7 +130,27 @@ const AdvertiseOfLocationManagement = () => {
           }).toString()
         });
       } catch (error) {
-        console.log(error);
+        // Trường hợp lỗi do không có contract --> Call lại API lấy danh sách advertises
+        const res = await AdvertiseService.getAdvertisesByLocationId(
+          Number(id),
+          {
+            search: searchValue,
+            pageSize: Number(rowsPerPage),
+            current: Number(currentPage)
+          },
+          intercept
+        );
+
+        setAdvertiseList(res.content);
+        setTotalPage(res.totalPages);
+        setTotalElements(res.totalElements);
+
+        navigate({
+          pathname: match,
+          search: createSearchParams({
+            page: currentPage.toString()
+          }).toString()
+        });
       }
     })();
   }, [currentPage, searchValue, rowsPerPage]);
@@ -175,7 +199,7 @@ const AdvertiseOfLocationManagement = () => {
         value: ads.licensing
       },
       pillarQuantity: ads.pillarQuantity,
-      statusContract: ads.contract.status
+      statusContract: ads?.contract ? ads.contract.status : null
     };
   });
 

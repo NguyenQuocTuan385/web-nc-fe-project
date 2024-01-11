@@ -14,6 +14,7 @@ import AdvertiseService from "services/advertise";
 import ContractService from "services/contract";
 import Heading4 from "components/common/text/Heading4";
 import useIntercepts from "hooks/useIntercepts";
+import { DateHelper } from "helpers/date";
 
 const InfoAdsBox = styled(Box)(() => ({
   display: "flex",
@@ -55,8 +56,8 @@ interface InfoContract {
   companyPhone: string;
   companyAddress: string;
   images: string;
-  startAt: string;
-  endAt: string;
+  startAt: Date;
+  endAt: Date;
 }
 
 export const AdvertiseDetail = () => {
@@ -124,8 +125,8 @@ export const AdvertiseDetail = () => {
               <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
               Trở về
             </ButtonBack>
-            <BoxFlex>
-              {infoAds && (
+            {infoAds && (
+              <BoxFlex>
                 <img
                   src={infoAds.images}
                   className={classes.image}
@@ -133,31 +134,31 @@ export const AdvertiseDetail = () => {
                   width={"50%"}
                   height={"250px"}
                 />
-              )}
-              <Box
-                width={"50%"}
-                ml={"15px"}
+                <Box
+                  width={"50%"}
+                  ml={"15px"}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    height: "350px",
+                    alignItems: "center",
+                    padding: "15px"
+                  }}
+                >
+                  {infoAds && <InfoAdvertise data={infoAds} />}
+                </Box>
+              </BoxFlex>
+            )}
+
+            {infoContract && (
+              <BoxFlex
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                  height: "350px",
-                  alignItems: "center",
-                  padding: "15px"
+                  justifyContent: "flex-end",
+                  marginTop: "24px"
                 }}
               >
-                {infoAds && <InfoAdvertise data={infoAds} />}
-              </Box>
-            </BoxFlex>
-
-            <BoxFlex
-              sx={{
-                justifyContent: "flex-end",
-                marginTop: "24px"
-              }}
-            >
-              {infoContract && (
                 <img
                   className={`${classes.image} ${classes.smallImage}`}
                   src={infoContract.images}
@@ -165,22 +166,22 @@ export const AdvertiseDetail = () => {
                   width={"50%"}
                   height={"250px"}
                 />
-              )}
-              <Box
-                width={"50%"}
-                ml={"15px"}
-                sx={{
-                  display: "flex",
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                  height: "350px",
-                  alignItems: "center",
-                  padding: "15px"
-                }}
-              >
-                {infoContract && infoContract && <InfoContract data={infoContract} />}
-              </Box>
-            </BoxFlex>
+                <Box
+                  width={"50%"}
+                  ml={"15px"}
+                  sx={{
+                    display: "flex",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    height: "350px",
+                    alignItems: "center",
+                    padding: "15px"
+                  }}
+                >
+                  {infoContract && infoContract && <InfoContract data={infoContract} />}
+                </Box>
+              </BoxFlex>
+            )}
 
             <Box mt={"15px"}>
               <Heading4>Vị trí trên bản đồ</Heading4>
@@ -196,11 +197,11 @@ export const AdvertiseDetail = () => {
                 <Box mt={"15px"}>
                   <Typography>
                     <span className={classes.title}>Bắt đầu hợp đồng: </span>{" "}
-                    <span>{infoContract.startAt}</span>
+                    <span>{DateHelper.formatDateToDDMMYYYY(infoContract.startAt)}</span>
                   </Typography>
                   <Typography>
                     <span className={classes.title}>Kết thúc hợp đồng: </span>{" "}
-                    <span>{infoContract.endAt}</span>
+                    <span>{DateHelper.formatDateToDDMMYYYY(infoContract.endAt)}</span>
                   </Typography>
                 </Box>
               )}

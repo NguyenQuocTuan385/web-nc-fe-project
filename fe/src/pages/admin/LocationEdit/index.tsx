@@ -33,7 +33,6 @@ import AdvertiseFormService from "services/advertiseForm";
 import { LocationEditRequest, LocationType } from "models/location";
 import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
-import userDetails from "userDetails.json";
 import Heading2 from "components/common/text/Heading2";
 import Editor from "components/common/Editor/EditWithQuill";
 import useIntercepts from "hooks/useIntercepts";
@@ -110,8 +109,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     resolver: yupResolver(schema)
   });
 
-  // Khi có login thì lấy thông tin từ login
-  const userInfo = { ...userDetails };
+  const currentUser = useSelector(selectCurrentUser);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [originalImages, setOriginalImages] = useState(JSON.parse(data.images));
@@ -179,8 +177,8 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     const dataSubmit = {
       ...formSubmit,
       imageUrls: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
-      propertyId: userInfo.property.id,
-      userId: userInfo.id
+      propertyId: currentUser.property.id,
+      userId: currentUser.id
     };
 
     createLocationEdit(locationId, dataSubmit);
@@ -195,7 +193,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           <TextField
             required
             id='outlined-required'
-            defaultValue={`${userInfo.property.name}, ${userInfo.property.propertyParent.name}`}
+            defaultValue={`${currentUser.property.name}, ${currentUser.property.propertyParent.name}`}
             InputProps={{ readOnly: true }}
             fullWidth
           />
@@ -269,7 +267,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                     label='Tung độ'
                     type='number'
                     {...field}
-                    {...register("latitude")}
+                    {...register("longitude")}
                     fullWidth
                   />
                   {errors.longitude && (
