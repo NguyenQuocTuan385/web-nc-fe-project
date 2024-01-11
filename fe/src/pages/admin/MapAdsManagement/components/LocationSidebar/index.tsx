@@ -36,7 +36,19 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
   }, [location]);
 
   return (
-    <Drawer variant='persistent' hideBackdrop={true} open={isOpen}>
+    <Drawer
+      variant='persistent'
+      hideBackdrop={true}
+      open={isOpen}
+      sx={{
+        "& .MuiDrawer-root": {
+          position: "absolute"
+        },
+        "& .MuiPaper-root": {
+          position: "absolute"
+        }
+      }}
+    >
       <Box className={classes.sidebarContainer}>
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>

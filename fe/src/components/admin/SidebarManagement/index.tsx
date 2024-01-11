@@ -42,7 +42,6 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   const locationHook = useLocation();
   const path = locationHook.pathname;
   const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
-  console.log(path);
 
   sideBar.map((item, index) => {
     if (item.children) {

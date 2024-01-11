@@ -22,12 +22,7 @@ const RandomLocationSidebar = ({
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   return (
     <Drawer variant='persistent' hideBackdrop={true} open={isOpen}>
-      <Box
-        className={classes.sidebarContainer}
-        display={"flex"}
-        flexDirection={"column"}
-        width={"408px"}
-      >
+      <Box className={classes.sidebarContainer}>
         <Box className={classes.iconBack}>
           <IconButton onClick={() => closeSidebar()}>
             <ChevronLeft fontSize='large' />

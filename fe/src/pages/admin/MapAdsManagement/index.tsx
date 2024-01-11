@@ -19,6 +19,10 @@ import ReactDOM from "react-dom/client";
 import { createPortal } from "react-dom";
 import PopoverHelper from "./components/PopoverHelper";
 import { Help } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
+import { Property } from "models/property";
+import { User } from "models/user";
 
 enum ELocationCheckedSwitch {
   BOTH = 1,
@@ -56,6 +60,8 @@ const MapAdsManagementAdmin = () => {
     ELocationCheckedSwitch.BOTH
   );
 
+  const user: User | null = useSelector((state: RootState) => state.auth.currentUser);
+
   const closeAdsSidebar = () => {
     setOpenLocationSidebar(false);
   };
@@ -66,7 +72,12 @@ const MapAdsManagementAdmin = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
-      const res = await LocationService.getLocationsByPropertyId(1, { pageSize: 9999 });
+      if (!user?.property?.id) {
+        return;
+      }
+      const res = await LocationService.getLocationsByPropertyId(user?.property?.id, {
+        pageSize: 9999
+      });
 
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {

@@ -658,7 +658,7 @@ const MapAdsManagement = () => {
   }, [API_KEY, lng, lat, zoom]);
 
   return (
-    <Box className={classes.mapWrap}>
+    <Box>
       <Box className={classes.geocoding}>
         <GeocodingControl apiKey={API_KEY} language={"vi"} mapController={mapController} />
       </Box>

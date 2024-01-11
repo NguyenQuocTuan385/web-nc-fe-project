@@ -1,12 +1,12 @@
-.ward-dashboard-container {
-  background-color: #fff;
+.district-dashboard-container {
   background-color: var(--blue-50);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
 }
 
 .container-body {
-  background-color: #fff;
-  border-radius: 8px;
-  margin:  -24px -24px 0 -24px;
-  height: 100svh;
-  width: 100svw;
+  height: 90%;
+  width: 100%;
+  border: 1px solid var(--gray-30);
 }
