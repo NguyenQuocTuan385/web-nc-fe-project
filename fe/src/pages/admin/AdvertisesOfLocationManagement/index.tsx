@@ -103,7 +103,7 @@ const AdvertiseOfLocationManagement = () => {
 
         const updatedAdvertises: any = await Promise.all(
           res.content.map(async (advertise: Advertise) => {
-            let contractData = await ContractService.getContractsByAdvertiseOne(
+            let contractData = await ContractService.findContractLicensingByAdvertiseId(
               advertise.id,
               {},
               intercept
@@ -198,8 +198,8 @@ const AdvertiseOfLocationManagement = () => {
         name: ads.licensing ? "Đã cấp phép" : "Chưa cấp phép",
         value: ads.licensing
       },
-      pillarQuantity: ads.pillarQuantity,
-      statusContract: ads?.contract ? ads.contract.status : null
+      pillarQuantity: !!ads.pillarQuantity ? ads.pillarQuantity : 0,
+      statusContract: !!ads.contract ? ads.contract.status : null
     };
   });
 

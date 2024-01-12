@@ -398,7 +398,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
@@ -416,15 +416,12 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
               </Box>
-              <Button
-                onClick={handleOpenDialog}
-                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
-              >
+              <Button onClick={handleOpenDialog} style={{ marginTop: "15px" }} variant='contained'>
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>

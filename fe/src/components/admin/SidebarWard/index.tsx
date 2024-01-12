@@ -80,7 +80,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PersistentDrawerLeft({ children }: any) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const currentUser: User = useSelector(selectCurrentUser);
   const sideBarItemListData = [
     {

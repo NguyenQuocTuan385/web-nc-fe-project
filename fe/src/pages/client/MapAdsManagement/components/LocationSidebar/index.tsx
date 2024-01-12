@@ -4,11 +4,11 @@ import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfo";
 import { Location } from "models/location";
 import { useEffect, useState } from "react";
-import AdvertiseService from "services/advertise";
 import { Advertise } from "models/advertise";
 import ImagesSlider from "components/common/ImagesSlider";
 import Heading3 from "components/common/text/Heading3";
 import images from "config/images";
+import AdvertiseClientService from "services/advertiseClient";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -24,7 +24,7 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
     const getAllAdvertises = async () => {
       if (!location) return;
       setImagesLocation(JSON.parse(location.images));
-      AdvertiseService.getAdvertisesByLocationIdForClient(location.id, { pageSize: 999 })
+      AdvertiseClientService.getAdvertisesByLocationId(location.id, { pageSize: 999 })
         .then((res) => {
           setAdvertises(res.content);
         })

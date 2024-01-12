@@ -11,6 +11,10 @@ export const API = {
     GET_BY_PROPERTY_ID: "/api/properties/:id/locations",
     GET_WITH_PROPERTY_PARENT: "/api/properties/locations"
   },
+  LOCATION_CLIENT: {
+    DEFAULT: "/api/locations-client",
+    EXISTS_ADVERTISES: "/api/locations-client/:id/exists-advertises"
+  },
   ADVERTISE: {
     DEFAULT: "/api/locations/:id/advertises",
     UPDATE_LICENSE: "/api/advertises/:id/license",
@@ -21,6 +25,9 @@ export const API = {
     UPDATE_STATUS: "/api/advertises/:id/status",
     DETAILS: "/api/locations/:id",
     EDIT: "/api/advertises/:id"
+  },
+  ADVERTISE_CLIENT: {
+    DEFAULT: "/api/locations-client/:id/advertises"
   },
   LOCATION_TYPE: {
     DEFAULT: "/api/location-types"
@@ -35,6 +42,9 @@ export const API = {
     BY_ADVERTISE_ID_ONE: "/api/contracts/advertises/:id",
     CREATE: "/api/contracts",
     GETBYPROPERTY_PARENT_ID: "/api/properties/contracts"
+  },
+  CONTRACT_CLIENT: {
+    BY_ADVERTISE_ID_ONE: "/api/advertises-client/:id/contracts"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
@@ -63,6 +73,10 @@ export const API = {
     DETAILS: "/api/reports/:id",
     UPDATE: "/api/reports/:id",
     GET_WITH_PROPERTY_PARENT: "/api/properties/reports"
+  },
+  REPORT_CLIENT: {
+    DEFAULT: "/api/reports-client",
+    CREATE: "/api/reports-client"
   },
   REPORT_FORM: {
     DEFAULT: "/api/report-forms",

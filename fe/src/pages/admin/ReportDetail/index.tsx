@@ -104,73 +104,76 @@ export const ReportDetail = () => {
               </Box>
             )}
             {dataReportDetail && (
-              <Box mt={"20px"}>
-                <Heading3>Thông tin báo cáo</Heading3>
-                <Box display={"flex"} mt={"15px"}>
-                  <Box width={"50%"}>
-                    <Typography>
-                      <span className={classes["title"]}>Loại báo cáo: </span>
-                      <span>
-                        {dataReportDetail.reportTypeName === EReportType.ADVERTISE
-                          ? "Báo cáo bảng quảng cáo"
-                          : "Báo cáo địa điểm quảng cáo"}
-                      </span>
-                    </Typography>
-                    <Typography>
-                      <span className={classes["title"]}>Thời điểm gửi: </span>
-                      <span>{DateHelper.formatDateToDDMMYYYY(dataReportDetail.createdAt)}</span>
-                    </Typography>
-                    <Typography>
-                      <span className={classes["title"]}>Hình thức báo cáo: </span>
-                      <span>{dataReportDetail.reportForm.name}</span>
-                    </Typography>
-                    <Typography>
-                      <span className={classes["title"]}>Họ tên người gửi: </span>
-                      <span>{dataReportDetail.fullName}</span>
-                    </Typography>
-                    <Typography>
-                      <span className={classes["title"]}>Email: </span>
-                      <span>{dataReportDetail.email}</span>
-                    </Typography>
-                    <Typography>
-                      <span className={classes["title"]}>Số điện thoại: </span>
-                      <span>{dataReportDetail.phone}</span>
-                    </Typography>
-                  </Box>
-                  <Box width={"50%"}>
-                    <span className={classes["title"]}>Nội dung báo cáo: </span>
-                    <Typography
-                      dangerouslySetInnerHTML={{ __html: dataReportDetail.content }}
-                    ></Typography>
+              <>
+                <Box mt={"20px"}>
+                  <Heading3>Thông tin báo cáo</Heading3>
+                  <Box display={"flex"} mt={"15px"}>
+                    <Box width={"50%"}>
+                      <Typography>
+                        <span className={classes["title"]}>Loại báo cáo: </span>
+                        <span>
+                          {dataReportDetail.reportTypeName === EReportType.ADVERTISE
+                            ? "Báo cáo bảng quảng cáo"
+                            : "Báo cáo địa điểm quảng cáo"}
+                        </span>
+                      </Typography>
+                      <Typography>
+                        <span className={classes["title"]}>Thời điểm gửi: </span>
+                        <span>{DateHelper.formatDateToDDMMYYYY(dataReportDetail.createdAt)}</span>
+                      </Typography>
+                      <Typography>
+                        <span className={classes["title"]}>Hình thức báo cáo: </span>
+                        <span>{dataReportDetail.reportForm.name}</span>
+                      </Typography>
+                      <Typography>
+                        <span className={classes["title"]}>Họ tên người gửi: </span>
+                        <span>{dataReportDetail.fullName}</span>
+                      </Typography>
+                      <Typography>
+                        <span className={classes["title"]}>Email: </span>
+                        <span>{dataReportDetail.email}</span>
+                      </Typography>
+                      <Typography>
+                        <span className={classes["title"]}>Số điện thoại: </span>
+                        <span>{dataReportDetail.phone}</span>
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            )}
-
-            {dataReportDetail && (
-              <Box mt='20px'>
-                <Heading3>Thông tin xử lý của cán bộ</Heading3>
-                <Typography mt={"15px"}>
-                  <span className={classes["title"]}>Tình trạng: </span>
-                  <span
-                    className={`${
-                      dataReportDetail.status ? classes["text-active"] : classes["text-inactive"]
-                    }`}
-                  >
-                    {dataReportDetail.status ? "Đã xử lý" : "Chưa xử lý"}
-                  </span>
-                </Typography>
                 <Box>
                   <Typography>
-                    <span className={classes["title"]}>Phản hồi: </span>
+                    <span className={classes["title"]}>Nội dung báo cáo: </span>
                   </Typography>
                   <Editor
                     placeholder=''
                     isAllowedType={false}
-                    content={dataReportDetail?.reply || "Chưa có thông tin phản hồi"}
+                    content={dataReportDetail?.content || "Không có nội dung báo cáo"}
                   />
                 </Box>
-              </Box>
+                <Box mt='20px'>
+                  <Heading3>Thông tin xử lý của cán bộ</Heading3>
+                  <Typography mt={"15px"}>
+                    <span className={classes["title"]}>Tình trạng: </span>
+                    <span
+                      className={`${
+                        dataReportDetail.status ? classes["text-active"] : classes["text-inactive"]
+                      }`}
+                    >
+                      {dataReportDetail.status ? "Đã xử lý" : "Chưa xử lý"}
+                    </span>
+                  </Typography>
+                  <Box>
+                    <Typography>
+                      <span className={classes["title"]}>Phản hồi: </span>
+                    </Typography>
+                    <Editor
+                      placeholder=''
+                      isAllowedType={false}
+                      content={dataReportDetail?.reply || "Chưa có thông tin phản hồi"}
+                    />
+                  </Box>
+                </Box>
+              </>
             )}
           </Box>
         </SideBarWard>

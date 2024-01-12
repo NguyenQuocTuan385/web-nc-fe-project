@@ -92,7 +92,7 @@ export const AdvertiseDetail = () => {
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
-      ContractService.getContractsByAdvertiseOne(Number(id), {}, intercept)
+      ContractService.findContractLicensingByAdvertiseId(Number(id), {}, intercept)
         .then((res) => {
           setInfoContract({
             companyName: res.companyName,
@@ -184,15 +184,6 @@ export const AdvertiseDetail = () => {
             )}
 
             <Box mt={"15px"}>
-              <Heading4>Vị trí trên bản đồ</Heading4>
-              <img
-                className={classes.imageMap}
-                src='https://inuvcuon.vn/images/2018/08/voi-nhung-cong-cu-rat-huu-ich-ban-da-co-the-in-truc-tiep-ngay-tren-google-map.jpg'
-                alt='Bản đồ'
-                width={"100%"}
-                height={"250px"}
-              />
-
               {infoContract && (
                 <Box mt={"15px"}>
                   <Typography>

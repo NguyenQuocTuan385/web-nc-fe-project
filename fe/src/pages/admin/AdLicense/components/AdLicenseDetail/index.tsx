@@ -150,20 +150,6 @@ export default function AdLicenseDetail() {
               </Box>
             </Box>
             <Divider variant='middle' />
-
-            <Box className={classes.boxMapContainer}>
-              <Box className={classes.boxTitle}>
-                <Heading3>VỊ TRÍ TRÊN BẢN ĐỒ</Heading3>
-              </Box>
-              <Box className={classes.boxMap}>
-                <img
-                  src='https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg'
-                  alt=''
-                  width={"100%"}
-                  height={"400px"}
-                />
-              </Box>
-            </Box>
           </Box>
         </Box>
         <Box className={classes.editHistoryContainer}>

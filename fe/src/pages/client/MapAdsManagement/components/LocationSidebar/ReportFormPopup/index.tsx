@@ -22,10 +22,10 @@ import InputWysiwyg from "components/common/InputWysiwyg";
 import ReportFormService from "services/reportForm";
 import { ReportForm } from "models/reportForm";
 import InputSelect from "components/common/InputSelect";
-import ReportService from "services/report";
 import { EReportType, ReportCreateRequest } from "models/report";
 import { RandomLocation } from "models/location";
 import SnackbarAlert, { AlertType } from "components/common/SnackbarAlert";
+import ReportClientService from "services/reportClient";
 
 export const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -144,7 +144,7 @@ export default function ReportFormPopup({
       };
     }
 
-    ReportService.createReport(reportCreate)
+    ReportClientService.createReport(reportCreate)
       .then((res) => {
         setOpenSnackbarAlert(true);
         setAlertContent("Đăng báo cáo thành công");

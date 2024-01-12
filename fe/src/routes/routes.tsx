@@ -49,8 +49,8 @@ export const routes = {
       districtEdit: "/admin/district/locations/edit/:id"
     },
     properties: {
-      district: "/admin/districts",
-      ward: "/admin/districts/:id"
+      district: "/admin/dcms/districts",
+      ward: "/admin/dcms/districts/:id"
     },
     contracts: {
       root: "/admin/contracts",

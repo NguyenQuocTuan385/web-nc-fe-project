@@ -9,7 +9,13 @@ import {
   Paper,
   IconButton
 } from "@mui/material";
-import { faBuildingCircleArrowRight, faEdit, faEye, faRectangleAd, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBuildingCircleArrowRight,
+  faEdit,
+  faEye,
+  faRectangleAd,
+  faTrash
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
 interface TableTemplateProps {
@@ -158,16 +164,12 @@ function TableTemplateDCMS({
                       size='medium'
                       onClick={() => handleAddClick(row.id)}
                     >
-                      <FontAwesomeIcon icon={faTrash} color='var(--red-600)' />
+                      <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
                     </IconButton>
                   )}
                   {onDeleteClick && (
-                    <IconButton
-                      aria-label='delete'
-                      size='medium'
-                      onClick={() => handleDeleteClick(row.id)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} color='var(--red-600)' />
+                    <IconButton size='medium' onClick={() => handleDeleteClick(row.id)}>
+                      <FontAwesomeIcon icon={faTrash} style={{ color: "var(--red-error)" }} />
                     </IconButton>
                   )}
                 </TableCell>

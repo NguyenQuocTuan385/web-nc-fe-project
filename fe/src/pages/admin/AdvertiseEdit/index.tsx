@@ -369,7 +369,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
@@ -387,15 +387,12 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
               </Box>
-              <Button
-                onClick={handleOpenDialog}
-                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
-              >
+              <Button onClick={handleOpenDialog} variant='contained' style={{ marginTop: "15px" }}>
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -492,7 +489,7 @@ export const AdvertiseEdit = () => {
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
-      ContractService.getContractsByAdvertiseOne(Number(advertiseId), {}, intercept)
+      ContractService.findContractLicensingByAdvertiseId(Number(advertiseId), {}, intercept)
         .then((res) => {
           setInfoContract({
             companyName: res.companyName,

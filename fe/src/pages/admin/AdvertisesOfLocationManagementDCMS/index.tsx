@@ -98,7 +98,7 @@ const AdvertiseOfLocationManagementDCMS = () => {
 
         const updatedAdvertises: any = await Promise.all(
           res.content.map(async (advertise: Advertise) => {
-            const contractData = await ContractService.getContractsByAdvertiseOne(
+            const contractData = await ContractService.findContractLicensingByAdvertiseId(
               advertise.id,
               {},
               intercept

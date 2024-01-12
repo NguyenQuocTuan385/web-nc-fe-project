@@ -16,7 +16,6 @@ import LocationService from "services/location";
 import { Box, Button, IconButton, Switch } from "@mui/material";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { EReportStatus, EReportType, Report } from "models/report";
-import ReportService from "services/report";
 import ReportInfoPopup from "./components/ReportListPopup";
 import ReactDOM from "react-dom/client";
 import { createPortal } from "react-dom";
@@ -24,6 +23,8 @@ import PopoverHelper from "./components/PopoverHelper";
 import { Help } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
 import useIntercepts from "hooks/useIntercepts";
+import LocationClientService from "services/locationClient";
+import ReportClientService from "services/reportClient";
 
 enum ELocationCheckedSwitch {
   BOTH = 1,
@@ -80,7 +81,7 @@ const MapAdsManagement = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
-      const res = await LocationService.getLocations({ pageSize: 9999 });
+      const res = await LocationClientService.getLocations({ pageSize: 9999 });
 
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
@@ -90,27 +91,30 @@ const MapAdsManagement = () => {
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          const res = await ReportService.getReports(
-            {
-              locationId: location.id,
-              pageSize: 999,
-              email: "nguyenvana@gmail.com"
-            },
-            intercepts
-          );
+          // const email = localStorage.getItem("guest_email");
+          // if (email) {
+          //   const res = await ReportService.getReports(
+          //     {
+          //       locationId: location.id,
+          //       pageSize: 999,
+          //       email: email
+          //     },
+          //     intercepts
+          //   );
 
-          if (res.content.length > 0) {
-            const report: Report = res.content[res.content.length - 1];
-            let reportStatus: string;
-            if (report.status === EReportStatus.NEW) {
-              reportStatus = "Chưa xử lý";
-            } else if (report.status === EReportStatus.PROCESSING) {
-              reportStatus = "Đang xử lý";
-            } else {
-              reportStatus = "Đã xử lý";
-            }
-            location.reportStatus = reportStatus;
-          }
+          //   if (res.content.length > 0) {
+          //     const report: Report = res.content[res.content.length - 1];
+          //     let reportStatus: string;
+          //     if (report.status === EReportStatus.NEW) {
+          //       reportStatus = "Chưa xử lý";
+          //     } else if (report.status === EReportStatus.PROCESSING) {
+          //       reportStatus = "Đang xử lý";
+          //     } else {
+          //       reportStatus = "Đã xử lý";
+          //     }
+          //     location.reportStatus = reportStatus;
+          //   }
+          // }
 
           const existsAdvertises = await LocationService.checkExistsAdvertises(location.id);
           location.existsAdvertises = existsAdvertises;
@@ -149,46 +153,50 @@ const MapAdsManagement = () => {
 
   useEffect(() => {
     const getAllReportsTypeLocation = async () => {
-      ReportService.getReports(
-        {
-          reportTypeName: EReportType.LOCATION,
-          pageSize: 999
-        },
-        intercepts
-      )
-        .then((res) => {
-          res.content.forEach((report: Report) => {
-            let reportStatus: string;
-            if (report.status === EReportStatus.NEW) {
-              reportStatus = "Chưa xử lý";
-            } else if (report.status === EReportStatus.PROCESSING) {
-              reportStatus = "Đang xử lý";
-            } else {
-              reportStatus = "Đã xử lý";
-            }
-            const reportLocation: RandomLocation = {
-              address: report.address as string,
-              longitude: report.longitude as number,
-              latitude: report.latitude as number,
-              reportStatus: reportStatus
-            };
-            const feature: Feature = {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [reportLocation.longitude, reportLocation.latitude]
-              },
-              properties: {
-                ...reportLocation,
-                isAdvertiseLocation: false
+      const email = localStorage.getItem("guest_email");
+      if (email) {
+        ReportClientService.getReports(
+          {
+            reportTypeName: EReportType.LOCATION,
+            pageSize: 999,
+            email: email
+          },
+          intercepts
+        )
+          .then((res) => {
+            res.content.forEach((report: Report) => {
+              let reportStatus: string;
+              if (report.status === EReportStatus.NEW) {
+                reportStatus = "Chưa xử lý";
+              } else if (report.status === EReportStatus.PROCESSING) {
+                reportStatus = "Đang xử lý";
+              } else {
+                reportStatus = "Đã xử lý";
               }
-            };
-            reportLocations.push(feature);
+              const reportLocation: RandomLocation = {
+                address: report.address as string,
+                longitude: report.longitude as number,
+                latitude: report.latitude as number,
+                reportStatus: reportStatus
+              };
+              const feature: Feature = {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [reportLocation.longitude, reportLocation.latitude]
+                },
+                properties: {
+                  ...reportLocation,
+                  isAdvertiseLocation: false
+                }
+              };
+              reportLocations.push(feature);
+            });
+          })
+          .catch((e) => {
+            console.log(e);
           });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      }
     };
     getAllReportsTypeLocation();
   }, [reportLocations]);
