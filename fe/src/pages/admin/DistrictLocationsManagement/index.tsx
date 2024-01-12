@@ -154,6 +154,10 @@ const DistrictLocationManagement = () => {
   const customHeading = ["STT", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
   const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
 
+  const onCloseFilterDialogHandle = () => {
+    dispatch(openFilterDialog(false));
+  };
+
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const handleViewAds = (idLocation: number) => {
@@ -180,7 +184,9 @@ const DistrictLocationManagement = () => {
           <Box className={classes["container-body"]}>
             <Box className={classes["search-container"]}>
               <SearchAppBar onSearch={handleSearch} />
-              <Button onClick={openFilterDialogHandle}>LỌC PHƯỜNG</Button>
+              <Button onClick={openFilterDialogHandle} variant='contained'>
+                LỌC PHƯỜNG
+              </Button>
             </Box>
             <Box className={classes["table-container"]}>
               <Box className={classes["table-container"]}>
@@ -213,11 +219,7 @@ const DistrictLocationManagement = () => {
         </SideBarWard>
       </div>
 
-      <Dialog
-        open={Boolean(openFilterDialogValue)}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
+      <Dialog open={Boolean(openFilterDialogValue)} onClose={onCloseFilterDialogHandle}>
         <DialogContent>
           <WardFilter selectedId={searchParamFilter} propertyList={wardList} />
         </DialogContent>

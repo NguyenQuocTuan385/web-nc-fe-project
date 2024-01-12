@@ -19,7 +19,6 @@ import DistrictService from "services/district";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
-import { Header } from "components/common/Header";
 
 export default function TabPanel() {
   const locationHook = useLocation();
@@ -56,6 +55,10 @@ export default function TabPanel() {
   };
   const openFilterDialogHandle = () => {
     dispatch(openFilterDialog(true));
+  };
+
+  const onCloseFilterDialogHandle = () => {
+    dispatch(openFilterDialog(false));
   };
 
   useEffect(() => {
@@ -102,14 +105,12 @@ export default function TabPanel() {
             onChange={handleSearchChange}
             className={classes.customTextField}
           />
-          <Button onClick={openFilterDialogHandle}>LỌC PHƯỜNG</Button>
+          <Button onClick={openFilterDialogHandle} variant='contained'>
+            LỌC PHƯỜNG
+          </Button>
         </Box>
 
-        <Dialog
-          open={Boolean(openFilterDialogValue)}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
-        >
+        <Dialog open={Boolean(openFilterDialogValue)} onClose={onCloseFilterDialogHandle}>
           <DialogContent>
             <WardFilter selectedId={searchParams} propertyList={wardList} />
           </DialogContent>

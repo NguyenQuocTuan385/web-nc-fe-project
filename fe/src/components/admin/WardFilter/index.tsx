@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import classes from "./styles.module.scss";
 import { Box, Button, FormControl, FormControlLabel, FormGroup, FormLabel } from "@mui/material";
-import Heading6 from "components/common/text/Heading6";
 import { Property } from "models/property";
 import Checkbox from "@mui/material/Checkbox";
 import { useLocation, useSearchParams } from "react-router-dom";
-import queryString from "query-string";
 import { openFilterDialog } from "reduxes/Status";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
+import Heading4 from "components/common/text/Heading4";
 
 interface PropsData {
   propertyList?: Property[];
@@ -17,16 +16,15 @@ interface PropsData {
 }
 
 function WardFilter(propsData: PropsData) {
-  const locationHook = useLocation();
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const openFilterDialogValue = useSelector((state: RootState) => state.status.isOpenFilterDialog);
 
   const [filteredList, setFilteredList] = useState<string[]>(() => {
     const initFilteredArray: string[] = [];
 
     propsData.propertyList?.forEach((item, index) => {
-      if (propsData.selectedId?.includes(item.id.toString())) initFilteredArray.push(item.id.toString());
+      if (propsData.selectedId?.includes(item.id.toString()))
+        initFilteredArray.push(item.id.toString());
     });
 
     return initFilteredArray;
@@ -49,7 +47,9 @@ function WardFilter(propsData: PropsData) {
       ? setFilteredList([...filteredList, event.target.name])
       : setFilteredList(filteredList.filter((item) => item !== event.target.name));
 
-    setCheckbox(checkbox.map((item, index) => (index === checkIndex ? (item = event.target.checked) : item)));
+    setCheckbox(
+      checkbox.map((item, index) => (index === checkIndex ? (item = event.target.checked) : item))
+    );
   };
 
   const sendFilterHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -69,7 +69,7 @@ function WardFilter(propsData: PropsData) {
 
   return (
     <Box className={classes.cardContainer}>
-      <Heading6>Lọc danh sách hợp đồng theo phường</Heading6>
+      <Heading4>Lọc danh sách hợp đồng theo phường</Heading4>
 
       <FormControl component='fieldset' variant='standard'>
         <FormLabel component='legend'>Chọn phường</FormLabel>

@@ -1,16 +1,17 @@
-.cardContainer{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
 }
 
-.wardGroup{
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
+.wardGroup {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
 }
 
-.sendFilterButton{
-    padding: 10px;
-    margin: 20px;
+.sendFilterButton {
+  padding: 10px;
+  margin: 20px;
 }

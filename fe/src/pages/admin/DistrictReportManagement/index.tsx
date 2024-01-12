@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Dialog, DialogContent, Pagination, TablePagination } from "@mui/material";
+import { Box, Button, Dialog, DialogContent, TablePagination } from "@mui/material";
 
-import {
-  useNavigate,
-  useLocation,
-  useResolvedPath,
-  createSearchParams,
-  useSearchParams
-} from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 
 import SideBarWard from "components/admin/SidebarWard";
 import TableTemplate from "components/common/TableTemplate";
 import SearchAppBar from "components/common/Search";
-import { Header } from "components/common/Header";
 import classes from "./styles.module.scss";
 import ReportService from "services/report";
 import { routes } from "routes/routes";
@@ -169,6 +162,10 @@ const DistrictReportsManagement = () => {
     dispatch(openFilterDialog(true));
   };
 
+  const onCloseFilterDialogHandle = () => {
+    dispatch(openFilterDialog(false));
+  };
+
   return (
     <Box>
       <div className={classes["reports-management-container"]}>
@@ -176,7 +173,9 @@ const DistrictReportsManagement = () => {
           <Box className={classes["container-body"]}>
             <Box className={classes["search-container"]}>
               <SearchAppBar onSearch={handleSearch} />
-              <Button onClick={openFilterDialogHandle}>LỌC PHƯỜNG</Button>
+              <Button onClick={openFilterDialogHandle} variant='contained'>
+                LỌC PHƯỜNG
+              </Button>
             </Box>
             <Box className={classes["table-container"]}>
               <Box className={classes["table-container"]}>
@@ -207,11 +206,7 @@ const DistrictReportsManagement = () => {
         </SideBarWard>
       </div>
 
-      <Dialog
-        open={Boolean(openFilterDialogValue)}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
+      <Dialog open={Boolean(openFilterDialogValue)} onClose={onCloseFilterDialogHandle}>
         <DialogContent>
           <WardFilter selectedId={searchParamFilter} propertyList={wardList} />
         </DialogContent>

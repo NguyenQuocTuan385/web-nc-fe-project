@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -19,7 +18,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 
-import { Header } from "components/common/Header";
 import classes from "./styles.module.scss";
 import SideBarWard from "components/admin/SidebarWard";
 import styled from "styled-components";
@@ -39,6 +37,7 @@ import useIntercepts from "hooks/useIntercepts";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
+import { User } from "models/user";
 
 interface FormData {
   propertyId: number;
@@ -65,13 +64,6 @@ const schema: any = Yup.object().shape({
 });
 
 const ButtonBack = styled(Button)(() => ({
-  paddingLeft: "0 !important",
-  "&:hover": {
-    backgroundColor: "transparent !important"
-  }
-}));
-
-const IconButtonBack = styled(IconButton)(() => ({
   paddingLeft: "0 !important",
   "&:hover": {
     backgroundColor: "transparent !important"
@@ -109,7 +101,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     resolver: yupResolver(schema)
   });
 
-  const currentUser = useSelector(selectCurrentUser);
+  const currentUser: User = useSelector(selectCurrentUser);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [originalImages, setOriginalImages] = useState(JSON.parse(data.images));
@@ -193,7 +185,11 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           <TextField
             required
             id='outlined-required'
-            defaultValue={`${currentUser.property.name}, ${currentUser.property.propertyParent.name}`}
+            defaultValue={
+              !!currentUser.property.propertyParent
+                ? `${currentUser.property.name}, ${currentUser.property.propertyParent.name}, Thành phố Hồ Chí Minh`
+                : `${currentUser.property.name}, Thành phố Hồ Chí Minh`
+            }
             InputProps={{ readOnly: true }}
             fullWidth
           />
@@ -424,7 +420,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
@@ -442,7 +438,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}

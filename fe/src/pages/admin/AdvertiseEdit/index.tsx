@@ -548,7 +548,7 @@ export const AdvertiseEdit = () => {
               Trở về
             </ButtonBack>
 
-            {infoContract && (
+            {!!infoContract && (
               <Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   {infoContract && (
@@ -565,40 +565,34 @@ export const AdvertiseEdit = () => {
                       marginLeft: "24px"
                     }}
                   >
-                    {infoContract && <InfoContract data={infoContract} />}
-                    {infoContract && (
-                      <Typography>
-                        <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
-                        <span>{infoContract.startAt}</span>
-                      </Typography>
-                    )}
-                    {infoContract && (
-                      <Typography>
-                        <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
-                        <span>{infoContract.endAt}</span>
-                      </Typography>
-                    )}
+                    <InfoContract data={infoContract} />
+                    <Typography>
+                      <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
+                      <span>{infoContract.startAt}</span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
+                      <span>{infoContract.endAt}</span>
+                    </Typography>
                   </Box>
                 </Box>
               </Box>
             )}
 
-            {infoAds && (
+            {!!infoAds && (
               <Box mt='30px'>
                 <Heading2>Thông tin quảng cáo</Heading2>
-                {infoAds && (
-                  <MyForm
-                    data={infoAds}
-                    createAdvertiseEditRequest={handleGetSuccessState}
-                    adsTypes={adsTypes}
-                    locationId={Number(locationId)}
-                    advertiseId={Number(advertiseId)}
-                  />
-                )}
+                <MyForm
+                  data={infoAds}
+                  createAdvertiseEditRequest={handleGetSuccessState}
+                  adsTypes={adsTypes}
+                  locationId={Number(locationId)}
+                  advertiseId={Number(advertiseId)}
+                />
               </Box>
             )}
 
-            {infoAds && (
+            {!!infoAds && (
               <Snackbar
                 open={isCreateSuccess !== null}
                 autoHideDuration={3000}
