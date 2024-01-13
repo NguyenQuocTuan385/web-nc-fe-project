@@ -24,6 +24,8 @@ import { UserRequest } from "models/user";
 import Alert from "@mui/material/Alert";
 import { AuthenticationService } from "services/authentication";
 import { DateHelper } from "helpers/date";
+import { useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 interface FormData {
   name: string;
   avatar: string;
@@ -42,6 +44,7 @@ export default function CreateAccount() {
   const [wards, setWards] = useState<Property[]>([]);
   const [selectedDistrict, setSelectedDistrict] = React.useState<Property | null>(null);
   const [selectedWard, setSelectedWard] = React.useState<Property | null>(null);
+  const navigate = useNavigate();
   const getAllWard = async (id: Number) => {
     WardService.getAllWardBy(Number(id), {
       search: "",
@@ -192,6 +195,10 @@ export default function CreateAccount() {
                 Đã tạo thành công
               </Alert>
             )}
+            <Box className={classes.backPage} onClick={() => navigate(-1)}>
+              <ArrowBackIcon className={classes.iconBack} />
+              Trở về
+            </Box>
             <Box className={classes.boxForm}>
               <Grid container spacing={5}>
                 <Grid item xs={6}>

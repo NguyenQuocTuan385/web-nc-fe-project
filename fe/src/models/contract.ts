@@ -14,6 +14,7 @@ export interface Contract {
   status: EContractStatus;
   images: string;
   advertise: Advertise;
+  createdAt: Date;
 }
 
 export interface PutContract {

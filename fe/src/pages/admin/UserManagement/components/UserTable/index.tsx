@@ -139,8 +139,8 @@ export default function UserManagementTable({ role, fieldSearch }: FilterProps) 
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.sizeTable} aria-label='simple table'>
           <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
+            <TableRow className={classes.tableHeading}>
+              <TableCell className={classes.headerTable}>ID</TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Họ và tên
               </TableCell>

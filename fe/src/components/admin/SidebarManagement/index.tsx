@@ -19,6 +19,7 @@ import images from "config/images";
 import { Avatar } from "@mui/material";
 import { RootState } from "store";
 import { selected } from "reduxes/Selected";
+import { set } from "react-hook-form";
 
 interface SidebarItem {
   name: string;
@@ -54,7 +55,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
         });
       } else {
         if (item.link?.includes(path)) {
-          dispatch(selected({ parentIndex: index, childIndex: 0 }));
+          dispatch(selected({ parentIndex: index, childIndex: -1 }));
           return;
         }
       }
@@ -66,10 +67,14 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
 
   const handleClick = (index: number, sideBarItem: SidebarItem, child: Array<{ name: string }>) => {
     if (index === state.parentIndex) {
+      setOpenItems(index);
       return;
     }
-    dispatch(selected({ parentIndex: index, childIndex: 0 }));
-    navigate(sideBarItem.link!!);
+    if (sideBarItem.children === undefined) {
+      dispatch(selected({ parentIndex: index, childIndex: -1 }));
+      navigate(sideBarItem.link!!);
+    }
+
     if (openItems === index) {
       setOpenItems(null);
     } else {
@@ -125,7 +130,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
                   <ListItemButton
                     onClick={() => handleClick(index, list, list.children || [])}
                     className={classes.item}
-                    selected={state.parentIndex === index && state.childIndex === 0}
+                    selected={state.parentIndex === index && state.childIndex === -1}
                   >
                     <ListItemIcon>{list.icon}</ListItemIcon>
                     <ListItemText primary={list.name} className={classes.itemText} />

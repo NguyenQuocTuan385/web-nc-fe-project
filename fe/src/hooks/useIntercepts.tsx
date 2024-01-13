@@ -10,6 +10,7 @@ const useIntercepts = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (currentUser === null) return;
     const requestIntercept = api.interceptors.request.use(
       (request) => {
         if (!request.headers.Authorization) {

@@ -5,15 +5,32 @@
 
 .tableContainer {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableHeading {
+  background-color: var(--blue-500);
 }
 
 .sizeTable {
-  min-width: 1050px;
+  max-width: 1050px;
+  border: 1px solid #e0e0e0;
 }
 
 .headerTable {
   font-weight: bold;
   padding: 5px;
+  color: white !important;
+}
+
+.pagination {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
 }
 
 .rowTable {
@@ -30,18 +47,15 @@
 .dataTable {
   padding: 5px;
   font-weight: normal;
+  white-space: nowrap; // Prevents the text from wrapping onto the next line
+  overflow: hidden; // Hides any text that overflows the cell
+  text-overflow: ellipsis; // Adds
 }
 .textOverflow {
   white-space: nowrap; // Prevents the text from wrapping onto the next line
   overflow: hidden; // Hides any text that overflows the cell
   text-overflow: ellipsis; // Adds an ellipsis (...) when the text overflows
   width: 400px;
-}
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
 }
 
 .checkIcon {
