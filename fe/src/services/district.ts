@@ -1,6 +1,6 @@
 import { API } from "config/constant";
 import api from "./configApi";
-import { GetProperties, PropertyRequest } from "models/property";
+import { GetProperties, PropertyCreateRequest, PropertyRequest } from "models/property";
 
 export class DistrictService {
   static async getAllDistrict(data: GetProperties): Promise<any> {
@@ -45,6 +45,22 @@ export class DistrictService {
       .get(`${API.DISTRICT.GET_BY_PARENT_ID.replace(":id", `${id}`)}`, {
         params: { pageSize: 999 }
       })
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+
+  static async createDistrict(propertyRequest: PropertyCreateRequest, api: any): Promise<any> {
+    const createData = {
+      propertyParentId: propertyRequest.propertyParentId,
+      name: propertyRequest.name,
+      code: propertyRequest.code
+    };
+    return await api
+      .post(`${API.DISTRICT.DEFAULT}`, createData)
       .then((res: any) => {
         return Promise.resolve(res.data);
       })

@@ -94,9 +94,9 @@ export class AdvertiseService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async createAdvertise(data: UpdateAdvertise, api: any): Promise<any> {
+  static async createAdvertise(locationId: number, data: UpdateAdvertise, api: any): Promise<any> {
     return await api
-      .post(`${API.ADVERTISE.CREATE}`, data)
+      .post(`${API.ADVERTISE.DEFAULT.replace(":id", `${locationId}`)}`, data)
       .then((res: any) => {
         return Promise.resolve(res.data);
       })

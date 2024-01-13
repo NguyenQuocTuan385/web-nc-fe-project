@@ -11,8 +11,7 @@ import {
   MenuItem,
   Select,
   Snackbar,
-  TextField,
-  Typography
+  TextField
 } from "@mui/material";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -24,23 +23,17 @@ import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-import { InfoContract } from "../AdvertiseDetail/components/InfoContract";
 import SideBarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
 import { routes } from "routes/routes";
-import { Advertise, AdvertiseEditRequest, AdvertiseType, UpdateAdvertise } from "models/advertise";
+import { AdvertiseType, UpdateAdvertise } from "models/advertise";
 import UploadImage from "components/common/UploadImage";
-import ContractService from "services/contract";
 import AdvertiseTypeService from "services/advertiseType";
-import AdvertiseEditService from "services/advertiseEdit";
 import Heading2 from "components/common/text/Heading2";
-import Editor from "components/common/Editor/EditWithQuill";
 import useIntercepts from "hooks/useIntercepts";
 import { User } from "models/user";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
-import { ERole } from "models/general";
-import ParagraphBody from "components/common/text/ParagraphBody";
 import AdvertiseService from "services/advertise";
 
 interface FormData {
@@ -113,8 +106,8 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
 
   const intercept = useIntercepts();
 
-  const createAdvertiseEdit = async (advertiseEditRequest: UpdateAdvertise) => {
-    AdvertiseService.createAdvertise(advertiseEditRequest, intercept)
+  const createAdvertiseEdit = async (locationId: number, advertiseEditRequest: UpdateAdvertise) => {
+    AdvertiseService.createAdvertise(locationId, advertiseEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
       })
@@ -165,7 +158,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
 
     console.log(dataSubmit);
 
-    createAdvertiseEdit(dataSubmit);
+    createAdvertiseEdit(locationId, dataSubmit);
   };
 
   return (
@@ -429,14 +422,15 @@ const IconButtonBack = styled(IconButton)(() => ({
 
 export const AdvertiseCreate = () => {
   const navigate = useNavigate();
-  const { locationId, advertiseId } = useParams<{ locationId: string; advertiseId: string }>();
+  const { id, advertiseId } = useParams<{ id: string; advertiseId: string }>();
   const currentUser: User = useSelector(selectCurrentUser);
   const [adsTypes, setAdsTypes] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
   const intercept = useIntercepts();
 
   const goBack = () => {
-    navigate(`${routes.admin.locations.dcmsDetail.replace(":id", `${locationId}`)}`);
+    // navigate(`${routes.admin.locations.dcmsDetail.replace(":id", `${locationId}`)}`);
+    navigate(`${routes.admin.locations.dcms}`);
   };
 
   useEffect(() => {
@@ -469,7 +463,7 @@ export const AdvertiseCreate = () => {
               <MyForm
                 createAdvertiseEditRequest={handleGetSuccessState}
                 adsTypes={adsTypes}
-                locationId={Number(locationId)}
+                locationId={Number(id)}
                 advertiseId={Number(advertiseId)}
               />
             </Box>

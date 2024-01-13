@@ -9,7 +9,8 @@ export const API = {
     DELETE: "/api/locations/edit/:id",
     EDIT: "/api/locations/:id",
     GET_BY_PROPERTY_ID: "/api/properties/:id/locations",
-    GET_WITH_PROPERTY_PARENT: "/api/properties/locations"
+    GET_WITH_PROPERTY_PARENT: "/api/properties/locations",
+    DELETE_LOCATION: "/api/locations/:id"
   },
   LOCATION_CLIENT: {
     DEFAULT: "/api/locations-client",
