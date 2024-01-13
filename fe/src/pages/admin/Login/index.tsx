@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Box, Button, Grid, Link, TextField, Typography } from "@mui/material";
+
 import classes from "./styles.module.scss";
 import picture from "../../../assets/img/login/login.jpg";
 import { routes } from "routes/routes";
@@ -28,6 +31,8 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser: User = useSelector(selectCurrentUser);
+  const notifySuccess = (message: string) => toast.success(message);
+  const notifyError = (message: string) => toast.error(message);
   const handleLogin = (data: any) => {
     const loginData: LoginRequest = {
       email: data.email,
@@ -55,6 +60,7 @@ const Login: React.FC = () => {
         } else navigate(routes.admin.contracts.root);
       })
       .catch((e) => {
+        notifyError(e.error);
         console.log(e);
       });
   };
@@ -122,6 +128,8 @@ const Login: React.FC = () => {
             Quên mật khẩu
           </Link>
         </Grid>
+
+        <ToastContainer />
       </Grid>
     </Box>
   ) : currentUser.role.id === ERole.DEPARTMENT ? (
