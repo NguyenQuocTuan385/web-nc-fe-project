@@ -23,7 +23,7 @@ export default function TabPanelAdvertise() {
     } else {
       setValue("1");
     }
-  }, [tab]);
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     navigate({
