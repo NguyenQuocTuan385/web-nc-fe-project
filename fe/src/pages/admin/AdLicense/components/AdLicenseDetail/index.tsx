@@ -3,7 +3,6 @@ import React from "react";
 import classes from "./styles.module.scss";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useLocation } from "react-router-dom";
-import Button from "@mui/material/Button";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import Heading3 from "components/common/text/Heading3";
 import Grid from "@mui/material/Grid";
@@ -14,6 +13,12 @@ import ContractService from "services/contract";
 import { useEffect } from "react";
 import AdvertiseService from "services/advertise";
 import useIntercepts from "hooks/useIntercepts";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 
 export default function AdLicenseDetail() {
   const navigate = useNavigate();
@@ -22,13 +27,19 @@ export default function AdLicenseDetail() {
   const constractId = location.pathname.split("/").pop();
   const [state, setState] = React.useState<Contract | null>(null);
   const intercept = useIntercepts();
+  const [openAccept, setOpenAccept] = React.useState(false);
+  const [openCancel, setOpenCancel] = React.useState(false);
+  const handleClose = () => {
+    setOpenAccept(false);
+    setOpenCancel(false);
+  };
   useEffect(() => {
-    const getAllContractById = async () => {
+    const getContractById = async () => {
       ContractService.getContractById(Number(constractId), intercept).then((res) => {
         setState(res);
       });
     };
-    getAllContractById();
+    getContractById();
   }, [constractId]);
   const startAt = new Date(state?.startAt ?? "").toLocaleDateString("en-GB");
 
@@ -50,9 +61,13 @@ export default function AdLicenseDetail() {
       });
   };
   const updateContractById = async (row: Contract) => {
-    ContractService.updateContractById(row.id, {
-      status: EContractStatus.licensed
-    })
+    ContractService.updateContractById(
+      row.id,
+      {
+        status: EContractStatus.licensed
+      },
+      intercept
+    )
       .then((res) => {
         console.log(res);
       })
@@ -60,17 +75,20 @@ export default function AdLicenseDetail() {
         console.log(err);
       });
   };
+  const confirmAccept = async () => {
+    await updateAdvertisesById(state!!);
+    await updateContractById(state!!);
+    navigate(-1);
+  };
   const handleClickAccept = () => {
-    if (state) {
-      Promise.all([updateAdvertisesById(state), updateContractById(state)]).then(() =>
-        navigate(-1)
-      );
-    }
+    setOpenAccept(true);
+  };
+  const confirmCancel = async () => {
+    await updateContractById(state!!);
+    navigate(-1);
   };
   const handleClickCancel = () => {
-    if (state) {
-      updateContractById(state).then(() => navigate(-1));
-    }
+    setOpenCancel(true);
   };
   return (
     <Box className={classes.boxContainer}>
@@ -173,6 +191,45 @@ export default function AdLicenseDetail() {
           </Box>
         </Box>
       </SidebarDCMS>
+      <Dialog
+        open={openAccept}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn cấp phép quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmAccept} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openCancel}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Hủy cấp phép quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn hủy cấp phép quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmCancel} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

@@ -18,6 +18,13 @@ import ContractService from "services/contract";
 import queryString from "query-string";
 import AdvertiseService from "services/advertise";
 import useIntercepts from "hooks/useIntercepts";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import { DateHelper } from "helpers/date";
 interface FilterProps {
   district?: number;
   ward?: number;
@@ -36,17 +43,27 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [dataList, setDataList] = useState<Contract[]>([]);
   const [totalPage, setTotalPage] = useState(1);
+  const [openAccept, setOpenAccept] = React.useState(false);
+  const [openCancel, setOpenCancel] = React.useState(false);
+  const [data, setData] = useState<Contract | null>(null);
+  const handleClose = () => {
+    setOpenAccept(false);
+    setOpenCancel(false);
+  };
 
   useEffect(() => {
     const getAllContractByProperty = async () => {
-      ContractService.getContractsByProperty({
-        propertyId: ward ? [ward] : [],
-        parentId: district ? [district] : [],
-        search: fieldSearch,
-        status: EContractStatus.notLicensed,
-        pageSize: rowsPerPage,
-        current: Number(page) + 1
-      })
+      ContractService.getContractsByProperty(
+        {
+          propertyId: ward ? [ward] : [],
+          parentId: district ? [district] : [],
+          search: fieldSearch,
+          status: EContractStatus.notLicensed,
+          pageSize: rowsPerPage,
+          current: Number(page) + 1
+        },
+        intercept
+      )
         .then((res) => {
           setUpdate(false);
           setDataList(res.content);
@@ -104,9 +121,13 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
       });
   };
   const updateContractById = async (row: Contract) => {
-    ContractService.updateContractById(row.id, {
-      status: EContractStatus.licensed
-    })
+    ContractService.updateContractById(
+      row.id,
+      {
+        status: EContractStatus.licensed
+      },
+      intercept
+    )
       .then((res) => {
         console.log(res);
       })
@@ -114,27 +135,39 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
         console.log(err);
       });
   };
+  const confirmAccept = async () => {
+    setOpenAccept(false);
+    await updateAdvertisesById(data!!);
+    await updateContractById(data!!).then(() => {
+      setUpdate(true);
+    });
+  };
   const handleClickAccept = (event: React.MouseEvent, row: Contract) => {
     event.stopPropagation();
-    Promise.all([updateAdvertisesById(row), updateContractById(row)]).then(() => {
+    setData(row);
+    setOpenAccept(true);
+  };
+
+  const confirmCancel = async () => {
+    setOpenCancel(false);
+    await updateContractById(data!!).then(() => {
       setUpdate(true);
     });
   };
   const handleClickCancel = (event: React.MouseEvent, row: Contract) => {
     event.stopPropagation();
-    updateContractById(row).then(() => {
-      setUpdate(true);
-    });
+    setData(row);
+    setOpenCancel(true);
   };
   const emptyRows = rowsPerPage - dataList.length;
 
   return (
     <Box className={classes.boxContainer}>
-      <TableContainer component={Paper} className={classes.tableContainer}>
+      <TableContainer className={classes.tableContainer}>
         <Table className={classes.sizeTable} aria-label='simple table'>
-          <TableHead>
+          <TableHead className={classes.tableHeading}>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell className={classes.headerTable}>ID</TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Điểm đặt đặt quảng cáo
               </TableCell>
@@ -143,6 +176,9 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
               </TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Loại bảng quảng cáo
+              </TableCell>
+              <TableCell align='left' className={classes.headerTable}>
+                Thời gian gửi
               </TableCell>
               <TableCell align='center' className={classes.headerTable}>
                 Duyệt
@@ -163,6 +199,9 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>
                   {row.advertise.adsType.description}
+                </TableCell>
+                <TableCell align='left' className={classes.dataTable}>
+                  {DateHelper.formatDateToDDMMYYYY(row.createdAt)}
                 </TableCell>
                 <TableCell align='center' className={classes.dataTable}>
                   <IconButton
@@ -202,6 +241,45 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
+      <Dialog
+        open={openAccept}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn cấp phép quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmAccept} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openCancel}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Hủy cấp phép quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn hủy cấp phép quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmCancel} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

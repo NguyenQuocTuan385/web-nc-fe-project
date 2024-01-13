@@ -47,6 +47,7 @@ export interface AdvertiseEdit {
   width: number;
   content: string;
   images: string;
+  pillarQuantity: number;
   location: Location;
   adsType: AdvertiseType;
   createdAt: Date;
@@ -54,8 +55,7 @@ export interface AdvertiseEdit {
 }
 
 export interface UpdateStatus {
-  status: boolean;
-  advertiseEditId?: number;
+  statusEdit: boolean;
 }
 
 export interface UpdateAdvertise {

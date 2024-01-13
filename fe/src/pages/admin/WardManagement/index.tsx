@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/Search";
+import SearchAppBar from "./components/SearchWard";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ import WardService from "services/ward";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import useIntercepts from "hooks/useIntercepts";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -44,6 +45,7 @@ export default function WardManagement() {
   const [editPopupOpen, setEditPopupOpen] = useState(false);
   const [editingWard, setEditingWard] = useState<null | any>(null);
 
+  const intercept = useIntercepts();
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
 
@@ -68,11 +70,15 @@ export default function WardManagement() {
 
   const getAllWardBy = async () => {
     try {
-      const res = await WardService.getAllWardBy(Number(id), {
-        search: searchValue,
-        pageSize: itemsPerPage,
-        current: Number(currentPage)
-      });
+      const res = await WardService.getAllWardBy(
+        Number(id),
+        {
+          search: searchValue,
+          pageSize: itemsPerPage,
+          current: Number(currentPage)
+        },
+        intercept
+      );
 
       setWardList(res.content);
       setTotalPage(res.totalPages);
@@ -123,7 +129,7 @@ export default function WardManagement() {
   };
 
   const deleteProperty = (idProperty: number) => {
-    WardService.deleteWardBy(idProperty)
+    WardService.deleteWardBy(idProperty, intercept)
       .then((res) => {
         getAllWardBy();
       })
@@ -135,11 +141,15 @@ export default function WardManagement() {
   };
 
   const handleEditWard = (name: string) => {
-    WardService.updateWardBy(wardId, {
-      id: wardId,
-      name: name,
-      code: editingWard.code
-    })
+    WardService.updateWardBy(
+      wardId,
+      {
+        id: wardId,
+        name: name,
+        code: editingWard.code
+      },
+      intercept
+    )
       .then((res) => {
         getAllWardBy();
         setEditPopupOpen(false);

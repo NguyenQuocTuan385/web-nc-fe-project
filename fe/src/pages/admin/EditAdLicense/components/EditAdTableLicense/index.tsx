@@ -5,13 +5,11 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { Box, IconButton } from "@mui/material";
 import classes from "./styles.module.scss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Cancel } from "@mui/icons-material";
-import ads from "../../../../../editadtable.json";
 import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import { routes } from "routes/routes";
 import AdvertiseService from "services/advertise";
@@ -19,6 +17,14 @@ import queryString from "query-string";
 import { Advertise, TAB_ADVERTISE, UpdateStatus } from "models/advertise";
 import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import { set } from "react-hook-form";
+
 interface FilterProps {
   district?: string;
   ward?: string;
@@ -38,6 +44,13 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   const [update, setUpdate] = useState(false);
   const navigate = useNavigate();
   const intercept = useIntercepts();
+  const [data, setData] = useState<Advertise | null>(null);
+  const [openAccept, setOpenAccept] = React.useState(false);
+  const [openCancel, setOpenCancel] = React.useState(false);
+  const handleClose = () => {
+    setOpenAccept(false);
+    setOpenCancel(false);
+  };
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -112,19 +125,19 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
         console.log(err);
       });
   };
-  const handleClickAccept = async (event: React.MouseEvent, data: Advertise) => {
-    event.stopPropagation();
-    const updateAdvertise = async (data: Advertise) => {
+
+  const confirmAccept = async () => {
+    const updateAdvertise = async () => {
       await AdvertiseService.updateAdvertise(
-        data.id,
+        data?.id!!,
         {
-          licensing: data.licensing,
-          width: data.advertiseEdit?.width!!,
-          height: data.advertiseEdit?.height!!,
-          images: data.advertiseEdit?.images!!,
-          locationId: data.advertiseEdit?.location.id!!,
-          adsTypeId: data.advertiseEdit?.adsType.id!!,
-          pillarQuantity: data.pillarQuantity!!
+          licensing: data?.licensing!!,
+          width: data?.advertiseEdit?.width!!,
+          height: data?.advertiseEdit?.height!!,
+          images: data?.advertiseEdit?.images!!,
+          locationId: data?.advertiseEdit?.location.id!!,
+          adsTypeId: data?.advertiseEdit?.adsType.id!!,
+          pillarQuantity: data?.advertiseEdit?.pillarQuantity!!
         },
         intercept
       )
@@ -135,18 +148,31 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
           console.log(err);
         });
     };
-    await updateAdvertise(data);
-    await deleteAdvertiseEdit(data.advertiseEdit?.id!!);
+    await updateAdvertise();
+    await deleteAdvertiseEdit(data?.advertiseEdit?.id!!);
     setUpdate(true);
+    setOpenAccept(false);
   };
 
+  const handleClickAccept = async (event: React.MouseEvent, data: Advertise) => {
+    event.stopPropagation();
+    setData(data);
+    console.log(data);
+    setOpenAccept(true);
+  };
+
+  const confirmCancel = async () => {
+    await updateStatus(data?.id!!, {
+      statusEdit: false
+    });
+    await deleteAdvertiseEdit(data?.advertiseEdit?.id!!);
+    setUpdate(true);
+    setOpenCancel(false);
+  };
   const handleClickCancel = async (event: React.MouseEvent, data: Advertise) => {
     event.stopPropagation();
-    await updateStatus(data.id, {
-      status: false
-    });
-    await deleteAdvertiseEdit(data.advertiseEdit?.id!!);
-    setUpdate(true);
+    setData(data);
+    setOpenCancel(true);
   };
 
   const handleClick = (row: Advertise) => {
@@ -154,11 +180,11 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
   };
   return (
     <Box className={classes.boxContainer}>
-      <TableContainer component={Paper} className={classes.tableContainer}>
+      <TableContainer className={classes.tableContainer}>
         <Table className={classes.sizeTable} aria-label='simple table'>
-          <TableHead>
+          <TableHead className={classes.tableHeading}>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell className={classes.headerTable}>ID</TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Địa chỉ đặt quảng cáo
               </TableCell>
@@ -226,6 +252,45 @@ export default function EditAdTableLicense({ district, ward, fieldSearch }: Filt
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
+      <Dialog
+        open={openAccept}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép chỉnh sửa bảng quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn cấp phép chỉnh sửa bảng quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmAccept} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openCancel}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép chỉnh sửa bảng quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn hủy chỉnh sửa bảng quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmCancel} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

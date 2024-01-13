@@ -91,14 +91,10 @@ const ButtonSubmit = styled(Button)(() => ({
 interface FormCreateLocationProps {
   locationTypes: LocationType[];
   adsForms: AdvertiseForm[];
-  createLocationEditRequest: (isSuccess: boolean) => void;
+  intercept: any;
 }
 
-const MyForm: React.FC<FormCreateLocationProps> = ({
-  locationTypes,
-  adsForms,
-  createLocationCreateRequest
-}: any) => {
+const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, intercept }: any) => {
   const {
     handleSubmit,
     control,
@@ -128,18 +124,12 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
     setOpenDialog(false);
   };
 
-  const handleEmitSuccessState = (isSuccess: boolean) => {
-    createLocationCreateRequest(isSuccess);
-  };
-
   const createLocation = async (locationCreateRequest: LocationCreateRequest) => {
-    LocationService.createLocation(locationCreateRequest)
+    LocationService.createLocation(locationCreateRequest, intercept)
       .then((res) => {
-        handleEmitSuccessState(true);
         navigate(`${routes.admin.locations.dcms}`);
       })
       .catch((err) => {
-        handleEmitSuccessState(false);
         console.log(err);
       });
   };
@@ -190,10 +180,14 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
   };
 
   const getAllWard = async (id: Number) => {
-    WardService.getAllWardBy(Number(id), {
-      search: "",
-      pageSize: 999
-    })
+    WardService.getAllWardBy(
+      Number(id),
+      {
+        search: "",
+        pageSize: 999
+      },
+      intercept
+    )
       .then((res) => {
         setWards(res.content);
         return res.content;
@@ -203,10 +197,13 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
 
   useEffect(() => {
     const getAllDistrict = async () => {
-      DistrictService.getAllDistrict({
-        search: "",
-        pageSize: 999
-      })
+      DistrictService.getAllDistrict(
+        {
+          search: "",
+          pageSize: 999
+        },
+        intercept
+      )
         .then((res) => {
           setDistricts(res.content);
           return res.content;
@@ -579,7 +576,7 @@ export const LocationCreateCDMS = () => {
 
   useEffect(() => {
     const getAllLocationTypes = async () => {
-      LocationTypeService.getAllLocationTypes({})
+      LocationTypeService.getAllLocationTypes({}, intercept)
         .then((res) => {
           setLocationTypes(res.content);
         })
@@ -592,7 +589,7 @@ export const LocationCreateCDMS = () => {
 
   useEffect(() => {
     const getAllAdsForms = async () => {
-      AdvertiseFormService.getAllAdvertiseForm({})
+      AdvertiseFormService.getAllAdvertiseForm({}, intercept)
         .then((res) => {
           setAdsForms(res.content);
         })
@@ -620,11 +617,7 @@ export const LocationCreateCDMS = () => {
 
             <Box className={classes["info-edit-container"]}>
               <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
-              <MyForm
-                locationTypes={locationTypes}
-                adsForms={adsForms}
-                createLocationEditRequest={handleGetSuccessState}
-              />
+              <MyForm locationTypes={locationTypes} adsForms={adsForms} intercept={intercept} />
             </Box>
 
             <Snackbar

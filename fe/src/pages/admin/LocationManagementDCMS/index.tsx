@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Pagination, Box } from "@mui/material";
+import {
+  Pagination,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@mui/material";
 import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import queryString from "query-string";
 
@@ -11,6 +20,7 @@ import LocationService from "services/location";
 import { routes } from "routes/routes";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import SideBarDCMS from "components/admin/SidebarDCMS";
+import useIntercepts from "hooks/useIntercepts";
 
 const LocationManagementDCMS = () => {
   const navigate = useNavigate();
@@ -39,11 +49,14 @@ const LocationManagementDCMS = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
-      LocationService.getLocations({
-        search: searchValue,
-        pageSize: itemsPerPage,
-        current: Number(currentPage)
-      })
+      LocationService.getLocations(
+        {
+          search: searchValue,
+          pageSize: itemsPerPage,
+          current: Number(currentPage)
+        },
+        intercept
+      )
         .then((res) => {
           setLocationList(res.content);
           setTotalPage(res.totalPages);
@@ -97,6 +110,31 @@ const LocationManagementDCMS = () => {
     setSearchValue(query);
   };
 
+  const handleCreateLocation = (idLocation: number) => {
+    navigate(`${routes.admin.advertises.dcmsCreate.replace(":id", `${idLocation}`)}`);
+  };
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [locationId, setLocationId] = useState(0);
+  const closeDeleteDialogHandle = () => {
+    setOpenDeleteDialog(false);
+  };
+  const handleDeleteClick = (idLocation: number) => {
+    setLocationId(idLocation);
+    setOpenDeleteDialog(true);
+  };
+  const intercept = useIntercepts();
+  const deleteLocation = (idLocation: number) => {
+    LocationService.deleteLocationById(idLocation, intercept)
+      .then((res) => {
+        setLocationList(locationList.filter((location: any) => location.id !== idLocation));
+        setOpenDeleteDialog(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return (
     <Box>
       {/* <Header /> */}
@@ -115,6 +153,8 @@ const LocationManagementDCMS = () => {
                   isActionColumn={true}
                   onViewAdsClick={handleViewAds}
                   onEditClick={handleEditLocation}
+                  onAddClick={handleCreateLocation}
+                  onDeleteClick={handleDeleteClick}
                 />
 
                 <Box className={classes["pagination-custom"]}>
@@ -133,6 +173,34 @@ const LocationManagementDCMS = () => {
           </Box>
         </SideBarDCMS>
       </div>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={closeDeleteDialogHandle}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa địa điểm này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
+            Hủy bỏ
+          </Button>
+          <Button
+            variant='contained'
+            onClick={() => {
+              deleteLocation(locationId);
+            }}
+            autoFocus
+            color='success'
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

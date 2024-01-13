@@ -9,6 +9,7 @@ import classes from "./styles.module.scss";
 import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 import UserManagementTable from "../UserTable";
 import SideBarDCMS from "components/admin/SidebarDCMS";
+import { Button } from "@mui/material";
 
 export default function TabPanel() {
   const [value, setValue] = React.useState(0);
@@ -58,6 +59,14 @@ export default function TabPanel() {
           onChange={handleSearchChange}
           className={classes.customTextField}
         />
+        <Button
+          onClick={() => navigate("create")}
+          variant='contained'
+          color='primary'
+          className={classes.customButton}
+        >
+          Thêm tài khoản
+        </Button>
       </Box>
       <UserManagementTable role={value} fieldSearch={searchValue} />
     </Box>

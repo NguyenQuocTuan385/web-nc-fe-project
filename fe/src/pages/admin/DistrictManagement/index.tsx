@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/SearchDCMS";
+import SearchAppBar from "pages/admin/DistrictManagement/components/SearchDistrict";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import queryString from "query-string";
 import { useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import DistrictService from "services/district";
 import { routes } from "routes/routes";
+import useIntercepts from "hooks/useIntercepts";
 
 export default function DistrictManagement() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function DistrictManagement() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [editPopupOpen, setEditPopupOpen] = useState(false);
   const [editingDistrict, setEditingDistrict] = useState<null | any>(null);
-
+  const intercept = useIntercepts();
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
 
@@ -56,11 +57,14 @@ export default function DistrictManagement() {
   };
 
   const getAllDistricts = async () => {
-    DistrictService.getAllDistrict({
-      search: searchValue,
-      pageSize: itemsPerPage,
-      current: Number(currentPage)
-    })
+    DistrictService.getAllDistrict(
+      {
+        search: searchValue,
+        pageSize: itemsPerPage,
+        current: Number(currentPage)
+      },
+      intercept
+    )
       .then((res) => {
         setDistrictList(res.content);
         setTotalPage(res.totalPages);
@@ -115,7 +119,7 @@ export default function DistrictManagement() {
   };
 
   const deleteProperty = (idProperty: number) => {
-    DistrictService.deleteDistrict(idProperty)
+    DistrictService.deleteDistrict(idProperty, intercept)
       .then((res) => {
         getAllDistricts();
         setOpenDeleteDialog(false);
@@ -125,11 +129,15 @@ export default function DistrictManagement() {
       });
   };
   const handleEditDistrict = (name: string) => {
-    DistrictService.updateDistrict(disstrictId, {
-      id: disstrictId,
-      name: name,
-      code: editingDistrict.code
-    })
+    DistrictService.updateDistrict(
+      disstrictId,
+      {
+        id: disstrictId,
+        name: name,
+        code: editingDistrict.code
+      },
+      intercept
+    )
       .then((res) => {
         getAllDistricts();
         setEditPopupOpen(false);

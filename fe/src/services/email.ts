@@ -1,4 +1,3 @@
-import { Email } from "@mui/icons-material";
 import { API } from "config/constant";
 import { EmailRequest, RequestOTP } from "models/email";
 

@@ -429,7 +429,7 @@ const AdvertiseOfLocationManagement = () => {
         <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            Bạn có thật sự muốn xóa hình thức quảng cáo này ?
+            Bạn có thật sự muốn xóa quảng cáo này ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

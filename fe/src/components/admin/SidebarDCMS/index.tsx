@@ -26,6 +26,11 @@ import { Header } from "components/common/Header";
 const drawerWidth = 300;
 const sideBarItemListData = [
   {
+    name: "Dashboard",
+    icon: <FontAwesomeIcon icon={faPeopleRoof} size='lg' className={classes.itemIcon} />,
+    link: routes.admin.dashboard.dcms
+  },
+  {
     name: "Quản lý",
     icon: <FontAwesomeIcon icon={faPeopleRoof} size='lg' className={classes.itemIcon} />,
     children: [
@@ -69,11 +74,6 @@ const sideBarItemListData = [
     name: "Thống kê",
     icon: <FontAwesomeIcon icon={faChartSimple} size='lg' className={classes.itemIcon} />,
     link: routes.admin.statistic.dcms
-  },
-  {
-    name: "Tạo tài khoản",
-    icon: <FontAwesomeIcon icon={faUserPlus} size='lg' className={classes.itemIcon} />,
-    link: routes.admin.users.dcmsCreate
   },
   {
     name: "Phân công tài khoản",

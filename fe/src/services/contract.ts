@@ -1,5 +1,4 @@
 import { API } from "config/constant";
-import api from "./configApi";
 import { GetContract, PutContract, UpdateContractStatus } from "models/contract";
 
 export class ContractService {

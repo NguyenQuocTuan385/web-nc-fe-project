@@ -5,15 +5,25 @@
 
 .tableContainer {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableHeading {
+  background-color: var(--blue-500);
 }
 
 .sizeTable {
-  min-width: 1050px;
+  max-width: 1000px;
+  border: 1px solid #e0e0e0;
 }
 
 .headerTable {
   font-weight: bold;
   padding: 5px;
+  color: white !important;
 }
 
 .rowTable {
