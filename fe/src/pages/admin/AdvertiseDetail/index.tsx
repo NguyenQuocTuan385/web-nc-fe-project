@@ -125,7 +125,37 @@ export const AdvertiseDetail = () => {
               <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
               Trở về
             </ButtonBack>
-            {infoAds && (
+            {infoAds && !infoContract && (
+              <>
+                <Box>
+                  <img
+                    src={infoAds.images}
+                    className={classes.imageLarge}
+                    alt='Bảng quảng cáo'
+                    width={"100%"}
+                    height={"250px"}
+                    style={{ width: "100% !important;" }}
+                  />
+                </Box>
+
+                <Box
+                  width={"100%"}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    height: "350px",
+                    alignItems: "center",
+                    padding: "15px"
+                  }}
+                >
+                  {infoAds && <InfoAdvertise data={infoAds} />}
+                </Box>
+              </>
+            )}
+
+            {infoAds && infoContract && (
               <BoxFlex>
                 <img
                   src={infoAds.images}
