@@ -39,6 +39,7 @@ import { useSelector } from "react-redux";
 import { User } from "models/user";
 import { selectCurrentUser } from "reduxes/Auth";
 import { AxiosInstance } from "axios";
+import SideBarDCMS from "components/admin/SidebarDCMS";
 
 interface FormData {
   propertyId: number;
@@ -542,7 +543,7 @@ export const LocationEditCDMS = () => {
     <Box>
       {/* <Header /> */}
       <div className={classes["location-edit-container"]}>
-        <SideBarWard>
+        <SideBarDCMS>
           <Box className={classes["container-body"]}>
             <ButtonBack onClick={() => goBack()}>
               <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
@@ -576,7 +577,7 @@ export const LocationEditCDMS = () => {
               </Alert>
             </Snackbar>
           </Box>
-        </SideBarWard>
+        </SideBarDCMS>
       </div>
     </Box>
   );
