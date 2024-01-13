@@ -35,7 +35,6 @@ import ReportStatistic from "pages/admin/ReportStatistic";
 import LocationManagementDCMS from "pages/admin/LocationManagementDCMS";
 import { LocationEditCDMS } from "pages/admin/LocationEditDCMS";
 import { LocationCreateCDMS } from "pages/admin/LocationCreateDCMS";
-import AdvertisesOfLocationManagementDCMS from "pages/admin/AdvertisesOfLocationManagementDCMS";
 
 import DistrictLocationManagement from "pages/admin/DistrictLocationsManagement";
 import DistrictReportsManagement from "pages/admin/DistrictReportManagement";

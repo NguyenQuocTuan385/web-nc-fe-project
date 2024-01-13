@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/Search";
+import SearchAppBar from "components/common/SearchDCMS";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useEffect, useState } from "react";
 import ReportFormService from "services/reportForm";

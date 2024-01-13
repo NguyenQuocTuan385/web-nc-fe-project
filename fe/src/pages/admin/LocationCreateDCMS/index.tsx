@@ -23,7 +23,7 @@ import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 
 import classes from "./styles.module.scss";
-import SideBarWard from "components/admin/SidebarWard";
+import SideBarDCMS from "components/admin/SidebarDCMS";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
@@ -250,7 +250,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
                   }
                 }}
               >
-                <MenuItem value=''>Chọn quận</MenuItem>
+                <MenuItem>Chọn quận</MenuItem>
                 {districts.map((district) => (
                   <MenuItem value={district.id} key={district.id}>
                     {district.name}
@@ -285,7 +285,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
                   }
                 }}
               >
-                <MenuItem value=''>Chọn phường</MenuItem>
+                <MenuItem>Chọn phường</MenuItem>
                 {wards.map((ward) => (
                   <MenuItem value={ward.id} key={ward.id}>
                     {ward.name}
@@ -611,7 +611,7 @@ export const LocationCreateCDMS = () => {
     <Box>
       {/* <Header /> */}
       <div className={classes["location-edit-container"]}>
-        <SideBarWard>
+        <SideBarDCMS>
           <Box className={classes["container-body"]}>
             <ButtonBack onClick={() => goBack()}>
               <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
@@ -640,7 +640,7 @@ export const LocationCreateCDMS = () => {
               </Alert>
             </Snackbar>
           </Box>
-        </SideBarWard>
+        </SideBarDCMS>
       </div>
     </Box>
   );

@@ -9,7 +9,13 @@ import {
   Paper,
   IconButton
 } from "@mui/material";
-import { faEdit, faEye, faRectangleAd, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faEye,
+  faRectangleAd,
+  faSquarePlus,
+  faTrash
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classes from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +34,7 @@ interface TableTemplateProps {
   onViewDetailsClick?: (idDetails: number) => void;
   onEditClick?: (idEdit: number) => void;
   onAddClick?: (idAdd: number) => void;
+  onDeleteClick?: (idDelete: number) => void;
   linkToMove?: string;
 }
 
@@ -40,6 +47,7 @@ function TableTemplate({
   onViewDetailsClick,
   onEditClick,
   onAddClick,
+  onDeleteClick,
   linkToMove
 }: TableTemplateProps) {
   const navigate = useNavigate();
@@ -69,6 +77,12 @@ function TableTemplate({
       currentUser.role.id === ERole.WARD
         ? navigate(`${routes.admin.contracts.createFormWard.replace(":id", `${rowId}`)}`)
         : navigate(`${routes.admin.contracts.createFormDistrict.replace(":id", `${rowId}`)}`);
+    }
+  };
+
+  const handleDeleteClick = (rowId: number) => {
+    if (onDeleteClick) {
+      onDeleteClick(rowId);
     }
   };
 
@@ -158,6 +172,11 @@ function TableTemplate({
                         onClick={() => handleAddClick(row.id)}
                       >
                         <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                      </IconButton>
+                    )}
+                    {onDeleteClick && (
+                      <IconButton size='medium' onClick={() => handleDeleteClick(row.id)}>
+                        <FontAwesomeIcon icon={faTrash} style={{ color: "var(--red-error)" }} />
                       </IconButton>
                     )}
                   </TableCell>

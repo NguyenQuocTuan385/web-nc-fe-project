@@ -1,4 +1,15 @@
-import { Box, Button, IconButton, Pagination, TablePagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Pagination,
+  TablePagination
+} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import {
   useParams,
@@ -60,7 +71,11 @@ const AdvertiseOfLocationManagement = () => {
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
   const intercept = useIntercepts();
-
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const closeDeleteDialogHandle = () => {
+    setOpenDeleteDialog(false);
+  };
+  const [adsId, setAdsId] = useState(0);
   const [currentPage, setCurrentPage] = useState(() => {
     const params = queryString.parse(locationHook.search);
     return params.page || 1;
@@ -196,6 +211,23 @@ const AdvertiseOfLocationManagement = () => {
 
   const handleAddAdvertise = (idAdvertise: number) => {
     console.log(idAdvertise);
+  };
+
+  const handleDeleteAdvertise = (idAdvertise: number) => {
+    setAdsId(idAdvertise);
+    setOpenDeleteDialog(true);
+  };
+
+  const deleteAdvertise = (idAdvertise: number) => {
+    AdvertiseService.deleteAdvertiseById(idAdvertise, intercept)
+      .then((res) => {
+        const updatedAdvertises = advertiseList.filter((ads: any) => ads.id !== idAdvertise);
+        setAdvertiseList(updatedAdvertises);
+        setOpenDeleteDialog(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const handleSearch = (query: string) => {
@@ -349,6 +381,7 @@ const AdvertiseOfLocationManagement = () => {
                       isActionColumn={true}
                       onViewDetailsClick={handleViewAdDetails}
                       onEditClick={handleEditAdvertise}
+                      onDeleteClick={handleDeleteAdvertise}
                     />
 
                     <Box className={classes.pagination}>
@@ -387,6 +420,34 @@ const AdvertiseOfLocationManagement = () => {
           </SideBarDCMS>
         )}
       </div>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={closeDeleteDialogHandle}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Lưu ý"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn có thật sự muốn xóa hình thức quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' color='error' onClick={closeDeleteDialogHandle}>
+            Hủy bỏ
+          </Button>
+          <Button
+            variant='contained'
+            onClick={() => {
+              deleteAdvertise(adsId);
+            }}
+            autoFocus
+            color='success'
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
