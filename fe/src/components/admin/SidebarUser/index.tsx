@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCircleLeft, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 import SidebarManagement from "../SidebarManagement";
 import classes from "./styles.module.scss";
 import { routes } from "routes/routes";
@@ -16,21 +16,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Header } from "components/common/Header";
+import { User } from "models/user";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { ERole } from "models/general";
 
 const drawerWidth = 300;
-
-const sideBarItemListData = [
-  {
-    name: "Thông tin tài khoản",
-    icon: <FontAwesomeIcon icon={faUser} size='lg' className={classes.itemIcon} />,
-    link: routes.admin.users.edit
-  },
-  {
-    name: "Đổi mật khẩu",
-    icon: <FontAwesomeIcon icon={faLock} size='lg' className={classes.itemIcon} />,
-    link: routes.admin.users.change_password
-  }
-];
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -83,6 +74,29 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function SideBarUser({ children }: any) {
+  const currentUser: User = useSelector(selectCurrentUser);
+  const sideBarItemListData = [
+    {
+      name: "Thông tin tài khoản",
+      icon: <FontAwesomeIcon icon={faUser} size='lg' className={classes.itemIcon} />,
+      link: routes.admin.users.edit
+    },
+    {
+      name: "Đổi mật khẩu",
+      icon: <FontAwesomeIcon icon={faLock} size='lg' className={classes.itemIcon} />,
+      link: routes.admin.users.change_password
+    },
+    {
+      name: "Quay lại",
+      icon: <FontAwesomeIcon icon={faCircleLeft} size='lg' className={classes.itemIcon} />,
+      link:
+        currentUser?.role.id === ERole.WARD
+          ? routes.admin.dashboard.wardDashboard
+          : currentUser?.role.id === ERole.DISTRICT
+            ? routes.admin.dashboard.district
+            : routes.admin.dashboard.dcms
+    }
+  ];
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
@@ -116,7 +130,12 @@ export default function SideBarUser({ children }: any) {
               <MenuIcon />
             </IconButton>
             <Typography variant='h6' noWrap component='div' color={"black"}>
-              Sở văn hóa
+              Cán Bộ{" "}
+              {currentUser?.role.id === ERole.WARD
+                ? "Phường"
+                : currentUser?.role.id === ERole.WARD
+                  ? "Quận"
+                  : "Sở Văn Hóa"}
             </Typography>
           </Box>
           <Header></Header>
