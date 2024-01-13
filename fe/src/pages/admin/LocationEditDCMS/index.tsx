@@ -130,6 +130,8 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     locationId: number,
     locationEditRequest: LocationEditByCDMSRequest
   ) => {
+    console.log(locationId + "-------------------------- ");
+    console.log(locationEditRequest);
     LocationEditService.updateLocationByCDMS(locationId, locationEditRequest)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -178,6 +180,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       propertyId: data.property.id,
       userId: currentUser.id
     };
+    console.log(dataSubmit);
 
     createLocationEdit(locationId, dataSubmit);
   };

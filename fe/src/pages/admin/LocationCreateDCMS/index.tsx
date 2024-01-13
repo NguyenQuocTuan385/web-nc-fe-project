@@ -118,6 +118,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
   const [selectedDistrict, setSelectedDistrict] = useState<Property | null>(null);
   const [selectedWard, setSelectedWard] = useState<Property | null>(null);
   const [selectedWardId, setSelectedWardId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -135,6 +136,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
     LocationService.createLocation(locationCreateRequest)
       .then((res) => {
         handleEmitSuccessState(true);
+        navigate(`${routes.admin.locations.dcms}`);
       })
       .catch((err) => {
         handleEmitSuccessState(false);

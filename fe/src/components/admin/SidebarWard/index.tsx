@@ -148,7 +148,12 @@ export default function PersistentDrawerLeft({ children }: any) {
               <MenuIcon />
             </IconButton>
             <Typography variant='h6' noWrap component='div' color={"black"}>
-              Cán Bộ {currentUser?.role.id === ERole.WARD ? "Phường" : "Quận"}
+              Cán Bộ{" "}
+              {currentUser?.role.id === ERole.WARD
+                ? "Phường"
+                : currentUser?.role.id === ERole.WARD
+                  ? "Quận"
+                  : "Sở Văn Hóa"}
             </Typography>
           </Box>
           <Header></Header>

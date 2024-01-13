@@ -33,13 +33,16 @@ export const routes = {
       wardDetails: "/admin/ward/advertises/:id",
       districtDetails: "/admin/district/advertises/:id",
       wardEdit: "/admin/ward/locations/:locationId/advertises/edit/:advertiseId",
-      districtEdit: "/admin/district/locations/:locationId/advertises/edit/:advertiseId"
+      districtEdit: "/admin/district/locations/:locationId/advertises/edit/:advertiseId",
+      dcms: "/admin/dcms/advertises/:id",
+      dcmsEdit: "/admin/dcms/locations/:locationId/advertises/:advertiseId/edit",
+      dcmsCreate: "/admin/dcms/locations/:id/advertises/create"
     },
     locations: {
       dcms: "/admin/dcms/locations",
       dcmsEdit: "/admin/dcms/locations/edit/:id",
       dcmsCreate: "/admin/dcms/locations/create",
-      dcmsDetail: "/admin/dcms/locations/:id",
+      dcmsDetail: "/admin/dcms/locations/:id/advertises",
       root: "/admin/locations",
       create: "/admin/locations/create",
       edit: "/admin/locations/edit/:id",
@@ -58,6 +61,7 @@ export const routes = {
       createFormDistrict: "/admin/district/contracts/create-form/:id",
       detailWard: "/admin/ward/contracts/:id",
       detailDistrict: "/admin/district/contracts/:id",
+      detailDcms: "/admin/dcms/contracts/:id",
       district: "/admin/district/contracts"
     },
     reports: {
