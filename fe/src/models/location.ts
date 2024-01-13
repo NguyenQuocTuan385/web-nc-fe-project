@@ -88,8 +88,7 @@ export interface putLocation {
 }
 
 export interface updateStatus {
-  status: boolean;
-  locationEditId?: number;
+  statusEdit: boolean;
 }
 
 export interface GetLocationTypes {

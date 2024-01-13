@@ -13,6 +13,12 @@ import { Advertise, UpdateStatus } from "models/advertise";
 import AdvertiseService from "services/advertise";
 import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { set } from "react-hook-form";
 
 export default function EditAdTableLicenseDetail() {
   const navigate = useNavigate();
@@ -20,6 +26,12 @@ export default function EditAdTableLicenseDetail() {
   const advertiseId = location.pathname.split("/").pop();
   const [advertise, setAdvertiseDetail] = useState<Advertise | null>(null);
   const intercept = useIntercepts();
+  const [openAccept, setOpenAccept] = React.useState(false);
+  const [openCancel, setOpenCancel] = React.useState(false);
+  const handleClose = () => {
+    setOpenAccept(false);
+    setOpenCancel(false);
+  };
   useEffect(() => {
     const getAdvertiseById = async () => {
       AdvertiseService.getAdvertisesById(Number(advertiseId), intercept)
@@ -66,19 +78,18 @@ export default function EditAdTableLicenseDetail() {
         console.log(err);
       });
   };
-  const handleClickAccept = async (event: React.MouseEvent, data: Advertise) => {
-    event.stopPropagation();
-    const updateAdvertise = async (data: Advertise) => {
+  const confirmAccept = async () => {
+    const updateAdvertise = async () => {
       await AdvertiseService.updateAdvertise(
-        data.id,
+        advertise?.id!!,
         {
-          licensing: data.licensing,
-          width: data.advertiseEdit?.width!!,
-          height: data.advertiseEdit?.height!!,
-          images: data.advertiseEdit?.images!!,
-          locationId: data.advertiseEdit?.location.id!!,
-          adsTypeId: data.advertiseEdit?.adsType.id!!,
-          pillarQuantity: data.pillarQuantity!!
+          licensing: advertise?.licensing!!,
+          width: advertise?.advertiseEdit?.width!!,
+          height: advertise?.advertiseEdit?.height!!,
+          images: advertise?.advertiseEdit?.images!!,
+          locationId: advertise?.advertiseEdit?.location.id!!,
+          adsTypeId: advertise?.advertiseEdit?.adsType.id!!,
+          pillarQuantity: advertise?.advertiseEdit?.pillarQuantity!!
         },
         intercept
       )
@@ -89,18 +100,26 @@ export default function EditAdTableLicenseDetail() {
           console.log(err);
         });
     };
-    await updateAdvertise(data);
-    await deleteAdvertiseEdit(data.advertiseEdit?.id!!);
+    await updateAdvertise();
+    await deleteAdvertiseEdit(advertise?.advertiseEdit?.id!!);
+    setOpenAccept(false);
     navigate(-1);
   };
 
-  const handleClickCancel = async (event: React.MouseEvent, data: Advertise) => {
-    event.stopPropagation();
-    await updateStatus(data.id, {
-      status: false
+  const handleClickAccept = () => {
+    setOpenAccept(true);
+  };
+
+  const confirmCancel = async () => {
+    await updateStatus(advertise?.id!!, {
+      statusEdit: false
     });
-    await deleteAdvertiseEdit(data.advertiseEdit?.id!!);
+    await deleteAdvertiseEdit(advertise?.advertiseEdit?.id!!);
+    setOpenCancel(false);
     navigate(-1);
+  };
+  const handleClickCancel = () => {
+    setOpenCancel(true);
   };
   return (
     <Box className={classes.boxContainer}>
@@ -117,11 +136,7 @@ export default function EditAdTableLicenseDetail() {
               </Box>
               <Box className={classes.imageInfoContainer}>
                 <Box className={classes.imageContainer}>
-                  <img
-                    src='https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg'
-                    alt=''
-                    className={classes.image}
-                  />
+                  <img src={advertise?.images!!} alt='' className={classes.image} />
                 </Box>
                 <Box className={classes.infoContainer}>
                   <Heading3>Thông tin bảng</Heading3>
@@ -152,7 +167,11 @@ export default function EditAdTableLicenseDetail() {
                   </ParagraphBody>
                   <ParagraphBody className={classes.infoContent}>
                     Số lượng:&nbsp;
-                    {advertise?.pillarQuantity} {" trụ/bảng"}
+                    {renderCurrent(
+                      advertise?.pillarQuantity?.toString()!!,
+                      advertise?.advertiseEdit?.pillarQuantity.toString()!!
+                    )}{" "}
+                    {" trụ/bảng"}
                   </ParagraphBody>
                   <ParagraphBody className={classes.infoContent}>
                     Hình thức:&nbsp;
@@ -180,11 +199,7 @@ export default function EditAdTableLicenseDetail() {
               </Box>
               <Box className={classes.imageInfoContainer}>
                 <Box className={classes.imageContainer}>
-                  <img
-                    src='https://pano.vn/wp-content/uploads/2019/01/billboard-quang-cao-ngoai-troi-1-1062x800.jpg'
-                    alt=''
-                    className={classes.image}
-                  />
+                  <img src={advertise?.advertiseEdit?.images!!} alt='' className={classes.image} />
                 </Box>
                 <Box className={classes.infoContainer}>
                   <Heading3>Thông tin bảng</Heading3>
@@ -214,7 +229,11 @@ export default function EditAdTableLicenseDetail() {
                   </ParagraphBody>
                   <ParagraphBody className={classes.infoContent}>
                     Số lượng:&nbsp;
-                    {advertise?.pillarQuantity} {" trụ/bảng"}
+                    {renderEdit(
+                      advertise?.pillarQuantity?.toString()!!,
+                      advertise?.advertiseEdit?.pillarQuantity.toString()!!
+                    )}{" "}
+                    {" trụ/bảng"}
                   </ParagraphBody>
                   <ParagraphBody className={classes.infoContent}>
                     Hình thức:&nbsp;
@@ -256,7 +275,7 @@ export default function EditAdTableLicenseDetail() {
                   className={classes.approveButton}
                   variant='contained'
                   color='primary'
-                  onClick={(e) => handleClickAccept(e, advertise!!)}
+                  onClick={handleClickAccept}
                 >
                   Duyệt
                 </Button>
@@ -264,7 +283,7 @@ export default function EditAdTableLicenseDetail() {
                   className={classes.skipButton}
                   variant='contained'
                   color='error'
-                  onClick={(e) => handleClickCancel(e, advertise!!)}
+                  onClick={handleClickCancel}
                 >
                   Bỏ qua
                 </Button>
@@ -273,6 +292,45 @@ export default function EditAdTableLicenseDetail() {
           </Box>
         </Box>
       </SidebarDCMS>
+      <Dialog
+        open={openAccept}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép chỉnh sửa bảng quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn cấp phép chỉnh sửa bảng quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmAccept} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openCancel}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép chỉnh sửa bảng quảng cáo</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn hủy chỉnh sửa bảng quảng cáo này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmCancel} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
   // Remove the closing </Box> tag

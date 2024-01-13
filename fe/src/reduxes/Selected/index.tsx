@@ -7,7 +7,7 @@ interface InitialState {
 
 const initState: InitialState = {
   parentIndex: 0,
-  childIndex: 0
+  childIndex: -1
 };
 
 const selectedSlice = createSlice({

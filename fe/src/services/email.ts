@@ -26,13 +26,13 @@ export class MailService {
       });
   }
 
-  static async sendOTPToEmail(email: RequestOTP): Promise<any> {
+  static async sendOTPToEmail(email: RequestOTP, api: any): Promise<any> {
     return await api
       .post(`${API.EMAIL.SEND_OTP_TO_EMAIL}`, email)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

@@ -94,7 +94,8 @@ export const routes = {
     },
     dashboard: {
       wardDashboard: "/admin/ward/dashboard",
-      district: "/admin/district/dashboard"
+      district: "/admin/district/dashboard",
+      dcms: "/admin/dcms/dashboard"
     }
   }
 };

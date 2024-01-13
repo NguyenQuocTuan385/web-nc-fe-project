@@ -30,17 +30,6 @@ export default function VerifyOTP() {
   useEffect(() => {
     if (!email) {
       navigate("/admin/login");
-    } else {
-      const FormSubmit: RequestOTP = {
-        email: email
-      };
-      MailService.sendOTPToEmail(FormSubmit)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     }
   }, []);
 

@@ -2,7 +2,6 @@ import React from "react";
 import classes from "./styles.module.scss";
 import { Box, Button, TextField } from "@mui/material";
 import forgotpassword from "assets/img/forgotpassword/forgotpassword.jpg";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useMemo } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,12 +9,15 @@ import { useForm } from "react-hook-form";
 import MailService from "services/email";
 import { RequestOTP } from "models/email";
 import { useNavigate } from "react-router-dom";
+import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   email: string;
 }
 export default function ForgotPassword() {
   const navigate = useNavigate();
+  const intercept = useIntercepts();
+  const [warn, setWarn] = React.useState<boolean>(false);
 
   const schema = useMemo(() => {
     return yup.object().shape({
@@ -35,7 +37,13 @@ export default function ForgotPassword() {
     const FormSubmit: RequestOTP = {
       email: data.email
     };
-    navigate(`/admin/recover/code?email=${data.email}`);
+    MailService.sendOTPToEmail(FormSubmit, intercept)
+      .then((res) => {
+        navigate(`/admin/recover/code?email=${data.email}`);
+      })
+      .catch((err) => {
+        setWarn(true);
+      });
   };
 
   return (
@@ -59,6 +67,7 @@ export default function ForgotPassword() {
                   error={Boolean(errors?.email)}
                 />
                 <p className={classes.errorText}>{errors?.email?.message}</p>
+                {warn && <p className={classes.errorText}>Email không tồn tại</p>}
               </Box>
               <Box className={classes.formContentButton}>
                 <Button variant='outlined' color='primary' onClick={() => navigate("/admin/login")}>

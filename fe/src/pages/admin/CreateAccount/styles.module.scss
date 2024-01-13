@@ -24,6 +24,24 @@
   z-index: 1;
   animation: slideIn 0.5s ease-in-out;
 }
+
+.backPage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  color: var(--blue-500);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--blue-600);
+
+    .iconBack {
+      color: var(--blue-600);
+    }
+  }
+}
 .loading {
   // cho nó giữa màn hình
   position: fixed;

@@ -1,0 +1,12 @@
+.ward-dashboard-container {
+  background-color: var(--blue-50);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+.container-body {
+  height: 90%;
+  width: 100%;
+  border: 1px solid var(--gray-30);
+}

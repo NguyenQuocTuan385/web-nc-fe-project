@@ -5,7 +5,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { Box, IconButton } from "@mui/material";
 import classes from "./styles.module.scss";
@@ -19,7 +18,12 @@ import { Location, updateStatus } from "models/location";
 import { TAB_ADVERTISE } from "models/advertise";
 import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
-
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 interface FilterProps {
   district?: string;
   ward?: string;
@@ -38,7 +42,13 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
   const [dataList, setDataList] = useState<Location[]>([]);
   const [update, setUpdate] = useState(false);
   const intercept = useIntercepts();
-
+  const [openAccept, setopenAccept] = useState(false);
+  const [openCancel, setopenCancel] = useState(false);
+  const [data, setData] = useState<Location | null>(null);
+  const handleClose = () => {
+    setopenAccept(false);
+    setopenCancel(false);
+  };
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
     navigate({
@@ -112,20 +122,19 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
         console.log(err);
       });
   };
-  const handleClickAccept = async (event: React.MouseEvent, data: Location) => {
-    event.stopPropagation();
-    const updateLocation = async (data: Location) => {
+  const confirmAccept = async () => {
+    const updateLocation = async () => {
       await LocationService.updateLocationsById(
-        data.id,
+        data?.id!!,
         {
-          planning: data.locationEdit?.planning!!,
-          latitude: data.locationEdit?.latitude!!,
-          longitude: data.locationEdit?.longitude!!,
-          address: data.locationEdit?.address!!,
-          advertiseFormId: data.locationEdit?.adsForm.id!!,
-          locationTypeId: data.locationEdit?.locationType.id!!,
-          propertyId: data.locationEdit?.property.id!!,
-          imageUrls: data.locationEdit?.images!!
+          planning: data?.locationEdit?.planning!!,
+          latitude: data?.locationEdit?.latitude!!,
+          longitude: data?.locationEdit?.longitude!!,
+          address: data?.locationEdit?.address!!,
+          advertiseFormId: data?.locationEdit?.adsForm.id!!,
+          locationTypeId: data?.locationEdit?.locationType.id!!,
+          propertyId: data?.locationEdit?.property.id!!,
+          imageUrls: data?.locationEdit?.images!!
         },
         intercept
       )
@@ -136,26 +145,38 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
           console.log(err);
         });
     };
-    await updateLocation(data);
-    await deleteLocationEdit(data.locationEdit?.id!!);
+    await updateLocation();
+    await deleteLocationEdit(data?.locationEdit?.id!!);
     setUpdate(true);
+    setopenAccept(false);
+  };
+  const handleClickAccept = async (event: React.MouseEvent, data: Location) => {
+    event.stopPropagation();
+    setData(data);
+    setopenAccept(true);
+  };
+
+  const confirmCancel = async () => {
+    await updateStatus(data?.id!!, {
+      statusEdit: false
+    });
+    await deleteLocationEdit(data?.locationEdit?.id!!);
+    setUpdate(true);
+    setopenCancel(false);
   };
 
   const handleClickCancel = async (event: React.MouseEvent, data: Location) => {
     event.stopPropagation();
-    await updateStatus(data.id, {
-      status: false
-    });
-    await deleteLocationEdit(data.locationEdit?.id!!);
-    setUpdate(true);
+    setData(data);
+    setopenCancel(true);
   };
   return (
     <Box className={classes.boxContainer}>
-      <TableContainer component={Paper} className={classes.tableContainer}>
+      <TableContainer className={classes.tableContainer}>
         <Table className={classes.sizeTable} aria-label='simple table'>
-          <TableHead>
+          <TableHead className={classes.tableHeading}>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell className={classes.headerTable}>ID</TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Địa chỉ đặt quảng cáo
               </TableCell>
@@ -229,6 +250,45 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Box>
+      <Dialog
+        open={openAccept}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép chỉnh sửa địa điểm</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn cấp phép chỉnh sửa địa điểm này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmAccept} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openCancel}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>Cấp phép chỉnh sửa địa điểm</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Bạn muốn hủy chỉnh sửa địa điểm này ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={confirmCancel} autoFocus>
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
