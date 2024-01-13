@@ -93,8 +93,8 @@ const LocationManagementDCMS = () => {
     };
   });
 
-  const customHeading = ["STT", "Mã", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
-  const customColumns = ["stt", "id", "address", "adsForm", "objectStatus"];
+  const customHeading = ["STT", "Địa chỉ", "Hình thức quảng cáo", "Tình trạng quy hoạch"];
+  const customColumns = ["stt", "address", "adsForm", "objectStatus"];
 
   // const paginatedData = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 

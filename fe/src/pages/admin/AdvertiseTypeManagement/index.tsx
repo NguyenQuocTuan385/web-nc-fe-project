@@ -6,11 +6,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Pagination
+  Pagination,
+  TextField,
+  styled
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/SearchDCMS";
+import SearchAppBar from "./components/SearchAdvertiseTypeManagement";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import AdvertiseTypeService from "services/advertiseType";
 import { useEffect, useState } from "react";
@@ -18,6 +20,25 @@ import queryString from "query-string";
 import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import { AdvertiseType } from "models/advertise";
 import useIntercepts from "hooks/useIntercepts";
+import React from "react";
+import { set, useForm } from "react-hook-form";
+
+const DialogWrapper = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialog-paper": {
+    borderRadius: theme.shape.borderRadius
+  }
+}));
+
+const FormWrapper = styled("form")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+  padding: theme.spacing(2)
+}));
+
+const FormActions = styled(DialogActions)(() => ({
+  justifyContent: "flex-end"
+}));
 
 export default function ReportFormManagement() {
   const customHeading = ["STT", "Tên loại quảng cáo", "Mô tả"];
@@ -104,6 +125,36 @@ export default function ReportFormManagement() {
     };
   });
 
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const methods = useForm();
+
+  const handleFormSubmit = (data: any) => {
+    const advertiseForm = {
+      name: data.name,
+      description: data.description
+    };
+    AdvertiseTypeService.updateAdvertiseTypeById(advertiseTypeId, advertiseForm, intercept)
+      .then(() => {
+        getAllAdvertiseType();
+        setIsDialogOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handleCloseDialog = () => {
+    setAdvertiseTypeIdEdit(null);
+    setIsDialogOpen(false);
+  };
+
+  const [advertiseFormIdEdit, setAdvertiseTypeIdEdit] = useState<any | null>(null);
+  const handleEditAdvertiseType = (id: number) => {
+    setAdvertiseTypeId(id);
+    const adsType = advertiseType.find((item) => item.id === id);
+    setAdvertiseTypeIdEdit(adsType);
+    setIsDialogOpen(true);
+  };
+
   return (
     <div>
       <div className={classes["location-management-container"]}>
@@ -119,6 +170,7 @@ export default function ReportFormManagement() {
                   customHeading={customHeading}
                   customColumns={customColumns}
                   isActionColumn={true}
+                  onEditClick={handleEditAdvertiseType}
                   onDeleteClick={handleDeleteAdvertiseType}
                 />
 
@@ -166,6 +218,36 @@ export default function ReportFormManagement() {
           </Button>
         </DialogActions>
       </Dialog>
+      <DialogWrapper open={isDialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Chỉnh sửa hình thức quảng cáo</DialogTitle>
+        <FormWrapper {...methods} onSubmit={methods.handleSubmit(handleFormSubmit)}>
+          <TextField
+            {...methods.register("name", { required: "Tên loại quảng cáo không được để rỗng" })}
+            label='Tên loại quảng cáo '
+            fullWidth
+            defaultValue={advertiseFormIdEdit?.name}
+            error={Boolean(methods.formState.errors?.name)}
+          />
+          <TextField
+            {...methods.register("description", { required: "Mô tả không được để rỗng" })}
+            label='Mô tả'
+            multiline
+            rows={4}
+            fullWidth
+            placeholder='Nhập mô tả'
+            defaultValue={advertiseFormIdEdit?.description}
+            error={Boolean(methods.formState.errors?.description)}
+          />
+          <FormActions>
+            <Button type='submit' variant='contained' color='primary'>
+              Cập nhập
+            </Button>
+            <Button type='button' onClick={handleCloseDialog}>
+              Hủy
+            </Button>
+          </FormActions>
+        </FormWrapper>
+      </DialogWrapper>
     </div>
   );
 }

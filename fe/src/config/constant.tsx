@@ -83,18 +83,24 @@ export const API = {
   },
   REPORT_FORM: {
     DEFAULT: "/api/report-forms",
-    DELETE: "/api/report-forms/:id"
+    DELETE: "/api/report-forms/:id",
+    CREATE: "/api/report-forms",
+    UPDATE: "/api/report-forms/:id"
   },
   REPORT_FORM_CLIENT: {
     DEFAULT: "/api/report-forms-client"
   },
   ADVERTISE_FORM: {
     DEFAULT: "/api/advertise-forms",
-    DELETE: "/api/advertise-forms/:id"
+    DELETE: "/api/advertise-forms/:id",
+    CREATE: "/api/advertise-forms",
+    UPDATE: "/api/advertise-forms/:id"
   },
   ADVERTISE_TYPE: {
     DEFAULT: "/api/advertise-types",
-    DELETE: "/api/advertise-types/:id"
+    DELETE: "/api/advertise-types/:id",
+    CREATE: "/api/advertise-types",
+    UPDATE: "/api/advertise-types/:id"
   },
   AUTH: {
     LOGIN: "/api/authentication/login",

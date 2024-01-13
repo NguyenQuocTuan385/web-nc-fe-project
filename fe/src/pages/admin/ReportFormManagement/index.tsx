@@ -6,11 +6,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Pagination
+  Pagination,
+  TextField,
+  styled
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/SearchDCMS";
+import SearchAppBar from "./components/SearchReportFormManagement";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useEffect, useState } from "react";
 import ReportFormService from "services/reportForm";
@@ -18,6 +20,25 @@ import queryString from "query-string";
 import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import { ReportForm } from "models/report";
 import useIntercepts from "hooks/useIntercepts";
+import React from "react";
+import { set, useForm } from "react-hook-form";
+
+const DialogWrapper = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialog-paper": {
+    borderRadius: theme.shape.borderRadius
+  }
+}));
+
+const FormWrapper = styled("form")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+  padding: theme.spacing(2)
+}));
+
+const FormActions = styled(DialogActions)(() => ({
+  justifyContent: "flex-end"
+}));
 
 export default function ReportFormManagement() {
   const customHeading = ["STT", "Tên hình thức báo cáo", "Mô tả"];
@@ -105,6 +126,36 @@ export default function ReportFormManagement() {
       });
   };
 
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const methods = useForm();
+
+  const handleFormSubmit = (data: any) => {
+    const ReportForm = {
+      name: data.name,
+      description: data.description
+    };
+    ReportFormService.updateReportFormById(reportFormId, ReportForm, intercept)
+      .then(() => {
+        getAllReportForm();
+        setIsDialogOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const handleCloseDialog = () => {
+    setReportFormIdEdit(null);
+    setIsDialogOpen(false);
+  };
+
+  const [reportFormIdEdit, setReportFormIdEdit] = useState<any | null>(null);
+  const handleEditReportForm = (id: number) => {
+    setReportFormId(id);
+    const rpForm = reportForm.find((item) => item.id === id);
+    setReportFormIdEdit(rpForm);
+    setIsDialogOpen(true);
+  };
+
   return (
     <div>
       <div className={classes["location-management-container"]}>
@@ -120,6 +171,7 @@ export default function ReportFormManagement() {
                   customHeading={customHeading}
                   customColumns={customColumns}
                   isActionColumn={true}
+                  onEditClick={handleEditReportForm}
                   onDeleteClick={handleDeleteReportForm}
                 />
 
@@ -167,6 +219,38 @@ export default function ReportFormManagement() {
           </Button>
         </DialogActions>
       </Dialog>
+      <DialogWrapper open={isDialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Chỉnh sửa hình thức báo cáo</DialogTitle>
+        <FormWrapper {...methods} onSubmit={methods.handleSubmit(handleFormSubmit)}>
+          <TextField
+            {...methods.register("name", {
+              required: "Tên hình thức báo cáo không được để rỗng"
+            })}
+            label='Tên hình thức báo cáo'
+            fullWidth
+            defaultValue={reportFormIdEdit?.name}
+            error={Boolean(methods.formState.errors?.name)}
+          />
+          <TextField
+            {...methods.register("description", { required: "Mô tả không được để rỗng" })}
+            label='Mô tả'
+            multiline
+            rows={4}
+            fullWidth
+            placeholder='Nhập mô tả'
+            defaultValue={reportFormIdEdit?.description}
+            error={Boolean(methods.formState.errors?.description)}
+          />
+          <FormActions>
+            <Button type='submit' variant='contained' color='primary'>
+              Cập nhật
+            </Button>
+            <Button type='button' onClick={handleCloseDialog}>
+              Hủy
+            </Button>
+          </FormActions>
+        </FormWrapper>
+      </DialogWrapper>
     </div>
   );
 }

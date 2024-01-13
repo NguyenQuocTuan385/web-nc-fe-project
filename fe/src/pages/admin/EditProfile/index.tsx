@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
+import { date } from "yup";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Họ tên là bắt buộc"),
@@ -125,7 +126,9 @@ const EditProfile: React.FC = () => {
                       </Box>
                     </Grid>
                     <Grid item xs={12} className={classes.property}>
-                      <label>Cán bộ: {userInfo.property?.name}</label>
+                      <label>
+                        Cán bộ: {userInfo.property?.name ? userInfo.property?.name : "Sở văn hóa"}
+                      </label>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -169,30 +172,6 @@ const EditProfile: React.FC = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <Box className={classes.title}>Ngày sinh</Box>
-                      <Controller
-                        defaultValue=''
-                        control={control}
-                        name='birthDay'
-                        aria-invalid={errors.birthDay ? "true" : "false"}
-                        rules={{ required: true }}
-                        render={({ field: { ref, ...field }, fieldState: { invalid, error } }) => (
-                          <>
-                            <DateTimePicker
-                              inputRef={ref}
-                              className={classes.datePickField}
-                              {...field}
-                              views={["year", "month", "day"]} // chỉ hiển thị chế độ xem ngày, tháng, và năm
-                              slotProps={{
-                                textField: {
-                                  required: true,
-                                  error: invalid
-                                }
-                              }}
-                            />
-                            <div className={classes.errorText}>{error?.message}</div>
-                          </>
-                        )}
-                      />
                     </Grid>
                   </Grid>
                 </Grid>

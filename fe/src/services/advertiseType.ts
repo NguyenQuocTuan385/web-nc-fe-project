@@ -22,6 +22,28 @@ export class AdvertiseTypeService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async updateAdvertiseTypeById(id: number, data: any, api: any): Promise<any> {
+    return await api
+      .put(`${API.ADVERTISE_TYPE.UPDATE.replace(":id", `${id}`)}`, data)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        console.log(e);
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async createAdvertiseType(data: any, api: any): Promise<any> {
+    return await api
+      .post(`${API.ADVERTISE_TYPE.CREATE}`, data)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        console.log(e);
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default AdvertiseTypeService;
