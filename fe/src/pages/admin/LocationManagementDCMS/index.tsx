@@ -153,7 +153,7 @@ const LocationManagementDCMS = () => {
                   isActionColumn={true}
                   onViewAdsClick={handleViewAds}
                   onEditClick={handleEditLocation}
-                  onAddClick={handleCreateLocation}
+                  // onAddClick={handleCreateLocation}
                   onDeleteClick={handleDeleteClick}
                 />
 

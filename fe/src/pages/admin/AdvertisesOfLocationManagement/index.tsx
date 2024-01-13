@@ -18,7 +18,7 @@ import {
   createSearchParams
 } from "react-router-dom";
 import queryString from "query-string";
-import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeftLong, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import classes from "./styles.module.scss";
@@ -196,8 +196,8 @@ const AdvertiseOfLocationManagement = () => {
     }
   };
 
-  const handleAddAdvertise = (idAdvertise: number) => {
-    console.log(idAdvertise);
+  const handleAddAdvertise = (locationId: number) => {
+    navigate(`${routes.admin.advertises.dcmsCreate.replace(":id", `${locationId}`)}`);
   };
 
   const handleDeleteAdvertise = (idAdvertise: number) => {
@@ -349,6 +349,14 @@ const AdvertiseOfLocationManagement = () => {
                 <>
                   <Box className={classes["search-container"]}>
                     <SearchAppBar onSearch={handleSearch} />
+                    <IconButton
+                      aria-label='add'
+                      size='small'
+                      onClick={() => handleAddAdvertise(Number(id))}
+                    >
+                      <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                      Thêm mới
+                    </IconButton>
                   </Box>
                   <Box className={classes["table-container"]}>
                     <Box className={classes["table-container"]}>
@@ -359,7 +367,7 @@ const AdvertiseOfLocationManagement = () => {
                         isActionColumn={true}
                         onViewDetailsClick={handleViewAdDetails}
                         onEditClick={handleEditAdvertise}
-                        onAddClick={handleAddAdvertise}
+                        onDeleteClick={handleDeleteAdvertise}
                       />
 
                       <Box className={classes.pagination}>
@@ -379,9 +387,19 @@ const AdvertiseOfLocationManagement = () => {
                 </>
               )}
               {(advertiseList.length === 0 || !advertiseList) && (
-                <ParagraphBody className={classes.noList}>
-                  Không có thông tin bảng quảng cáo
-                </ParagraphBody>
+                <>
+                  <ParagraphBody className={classes.noList}>
+                    Không có thông tin bảng quảng cáo
+                  </ParagraphBody>
+                  <IconButton
+                    aria-label='add'
+                    size='medium'
+                    onClick={() => handleAddAdvertise(Number(id))}
+                  >
+                    <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                    Thêm mới
+                  </IconButton>
+                </>
               )}
             </Box>
           </SideBarDCMS>
