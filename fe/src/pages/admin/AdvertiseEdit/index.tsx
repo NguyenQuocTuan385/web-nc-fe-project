@@ -37,12 +37,13 @@ import Heading2 from "components/common/text/Heading2";
 import Editor from "components/common/Editor/EditWithQuill";
 import useIntercepts from "hooks/useIntercepts";
 import { User } from "models/user";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import AdvertiseService from "services/advertise";
 import SideBarDCMS from "components/admin/SidebarDCMS";
+import { loading } from "reduxes/Loading";
 
 interface FormData {
   licensing: number;
@@ -106,7 +107,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
   const isDepartment = currentUser.role.id === ERole.DEPARTMENT ? true : false;
   const intercept = useIntercepts();
-
+  const dispatch = useDispatch();
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -123,6 +124,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     advertiseId: number,
     advertiseEditRequest: AdvertiseEditRequest
   ) => {
+    dispatch(loading(true));
     AdvertiseEditService.createAdvertiseEditRequest(locationId, advertiseEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -130,7 +132,8 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
       .catch((err) => {
         handleEmitSuccessState(false);
         console.log(err);
-      });
+      })
+      .finally(() => dispatch(loading(false)));
   };
 
   const submitHandler = async (data: any) => {
@@ -486,7 +489,7 @@ export const AdvertiseEdit = () => {
   const [adsTypes, setAdsTypes] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
   const intercept = useIntercepts();
-
+  const dispatch = useDispatch();
   const goBack = () => {
     if (currentUser.role.id === ERole.WARD)
       navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${locationId}`)}`);
@@ -497,6 +500,7 @@ export const AdvertiseEdit = () => {
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
+      dispatch(loading(true));
       ContractService.findContractLicensingByAdvertiseId(Number(advertiseId), {}, intercept)
         .then((res) => {
           setInfoContract({
@@ -523,19 +527,22 @@ export const AdvertiseEdit = () => {
             });
           });
           console.log(e);
-        });
+        })
+        .finally(() => dispatch(loading(false)));
     };
     getContractByAdvertiseId();
   }, []);
 
   useEffect(() => {
+    dispatch(loading(true));
     AdvertiseTypeService.getAllAdvertiseType({}, intercept)
       .then((res) => {
         setAdsTypes(res.content);
       })
       .catch((e) => {
         console.log(e);
-      });
+      })
+      .finally(() => dispatch(loading(false)));
   }, []);
 
   const handleGetSuccessState = (isSuccess: boolean) => {

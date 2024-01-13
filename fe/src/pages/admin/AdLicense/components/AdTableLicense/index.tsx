@@ -25,6 +25,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { DateHelper } from "helpers/date";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 interface FilterProps {
   district?: number;
   ward?: number;
@@ -35,7 +37,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
   const match = useResolvedPath("").pathname;
   const [update, setUpdate] = useState(false);
   const intercept = useIntercepts();
-
+  const dispatch = useDispatch();
   const [page, setPage] = React.useState(() => {
     const params = queryString.parse(locationHook.search);
     return Number(params.page) - 1 || 0;
@@ -53,6 +55,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
 
   useEffect(() => {
     const getAllContractByProperty = async () => {
+      dispatch(loading(true));
       ContractService.getContractsByProperty(
         {
           propertyId: ward ? [ward] : [],
@@ -79,7 +82,8 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
         })
         .catch((err) => {
           console.log(err);
-        });
+        })
+        .finally(() => dispatch(loading(false)));
     };
     getAllContractByProperty();
   }, [district, ward, fieldSearch, page, rowsPerPage, update]);
@@ -106,6 +110,7 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
     navigate(`${routes.admin.reviewLisence.dcmsDetail}`.replace(":id", row.id.toString()));
   };
   const updateAdvertisesById = async (row: Contract) => {
+    dispatch(loading(true));
     AdvertiseService.updateAdvertiseLicense(
       row.advertise.id,
       {
@@ -118,9 +123,11 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => dispatch(loading(false)));
   };
   const updateContractById = async (row: Contract) => {
+    dispatch(loading(true));
     ContractService.updateContractById(
       row.id,
       {
@@ -133,7 +140,8 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => dispatch(loading(false)));
   };
   const confirmAccept = async () => {
     setOpenAccept(false);

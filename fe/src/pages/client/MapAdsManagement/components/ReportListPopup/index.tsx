@@ -23,6 +23,8 @@ import ReportViewPopup from "./ReportViewPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import ReportClientService from "services/reportClient";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 interface ReportInfoPopupProps {
   open: boolean;
@@ -35,18 +37,21 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
   const [reports, setReports] = useState<Report[]>([]);
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<Report | null>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getReportsUser = async () => {
       const email = localStorage.getItem("guest_email");
       if (email) {
+        dispatch(loading(true));
         ReportClientService.getReports({ pageSize: 999, email: email })
           .then((res) => {
             setReports(res.content);
           })
           .catch((error) => {
             console.log(error);
-          });
+          })
+          .finally(() => dispatch(loading(false)));
       }
     };
     getReportsUser();

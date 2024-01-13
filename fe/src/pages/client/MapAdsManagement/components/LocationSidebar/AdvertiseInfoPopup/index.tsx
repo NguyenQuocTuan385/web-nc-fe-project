@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import { Contract } from "models/contract";
 import { DateHelper } from "helpers/date";
 import ContractClientService from "services/contractClient";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 const AdvertisePopup = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -30,14 +32,16 @@ interface AdvertisePopupProps {
 }
 export default function AdvertiseInfoPopup({ onClose, open, advertise }: AdvertisePopupProps) {
   const [contract, setContract] = useState<Contract | null>(null);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const getContracts = async () => {
+      dispatch(loading(true));
       ContractClientService.findContractLicensingByAdvertiseId(advertise.id, { pageSize: 999 })
         .then((res) => {
           setContract(res);
         })
-        .catch((err) => {});
+        .catch((err) => {})
+        .finally(() => dispatch(loading(false)));
     };
     getContracts();
   }, [advertise]);

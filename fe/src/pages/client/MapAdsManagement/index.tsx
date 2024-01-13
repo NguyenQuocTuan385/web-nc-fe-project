@@ -23,6 +23,8 @@ import { Help } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
 import LocationClientService from "services/locationClient";
 import ReportClientService from "services/reportClient";
+import { loading } from "reduxes/Loading";
+import { useDispatch } from "react-redux";
 
 enum ELocationCheckedSwitch {
   BOTH = 1,
@@ -58,6 +60,8 @@ const MapAdsManagement = () => {
   let locationsIsNotPlanningHasAdvertises = useRef<Feature[]>([]);
   let reportLocations = useRef<Feature[]>([]);
   let clusters = useRef<Feature[]>([]);
+  const dispatch = useDispatch();
+
   const [locationCheckedSwitch, setLocationCheckedSwitch] = useState<ELocationCheckedSwitch>(
     ELocationCheckedSwitch.BOTH
   );
@@ -72,6 +76,7 @@ const MapAdsManagement = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
+      dispatch(loading(true));
       const res = await LocationClientService.getLocations({ pageSize: 9999 });
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
@@ -140,6 +145,7 @@ const MapAdsManagement = () => {
       locationsIsPlanningHasAdvertises.current = locationsIsPlanningHasAdvertisesTemp;
       locationsIsNotPlanningNoAdvertises.current = locationsIsNotPlanningNoAdvertisesTemp;
       locationsIsNotPlanningHasAdvertises.current = locationsIsNotPlanningHasAdvertisesTemp;
+      dispatch(loading(false));
     };
     getAllLocations();
   }, []);
@@ -148,6 +154,7 @@ const MapAdsManagement = () => {
     const getAllReportsTypeLocation = async () => {
       const email = localStorage.getItem("guest_email");
       if (email) {
+        dispatch(loading(true));
         const res = await ReportClientService.getReports({
           reportTypeName: EReportType.LOCATION,
           pageSize: 999,
@@ -185,6 +192,7 @@ const MapAdsManagement = () => {
           })
         );
         reportLocations.current = reportLocationsTemp;
+        dispatch(loading(false));
       }
     };
     getAllReportsTypeLocation();

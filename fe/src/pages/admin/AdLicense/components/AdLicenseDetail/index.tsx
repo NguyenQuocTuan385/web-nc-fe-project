@@ -19,6 +19,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 export default function AdLicenseDetail() {
   const navigate = useNavigate();
@@ -29,15 +31,22 @@ export default function AdLicenseDetail() {
   const intercept = useIntercepts();
   const [openAccept, setOpenAccept] = React.useState(false);
   const [openCancel, setOpenCancel] = React.useState(false);
+  const dispatch = useDispatch();
   const handleClose = () => {
     setOpenAccept(false);
     setOpenCancel(false);
   };
   useEffect(() => {
     const getContractById = async () => {
-      ContractService.getContractById(Number(constractId), intercept).then((res) => {
-        setState(res);
-      });
+      dispatch(loading(true));
+      ContractService.getContractById(Number(constractId), intercept)
+        .then((res) => {
+          setState(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => dispatch(loading(false)));
     };
     getContractById();
   }, [constractId]);

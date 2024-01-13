@@ -19,6 +19,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import Editor from "components/common/Editor/EditWithQuill";
 export default function EditAdLocationLicenseDetail() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -236,7 +237,13 @@ export default function EditAdLocationLicenseDetail() {
                   <Box>
                     <ParagraphBody className={classes.infoContent}>
                       Lí do chỉnh sửa:&nbsp;
-                      <span>{locationDetail?.locationEdit?.content}</span>
+                      <Editor
+                        placeholder=''
+                        isAllowedType={false}
+                        content={
+                          locationDetail?.locationEdit?.content || "Không có nội dung báo cáo"
+                        }
+                      />
                     </ParagraphBody>
                     <Box></Box>
                   </Box>

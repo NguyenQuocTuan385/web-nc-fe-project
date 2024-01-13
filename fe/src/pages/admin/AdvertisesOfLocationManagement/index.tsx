@@ -293,7 +293,7 @@ const AdvertiseOfLocationManagement = () => {
                 {!!dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}
               </Box>
               <Box className={classes["map-item"]}>
-                <MapAdsManagementAdmin />
+                <MapAdsManagementAdmin locationView={dataInfoLocation} />
               </Box>
               {advertiseList.length > 0 && (
                 <>
@@ -337,13 +337,13 @@ const AdvertiseOfLocationManagement = () => {
         ) : (
           <SideBarDCMS>
             <Box className={classes["container-body"]}>
-              <ButtonBack onClick={() => goBack()}>
+              <ButtonBack onClick={() => goBack()} sx={{ width: "100px" }}>
                 <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
                 Trở về
               </ButtonBack>
               <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
               <Box className={classes["map-item"]}>
-                <MapAdsManagementAdmin />
+                <MapAdsManagementAdmin locationView={dataInfoLocation} />
               </Box>
               {advertiseList.length > 0 && (
                 <>

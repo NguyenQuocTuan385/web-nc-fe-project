@@ -19,6 +19,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { set } from "react-hook-form";
+import Editor from "components/common/Editor/EditWithQuill";
 
 export default function EditAdTableLicenseDetail() {
   const navigate = useNavigate();
@@ -264,7 +265,11 @@ export default function EditAdTableLicenseDetail() {
                 <Box>
                   <ParagraphBody className={classes.infoContent}>
                     Lí do chỉnh sửa:&nbsp;
-                    <span>{advertise?.advertiseEdit?.content}</span>
+                    <Editor
+                      placeholder=''
+                      isAllowedType={false}
+                      content={advertise?.advertiseEdit?.content || "Không có nội dung báo cáo"}
+                    />
                   </ParagraphBody>
                   <Box></Box>
                 </Box>

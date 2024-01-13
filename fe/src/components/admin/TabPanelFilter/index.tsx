@@ -10,6 +10,8 @@ import DistrictService from "services/district";
 import { Property } from "models/property";
 import WardService from "services/ward";
 import useIntercepts from "hooks/useIntercepts";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 interface ComponentProps {
   props: JSX.Element;
@@ -21,8 +23,10 @@ export default function TabPanelFilter({ props }: ComponentProps) {
   const [districts, setDistricts] = useState<Property[]>([]);
   const [wards, setWards] = useState<Property[]>([]);
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
   useEffect(() => {
     const getAllDistrict = async () => {
+      dispatch(loading(true));
       DistrictService.getAllDistrict(
         {
           search: "",
@@ -34,11 +38,13 @@ export default function TabPanelFilter({ props }: ComponentProps) {
           setDistricts(res.content);
           return res.content;
         })
-        .catch((err: any) => console.log(err));
+        .catch((err: any) => console.log(err))
+        .finally(() => dispatch(loading(false)));
     };
     getAllDistrict();
   }, []);
   const getAllWard = async (id: Number) => {
+    dispatch(loading(true));
     WardService.getAllWardBy(
       Number(id),
       {
@@ -51,7 +57,8 @@ export default function TabPanelFilter({ props }: ComponentProps) {
         setWards(res.content);
         return res.content;
       })
-      .catch((err: any) => console.log(err));
+      .catch((err: any) => console.log(err))
+      .finally(() => dispatch(loading(false)));
   };
   useEffect(() => {
     if (selectedDistrict) {

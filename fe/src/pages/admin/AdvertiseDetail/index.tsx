@@ -17,10 +17,11 @@ import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
 import SideBarDCMS from "components/admin/SidebarDCMS";
 import { User } from "models/user";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import Heading3 from "components/common/text/Heading3";
+import { loading } from "reduxes/Loading";
 
 const InfoAdsBox = styled(Box)(() => ({
   display: "flex",
@@ -74,9 +75,10 @@ export const AdvertiseDetail = () => {
   const [infoAds, setInfoAds] = useState<InfoAds | null>(null);
   const [infoContract, setInfoContract] = useState<InfoContract | null>(null);
   const intercept = useIntercepts();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const getAdvertiseDetails = async () => {
+      dispatch(loading(true));
       AdvertiseService.getAdvertisesById(Number(id), intercept)
         .then((res) => {
           setInfoAds({
@@ -91,13 +93,15 @@ export const AdvertiseDetail = () => {
         })
         .catch((e) => {
           console.log(e);
-        });
+        })
+        .finally(() => dispatch(loading(false)));
     };
     getAdvertiseDetails();
   }, []);
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
+      dispatch(loading(true));
       ContractService.findContractLicensingByAdvertiseId(Number(id), {}, intercept)
         .then((res) => {
           setInfoContract({
@@ -112,7 +116,8 @@ export const AdvertiseDetail = () => {
         })
         .catch((e) => {
           console.log(e);
-        });
+        })
+        .finally(() => dispatch(loading(false)));
     };
     getContractByAdvertiseId();
   }, []);

@@ -25,7 +25,7 @@ import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
 
 interface MapAdsManagementAdminProps {
-  locationView?: Location;
+  locationView?: Location | null;
 }
 enum ELocationCheckedSwitch {
   BOTH = 1,
@@ -38,7 +38,7 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
   const map = useRef<MapLibre | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [lat, setLat] = useState<number | null>(null);
-  const [zoom] = useState<number>(14);
+  const [zoom] = useState<number>(locationView ? 18 : 14);
   const [API_KEY] = useState<string>(process.env.REACT_APP_API_KEY_MAPTILER as string);
   const [openLocationSidebar, setOpenLocationSidebar] = useState<boolean>(false);
   const [location, setLocationData] = useState<Location | null>(null);

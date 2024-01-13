@@ -140,13 +140,8 @@ export const ReportDetailDCMS = () => {
                       <span>{dataReportDetail.phone}</span>
                     </Typography>
                   </Box>
-                  <Box width={"50%"}>
-                    <span className={classes["title"]}>Nội dung báo cáo: </span>
-                    <Typography
-                      dangerouslySetInnerHTML={{ __html: dataReportDetail.content }}
-                    ></Typography>
-                  </Box>
                 </Box>
+                <Editor placeholder='' isAllowedType={false} content={dataReportDetail.content} />
               </Box>
             )}
 

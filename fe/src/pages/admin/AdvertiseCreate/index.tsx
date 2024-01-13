@@ -32,9 +32,10 @@ import AdvertiseTypeService from "services/advertiseType";
 import Heading2 from "components/common/text/Heading2";
 import useIntercepts from "hooks/useIntercepts";
 import { User } from "models/user";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import AdvertiseService from "services/advertise";
+import { loading } from "reduxes/Loading";
 
 interface FormData {
   licensing: number;
@@ -105,8 +106,10 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
   };
 
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
 
   const createAdvertiseEdit = async (locationId: number, advertiseEditRequest: UpdateAdvertise) => {
+    dispatch(loading(true));
     AdvertiseService.createAdvertise(locationId, advertiseEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -114,7 +117,8 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
       .catch((err) => {
         handleEmitSuccessState(false);
         console.log(err);
-      });
+      })
+      .finally(() => dispatch(loading(false)));
   };
 
   const submitHandler = async (data: any) => {

@@ -26,6 +26,8 @@ import { RandomLocation } from "models/location";
 import SnackbarAlert, { AlertType } from "components/common/SnackbarAlert";
 import ReportClientService from "services/reportClient";
 import ReportFormClientService from "services/reportFormClient";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 export const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -77,6 +79,7 @@ export default function ReportFormPopup({
   const [openSnackbarAlert, setOpenSnackbarAlert] = useState(false);
   const [alertContent, setAlertContent] = useState<string>();
   const [alertType, setAlertType] = useState<AlertType>();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -101,6 +104,7 @@ export default function ReportFormPopup({
       images: []
     };
 
+    dispatch(loading(true));
     if (files) {
       await Promise.all(
         files.map(async (file) => {
@@ -119,7 +123,7 @@ export default function ReportFormPopup({
         })
       );
     }
-
+    dispatch(loading(false));
     const email = localStorage.getItem("guest_email");
 
     let reportCreate: ReportCreateRequest = {
@@ -147,6 +151,7 @@ export default function ReportFormPopup({
       };
     }
 
+    dispatch(loading(true));
     ReportClientService.createReport(reportCreate)
       .then((res) => {
         if (!email) {
@@ -162,6 +167,9 @@ export default function ReportFormPopup({
         setAlertContent("Đăng báo cáo thất bại");
         setAlertType(AlertType.Error);
         console.log(err);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 
