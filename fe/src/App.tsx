@@ -56,7 +56,6 @@ import { ReportDetailDCMS } from "pages/admin/ReportStatistic/components/ReportD
 import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
 import { DCMSDashBoard } from "pages/admin/DCMSDashboard";
 import { AdvertiseCreate } from "pages/admin/AdvertiseCreate";
-import SearchAppBar from "pages/admin/DistrictManagement/components/SearchDistrict";
 
 function App() {
   injectStore(store);
