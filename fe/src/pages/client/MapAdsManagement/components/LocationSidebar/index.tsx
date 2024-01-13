@@ -21,21 +21,18 @@ interface LocalAddressPopoverProps {
 const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopoverProps) => {
   const [advertises, setAdvertises] = useState<Advertise[]>([]);
   const [imagesLocation, setImagesLocation] = useState<string[]>([]);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const getAllAdvertises = async () => {
       if (!location) return;
       setImagesLocation(JSON.parse(location.images));
-      dispatch(loading(true));
       AdvertiseClientService.getAdvertisesByLocationId(location.id, { pageSize: 999 })
         .then((res) => {
           setAdvertises(res.content);
         })
         .catch((err) => {
           console.log(err);
-        })
-        .finally(() => dispatch(loading(false)));
+        });
     };
     getAllAdvertises();
   }, [location]);
