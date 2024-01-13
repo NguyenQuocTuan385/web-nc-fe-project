@@ -32,16 +32,13 @@ interface AdvertisePopupProps {
 }
 export default function AdvertiseInfoPopup({ onClose, open, advertise }: AdvertisePopupProps) {
   const [contract, setContract] = useState<Contract | null>(null);
-  const dispatch = useDispatch();
   useEffect(() => {
     const getContracts = async () => {
-      dispatch(loading(true));
       ContractClientService.findContractLicensingByAdvertiseId(advertise.id, { pageSize: 999 })
         .then((res) => {
           setContract(res);
         })
-        .catch((err) => {})
-        .finally(() => dispatch(loading(false)));
+        .catch((err) => {});
     };
     getContracts();
   }, [advertise]);

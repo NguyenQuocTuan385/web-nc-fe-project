@@ -292,9 +292,11 @@ const AdvertiseOfLocationManagement = () => {
               <Box>
                 {!!dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}
               </Box>
-              <Box className={classes["map-item"]}>
-                <MapAdsManagementAdmin locationView={dataInfoLocation} />
-              </Box>
+              {dataInfoLocation && (
+                <Box className={classes["map-item"]}>
+                  <MapAdsManagementAdmin locationView={dataInfoLocation} />
+                </Box>
+              )}
               {advertiseList.length > 0 && (
                 <>
                   <Box className={classes["search-container"]}>
@@ -342,9 +344,11 @@ const AdvertiseOfLocationManagement = () => {
                 Trở về
               </ButtonBack>
               <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
-              <Box className={classes["map-item"]}>
-                <MapAdsManagementAdmin locationView={dataInfoLocation} />
-              </Box>
+              {dataInfoLocation && (
+                <Box className={classes["map-item"]}>
+                  <MapAdsManagementAdmin locationView={dataInfoLocation} />
+                </Box>
+              )}
               {advertiseList.length > 0 && (
                 <>
                   <Box className={classes["search-container"]}>

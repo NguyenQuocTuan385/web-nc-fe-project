@@ -4,7 +4,9 @@ export interface Feature {
   type: string;
   properties:
     | (Location & { isAdvertiseLocation?: boolean })
-    | (RandomLocation & { isAdvertiseLocation?: boolean });
+    | (RandomLocation & { isAdvertiseLocation?: boolean })
+    | Location
+    | RandomLocation;
   geometry: Geometry;
 }
 

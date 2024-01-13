@@ -91,29 +91,27 @@ const MapAdsManagement = () => {
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          // const email = localStorage.getItem("guest_email");
-          // if (email) {
-          //   const res = await ReportClientService.getReports(
-          //     {
-          //       locationId: location.id,
-          //       pageSize: 999,
-          //       email: email
-          //     }
-          //   );
+          const email = localStorage.getItem("guest_email");
+          if (email) {
+            const res = await ReportClientService.getReports({
+              locationId: location.id,
+              pageSize: 999,
+              email: email
+            });
 
-          //   if (res.content.length > 0) {
-          //     const report: Report = res.content[res.content.length - 1];
-          //     let reportStatus: string;
-          //     if (report.status === EReportStatus.NEW) {
-          //       reportStatus = "Chưa xử lý";
-          //     } else if (report.status === EReportStatus.PROCESSING) {
-          //       reportStatus = "Đang xử lý";
-          //     } else {
-          //       reportStatus = "Đã xử lý";
-          //     }
-          //     location.reportStatus = reportStatus;
-          //   }
-          // }
+            if (res.content.length > 0) {
+              const report: Report = res.content[res.content.length - 1];
+              let reportStatus: string;
+              if (report.status === EReportStatus.NEW) {
+                reportStatus = "Chưa xử lý";
+              } else if (report.status === EReportStatus.PROCESSING) {
+                reportStatus = "Đang xử lý";
+              } else {
+                reportStatus = "Đã xử lý";
+              }
+              location.reportStatus = reportStatus;
+            }
+          }
 
           const existsAdvertises = await LocationClientService.checkExistsAdvertises(location.id);
           location.existsAdvertises = existsAdvertises;
@@ -403,182 +401,132 @@ const MapAdsManagement = () => {
           }
         });
 
-        map.current.addLayer({
-          id: "unclustered-location_is_planning_no_advertises",
-          type: "circle",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", true],
-            ["==", "existsAdvertises", false]
-          ],
-          paint: {
-            "circle-color": "	#001aff",
-            "circle-radius": 10
-          }
+        map.current.loadImage("https://i.ibb.co/5hWpBFR/icons8-circle-24-3.png", (error, image) => {
+          if (error) throw error;
+          if (!map.current) return;
+          map.current.addImage("imageName1", image as HTMLImageElement);
+          map.current.addLayer({
+            id: "unclustered_location_is_planning_no_advertises",
+            type: "symbol",
+            source: "locations",
+            filter: [
+              "all",
+              ["!has", "point_count"],
+              ["==", "planning", true],
+              ["==", "existsAdvertises", false]
+            ],
+            layout: {
+              "icon-image": "imageName1",
+              "text-field": ["get", "reportStatus"],
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+              "text-offset": [0, 1.25],
+              "text-size": 10,
+              "text-anchor": "top"
+            }
+          });
         });
 
-        map.current.addLayer({
-          id: "unclustered-location_is_planning_no_advertises-text",
-          type: "symbol",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", true],
-            ["==", "existsAdvertises", false]
-          ],
-          layout: {
-            "text-field": "QC",
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 8
-          },
-          paint: {
-            "text-color": "white"
-          }
-        });
+        loadLocationLayerFunction("unclustered_location_is_planning_no_advertises");
 
-        loadLocationLayerFunction("unclustered-location_is_planning_no_advertises");
-
-        map.current.addLayer({
-          id: "unclustered_location_is_planning_has_advertises",
-          type: "circle",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", true],
-            ["==", "existsAdvertises", true]
-          ],
-          paint: {
-            "circle-color": "#fcc419",
-            "circle-radius": 10
-          }
-        });
-
-        map.current.addLayer({
-          id: "unclustered_location_is_planning_has_advertises-text",
-          type: "symbol",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", true],
-            ["==", "existsAdvertises", true]
-          ],
-          layout: {
-            "text-field": "QC",
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 8
-          },
-          paint: {
-            "text-color": "white"
-          }
+        map.current.loadImage("https://i.ibb.co/BPbcShD/icons8-circle-24-7.png", (error, image) => {
+          if (error) throw error;
+          if (!map.current) return;
+          map.current.addImage("imageName2", image as HTMLImageElement);
+          map.current.addLayer({
+            id: "unclustered_location_is_planning_has_advertises",
+            type: "symbol",
+            source: "locations",
+            filter: [
+              "all",
+              ["!has", "point_count"],
+              ["==", "planning", true],
+              ["==", "existsAdvertises", true]
+            ],
+            layout: {
+              "icon-image": "imageName2",
+              "text-field": ["get", "reportStatus"],
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+              "text-offset": [0, 1.25],
+              "text-size": 10,
+              "text-anchor": "top"
+            }
+          });
         });
 
         loadLocationLayerFunction("unclustered_location_is_planning_has_advertises");
 
-        map.current.addLayer({
-          id: "unclustered_location_is_not_planning_has_advertises",
-          type: "circle",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", false],
-            ["==", "existsAdvertises", true]
-          ],
-          paint: {
-            "circle-color": "#ff0000",
-            "circle-radius": 10
-          }
+        map.current.loadImage("https://i.ibb.co/LvJJcmX/icons8-circle-24-4.png", (error, image) => {
+          if (error) throw error;
+          if (!map.current) return;
+          map.current.addImage("imageName3", image as HTMLImageElement);
+          map.current.addLayer({
+            id: "unclustered_location_is_not_planning_has_advertises",
+            type: "symbol",
+            source: "locations",
+            filter: [
+              "all",
+              ["!has", "point_count"],
+              ["==", "planning", false],
+              ["==", "existsAdvertises", true]
+            ],
+            layout: {
+              "icon-image": "imageName3",
+              "text-field": ["get", "reportStatus"],
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+              "text-offset": [0, 1.25],
+              "text-size": 10,
+              "text-anchor": "top"
+            }
+          });
         });
 
         loadLocationLayerFunction("unclustered_location_is_not_planning_has_advertises");
 
-        map.current.addLayer({
-          id: "unclustered_location_is_not_planning_has_advertises-text",
-          type: "symbol",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", false],
-            ["==", "existsAdvertises", true]
-          ],
-          layout: {
-            "text-field": "QC",
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 8
-          },
-          paint: {
-            "text-color": "white"
-          }
-        });
-
-        map.current.addLayer({
-          id: "unclustered_location_is_not_planning_no_advertises",
-          type: "circle",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", false],
-            ["==", "existsAdvertises", false]
-          ],
-          paint: {
-            "circle-color": "#f033c9",
-            "circle-radius": 10
-          }
-        });
-
-        map.current.addLayer({
-          id: "unclustered_location_is_not_planning_no_advertises-text",
-          type: "symbol",
-          source: "locations",
-          filter: [
-            "all",
-            ["!has", "point_count"],
-            ["==", "planning", false],
-            ["==", "existsAdvertises", false]
-          ],
-          layout: {
-            "text-field": "QC",
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 8
-          },
-          paint: {
-            "text-color": "white"
-          }
+        map.current.loadImage("https://i.ibb.co/JyWgyYt/icons8-circle-24-6.png", (error, image) => {
+          if (error) throw error;
+          if (!map.current) return;
+          map.current.addImage("marker_is_not_planning_not_advertises", image as HTMLImageElement);
+          map.current.addLayer({
+            id: "unclustered_location_is_not_planning_no_advertises",
+            type: "symbol",
+            source: "locations",
+            filter: [
+              "all",
+              ["!has", "point_count"],
+              ["==", "planning", false],
+              ["==", "existsAdvertises", false]
+            ],
+            layout: {
+              "icon-image": "marker_is_not_planning_not_advertises",
+              "text-field": ["get", "reportStatus"],
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+              "text-offset": [0, 1.25],
+              "text-size": 10,
+              "text-anchor": "top"
+            }
+          });
         });
 
         loadLocationLayerFunction("unclustered_location_is_not_planning_no_advertises");
 
-        map.current.addLayer({
-          id: "unclustered_report_location",
-          type: "circle",
-          source: "locations",
-          filter: ["all", ["!has", "point_count"], ["==", "isAdvertiseLocation", false]],
-          paint: {
-            "circle-color": "#00b100",
-            "circle-radius": 10
-          }
-        });
-
-        map.current.addLayer({
-          id: "unclustered_report_location-text",
-          type: "symbol",
-          source: "locations",
-          filter: ["all", ["!has", "point_count"], ["==", "isAdvertiseLocation", false]],
-          layout: {
-            "text-field": "RP",
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 8
-          },
-          paint: {
-            "text-color": "white"
-          }
+        map.current.loadImage("https://i.ibb.co/Jmm2yS2/icons8-circle-24-5.png", (error, image) => {
+          if (error) throw error;
+          if (!map.current) return;
+          map.current.addImage("marker_report_location", image as HTMLImageElement);
+          map.current.addLayer({
+            id: "unclustered_report_location",
+            type: "symbol",
+            source: "locations",
+            filter: ["all", ["!has", "point_count"], ["==", "isAdvertiseLocation", false]],
+            layout: {
+              "icon-image": "marker_report_location",
+              "text-field": ["get", "reportStatus"],
+              "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+              "text-offset": [0, 1.25],
+              "text-size": 10,
+              "text-anchor": "top"
+            }
+          });
         });
 
         map.current.on("mouseenter", "unclustered_report_location", (e) => {
@@ -612,7 +560,7 @@ const MapAdsManagement = () => {
             layers: [
               "unclustered_location_is_not_planning_has_advertises",
               "unclustered_location_is_not_planning_no_advertises",
-              "unclustered-location_is_planning_no_advertises",
+              "unclustered_location_is_planning_no_advertises",
               "unclustered_location_is_planning_has_advertises",
               "unclustered_report_location",
               "clusters"
@@ -747,10 +695,10 @@ const MapAdsManagement = () => {
                   }
                 }
 
-                handleClickSwitchLocationEvent("unclustered-location_is_planning_no_advertises");
+                handleClickSwitchLocationEvent("unclustered_location_is_planning_no_advertises");
                 handleClickSwitchLocationEvent("unclustered_location_is_planning_has_advertises");
                 handleClickSwitchLocationEvent(
-                  "unclustered-location_is_planning_no_advertises_text"
+                  "unclustered_location_is_planning_no_advertises_text"
                 );
                 handleClickSwitchLocationEvent(
                   "unclustered_location_is_planning_has_advertises_text"

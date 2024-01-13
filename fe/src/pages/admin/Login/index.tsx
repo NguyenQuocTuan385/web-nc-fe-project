@@ -50,6 +50,7 @@ const Login: React.FC = () => {
 
         if (userRole === ERole.DEPARTMENT) navigate(routes.admin.contracts.district);
         else if (userRole === ERole.DISTRICT) {
+          console.log("Yes district");
           navigate(routes.admin.locations.district);
         } else navigate(routes.admin.contracts.root);
       })
@@ -124,11 +125,11 @@ const Login: React.FC = () => {
       </Grid>
     </Box>
   ) : currentUser.role.id === ERole.DEPARTMENT ? (
-    <Navigate to={routes.admin.locations.dcms} />
+    <Navigate to={routes.admin.dashboard.dcms} />
   ) : currentUser.role.id === ERole.DISTRICT ? (
-    <Navigate to={routes.admin.locations.district} />
+    <Navigate to={routes.admin.dashboard.district} />
   ) : (
-    <Navigate to={routes.admin.locations.ward} />
+    <Navigate to={routes.admin.dashboard.wardDashboard} />
   );
 };
 export default Login;
