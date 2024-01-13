@@ -25,7 +25,8 @@ export const API = {
     UPDATE_STATUS: "/api/advertises/:id/status",
     DETAILS: "/api/locations/:id",
     EDIT: "/api/advertises/:id",
-    CREATE: "/api/advertises"
+    CREATE: "/api/advertises",
+    DELETE: "/api/advertises/:id"
   },
   ADVERTISE_CLIENT: {
     DEFAULT: "/api/locations-client/:id/advertises"

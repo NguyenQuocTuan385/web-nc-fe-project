@@ -115,6 +115,17 @@ export class AdvertiseService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async deleteAdvertiseById(id: number, api: any): Promise<any> {
+    return await api
+      .delete(`${API.ADVERTISE.DELETE.replace(":id", `${id}`)}`)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        console.log(e);
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default AdvertiseService;

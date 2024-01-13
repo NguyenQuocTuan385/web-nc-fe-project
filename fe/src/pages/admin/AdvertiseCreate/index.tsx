@@ -163,7 +163,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
       licensing: formSubmit.licensing === 1 ? true : false
     };
 
-console.log(dataSubmit);
+    console.log(dataSubmit);
 
     createAdvertiseEdit(dataSubmit);
   };
@@ -185,9 +185,7 @@ console.log(dataSubmit);
                 inputProps={{ "aria-label": "Without label" }}
                 fullWidth
               >
-                <MenuItem value='' disabled>
-                  Chọn hình thức quảng cáo
-                </MenuItem>
+                <MenuItem>Chọn hình thức quảng cáo</MenuItem>
                 {adsTypes.length > 0 &&
                   adsTypes.map((adsType: AdvertiseType) => (
                     <MenuItem value={adsType.id} key={adsType.id}>
@@ -218,9 +216,7 @@ console.log(dataSubmit);
                 inputProps={{ "aria-label": "Without label" }}
                 fullWidth
               >
-                <MenuItem value='' disabled>
-                  Chọn tình trạng cấp phép
-                </MenuItem>
+                <MenuItem>Chọn tình trạng cấp phép</MenuItem>
                 <MenuItem value='false'>Chưa cấp phép</MenuItem>
                 <MenuItem value='true'>Đã cấp phép</MenuItem>
               </Select>
