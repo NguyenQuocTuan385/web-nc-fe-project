@@ -1,29 +1,28 @@
 import { API } from "config/constant";
-import api from "./configApi";
 import { GetProperties, PropertyRequest } from "models/property";
 
 export class WardService {
-  static async getAllWardBy(propertyParentId: number, data: GetProperties): Promise<any> {
+  static async getAllWardBy(propertyParentId: number, data: GetProperties, api: any): Promise<any> {
     return await api
       .get(`${API.WARD.DEFAULT.replace(":propertyParentId", `${propertyParentId}`)}`, {
         params: data
       })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async deleteWardBy(id: number): Promise<any> {
+  static async deleteWardBy(id: number, api: any): Promise<any> {
     return await api
       .delete(`${API.WARD.DELETE.replace(":id", `${id}`)}`)
-      .then((res) => {})
-      .catch((e) => {
+      .then((res: any) => {})
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async updateWardBy(id: number, propertyRequest: PropertyRequest): Promise<any> {
+  static async updateWardBy(id: number, propertyRequest: PropertyRequest, api: any): Promise<any> {
     const updateData = {
       name: propertyRequest.name,
       code: propertyRequest.code
@@ -31,10 +30,10 @@ export class WardService {
 
     return await api
       .put(`${API.WARD.UPDATE.replace(":id", `${id}`)}`, updateData)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

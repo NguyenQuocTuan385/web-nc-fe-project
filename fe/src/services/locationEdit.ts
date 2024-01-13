@@ -1,5 +1,4 @@
 import { API } from "config/constant";
-import api from "./configApi";
 import { LocationEditRequest, LocationEditByCDMSRequest } from "models/location";
 
 export class LocationEditService {
@@ -19,14 +18,15 @@ export class LocationEditService {
   }
   static async updateLocationByCDMS(
     locationId: number,
-    locationEditCDMSRequest: LocationEditByCDMSRequest
+    locationEditCDMSRequest: LocationEditByCDMSRequest,
+    api: any
   ): Promise<any> {
     return await api
       .put(`${API.LOCATION.EDIT}`.replace(":id", `${locationId}`), locationEditCDMSRequest)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

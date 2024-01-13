@@ -105,6 +105,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
   const [originalImages, setOriginalImages] = useState(data.images);
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
   const isDepartment = currentUser.role.id === ERole.DEPARTMENT ? true : false;
+  const intercept = useIntercepts();
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -122,7 +123,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     advertiseId: number,
     advertiseEditRequest: AdvertiseEditRequest
   ) => {
-    AdvertiseEditService.createAdvertiseEditRequest(locationId, advertiseEditRequest)
+    AdvertiseEditService.createAdvertiseEditRequest(locationId, advertiseEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
       })

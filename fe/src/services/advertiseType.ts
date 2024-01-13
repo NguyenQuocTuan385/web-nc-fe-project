@@ -1,5 +1,4 @@
 import { API } from "config/constant";
-import api from "./configApi";
 import { GetAdvertiseTypes } from "models/advertiseType";
 
 export class AdvertiseTypeService {

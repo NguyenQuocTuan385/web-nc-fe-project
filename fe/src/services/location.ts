@@ -1,5 +1,4 @@
 import { API } from "config/constant";
-import api from "./configApi";
 import {
   GetLocations,
   LocationCreateRequest,
@@ -9,13 +8,13 @@ import {
 } from "models/location";
 
 export class LocationService {
-  static async getLocations(data: GetLocations): Promise<any> {
+  static async getLocations(data: GetLocations, api: any): Promise<any> {
     return await api
       .get(`${API.LOCATION.DEFAULT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
@@ -70,13 +69,16 @@ export class LocationService {
       });
   }
 
-  static async createLocation(locationCreateRequest: LocationCreateRequest): Promise<any> {
+  static async createLocation(
+    locationCreateRequest: LocationCreateRequest,
+    api: any
+  ): Promise<any> {
     return await api
       .post(`${API.LOCATION.DEFAULT}`, locationCreateRequest)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

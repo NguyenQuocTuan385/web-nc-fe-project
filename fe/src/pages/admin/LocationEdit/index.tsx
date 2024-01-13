@@ -529,7 +529,7 @@ export const LocationEdit = () => {
 
   useEffect(() => {
     const getAllLocationTypes = async () => {
-      LocationTypeService.getAllLocationTypes({})
+      LocationTypeService.getAllLocationTypes({}, intercept)
         .then((res) => {
           setLocationTypes(res.content);
         })
@@ -542,7 +542,7 @@ export const LocationEdit = () => {
 
   useEffect(() => {
     const getAllAdsForms = async () => {
-      AdvertiseFormService.getAllAdvertiseForm({})
+      AdvertiseFormService.getAllAdvertiseForm({}, intercept)
         .then((res) => {
           setAdsForms(res.content);
         })

@@ -53,11 +53,14 @@ export default function ReportFormManagement() {
 
   const getAllReportForm = async () => {
     try {
-      const res = await ReportFormService.getAllReportForm({
-        search: searchValue,
-        pageSize: itemsPerPage,
-        current: Number(currentPage)
-      });
+      const res = await ReportFormService.getAllReportForm(
+        {
+          search: searchValue,
+          pageSize: itemsPerPage,
+          current: Number(currentPage)
+        },
+        intercept
+      );
       const reportForm: ReportForm[] = res.content;
       setReportForm(reportForm);
       setTotalPage(res.totalPages);

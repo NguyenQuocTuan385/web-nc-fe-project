@@ -38,6 +38,7 @@ import useIntercepts from "hooks/useIntercepts";
 import { useSelector } from "react-redux";
 import { User } from "models/user";
 import { selectCurrentUser } from "reduxes/Auth";
+import { AxiosInstance } from "axios";
 
 interface FormData {
   propertyId: number;
@@ -88,6 +89,7 @@ interface FormEditLocationProps {
   adsForms: AdvertiseForm[];
   createLocationEditRequest: (isSuccess: boolean) => void;
   locationId: number;
+  intercept: AxiosInstance;
 }
 
 const MyForm: React.FC<FormEditLocationProps> = ({
@@ -95,7 +97,8 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   locationTypes,
   adsForms,
   createLocationEditRequest,
-  locationId
+  locationId,
+  intercept
 }: any) => {
   const {
     handleSubmit,
@@ -128,11 +131,12 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
   const createLocationEdit = async (
     locationId: number,
-    locationEditRequest: LocationEditByCDMSRequest
+    locationEditRequest: LocationEditByCDMSRequest,
+    intercept: AxiosInstance
   ) => {
     console.log(locationId + "-------------------------- ");
     console.log(locationEditRequest);
-    LocationEditService.updateLocationByCDMS(locationId, locationEditRequest)
+    LocationEditService.updateLocationByCDMS(locationId, locationEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
       })
@@ -181,8 +185,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       userId: currentUser.id
     };
     console.log(dataSubmit);
-
-    createLocationEdit(locationId, dataSubmit);
+    createLocationEdit(locationId, dataSubmit, intercept);
   };
 
   return (
@@ -490,7 +493,7 @@ export const LocationEditCDMS = () => {
   const [locationTypes, setLocationTypes] = useState([]);
   const [adsForms, setAdsForms] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
-  const intercept = useIntercepts();
+  const intercept: AxiosInstance = useIntercepts();
 
   useEffect(() => {
     const getLocationById = async () => {
@@ -507,7 +510,7 @@ export const LocationEditCDMS = () => {
 
   useEffect(() => {
     const getAllLocationTypes = async () => {
-      LocationTypeService.getAllLocationTypes({})
+      LocationTypeService.getAllLocationTypes({}, intercept)
         .then((res) => {
           setLocationTypes(res.content);
         })
@@ -520,7 +523,7 @@ export const LocationEditCDMS = () => {
 
   useEffect(() => {
     const getAllAdsForms = async () => {
-      AdvertiseFormService.getAllAdvertiseForm({})
+      AdvertiseFormService.getAllAdvertiseForm({}, intercept)
         .then((res) => {
           setAdsForms(res.content);
         })
@@ -555,6 +558,7 @@ export const LocationEditCDMS = () => {
                   adsForms={adsForms}
                   createLocationEditRequest={handleGetSuccessState}
                   locationId={Number(id)}
+                  intercept={intercept}
                 />
               </Box>
             )}

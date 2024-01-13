@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { DateHelper } from "../../../helpers/date";
+import useIntercepts from "hooks/useIntercepts";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -76,10 +77,11 @@ export const ReportHandle = () => {
 
   const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
   const currentUser = useSelector(selectCurrentUser);
+  const intercept = useIntercepts();
 
   useEffect(() => {
     const getReportById = async () => {
-      ReportService.getReportById(Number(id))
+      ReportService.getReportById(Number(id), intercept)
         .then((res) => {
           setDataReportDetail(res);
           setHandleStatus(res.status);
@@ -174,7 +176,7 @@ export const ReportHandle = () => {
         body: handleReportHtml
       };
 
-      MailService.sendHtmlEmail(data)
+      MailService.sendHtmlEmail(data, intercept)
         .then((res) => {
           setIsUpdateSuccess(true);
           console.log("Gửi email đến người dân gửi báo cáo thành công!");
@@ -192,7 +194,7 @@ export const ReportHandle = () => {
       reply: replyText.length > 0 ? replyText : dataReportDetail && dataReportDetail.reply
     };
 
-    ReportService.updateReport(Number(id), updateData)
+    ReportService.updateReport(Number(id), updateData, intercept)
       .then((res) => {
         handleSendEmail();
       })

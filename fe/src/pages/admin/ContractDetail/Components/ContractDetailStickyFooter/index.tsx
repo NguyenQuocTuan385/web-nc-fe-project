@@ -16,6 +16,7 @@ import Heading6 from "components/common/text/Heading6";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faCircleXmark, faWarning } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
+import useIntercepts from "hooks/useIntercepts";
 
 interface PropsData {
   startDate?: Date;
@@ -27,6 +28,7 @@ interface PropsData {
 function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: PropsData) {
   const navigate = useNavigate();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const intercept = useIntercepts();
 
   const openDeleteDialogHandle = () => {
     setOpenDeleteDialog(true);
@@ -37,7 +39,7 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
   };
 
   const deleteContractHandle = (id: number) => {
-    ContractService.deleteContracts(id)
+    ContractService.deleteContracts(id, intercept)
       .then((res) => {})
       .catch((e) => {
         console.log(e);

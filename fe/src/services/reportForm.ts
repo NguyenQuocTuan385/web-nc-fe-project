@@ -1,15 +1,14 @@
 import { API } from "config/constant";
-import api from "./configApi";
 import { GetReportForms, ReportForm } from "models/reportForm";
 
 export class ReportFormService {
-  static async getAllReportForm(data: GetReportForms): Promise<any> {
+  static async getAllReportForm(data: GetReportForms, api: any): Promise<any> {
     return await api
       .get(`${API.REPORT_FORM.DEFAULT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

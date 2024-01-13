@@ -1,15 +1,14 @@
 import { API } from "config/constant";
-import api from "./configApi";
 import { GetLocationTypes } from "models/location";
 
 export class LocationTypeService {
-  static async getAllLocationTypes(data: GetLocationTypes): Promise<any> {
+  static async getAllLocationTypes(data: GetLocationTypes, api: any): Promise<any> {
     return await api
       .get(`${API.LOCATION_TYPE.DEFAULT}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

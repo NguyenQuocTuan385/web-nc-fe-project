@@ -12,6 +12,7 @@ import Heading3 from "components/common/text/Heading3";
 import Editor from "components/common/Editor/EditWithQuill";
 import { routes } from "routes/routes";
 import SideBarDCMS from "components/admin/SidebarDCMS";
+import useIntercepts from "hooks/useIntercepts";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -49,10 +50,10 @@ export const ReportDetailDCMS = () => {
   const navigate = useNavigate();
 
   const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
-
+  const intercept = useIntercepts();
   useEffect(() => {
     const getReportById = async () => {
-      ReportService.getReportById(Number(id))
+      ReportService.getReportById(Number(id), intercept)
         .then((res) => {
           setDataReportDetail(res);
         })

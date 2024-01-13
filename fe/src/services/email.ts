@@ -1,38 +1,37 @@
 import { Email } from "@mui/icons-material";
 import { API } from "config/constant";
-import api from "./configApi";
 import { EmailRequest, RequestOTP } from "models/email";
 
 export class MailService {
-  static async sendTextEmail(emailTextRequest: EmailRequest): Promise<any> {
+  static async sendTextEmail(emailTextRequest: EmailRequest, api: any): Promise<any> {
     return await api
       .post(`${API.EMAIL.SEND_TEXT_EMAIL}`, emailTextRequest)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
 
-  static async sendHtmlEmail(emailHtmlRequest: EmailRequest): Promise<any> {
+  static async sendHtmlEmail(emailHtmlRequest: EmailRequest, api: any): Promise<any> {
     return await api
       .post(`${API.EMAIL.SEND_HTML_EMAIL}`, emailHtmlRequest)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
 
-  static async sendOTPToEmail(email: RequestOTP): Promise<any> {
+  static async sendOTPToEmail(email: RequestOTP, api: any): Promise<any> {
     return await api
       .post(`${API.EMAIL.SEND_OTP_TO_EMAIL}`, email)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

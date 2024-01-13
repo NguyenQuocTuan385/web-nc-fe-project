@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { DateHelper } from "helpers/date";
+import useIntercepts from "hooks/useIntercepts";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -44,10 +45,10 @@ export const ReportDetail = () => {
 
   const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
   const currentUser = useSelector(selectCurrentUser);
-
+  const intercept = useIntercepts();
   useEffect(() => {
     const getReportById = async () => {
-      ReportService.getReportById(Number(id))
+      ReportService.getReportById(Number(id), intercept)
         .then((res) => {
           setDataReportDetail(res);
         })

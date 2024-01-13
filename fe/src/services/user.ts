@@ -1,6 +1,5 @@
 import { API } from "config/constant";
-import api from "./configApi";
-import { User, GetUsers, UserRequest, RequestOTPUser } from "models/user";
+import { GetUsers, UserRequest, RequestOTPUser } from "models/user";
 
 export class Userservice {
   static async getUsers(data: GetUsers, api: any): Promise<any> {

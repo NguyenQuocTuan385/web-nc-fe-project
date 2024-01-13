@@ -14,13 +14,13 @@ export class ContractService {
       });
   }
 
-  static async getContractsByProperty(data: GetContract): Promise<any> {
+  static async getContractsByProperty(data: GetContract, api: any): Promise<any> {
     return await api
       .get(`${API.CONTRACT.GETBYPROPERTY_PARENT_ID}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
@@ -50,13 +50,13 @@ export class ContractService {
       });
   }
 
-  static async deleteContracts(id: number): Promise<any> {
+  static async deleteContracts(id: number, api: any): Promise<any> {
     return await api
       .delete(`${API.CONTRACT.DELETE.replace(":id", `${id}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
@@ -94,13 +94,13 @@ export class ContractService {
       });
   }
 
-  static async updateContractById(id: number, data: UpdateContractStatus): Promise<any> {
+  static async updateContractById(id: number, data: UpdateContractStatus, api: any): Promise<any> {
     return await api
       .put(`${API.CONTRACT.UPDATE_STATUS.replace(":id", `${id}`)}`, data)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

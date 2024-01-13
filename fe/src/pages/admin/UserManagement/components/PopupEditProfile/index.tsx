@@ -145,10 +145,14 @@ export default function Popup(props: PopupProps) {
   const [selectedDistrict, setSelectedDistrict] = React.useState<Property | null>(null);
   const [selectedWard, setSelectedWard] = React.useState<Property | null>(null);
   const getAllWard = async (id: Number) => {
-    WardService.getAllWardBy(Number(id), {
-      search: "",
-      pageSize: 999
-    })
+    WardService.getAllWardBy(
+      Number(id),
+      {
+        search: "",
+        pageSize: 999
+      },
+      intercept
+    )
       .then((res) => {
         setWards(res.content);
         return res.content;
@@ -175,10 +179,13 @@ export default function Popup(props: PopupProps) {
 
   useEffect(() => {
     const getAllDistrict = async () => {
-      DistrictService.getAllDistrict({
-        search: "",
-        pageSize: 999
-      })
+      DistrictService.getAllDistrict(
+        {
+          search: "",
+          pageSize: 999
+        },
+        intercept
+      )
         .then((res) => {
           setDistricts(res.content);
           return res.content;

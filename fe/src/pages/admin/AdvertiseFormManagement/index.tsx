@@ -1,4 +1,13 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Pagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Pagination
+} from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
 import SearchAppBar from "components/common/SearchDCMS";
@@ -43,11 +52,14 @@ export default function ReportFormManagement() {
 
   const getAllAdvertiseForm = async () => {
     try {
-      const res = await AdvertiseFormService.getAllAdvertiseForm({
-        search: searchValue,
-        pageSize: itemsPerPage,
-        current: Number(currentPage)
-      });
+      const res = await AdvertiseFormService.getAllAdvertiseForm(
+        {
+          search: searchValue,
+          pageSize: itemsPerPage,
+          current: Number(currentPage)
+        },
+        intercept
+      );
       const advertiseForm: AdvertiseForm[] = res.content;
       setAdvertiseForm(advertiseForm);
       setTotalPage(res.totalPages);
@@ -60,7 +72,7 @@ export default function ReportFormManagement() {
   useEffect(() => {
     getAllAdvertiseForm();
   }, [searchValue, currentPage]);
-  
+
   const data = advertiseForm.map((item, index) => {
     return {
       stt: index + 1,
@@ -70,9 +82,8 @@ export default function ReportFormManagement() {
     };
   });
 
-   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [advertiseFormId, setAdvertiseFormId] = useState(0);
-
 
   const intercept = useIntercepts();
 
@@ -93,7 +104,6 @@ export default function ReportFormManagement() {
   const closeDeleteDialogHandle = () => {
     setOpenDeleteDialog(false);
   };
-
 
   return (
     <div>

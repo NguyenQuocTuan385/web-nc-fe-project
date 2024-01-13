@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import DistrictService from "services/district";
 import { Property } from "models/property";
 import WardService from "services/ward";
+import useIntercepts from "hooks/useIntercepts";
 
 interface ComponentProps {
   props: JSX.Element;
@@ -19,12 +20,16 @@ export default function TabPanelFilter({ props }: ComponentProps) {
   const [selectedWard, setSelectedWard] = React.useState<Property | null>(null);
   const [districts, setDistricts] = useState<Property[]>([]);
   const [wards, setWards] = useState<Property[]>([]);
+  const intercept = useIntercepts();
   useEffect(() => {
     const getAllDistrict = async () => {
-      DistrictService.getAllDistrict({
-        search: "",
-        pageSize: 999
-      })
+      DistrictService.getAllDistrict(
+        {
+          search: "",
+          pageSize: 999
+        },
+        intercept
+      )
         .then((res) => {
           setDistricts(res.content);
           return res.content;
@@ -34,10 +39,14 @@ export default function TabPanelFilter({ props }: ComponentProps) {
     getAllDistrict();
   }, []);
   const getAllWard = async (id: Number) => {
-    WardService.getAllWardBy(Number(id), {
-      search: "",
-      pageSize: 999
-    })
+    WardService.getAllWardBy(
+      Number(id),
+      {
+        search: "",
+        pageSize: 999
+      },
+      intercept
+    )
       .then((res) => {
         setWards(res.content);
         return res.content;
