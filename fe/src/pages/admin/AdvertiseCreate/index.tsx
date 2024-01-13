@@ -92,6 +92,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [originalImages, setOriginalImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
+  const navigate = useNavigate();
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -113,6 +114,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     AdvertiseService.createAdvertise(locationId, advertiseEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
+        navigate(`${routes.admin.locations.dcmsDetail.replace(":id", `${locationId}`)}`);
       })
       .catch((err) => {
         handleEmitSuccessState(false);
@@ -433,8 +435,8 @@ export const AdvertiseCreate = () => {
   const intercept = useIntercepts();
 
   const goBack = () => {
-    // navigate(`${routes.admin.locations.dcmsDetail.replace(":id", `${locationId}`)}`);
-    navigate(`${routes.admin.locations.dcms}`);
+    navigate(`${routes.admin.locations.dcmsDetail.replace(":id", `${id}`)}`);
+    // navigate(`${routes.admin.locations.dcms}`);
   };
 
   useEffect(() => {
