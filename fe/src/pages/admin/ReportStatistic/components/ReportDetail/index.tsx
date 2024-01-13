@@ -65,7 +65,7 @@ export const ReportDetailDCMS = () => {
   }, []);
 
   const goBack = () => {
-    navigate(`${routes.admin.reports.ward}`);
+    navigate(-1);
   };
 
   return (

@@ -43,6 +43,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
   const locationHook = useLocation();
   const path = locationHook.pathname;
   const [sideBar, setSidebar] = useState<SidebarItem[]>(sideBarItemList.sideBarItem);
+  const [openItems, setOpenItems] = useState<number | null>(null);
 
   useEffect(() => {
     sideBar.map((item, index) => {
@@ -50,6 +51,7 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
         item.children.map((child, childIndex) => {
           if (child.link.includes(path)) {
             dispatch(selected({ parentIndex: index, childIndex: childIndex }));
+            setOpenItems(index);
             return;
           }
         });
@@ -62,14 +64,9 @@ export default function SidebarManagement(sideBarItemList: SideBarItemList) {
     });
   }, [path]);
   const state = useSelector((state: RootState) => state.selected);
-  const [openItems, setOpenItems] = useState<number | null>(state.parentIndex);
   const currentUser: User = useSelector(selectCurrentUser);
 
   const handleClick = (index: number, sideBarItem: SidebarItem, child: Array<{ name: string }>) => {
-    if (index === state.parentIndex) {
-      setOpenItems(index);
-      return;
-    }
     if (sideBarItem.children === undefined) {
       dispatch(selected({ parentIndex: index, childIndex: -1 }));
       navigate(sideBarItem.link!!);
