@@ -52,16 +52,11 @@ const MapAdsManagement = () => {
   const popup = new MapLibreGL.Popup({});
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsPlanningNoAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsPlanningHasAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsNotPlanningNoAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsNotPlanningHasAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const reportLocations: Feature[] = [];
+  let locationsIsPlanningNoAdvertises = useRef<Feature[]>([]);
+  let locationsIsPlanningHasAdvertises = useRef<Feature[]>([]);
+  let locationsIsNotPlanningNoAdvertises = useRef<Feature[]>([]);
+  let locationsIsNotPlanningHasAdvertises = useRef<Feature[]>([]);
+  let reportLocations = useRef<Feature[]>([]);
   let clusters = useRef<Feature[]>([]);
   const [locationCheckedSwitch, setLocationCheckedSwitch] = useState<ELocationCheckedSwitch>(
     ELocationCheckedSwitch.BOTH
@@ -78,36 +73,42 @@ const MapAdsManagement = () => {
   useEffect(() => {
     const getAllLocations = async () => {
       const res = await LocationClientService.getLocations({ pageSize: 9999 });
-
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
         setLng(locations_temp[0].longitude);
         setLat(locations_temp[0].latitude);
       }
 
+      const locationsIsPlanningNoAdvertisesTemp: Feature[] = [];
+      const locationsIsPlanningHasAdvertisesTemp: Feature[] = [];
+      const locationsIsNotPlanningNoAdvertisesTemp: Feature[] = [];
+      const locationsIsNotPlanningHasAdvertisesTemp: Feature[] = [];
+
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          const email = localStorage.getItem("guest_email");
-          if (email) {
-            const res = await ReportClientService.getReports({
-              locationId: location.id,
-              pageSize: 999,
-              email: email
-            });
+          // const email = localStorage.getItem("guest_email");
+          // if (email) {
+          //   const res = await ReportClientService.getReports(
+          //     {
+          //       locationId: location.id,
+          //       pageSize: 999,
+          //       email: email
+          //     }
+          //   );
 
-            if (res.content.length > 0) {
-              const report: Report = res.content[res.content.length - 1];
-              let reportStatus: string;
-              if (report.status === EReportStatus.NEW) {
-                reportStatus = "Chưa xử lý";
-              } else if (report.status === EReportStatus.PROCESSING) {
-                reportStatus = "Đang xử lý";
-              } else {
-                reportStatus = "Đã xử lý";
-              }
-              location.reportStatus = reportStatus;
-            }
-          }
+          //   if (res.content.length > 0) {
+          //     const report: Report = res.content[res.content.length - 1];
+          //     let reportStatus: string;
+          //     if (report.status === EReportStatus.NEW) {
+          //       reportStatus = "Chưa xử lý";
+          //     } else if (report.status === EReportStatus.PROCESSING) {
+          //       reportStatus = "Đang xử lý";
+          //     } else {
+          //       reportStatus = "Đã xử lý";
+          //     }
+          //     location.reportStatus = reportStatus;
+          //   }
+          // }
 
           const existsAdvertises = await LocationClientService.checkExistsAdvertises(location.id);
           location.existsAdvertises = existsAdvertises;
@@ -126,66 +127,64 @@ const MapAdsManagement = () => {
 
           if (location.planning) {
             existsAdvertises
-              ? locationsIsPlanningHasAdvertises.push(feature)
-              : locationsIsPlanningNoAdvertises.push(feature);
+              ? locationsIsPlanningHasAdvertisesTemp.push(feature)
+              : locationsIsPlanningNoAdvertisesTemp.push(feature);
           } else {
             existsAdvertises
-              ? locationsIsNotPlanningHasAdvertises.push(feature)
-              : locationsIsNotPlanningNoAdvertises.push(feature);
+              ? locationsIsNotPlanningHasAdvertisesTemp.push(feature)
+              : locationsIsNotPlanningNoAdvertisesTemp.push(feature);
           }
         })
       );
+      locationsIsPlanningNoAdvertises.current = locationsIsPlanningNoAdvertisesTemp;
+      locationsIsPlanningHasAdvertises.current = locationsIsPlanningHasAdvertisesTemp;
+      locationsIsNotPlanningNoAdvertises.current = locationsIsNotPlanningNoAdvertisesTemp;
+      locationsIsNotPlanningHasAdvertises.current = locationsIsNotPlanningHasAdvertisesTemp;
     };
     getAllLocations();
-  }, [
-    locationsIsPlanningHasAdvertises,
-    locationsIsPlanningNoAdvertises,
-    locationsIsNotPlanningHasAdvertises,
-    locationsIsNotPlanningNoAdvertises
-  ]);
+  }, []);
 
   useEffect(() => {
     const getAllReportsTypeLocation = async () => {
       const email = localStorage.getItem("guest_email");
       if (email) {
-        ReportClientService.getReports({
+        const res = await ReportClientService.getReports({
           reportTypeName: EReportType.LOCATION,
           pageSize: 999,
           email: email
-        })
-          .then((res) => {
-            res.content.forEach((report: Report) => {
-              let reportStatus: string;
-              if (report.status === EReportStatus.NEW) {
-                reportStatus = "Chưa xử lý";
-              } else if (report.status === EReportStatus.PROCESSING) {
-                reportStatus = "Đang xử lý";
-              } else {
-                reportStatus = "Đã xử lý";
+        });
+        const reportLocationsTemp: Feature[] = [];
+        Promise.all(
+          res.content.map(async (report: Report) => {
+            let reportStatus: string;
+            if (report.status === EReportStatus.NEW) {
+              reportStatus = "Chưa xử lý";
+            } else if (report.status === EReportStatus.PROCESSING) {
+              reportStatus = "Đang xử lý";
+            } else {
+              reportStatus = "Đã xử lý";
+            }
+            const reportLocation: RandomLocation = {
+              address: report.address as string,
+              longitude: report.longitude as number,
+              latitude: report.latitude as number,
+              reportStatus: reportStatus
+            };
+            const feature: Feature = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [reportLocation.longitude, reportLocation.latitude]
+              },
+              properties: {
+                ...reportLocation,
+                isAdvertiseLocation: false
               }
-              const reportLocation: RandomLocation = {
-                address: report.address as string,
-                longitude: report.longitude as number,
-                latitude: report.latitude as number,
-                reportStatus: reportStatus
-              };
-              const feature: Feature = {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [reportLocation.longitude, reportLocation.latitude]
-                },
-                properties: {
-                  ...reportLocation,
-                  isAdvertiseLocation: false
-                }
-              };
-              reportLocations.push(feature);
-            });
+            };
+            reportLocationsTemp.push(feature);
           })
-          .catch((e) => {
-            console.log(e);
-          });
+        );
+        reportLocations.current = reportLocationsTemp;
       }
     };
     getAllReportsTypeLocation();
@@ -204,43 +203,45 @@ const MapAdsManagement = () => {
 
   const changeSourceDataLocation = (locationCheckedChange: ELocationCheckedSwitch) => {
     if (locationCheckedChange === ELocationCheckedSwitch.BOTH) {
-      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-        locationsIsNotPlanningNoAdvertises,
-        locationsIsPlanningHasAdvertises,
-        locationsIsPlanningNoAdvertises,
-        reportLocations
+      clusters.current = locationsIsNotPlanningHasAdvertises.current.concat(
+        locationsIsNotPlanningNoAdvertises.current,
+        locationsIsPlanningHasAdvertises.current,
+        locationsIsPlanningNoAdvertises.current,
+        reportLocations.current
       );
     } else if (
       locationCheckedChange ===
       ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING
     ) {
-      clusters.current = locationsIsPlanningHasAdvertises.concat(
-        locationsIsPlanningNoAdvertises,
-        locationsIsNotPlanningNoAdvertises,
-        locationsIsNotPlanningHasAdvertises
+      clusters.current = locationsIsPlanningHasAdvertises.current.concat(
+        locationsIsPlanningNoAdvertises.current,
+        locationsIsNotPlanningNoAdvertises.current,
+        locationsIsNotPlanningHasAdvertises.current
       );
     } else if (
       locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING_AND_REPORT_LOCATION
     ) {
-      clusters.current = locationsIsPlanningHasAdvertises.concat(
-        locationsIsPlanningNoAdvertises,
-        reportLocations
+      clusters.current = locationsIsPlanningHasAdvertises.current.concat(
+        locationsIsPlanningNoAdvertises.current,
+        reportLocations.current
       );
     } else if (
       locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
     ) {
-      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-        locationsIsNotPlanningNoAdvertises,
-        reportLocations
+      clusters.current = locationsIsNotPlanningHasAdvertises.current.concat(
+        locationsIsNotPlanningNoAdvertises.current,
+        reportLocations.current
       );
     } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING) {
-      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-        locationsIsNotPlanningNoAdvertises
+      clusters.current = locationsIsNotPlanningHasAdvertises.current.concat(
+        locationsIsNotPlanningNoAdvertises.current
       );
     } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
-      clusters.current = locationsIsPlanningHasAdvertises.concat(locationsIsPlanningNoAdvertises);
+      clusters.current = locationsIsPlanningHasAdvertises.current.concat(
+        locationsIsPlanningNoAdvertises.current
+      );
     } else if (locationCheckedChange === ELocationCheckedSwitch.REPORT_LOCATION) {
-      clusters.current = reportLocations;
+      clusters.current = reportLocations.current;
     } else {
       clusters.current = [];
     }
@@ -343,11 +344,11 @@ const MapAdsManagement = () => {
       map.current.on("load", () => {
         if (!map.current) return;
 
-        clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-          locationsIsNotPlanningNoAdvertises,
-          locationsIsPlanningHasAdvertises,
-          locationsIsPlanningNoAdvertises,
-          reportLocations
+        clusters.current = locationsIsNotPlanningHasAdvertises.current.concat(
+          locationsIsNotPlanningNoAdvertises.current,
+          locationsIsPlanningHasAdvertises.current,
+          locationsIsPlanningNoAdvertises.current,
+          reportLocations.current
         );
 
         const clustersGeojson: GeoJson = {

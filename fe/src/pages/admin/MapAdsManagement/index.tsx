@@ -47,14 +47,10 @@ const MapAdsManagementAdmin = () => {
   const popup = new MapLibreGL.Popup({});
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsPlanningNoAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsPlanningHasAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsNotPlanningNoAdvertises: Feature[] = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const locationsIsNotPlanningHasAdvertises: Feature[] = [];
+  let locationsIsPlanningNoAdvertises = useRef<Feature[]>([]);
+  let locationsIsPlanningHasAdvertises = useRef<Feature[]>([]);
+  let locationsIsNotPlanningNoAdvertises = useRef<Feature[]>([]);
+  let locationsIsNotPlanningHasAdvertises = useRef<Feature[]>([]);
   let clusters = useRef<Feature[]>([]);
   const [locationCheckedSwitch, setLocationCheckedSwitch] = useState<ELocationCheckedSwitch>(
     ELocationCheckedSwitch.BOTH
@@ -74,22 +70,17 @@ const MapAdsManagementAdmin = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
-      let res;
-      if (user?.property?.id) {
-        res = await LocationService.getLocationsByPropertyId(
-          user.property.id,
-          {
-            pageSize: 9999
-          },
-          intercept
-        );
-      }
-      res = await LocationService.getLocations({ pageSize: 9999 }, intercept);
+      const res = await LocationService.getLocations({ pageSize: 9999 }, intercept);
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
         setLng(locations_temp[0].longitude);
         setLat(locations_temp[0].latitude);
       }
+
+      const locationsIsPlanningNoAdvertisesTemp: Feature[] = [];
+      const locationsIsPlanningHasAdvertisesTemp: Feature[] = [];
+      const locationsIsNotPlanningNoAdvertisesTemp: Feature[] = [];
+      const locationsIsNotPlanningHasAdvertisesTemp: Feature[] = [];
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
@@ -113,15 +104,19 @@ const MapAdsManagementAdmin = () => {
 
           if (location.planning) {
             existsAdvertises
-              ? locationsIsPlanningHasAdvertises.push(feature)
-              : locationsIsPlanningNoAdvertises.push(feature);
+              ? locationsIsPlanningHasAdvertisesTemp.push(feature)
+              : locationsIsPlanningNoAdvertisesTemp.push(feature);
           } else {
             existsAdvertises
-              ? locationsIsNotPlanningHasAdvertises.push(feature)
-              : locationsIsNotPlanningNoAdvertises.push(feature);
+              ? locationsIsNotPlanningHasAdvertisesTemp.push(feature)
+              : locationsIsNotPlanningNoAdvertisesTemp.push(feature);
           }
         })
       );
+      locationsIsPlanningNoAdvertises.current = locationsIsPlanningNoAdvertisesTemp;
+      locationsIsPlanningHasAdvertises.current = locationsIsPlanningHasAdvertisesTemp;
+      locationsIsNotPlanningNoAdvertises.current = locationsIsNotPlanningNoAdvertisesTemp;
+      locationsIsNotPlanningHasAdvertises.current = locationsIsNotPlanningHasAdvertisesTemp;
     };
     getAllLocations();
   }, [
@@ -144,16 +139,18 @@ const MapAdsManagementAdmin = () => {
 
   const changeSourceDataLocation = (locationCheckedChange: ELocationCheckedSwitch) => {
     if (locationCheckedChange === ELocationCheckedSwitch.BOTH) {
-      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-        locationsIsNotPlanningNoAdvertises,
-        locationsIsPlanningHasAdvertises,
-        locationsIsPlanningNoAdvertises
+      clusters.current = locationsIsNotPlanningHasAdvertises.current.concat(
+        locationsIsNotPlanningNoAdvertises.current,
+        locationsIsPlanningHasAdvertises.current,
+        locationsIsPlanningNoAdvertises.current
       );
     } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_PLANNING) {
-      clusters.current = locationsIsPlanningHasAdvertises.concat(locationsIsPlanningNoAdvertises);
+      clusters.current = locationsIsPlanningHasAdvertises.current.concat(
+        locationsIsPlanningNoAdvertises.current
+      );
     } else if (locationCheckedChange === ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING) {
-      clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-        locationsIsNotPlanningNoAdvertises
+      clusters.current = locationsIsNotPlanningHasAdvertises.current.concat(
+        locationsIsNotPlanningNoAdvertises.current
       );
     } else {
       clusters.current = [];
@@ -257,10 +254,10 @@ const MapAdsManagementAdmin = () => {
       map.current.on("load", () => {
         if (!map.current) return;
 
-        clusters.current = locationsIsNotPlanningHasAdvertises.concat(
-          locationsIsNotPlanningNoAdvertises,
-          locationsIsPlanningHasAdvertises,
-          locationsIsPlanningNoAdvertises
+        clusters.current = locationsIsNotPlanningHasAdvertises.current.concat(
+          locationsIsNotPlanningNoAdvertises.current,
+          locationsIsPlanningHasAdvertises.current,
+          locationsIsPlanningNoAdvertises.current
         );
 
         const clustersGeojson: GeoJson = {
