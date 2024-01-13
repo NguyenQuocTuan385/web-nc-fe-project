@@ -18,6 +18,7 @@ import TableTemplate from "components/common/TableTemplate";
 import InfoLocation from "./components/InfoLocation";
 import { Header } from "components/common/Header";
 import SearchAppBar from "components/common/Search";
+import SearchAppBarAdvertise from "components/common/SearchAdvertise";
 import AdvertiseService from "services/advertise";
 import { routes } from "routes/routes";
 import styled from "styled-components";
@@ -31,6 +32,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import { ERole } from "models/general";
+import SideBarDCMS from "components/admin/SidebarDCMS";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -50,6 +52,7 @@ const AdvertiseOfLocationManagement = () => {
   const navigate = useNavigate();
   const currentUser: User = useSelector(selectCurrentUser);
   const isWard = currentUser.role.id === ERole.WARD ? true : false;
+  const isDistrict = currentUser.role.id === ERole.DISTRICT ? true : false;
   const { id } = useParams<{ id: string }>();
   const [advertiseList, setAdvertiseList] = useState([]);
   const [infoContract, setInfoContract] = useState<Contract | null>(null);
@@ -160,23 +163,35 @@ const AdvertiseOfLocationManagement = () => {
   }, [searchValue]);
 
   const handleViewAdDetails = (idAdvertise: number) => {
-    isWard
-      ? navigate(`${routes.admin.advertises.wardDetails.replace(":id", `${idAdvertise}`)}`)
-      : navigate(`${routes.admin.advertises.districtDetails.replace(":id", `${idAdvertise}`)}`);
+    if (isWard) {
+      navigate(`${routes.admin.advertises.wardDetails.replace(":id", `${idAdvertise}`)}`);
+    } else if (isDistrict) {
+      navigate(`${routes.admin.advertises.districtDetails.replace(":id", `${idAdvertise}`)}`);
+    } else {
+      navigate(`${routes.admin.advertises.dcms.replace(":id", `${idAdvertise}`)}`);
+    }
   };
 
   const handleEditAdvertise = (idAdvertise: number) => {
-    isWard
-      ? navigate(
-          `${routes.admin.advertises.wardEdit
-            .replace(":locationId", `${id}`)
-            .replace(":advertiseId", `${idAdvertise}`)}`
-        )
-      : navigate(
-          `${routes.admin.advertises.districtEdit
-            .replace(":locationId", `${id}`)
-            .replace(":advertiseId", `${idAdvertise}`)}`
-        );
+    if (isWard) {
+      navigate(
+        `${routes.admin.advertises.wardEdit
+          .replace(":locationId", `${id}`)
+          .replace(":advertiseId", `${idAdvertise}`)}`
+      );
+    } else if (isDistrict) {
+      navigate(
+        `${routes.admin.advertises.districtEdit
+          .replace(":locationId", `${id}`)
+          .replace(":advertiseId", `${idAdvertise}`)}`
+      );
+    } else {
+      navigate(
+        `${routes.admin.advertises.dcmsEdit
+          .replace(":locationId", `${id}`)
+          .replace(":advertiseId", `${idAdvertise}`)}`
+      );
+    }
   };
 
   const handleAddAdvertise = (idAdvertise: number) => {
@@ -236,55 +251,60 @@ const AdvertiseOfLocationManagement = () => {
   })[0];
 
   const goBack = () => {
-    isWard
-      ? navigate(`${routes.admin.locations.ward}`)
-      : navigate(`${routes.admin.locations.district}`);
+    if (isWard) {
+      navigate(`${routes.admin.locations.ward}`);
+    } else if (isDistrict) {
+      navigate(`${routes.admin.locations.district}`);
+    } else {
+      navigate(`${routes.admin.locations.dcms}`);
+    }
   };
 
   return (
     <>
       {/* <Header /> */}
       <div className={classes["advertise-management-container"]}>
-        <SideBarWard>
-          <Box className={classes["container-body"]}>
-            <ButtonBack onClick={() => goBack()}>
-              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-              Trở về
-            </ButtonBack>
-            {advertiseList.length > 0 && (
-              <Box className={classes["search-container"]}>
-                <SearchAppBar onSearch={handleSearch} />
-              </Box>
-            )}
-            <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
+        {currentUser.role.id === ERole.WARD || currentUser.role.id === ERole.DISTRICT ? (
+          <SideBarWard>
+            <Box className={classes["container-body"]}>
+              <ButtonBack onClick={() => goBack()}>
+                <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+                Trở về
+              </ButtonBack>
+              {advertiseList.length > 0 && (
+                <Box className={classes["search-container"]}>
+                  <SearchAppBar onSearch={handleSearch} />
+                </Box>
+              )}
+              <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
 
-            {advertiseList.length > 0 && (
-              <Box className={classes["table-container"]}>
+              {advertiseList.length > 0 && (
                 <Box className={classes["table-container"]}>
-                  <TableTemplate
-                    data={data}
-                    customHeading={customHeading}
-                    customColumns={customColumns}
-                    isActionColumn={true}
-                    onViewDetailsClick={handleViewAdDetails}
-                    onEditClick={handleEditAdvertise}
-                    onAddClick={handleAddAdvertise}
-                  />
-
-                  <Box className={classes.pagination}>
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25, 100]}
-                      component='div'
-                      count={totalElements}
-                      page={Number(currentPage) - 1}
-                      onPageChange={handleChangePage}
-                      rowsPerPage={Number(rowsPerPage)}
-                      labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-                      onRowsPerPageChange={handleChangeRowsPerPage}
+                  <Box className={classes["table-container"]}>
+                    <TableTemplate
+                      data={data}
+                      customHeading={customHeading}
+                      customColumns={customColumns}
+                      isActionColumn={true}
+                      onViewDetailsClick={handleViewAdDetails}
+                      onEditClick={handleEditAdvertise}
+                      onAddClick={handleAddAdvertise}
                     />
-                  </Box>
 
-                  {/* <Box className={classes["pagination-custom"]}>
+                    <Box className={classes.pagination}>
+                      <TablePagination
+                        rowsPerPageOptions={[5, 10, 25, 100]}
+                        component='div'
+                        count={totalElements}
+                        page={Number(currentPage) - 1}
+                        onPageChange={handleChangePage}
+                        rowsPerPage={Number(rowsPerPage)}
+                        labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </Box>
+
+                    {/* <Box className={classes["pagination-custom"]}>
                   <span>{`Hiển thị ${Math.min(
                     Number(currentPage) * itemsPerPage,
                     totalElements
@@ -295,16 +315,77 @@ const AdvertiseOfLocationManagement = () => {
                     onChange={handleChangePage}
                   />
                 </Box> */}
+                  </Box>
                 </Box>
-              </Box>
-            )}
-            {(advertiseList.length === 0 || !advertiseList) && (
-              <ParagraphBody className={classes.noList}>
-                Không có thông tin bảng quảng cáo
-              </ParagraphBody>
-            )}
-          </Box>
-        </SideBarWard>
+              )}
+              {(advertiseList.length === 0 || !advertiseList) && (
+                <ParagraphBody className={classes.noList}>
+                  Không có thông tin bảng quảng cáo
+                </ParagraphBody>
+              )}
+            </Box>
+          </SideBarWard>
+        ) : (
+          <SideBarDCMS>
+            <Box className={classes["container-body"]}>
+              <ButtonBack onClick={() => goBack()}>
+                <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+                Trở về
+              </ButtonBack>
+              {advertiseList.length > 0 && (
+                <Box className={classes["search-container"]}>
+                  <SearchAppBarAdvertise onSearch={handleSearch} />
+                </Box>
+              )}
+              <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
+
+              {advertiseList.length > 0 && (
+                <Box className={classes["table-container"]}>
+                  <Box className={classes["table-container"]}>
+                    <TableTemplate
+                      data={data}
+                      customHeading={customHeading}
+                      customColumns={customColumns}
+                      isActionColumn={true}
+                      onViewDetailsClick={handleViewAdDetails}
+                      onEditClick={handleEditAdvertise}
+                    />
+
+                    <Box className={classes.pagination}>
+                      <TablePagination
+                        rowsPerPageOptions={[5, 10, 25, 100]}
+                        component='div'
+                        count={totalElements}
+                        page={Number(currentPage) - 1}
+                        onPageChange={handleChangePage}
+                        rowsPerPage={Number(rowsPerPage)}
+                        labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </Box>
+
+                    {/* <Box className={classes["pagination-custom"]}>
+                  <span>{`Hiển thị ${Math.min(
+                    Number(currentPage) * itemsPerPage,
+                    totalElements
+                  )} kết quả trên ${totalElements}`}</span>
+                  <Pagination
+                    count={totalPage}
+                    page={Number(currentPage)}
+                    onChange={handleChangePage}
+                  />
+                </Box> */}
+                  </Box>
+                </Box>
+              )}
+              {(advertiseList.length === 0 || !advertiseList) && (
+                <ParagraphBody className={classes.noList}>
+                  Không có thông tin bảng quảng cáo
+                </ParagraphBody>
+              )}
+            </Box>
+          </SideBarDCMS>
+        )}
       </div>
     </>
   );

@@ -104,6 +104,17 @@ export class AdvertiseService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async createAdvertise(data: UpdateAdvertise, api: any): Promise<any> {
+    return await api
+      .post(`${API.ADVERTISE.CREATE}`, data)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        console.log(e);
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default AdvertiseService;
