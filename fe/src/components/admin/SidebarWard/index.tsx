@@ -151,7 +151,7 @@ export default function PersistentDrawerLeft({ children }: any) {
               Cán Bộ{" "}
               {currentUser?.role.id === ERole.WARD
                 ? "Phường"
-                : currentUser?.role.id === ERole.WARD
+                : currentUser?.role.id === ERole.DISTRICT
                   ? "Quận"
                   : "Sở Văn Hóa"}
             </Typography>

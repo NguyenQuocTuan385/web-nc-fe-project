@@ -184,7 +184,7 @@ const DistrictLocationManagement = () => {
           <Box className={classes["container-body"]}>
             <Box className={classes["search-container"]}>
               <SearchAppBar onSearch={handleSearch} />
-              <Button onClick={openFilterDialogHandle} variant='contained'>
+              <Button onClick={openFilterDialogHandle} variant='contained' sx={{ height: "39px" }}>
                 LỌC PHƯỜNG
               </Button>
             </Box>

@@ -198,7 +198,7 @@ const DistrictReportsManagement = () => {
           <Box className={classes["container-body"]}>
             <Box className={classes["search-container"]}>
               <SearchAppBar onSearch={handleSearch} />
-              <Button onClick={openFilterDialogHandle} variant='contained'>
+              <Button onClick={openFilterDialogHandle} variant='contained' sx={{ height: "39px" }}>
                 LỌC PHƯỜNG
               </Button>
             </Box>
@@ -223,6 +223,7 @@ const DistrictReportsManagement = () => {
                     rowsPerPage={Number(rowsPerPage)}
                     labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                    className={classes.pagination}
                   />
                 </Box>
               </Box>
