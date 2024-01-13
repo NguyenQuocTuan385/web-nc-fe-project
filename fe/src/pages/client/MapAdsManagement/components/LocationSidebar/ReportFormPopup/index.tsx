@@ -120,6 +120,8 @@ export default function ReportFormPopup({
       );
     }
 
+    const email = localStorage.getItem("guest_email");
+
     let reportCreate: ReportCreateRequest = {
       reportFormId: formSubmit.reportFormId,
       fullName: formSubmit.fullName,
@@ -127,7 +129,8 @@ export default function ReportFormPopup({
       phone: formSubmit.phone,
       content: formSubmit.content,
       images: JSON.stringify(formSubmit.images),
-      reportTypeName: reportTypeName
+      reportTypeName: reportTypeName,
+      guestEmail: !!email ? email : formSubmit.email
     };
 
     if (reportTypeName === EReportType.ADVERTISE) {
@@ -146,14 +149,19 @@ export default function ReportFormPopup({
 
     ReportClientService.createReport(reportCreate)
       .then((res) => {
+        if (!email) {
+          localStorage.setItem("guest_email", formSubmit.email);
+        }
         setOpenSnackbarAlert(true);
         setAlertContent("Đăng báo cáo thành công");
         setAlertType(AlertType.Success);
+        onClose();
       })
       .catch((err) => {
         setOpenSnackbarAlert(true);
         setAlertContent("Đăng báo cáo thất bại");
         setAlertType(AlertType.Error);
+        console.log(err);
       });
   };
 

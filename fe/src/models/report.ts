@@ -12,6 +12,7 @@ export interface Report {
   id: string;
   fullName: string;
   email: string;
+  guestEmail: string;
   phone: string;
   content: string;
   status: EReportStatus;
@@ -59,6 +60,7 @@ export interface ReportCreateRequest {
   email: string;
   phone: string;
   content: string;
+  guestEmail: string;
   images: string;
   reportTypeName: EReportType;
   address?: string;

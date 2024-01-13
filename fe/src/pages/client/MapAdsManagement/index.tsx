@@ -87,30 +87,27 @@ const MapAdsManagement = () => {
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          // const email = localStorage.getItem("guest_email");
-          // if (email) {
-          //   const res = await ReportService.getReports(
-          //     {
-          //       locationId: location.id,
-          //       pageSize: 999,
-          //       email: email
-          //     },
-          //     intercepts
-          //   );
+          const email = localStorage.getItem("guest_email");
+          if (email) {
+            const res = await ReportClientService.getReports({
+              locationId: location.id,
+              pageSize: 999,
+              email: email
+            });
 
-          //   if (res.content.length > 0) {
-          //     const report: Report = res.content[res.content.length - 1];
-          //     let reportStatus: string;
-          //     if (report.status === EReportStatus.NEW) {
-          //       reportStatus = "Chưa xử lý";
-          //     } else if (report.status === EReportStatus.PROCESSING) {
-          //       reportStatus = "Đang xử lý";
-          //     } else {
-          //       reportStatus = "Đã xử lý";
-          //     }
-          //     location.reportStatus = reportStatus;
-          //   }
-          // }
+            if (res.content.length > 0) {
+              const report: Report = res.content[res.content.length - 1];
+              let reportStatus: string;
+              if (report.status === EReportStatus.NEW) {
+                reportStatus = "Chưa xử lý";
+              } else if (report.status === EReportStatus.PROCESSING) {
+                reportStatus = "Đang xử lý";
+              } else {
+                reportStatus = "Đã xử lý";
+              }
+              location.reportStatus = reportStatus;
+            }
+          }
 
           const existsAdvertises = await LocationClientService.checkExistsAdvertises(location.id);
           location.existsAdvertises = existsAdvertises;
