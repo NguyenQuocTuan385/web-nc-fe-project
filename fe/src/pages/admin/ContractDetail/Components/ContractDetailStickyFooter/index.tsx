@@ -46,6 +46,9 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
     navigate(-1);
   };
 
+  const backHandle = () => {
+    navigate(-1);
+  };
   return (
     <Box>
       <div className={classes.stickyFooterContainer}>
@@ -62,14 +65,24 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
                 />
                 <Heading6 colorName='--red-error'>Chưa được cấp phép</Heading6>
               </Box>
-              <Button
-                variant='contained'
-                className={classes.cancelButton}
-                color='error'
-                onClick={openDeleteDialogHandle}
-              >
-                Hủy bỏ cấp phép
-              </Button>
+              <Box>
+                <Button
+                  variant='contained'
+                  className={classes.backButton}
+                  color='secondary'
+                  onClick={backHandle}
+                >
+                  Trở về
+                </Button>
+                <Button
+                  variant='contained'
+                  className={classes.cancelButton}
+                  color='error'
+                  onClick={openDeleteDialogHandle}
+                >
+                  Hủy bỏ cấp phép
+                </Button>
+              </Box>
             </Box>
           ) : status === EContractStatus.licensed ? (
             <Box className={classes.footerItem}>
@@ -83,9 +96,21 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
                 <Heading6 colorName='--green-600'>Đã được cấp phép</Heading6>
               </Box>
 
-              <Box>
-                <Heading6>Bắt đầu hợp đồng: {startDate?.toString()}</Heading6>
-                <Heading6>Bắt đầu hợp đồng: {endDate?.toString()}</Heading6>
+              <Box className={classes.backContainer}>
+                <Box>
+                  <Button
+                    variant='contained'
+                    className={classes.backButton}
+                    color='secondary'
+                    onClick={backHandle}
+                  >
+                    Trở về
+                  </Button>
+                </Box>
+                <Box>
+                  <Heading6>Bắt đầu hợp đồng: {startDate?.toString()}</Heading6>
+                  <Heading6>Bắt đầu hợp đồng: {endDate?.toString()}</Heading6>
+                </Box>
               </Box>
             </Box>
           ) : (
@@ -99,10 +124,19 @@ function ContractDetailStickyFooter({ startDate, endDate, status, deleteId }: Pr
                 />
                 <Heading6 colorName='--gray-60'>Đã hết hạn</Heading6>
               </Box>
-
-              <Box>
-                <Heading6>Bắt đầu hợp đồng: {startDate?.toString()}</Heading6>
-                <Heading6>Bắt đầu hợp đồng: {endDate?.toString()}</Heading6>
+              <Box className={classes.backContainer}>
+                <Button
+                  variant='contained'
+                  className={classes.backButton}
+                  color='secondary'
+                  onClick={backHandle}
+                >
+                  Trở về
+                </Button>
+                <Box>
+                  <Heading6>Bắt đầu hợp đồng: {startDate?.toString()}</Heading6>
+                  <Heading6>Bắt đầu hợp đồng: {endDate?.toString()}</Heading6>
+                </Box>
               </Box>
             </Box>
           )}

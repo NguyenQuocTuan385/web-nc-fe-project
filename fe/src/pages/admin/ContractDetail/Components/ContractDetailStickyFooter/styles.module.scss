@@ -28,3 +28,13 @@
 .stickyFooterContainer {
   position: relative;
 }
+
+.backButton {
+  background-color: var(--gray-50) !important;
+  margin-right: 10px !important;
+}
+
+.backContainer {
+  display: flex;
+  align-items: center;
+}

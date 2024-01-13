@@ -140,7 +140,7 @@ const DistrictLocationManagement = () => {
 
   const data = locationList.map((location: any, index: number) => {
     return {
-      stt: location.id,
+      stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
       id: location.id,
       address: location.address,
       adsForm: location.adsForm.name,

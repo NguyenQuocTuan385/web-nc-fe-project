@@ -18,16 +18,6 @@ export class AdvertiseService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getAdvertisesByLocationIdForClient(id: number, data: GetAdvertises): Promise<any> {
-    return await api
-      .get(`${API.ADVERTISE.DEFAULT.replace(":id", `${id}`)}`, { params: data })
-      .then((res) => {
-        return Promise.resolve(res.data);
-      })
-      .catch((e) => {
-        return Promise.reject(e?.response?.data);
-      });
-  }
   static async updateAdvertiseLicense(
     id: number,
     data: UpdateAdvertiseStatus,
@@ -101,6 +91,28 @@ export class AdvertiseService {
         return Promise.resolve(res.data);
       })
       .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async createAdvertise(data: UpdateAdvertise, api: any): Promise<any> {
+    return await api
+      .post(`${API.ADVERTISE.CREATE}`, data)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        console.log(e);
+        return Promise.reject(e?.response?.data);
+      });
+  }
+  static async deleteAdvertiseById(id: number, api: any): Promise<any> {
+    return await api
+      .delete(`${API.ADVERTISE.DELETE.replace(":id", `${id}`)}`)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        console.log(e);
         return Promise.reject(e?.response?.data);
       });
   }

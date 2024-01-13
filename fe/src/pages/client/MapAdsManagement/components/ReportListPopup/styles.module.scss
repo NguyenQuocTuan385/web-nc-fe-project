@@ -18,6 +18,7 @@
 .headerTable {
   font-weight: bold !important;
   padding: 10px !important;
+  color: white !important;
 }
 
 .dataTable {
@@ -38,4 +39,8 @@
 .red {
   color: var(--red-error);
   font-weight: bold;
+}
+
+.tableHead {
+  background-color: var(--blue-500);
 }

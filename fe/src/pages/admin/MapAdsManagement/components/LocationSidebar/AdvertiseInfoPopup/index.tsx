@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import ContractService from "services/contract";
 import { Contract } from "models/contract";
 import { DateHelper } from "helpers/date";
+import useIntercepts from "hooks/useIntercepts";
 
 const AdvertisePopup = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -30,13 +31,13 @@ interface AdvertisePopupProps {
 }
 export default function AdvertiseInfoPopup({ onClose, open, advertise }: AdvertisePopupProps) {
   const [contract, setContract] = useState<Contract | null>(null);
+  const intercept = useIntercepts();
+
   useEffect(() => {
     const getContracts = async () => {
-      ContractService.getContractsByAdvertise(advertise.id, { pageSize: 999 })
+      ContractService.findContractLicensingByAdvertiseId(advertise.id, { pageSize: 999 }, intercept)
         .then((res) => {
-          const contractsTemp: Contract[] = res.content;
-          const filteredContracts = contractsTemp.filter((item: Contract) => item.status === 1);
-          filteredContracts.forEach((item: Contract) => setContract(item));
+          setContract(res);
         })
         .catch((err) => {});
     };

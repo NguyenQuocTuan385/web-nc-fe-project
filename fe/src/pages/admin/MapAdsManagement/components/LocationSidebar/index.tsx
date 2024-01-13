@@ -9,6 +9,7 @@ import { Advertise } from "models/advertise";
 import ImagesSlider from "components/common/ImagesSlider";
 import Heading3 from "components/common/text/Heading3";
 import images from "config/images";
+import useIntercepts from "hooks/useIntercepts";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -19,12 +20,12 @@ interface LocalAddressPopoverProps {
 const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopoverProps) => {
   const [advertises, setAdvertises] = useState<Advertise[]>([]);
   const [imagesLocation, setImagesLocation] = useState<string[]>([]);
-
+  const intercept = useIntercepts();
   useEffect(() => {
     const getAllAdvertises = async () => {
       if (!location) return;
       setImagesLocation(JSON.parse(location.images));
-      AdvertiseService.getAdvertisesByLocationIdForClient(location.id, { pageSize: 999 })
+      AdvertiseService.getAdvertisesByLocationId(location.id, { pageSize: 999 }, intercept)
         .then((res) => {
           setAdvertises(res.content);
         })

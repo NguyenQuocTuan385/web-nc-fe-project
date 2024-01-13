@@ -15,6 +15,11 @@ import ContractService from "services/contract";
 import Heading4 from "components/common/text/Heading4";
 import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
+import SideBarDCMS from "components/admin/SidebarDCMS";
+import { User } from "models/user";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "reduxes/Auth";
+import { ERole } from "models/general";
 
 const InfoAdsBox = styled(Box)(() => ({
   display: "flex",
@@ -92,7 +97,7 @@ export const AdvertiseDetail = () => {
 
   useEffect(() => {
     const getContractByAdvertiseId = async () => {
-      ContractService.getContractsByAdvertiseOne(Number(id), {}, intercept)
+      ContractService.findContractLicensingByAdvertiseId(Number(id), {}, intercept)
         .then((res) => {
           setInfoContract({
             companyName: res.companyName,
@@ -115,84 +120,109 @@ export const AdvertiseDetail = () => {
     navigate(-1);
   };
 
+  const currentUser: User = useSelector(selectCurrentUser);
+
   return (
     <Box>
       {/* <Header /> */}
       <div className={classes["advertise-detail-container"]}>
-        <SideBarWard>
-          <Box className={classes["container-body"]}>
-            <ButtonBack onClick={() => goBack()}>
-              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-              Trở về
-            </ButtonBack>
-            {infoAds && (
-              <BoxFlex>
-                <img
-                  src={infoAds.images}
-                  className={classes.image}
-                  alt='Bảng quảng cáo'
-                  width={"50%"}
-                  height={"250px"}
-                />
-                <Box
-                  width={"50%"}
-                  ml={"15px"}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    height: "350px",
-                    alignItems: "center",
-                    padding: "15px"
-                  }}
-                >
-                  {infoAds && <InfoAdvertise data={infoAds} />}
-                </Box>
-              </BoxFlex>
-            )}
+        {currentUser.role.id === ERole.WARD || currentUser.role.id === ERole.DISTRICT ? (
+          <SideBarWard>
+            <Box className={classes["container-body"]}>
+              <ButtonBack onClick={() => goBack()}>
+                <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+                Trở về
+              </ButtonBack>
+              {infoAds && !infoContract && (
+                <>
+                  <Box>
+                    <img
+                      src={infoAds.images}
+                      className={classes.imageLarge}
+                      alt='Bảng quảng cáo'
+                      width={"100%"}
+                      height={"250px"}
+                      style={{ width: "100% !important;" }}
+                    />
+                  </Box>
 
-            {infoContract && (
-              <BoxFlex
-                sx={{
-                  justifyContent: "flex-end",
-                  marginTop: "24px"
-                }}
-              >
-                <img
-                  className={`${classes.image} ${classes.smallImage}`}
-                  src={infoContract.images}
-                  alt='Hình ảnh công ty'
-                  width={"50%"}
-                  height={"250px"}
-                />
-                <Box
-                  width={"50%"}
-                  ml={"15px"}
+                  <Box
+                    width={"100%"}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      height: "350px",
+                      alignItems: "center",
+                      padding: "15px"
+                    }}
+                  >
+                    {infoAds && <InfoAdvertise data={infoAds} />}
+                  </Box>
+                </>
+              )}
+
+              {infoAds && infoContract && (
+                <BoxFlex>
+                  <img
+                    src={infoAds.images}
+                    className={classes.image}
+                    alt='Bảng quảng cáo'
+                    width={"50%"}
+                    height={"250px"}
+                  />
+                  <Box
+                    width={"50%"}
+                    ml={"15px"}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      height: "350px",
+                      alignItems: "center",
+                      padding: "15px"
+                    }}
+                  >
+                    {infoAds && <InfoAdvertise data={infoAds} />}
+                  </Box>
+                </BoxFlex>
+              )}
+
+              {infoContract && (
+                <BoxFlex
                   sx={{
-                    display: "flex",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    height: "350px",
-                    alignItems: "center",
-                    padding: "15px"
+                    justifyContent: "flex-end",
+                    marginTop: "24px"
                   }}
                 >
-                  {infoContract && infoContract && <InfoContract data={infoContract} />}
-                </Box>
-              </BoxFlex>
-            )}
+                  <img
+                    className={`${classes.image} ${classes.smallImage}`}
+                    src={infoContract.images}
+                    alt='Hình ảnh công ty'
+                    width={"50%"}
+                    height={"250px"}
+                  />
+                  <Box
+                    width={"50%"}
+                    ml={"15px"}
+                    sx={{
+                      display: "flex",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      height: "350px",
+                      alignItems: "center",
+                      padding: "15px"
+                    }}
+                  >
+                    {infoContract && infoContract && <InfoContract data={infoContract} />}
+                  </Box>
+                </BoxFlex>
+              )}
+            </Box>
 
             <Box mt={"15px"}>
-              <Heading4>Vị trí trên bản đồ</Heading4>
-              <img
-                className={classes.imageMap}
-                src='https://inuvcuon.vn/images/2018/08/voi-nhung-cong-cu-rat-huu-ich-ban-da-co-the-in-truc-tiep-ngay-tren-google-map.jpg'
-                alt='Bản đồ'
-                width={"100%"}
-                height={"250px"}
-              />
-
               {infoContract && (
                 <Box mt={"15px"}>
                   <Typography>
@@ -205,9 +235,136 @@ export const AdvertiseDetail = () => {
                   </Typography>
                 </Box>
               )}
+
+              {infoContract && (
+                <BoxFlex
+                  sx={{
+                    justifyContent: "flex-end",
+                    marginTop: "24px"
+                  }}
+                >
+                  <img
+                    className={`${classes.image} ${classes.smallImage}`}
+                    src={infoContract.images}
+                    alt='Hình ảnh công ty'
+                    width={"50%"}
+                    height={"250px"}
+                  />
+                  <Box
+                    width={"50%"}
+                    ml={"15px"}
+                    sx={{
+                      display: "flex",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      height: "350px",
+                      alignItems: "center",
+                      padding: "15px"
+                    }}
+                  >
+                    {infoContract && infoContract && <InfoContract data={infoContract} />}
+                  </Box>
+                </BoxFlex>
+              )}
+
+              <Box mt={"15px"}>
+                {infoContract && (
+                  <Box mt={"15px"}>
+                    <Typography>
+                      <span className={classes.title}>Bắt đầu hợp đồng: </span>{" "}
+                      <span>{DateHelper.formatDateToDDMMYYYY(infoContract.startAt)}</span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes.title}>Kết thúc hợp đồng: </span>{" "}
+                      <span>{DateHelper.formatDateToDDMMYYYY(infoContract.endAt)}</span>
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
             </Box>
-          </Box>
-        </SideBarWard>
+          </SideBarWard>
+        ) : (
+          <SideBarDCMS>
+            <Box className={classes["container-body"]}>
+              <ButtonBack onClick={() => goBack()}>
+                <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+                Trở về
+              </ButtonBack>
+              {infoAds && (
+                <BoxFlex>
+                  <img
+                    src={infoAds.images}
+                    className={classes.image}
+                    alt='Bảng quảng cáo'
+                    width={"50%"}
+                    height={"250px"}
+                  />
+                  <Box
+                    width={"50%"}
+                    ml={"15px"}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      height: "350px",
+                      alignItems: "center",
+                      padding: "15px"
+                    }}
+                  >
+                    {infoAds && <InfoAdvertise data={infoAds} />}
+                  </Box>
+                </BoxFlex>
+              )}
+
+              {infoContract && (
+                <BoxFlex
+                  sx={{
+                    justifyContent: "flex-end",
+                    marginTop: "24px"
+                  }}
+                >
+                  <img
+                    className={`${classes.image} ${classes.smallImage}`}
+                    src={infoContract.images}
+                    alt='Hình ảnh công ty'
+                    width={"50%"}
+                    height={"250px"}
+                  />
+                  <Box
+                    width={"50%"}
+                    ml={"15px"}
+                    sx={{
+                      display: "flex",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      height: "350px",
+                      alignItems: "center",
+                      padding: "15px"
+                    }}
+                  >
+                    {infoContract && infoContract && <InfoContract data={infoContract} />}
+                  </Box>
+                </BoxFlex>
+              )}
+
+              <Box mt={"15px"}>
+                {infoContract && (
+                  <Box mt={"15px"}>
+                    <Typography>
+                      <span className={classes.title}>Bắt đầu hợp đồng: </span>{" "}
+                      <span>{DateHelper.formatDateToDDMMYYYY(infoContract.startAt)}</span>
+                    </Typography>
+                    <Typography>
+                      <span className={classes.title}>Kết thúc hợp đồng: </span>{" "}
+                      <span>{DateHelper.formatDateToDDMMYYYY(infoContract.endAt)}</span>
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </SideBarDCMS>
+        )}
       </div>
     </Box>
   );

@@ -24,18 +24,22 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getContractsByAdvertise(id: number, data: GetContract): Promise<any> {
+  static async getContractsByAdvertise(id: number, data: GetContract, api: any): Promise<any> {
     return await api
       .get(`${API.CONTRACT.BY_ADVERTISE_ID.replace(":id", `${id}`)}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
 
-  static async getContractsByAdvertiseOne(id: number, data: GetContract, api: any): Promise<any> {
+  static async findContractLicensingByAdvertiseId(
+    id: number,
+    data: GetContract,
+    api: any
+  ): Promise<any> {
     return await api
       .get(`${API.CONTRACT.BY_ADVERTISE_ID_ONE.replace(":id", `${id}`)}`, { params: data })
       .then((res: any) => {
@@ -82,10 +86,10 @@ export class ContractService {
   static async getContractByPropertyAndParent(data: GetContract, api: any): Promise<any> {
     return await api
       .get(`${API.CONTRACT.CONTRACTBYPROPERTY}`, { params: data })
-      .then((res:any) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e:any) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

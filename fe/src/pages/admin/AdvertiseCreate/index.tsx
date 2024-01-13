@@ -25,10 +25,10 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 import { InfoContract } from "../AdvertiseDetail/components/InfoContract";
-import SideBarWard from "components/admin/SidebarWard";
+import SideBarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
 import { routes } from "routes/routes";
-import { Advertise, AdvertiseEditRequest, AdvertiseType } from "models/advertise";
+import { Advertise, AdvertiseEditRequest, AdvertiseType, UpdateAdvertise } from "models/advertise";
 import UploadImage from "components/common/UploadImage";
 import ContractService from "services/contract";
 import AdvertiseTypeService from "services/advertiseType";
@@ -42,7 +42,6 @@ import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import AdvertiseService from "services/advertise";
-import SideBarDCMS from "components/admin/SidebarDCMS";
 
 interface FormData {
   licensing: number;
@@ -52,7 +51,6 @@ interface FormData {
   locationId: number;
   userId: number;
   pillarQuantity: number;
-  content: string;
   imageUrls: any[];
 }
 
@@ -62,7 +60,6 @@ const schema: any = Yup.object().shape({
   height: Yup.number().required("Độ cao là trường bắt buộc"),
   adsTypeId: Yup.number().required("Loại bảng quảng cáo là trường bắt buộc"),
   pillarQuantity: Yup.number().required("Số lượng trụ/bảng là trường bắt buộc"),
-  content: Yup.string().required("Lí do thay đổi là trường bắt buộc"),
   imageUrls: Yup.array().required("Vui lòng chọn ít nhất 1 ảnh")
 });
 
@@ -76,7 +73,6 @@ const ButtonSubmit = styled(Button)(
 );
 
 interface FormEditAdvertiseProps {
-  data: any;
   adsTypes: AdvertiseType[];
   createAdvertiseEditRequest: (isSuccess: boolean) => void;
   locationId: number;
@@ -84,11 +80,9 @@ interface FormEditAdvertiseProps {
 }
 
 const MyForm: React.FC<FormEditAdvertiseProps> = ({
-  data,
   adsTypes,
   createAdvertiseEditRequest,
-  locationId,
-  advertiseId
+  locationId
 }: any) => {
   const {
     control,
@@ -102,9 +96,8 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
   const currentUser: User = useSelector(selectCurrentUser);
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [originalImages, setOriginalImages] = useState(data.images);
+  const [originalImages, setOriginalImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState<Array<any>>([]);
-  const isDepartment = currentUser.role.id === ERole.DEPARTMENT ? true : false;
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -118,11 +111,10 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     createAdvertiseEditRequest(isSuccess);
   };
 
-  const createAdvertiseEdit = async (
-    advertiseId: number,
-    advertiseEditRequest: AdvertiseEditRequest
-  ) => {
-    AdvertiseEditService.createAdvertiseEditRequest(locationId, advertiseEditRequest)
+  const intercept = useIntercepts();
+
+  const createAdvertiseEdit = async (advertiseEditRequest: UpdateAdvertise) => {
+    AdvertiseService.createAdvertise(advertiseEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
       })
@@ -166,12 +158,14 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
 
     const dataSubmit = {
       ...formSubmit,
-      imageUrls: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
+      images: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
       userId: currentUser.id,
-      locationId: locationId
+      licensing: formSubmit.licensing === 1 ? true : false
     };
 
-    createAdvertiseEdit(locationId, dataSubmit);
+    console.log(dataSubmit);
+
+    createAdvertiseEdit(dataSubmit);
   };
 
   return (
@@ -182,7 +176,6 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         <Controller
           control={control}
           name='adsTypeId'
-          defaultValue={data.adsType.id}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
               <Select
@@ -192,9 +185,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                 inputProps={{ "aria-label": "Without label" }}
                 fullWidth
               >
-                <MenuItem value='' disabled>
-                  Chọn hình thức quảng cáo
-                </MenuItem>
+                <MenuItem>Chọn hình thức quảng cáo</MenuItem>
                 {adsTypes.length > 0 &&
                   adsTypes.map((adsType: AdvertiseType) => (
                     <MenuItem value={adsType.id} key={adsType.id}>
@@ -216,7 +207,6 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         <Controller
           control={control}
           name='licensing'
-          defaultValue={data.licensing}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
               <Select
@@ -226,9 +216,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                 inputProps={{ "aria-label": "Without label" }}
                 fullWidth
               >
-                <MenuItem value='' disabled>
-                  Chọn tình trạng cấp phép
-                </MenuItem>
+                <MenuItem>Chọn tình trạng cấp phép</MenuItem>
                 <MenuItem value='false'>Chưa cấp phép</MenuItem>
                 <MenuItem value='true'>Đã cấp phép</MenuItem>
               </Select>
@@ -248,7 +236,6 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
             <Controller
               control={control}
               name='width'
-              defaultValue={data.width}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
                   <TextField
@@ -275,7 +262,6 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
             <Controller
               control={control}
               name='height'
-              defaultValue={data.height}
               render={({ field }) => (
                 <div className={classes["input-error-container"]}>
                   <TextField
@@ -306,7 +292,6 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         <Controller
           control={control}
           name='pillarQuantity'
-          defaultValue={data.pillarQuantity ? data.pillarQuantity : 0}
           render={({ field }) => (
             <div className={classes["input-error-container"]}>
               <TextField
@@ -324,33 +309,6 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
           )}
         />
       </Box>
-
-      {/* Lý do chỉnh sửa */}
-      {/* {(currentUser.role.id === ERole.WARD || currentUser.role.id === ERole.DISTRICT) && ( */}
-      <Box className={classes["input-container"]}>
-        <label>Lý do chỉnh sửa:</label>
-        <Controller
-          control={control}
-          // disabled={isDepartment}
-          name='content'
-          defaultValue=''
-          render={({ field }) => (
-            <div className={classes["input-error-container"]}>
-              {/* Replace textarea with the Editor component */}
-              <Editor
-                placeholder='Nhập lí do chỉnh sửa...'
-                getValueOnChange={(html: string) => field.onChange(html)}
-                content={field.value}
-                isAllowedType={true}
-              />
-              {errors.content && (
-                <div className={classes["error-text"]}>{errors.content.message}</div>
-              )}
-            </div>
-          )}
-        />
-      </Box>
-      {/* )} */}
 
       {/* Hình ảnh */}
       <Box className={classes["input-container"]}>
@@ -374,12 +332,12 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='img Loation'
+                        alt='Image Loation'
                       />
                     );
                   })}
 
-                {data.images.length > 0 &&
+                {/* {data.images.length > 0 &&
                   selectedImages.length < 1 &&
                   data.images.map((image: string, index: number) => {
                     return (
@@ -392,12 +350,15 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='img Loation'
+                        alt='Image Loation'
                       />
                     );
-                  })}
+                  })} */}
               </Box>
-              <Button onClick={handleOpenDialog} variant='contained' style={{ marginTop: "15px" }}>
+              <Button
+                onClick={handleOpenDialog}
+                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
+              >
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -434,7 +395,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
                   </Button>
 
                   <Button onClick={handleCloseDialog} style={{ color: "green" }}>
-                    Lưu thay đổi
+                    Tạo quảng cáo
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -447,7 +408,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         />
       </Box>
 
-      <ButtonSubmit type='submit'> Gửi</ButtonSubmit>
+      <ButtonSubmit type='submit'>Tạo quảng cáo</ButtonSubmit>
     </form>
   );
 };
@@ -466,66 +427,17 @@ const IconButtonBack = styled(IconButton)(() => ({
   }
 }));
 
-interface InfoContract {
-  companyName: string;
-  companyEmail: string;
-  companyPhone: string;
-  companyAddress: string;
-  images: string;
-  startAt: string;
-  endAt: string;
-}
-
-export const AdvertiseEdit = () => {
+export const AdvertiseCreate = () => {
   const navigate = useNavigate();
   const { locationId, advertiseId } = useParams<{ locationId: string; advertiseId: string }>();
   const currentUser: User = useSelector(selectCurrentUser);
-  const [infoContract, setInfoContract] = useState<InfoContract | null>(null);
-  const [infoAds, setInfoAds] = useState<Advertise | null>(null);
   const [adsTypes, setAdsTypes] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
   const intercept = useIntercepts();
 
   const goBack = () => {
-    if (currentUser.role.id === ERole.WARD)
-      navigate(`${routes.admin.advertises.wardOfLocation.replace(":id", `${locationId}`)}`);
-    else if (currentUser.role.id === ERole.DISTRICT)
-      navigate(`${routes.admin.advertises.districtOfLocation.replace(":id", `${locationId}`)}`);
-    else navigate(`${routes.admin.locations.dcmsDetail.replace(":id", `${locationId}`)}`);
+    navigate(`${routes.admin.locations.dcmsDetail.replace(":id", `${locationId}`)}`);
   };
-
-  useEffect(() => {
-    const getContractByAdvertiseId = async () => {
-      ContractService.findContractLicensingByAdvertiseId(Number(advertiseId), {}, intercept)
-        .then((res) => {
-          setInfoContract({
-            companyName: res.companyName,
-            companyAddress: res.companyAddress,
-            companyEmail: res.companyEmail,
-            companyPhone: res.companyPhone,
-            images: res.images,
-            startAt: res.startAt,
-            endAt: res.endAt
-          });
-
-          setInfoAds({
-            ...res.advertise,
-            images: [res.advertise.images]
-          });
-        })
-        .catch((e) => {
-          // Lỗi khi không có contract --> Call API lấy chi tiết quảng cáo
-          AdvertiseService.getAdvertisesById(Number(advertiseId), intercept).then((res) => {
-            setInfoAds({
-              ...res,
-              images: [res.images]
-            });
-          });
-          console.log(e);
-        });
-    };
-    getContractByAdvertiseId();
-  }, []);
 
   useEffect(() => {
     AdvertiseTypeService.getAllAdvertiseType({}, intercept)
@@ -545,159 +457,37 @@ export const AdvertiseEdit = () => {
     <Box>
       {/* <Header /> */}
       <div className={classes["advertise-edit-container"]}>
-        {currentUser.role.id === ERole.WARD || currentUser.role.id === ERole.DISTRICT ? (
-          <SideBarWard>
-            <Box className={classes["container-body"]}>
-              <ButtonBack onClick={() => goBack()}>
-                <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-                Trở về
-              </ButtonBack>
+        <SideBarDCMS>
+          <Box className={classes["container-body"]}>
+            <ButtonBack onClick={() => goBack()}>
+              <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
+              Trở về
+            </ButtonBack>
 
-              {!!infoContract && (
-                <Box>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    {infoContract && (
-                      <img
-                        className={classes.image}
-                        src={infoContract.images}
-                        alt='Hình ảnh công ty'
-                        width={"50%"}
-                        height={"250px"}
-                      />
-                    )}
-                    <Box
-                      sx={{
-                        marginLeft: "24px"
-                      }}
-                    >
-                      <InfoContract data={infoContract} />
-                      <Typography>
-                        <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
-                        <span>{infoContract.startAt}</span>
-                      </Typography>
-                      <Typography>
-                        <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
-                        <span>{infoContract.endAt}</span>
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-
-              {!!infoAds && (
-                <Box mt='30px'>
-                  <Heading2>Thông tin quảng cáo</Heading2>
-                  <MyForm
-                    data={infoAds}
-                    createAdvertiseEditRequest={handleGetSuccessState}
-                    adsTypes={adsTypes}
-                    locationId={Number(locationId)}
-                    advertiseId={Number(advertiseId)}
-                  />
-                </Box>
-              )}
-
-              {!!infoAds && (
-                <Snackbar
-                  open={isCreateSuccess !== null}
-                  autoHideDuration={3000}
-                  onClose={() => setIsCreateSuccess(null)}
-                >
-                  <Alert
-                    severity={isCreateSuccess ? "success" : "error"}
-                    onClose={() => setIsCreateSuccess(null)}
-                  >
-                    {isCreateSuccess
-                      ? "Yêu cầu chỉnh sửa thành công"
-                      : "Yêu cầu chỉnh sửa thất bại"}
-                  </Alert>
-                </Snackbar>
-              )}
-
-              {!infoAds && !infoContract && (
-                <ParagraphBody className={classes.noList}>
-                  Không có thông tin bảng quảng cáo
-                </ParagraphBody>
-              )}
+            <Box mt='30px'>
+              <Heading2>Thông tin quảng cáo</Heading2>
+              <MyForm
+                createAdvertiseEditRequest={handleGetSuccessState}
+                adsTypes={adsTypes}
+                locationId={Number(locationId)}
+                advertiseId={Number(advertiseId)}
+              />
             </Box>
-          </SideBarWard>
-        ) : (
-          <SideBarDCMS>
-            <Box className={classes["container-body"]}>
-              <ButtonBack onClick={() => goBack()}>
-                <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
-                Trở về
-              </ButtonBack>
 
-              {!!infoContract && (
-                <Box>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    {infoContract && (
-                      <img
-                        className={classes.image}
-                        src={infoContract.images}
-                        alt='Hình ảnh công ty'
-                        width={"50%"}
-                        height={"250px"}
-                      />
-                    )}
-                    <Box
-                      sx={{
-                        marginLeft: "24px"
-                      }}
-                    >
-                      <InfoContract data={infoContract} />
-                      <Typography>
-                        <span className={classes.title}>Ngày bắt đầu hợp đồng: </span>{" "}
-                        <span>{infoContract.startAt}</span>
-                      </Typography>
-                      <Typography>
-                        <span className={classes.title}>Ngày kết thúc hợp đồng: </span>{" "}
-                        <span>{infoContract.endAt}</span>
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
-
-              {!!infoAds && (
-                <Box mt='30px'>
-                  <Heading2>Thông tin quảng cáo</Heading2>
-                  <MyForm
-                    data={infoAds}
-                    createAdvertiseEditRequest={handleGetSuccessState}
-                    adsTypes={adsTypes}
-                    locationId={Number(locationId)}
-                    advertiseId={Number(advertiseId)}
-                  />
-                </Box>
-              )}
-
-              {!!infoAds && (
-                <Snackbar
-                  open={isCreateSuccess !== null}
-                  autoHideDuration={3000}
-                  onClose={() => setIsCreateSuccess(null)}
-                >
-                  <Alert
-                    severity={isCreateSuccess ? "success" : "error"}
-                    onClose={() => setIsCreateSuccess(null)}
-                  >
-                    {isCreateSuccess
-                      ? "Yêu cầu chỉnh sửa thành công"
-                      : "Yêu cầu chỉnh sửa thất bại"}
-                  </Alert>
-                </Snackbar>
-              )}
-
-              {!infoAds && !infoContract && (
-                <ParagraphBody className={classes.noList}>
-                  Không có thông tin bảng quảng cáo
-                </ParagraphBody>
-              )}
-            </Box>
-          </SideBarDCMS>
-        )}
+            <Snackbar
+              open={isCreateSuccess !== null}
+              autoHideDuration={3000}
+              onClose={() => setIsCreateSuccess(null)}
+            >
+              <Alert
+                severity={isCreateSuccess ? "success" : "error"}
+                onClose={() => setIsCreateSuccess(null)}
+              >
+                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+              </Alert>
+            </Snackbar>
+          </Box>
+        </SideBarDCMS>
       </div>
     </Box>
   );

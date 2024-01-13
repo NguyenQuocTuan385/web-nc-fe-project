@@ -130,6 +130,8 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     locationId: number,
     locationEditRequest: LocationEditByCDMSRequest
   ) => {
+    console.log(locationId + "-------------------------- ");
+    console.log(locationEditRequest);
     LocationEditService.updateLocationByCDMS(locationId, locationEditRequest)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -178,6 +180,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       propertyId: data.property.id,
       userId: currentUser.id
     };
+    console.log(dataSubmit);
 
     createLocationEdit(locationId, dataSubmit);
   };
@@ -398,7 +401,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
@@ -416,15 +419,12 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
               </Box>
-              <Button
-                onClick={handleOpenDialog}
-                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
-              >
+              <Button onClick={handleOpenDialog} style={{ marginTop: "15px" }} variant='contained'>
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>

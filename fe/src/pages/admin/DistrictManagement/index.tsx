@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/Search";
+import SearchAppBar from "components/common/SearchDCMS";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -90,13 +90,14 @@ export default function DistrictManagement() {
     return {
       stt: index + 1,
       id: district.id,
+      city: "Thành phố Hồ Chí Minh",
       name: district.name,
       code: district.code
     };
   });
 
-  const customHeading = ["STT", "ID", "Mã quận", "Tên quận"];
-  const customColumns = ["stt", "id", "code", "name"];
+  const customHeading = ["STT", "Tên quận", "Thành phố"];
+  const customColumns = ["stt", "name", "city"];
 
   const handleViewWard = (idProperty: number) => {
     navigate(`${routes.admin.properties.ward.replace(":id", idProperty.toString())}`);

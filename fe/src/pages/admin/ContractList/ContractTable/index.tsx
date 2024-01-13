@@ -157,7 +157,7 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
         <Table className={classes.sizeTable} aria-label='simple table'>
           <TableHead className={classes["table-head"]}>
             <TableRow>
-              <TableCell className={classes.headerTable}>ID</TableCell>
+              <TableCell className={classes.headerTable}>STT</TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Loại bảng quảng cáo
               </TableCell>
@@ -185,10 +185,10 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataList.map((contract) => (
+            {dataList.map((contract, index) => (
               <TableRow key={contract.id} className={classes.rowTable}>
                 <TableCell component='th' align='center' scope='row'>
-                  {contract.id}
+                  {(Number(currentPage) - 1) * Number(rowsPerPage) + index + 1}
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable} scope='row'>
                   {contract.advertise.adsType.name}
@@ -239,7 +239,7 @@ export default function ContractTable({ propertyId, status, fieldSearch }: Filte
                 </TableCell>
               </TableRow>
             ))}
-            {emptyRows > 0 && (
+            {totalElements === 0 && (
               <TableRow style={{ height: 73 }}>
                 <TableCell colSpan={9} align='center'>
                   Không có dữ liệu

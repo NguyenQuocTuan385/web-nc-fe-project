@@ -18,7 +18,8 @@ import useIntercepts from "hooks/useIntercepts";
 import DistrictService from "services/district";
 import { User } from "models/user";
 import { selectCurrentUser } from "reduxes/Auth";
-import { Report } from "models/report";
+import { EReportType, Report } from "models/report";
+import { DateHelper } from "helpers/date";
 
 const DistrictReportsManagement = () => {
   const navigate = useNavigate();
@@ -136,14 +137,38 @@ const DistrictReportsManagement = () => {
 
   const data = reportList.map((report: Report, index: number) => {
     return {
-      stt: report.id,
+      ...report,
+      stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
       objectStatus: { value: report.status, name: report.status ? "Đã xử lí" : "Chưa xử lí" },
-      ...report
+      reportTypeName:
+        report.reportTypeName === EReportType.ADVERTISE ? "Bảng quảng cáo" : "Điểm đặt quảng cáo",
+      createdAt: DateHelper.formatDateToDDMMYYYY(report.createdAt),
+      address:
+        report.reportTypeName === EReportType.LOCATION
+          ? report.address
+          : report.advertise?.location.address
     };
   });
 
-  const customHeading = ["ID", "Email", "Tên", "Điện thoại", "Tình trạng xử lý"];
-  const customColumns = ["stt", "email", "fullName", "phone", "objectStatus"];
+  const customHeading = [
+    "STT",
+    "Loại báo cáo",
+    "Email",
+    "Tên",
+    "Địa chỉ",
+    "Thời điểm gửi",
+    "Tình trạng xử lý"
+  ];
+  const customColumns = [
+    "stt",
+    "reportTypeName",
+    "id",
+    "email",
+    "fullName",
+    "address",
+    "createdAt",
+    "objectStatus"
+  ];
 
   const handleSearch = (query: string) => {
     setSearchValue(query);

@@ -16,14 +16,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
 import classes from "./styles.module.scss";
 import { EReportStatus, EReportType, Report } from "models/report";
-import ReportService from "services/report";
 import { Error } from "@mui/icons-material";
 import Heading4 from "components/common/text/Heading4";
 import { DateHelper } from "helpers/date";
 import ReportViewPopup from "./ReportViewPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import useIntercepts from "hooks/useIntercepts";
+import ReportClientService from "services/reportClient";
+
 interface ReportInfoPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -35,17 +35,19 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
   const [reports, setReports] = useState<Report[]>([]);
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<Report | null>(null);
-  const intercept = useIntercepts();
 
   useEffect(() => {
     const getReportsUser = async () => {
-      ReportService.getReports({ pageSize: 999, email: "nguyenvana@gmail.com" }, intercept)
-        .then((res) => {
-          setReports(res.content);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const email = localStorage.getItem("guest_email");
+      if (email) {
+        ReportClientService.getReports({ pageSize: 999, email: email })
+          .then((res) => {
+            setReports(res.content);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     };
     getReportsUser();
   }, []);
@@ -72,9 +74,9 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
       <DialogContent dividers>
         <TableContainer component={Paper} className={classes.tableContainer}>
           <Table className={classes.sizeTable} aria-label='simple table'>
-            <TableHead>
+            <TableHead className={classes.tableHead}>
               <TableRow>
-                <TableCell>STT</TableCell>
+                <TableCell className={classes.headerTable}>STT</TableCell>
                 <TableCell align='left' className={classes.headerTable} style={{ width: 400 }}>
                   Địa điểm báo cáo
                 </TableCell>
@@ -96,50 +98,58 @@ const ReportInfoPopup = ({ setOpen, open }: ReportInfoPopupProps) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reports.map((item, index) => (
-                <TableRow key={index} className={classes.rowTable}>
-                  <TableCell component='th' scope='row'>
-                    {index + 1}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {item.reportTypeName === EReportType.LOCATION
-                      ? item.address
-                      : item.advertise?.location.address}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {item.reportTypeName === EReportType.LOCATION ? "Địa điểm" : "Bảng quảng cáo"}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {item.reportForm.name}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {DateHelper.formatDateToDDMMYYYY(item.createdAt)}
-                  </TableCell>
-                  <TableCell align='left' className={classes.dataTable}>
-                    {item.status === EReportStatus.NEW && (
-                      <span className={classes.red}>Chưa xử lý</span>
-                    )}
-                    {item.status === EReportStatus.PROCESSING && (
-                      <span className={classes.blue}>Đang xử lý</span>
-                    )}
-                    {item.status === EReportStatus.DONE && (
-                      <span className={classes.green}>Đã xử lý</span>
-                    )}
-                  </TableCell>
-                  <TableCell align='center' className={classes.dataTable}>
-                    <IconButton
-                      aria-label='edit'
-                      size='medium'
-                      onClick={() => {
-                        setOpenReportPopup(true);
-                        setReportShow(item);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
-                    </IconButton>
+              {!!reports &&
+                reports.map((item, index) => (
+                  <TableRow key={index} className={classes.rowTable}>
+                    <TableCell component='th' scope='row'>
+                      {index + 1}
+                    </TableCell>
+                    <TableCell align='left' className={classes.dataTable}>
+                      {item.reportTypeName === EReportType.LOCATION
+                        ? item.address
+                        : item.advertise?.location.address}
+                    </TableCell>
+                    <TableCell align='left' className={classes.dataTable}>
+                      {item.reportTypeName === EReportType.LOCATION ? "Địa điểm" : "Bảng quảng cáo"}
+                    </TableCell>
+                    <TableCell align='left' className={classes.dataTable}>
+                      {item.reportForm.name}
+                    </TableCell>
+                    <TableCell align='left' className={classes.dataTable}>
+                      {DateHelper.formatDateToDDMMYYYY(item.createdAt)}
+                    </TableCell>
+                    <TableCell align='left' className={classes.dataTable}>
+                      {item.status === EReportStatus.NEW && (
+                        <span className={classes.red}>Chưa xử lý</span>
+                      )}
+                      {item.status === EReportStatus.PROCESSING && (
+                        <span className={classes.blue}>Đang xử lý</span>
+                      )}
+                      {item.status === EReportStatus.DONE && (
+                        <span className={classes.green}>Đã xử lý</span>
+                      )}
+                    </TableCell>
+                    <TableCell align='center' className={classes.dataTable}>
+                      <IconButton
+                        aria-label='edit'
+                        size='medium'
+                        onClick={() => {
+                          setOpenReportPopup(true);
+                          setReportShow(item);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faEye} color='var(--blue-500)' />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              {(!reports || reports.length === 0) && (
+                <TableRow>
+                  <TableCell align='center' colSpan={7}>
+                    <Heading4>Chưa có báo cáo nào</Heading4>
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </TableContainer>

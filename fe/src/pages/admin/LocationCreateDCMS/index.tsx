@@ -23,7 +23,7 @@ import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 
 import classes from "./styles.module.scss";
-import SideBarWard from "components/admin/SidebarWard";
+import SideBarDCMS from "components/admin/SidebarDCMS";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
@@ -118,6 +118,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
   const [selectedDistrict, setSelectedDistrict] = useState<Property | null>(null);
   const [selectedWard, setSelectedWard] = useState<Property | null>(null);
   const [selectedWardId, setSelectedWardId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -135,6 +136,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
     LocationService.createLocation(locationCreateRequest)
       .then((res) => {
         handleEmitSuccessState(true);
+        navigate(`${routes.admin.locations.dcms}`);
       })
       .catch((err) => {
         handleEmitSuccessState(false);
@@ -248,7 +250,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
                   }
                 }}
               >
-                <MenuItem value=''>Chọn quận</MenuItem>
+                <MenuItem>Chọn quận</MenuItem>
                 {districts.map((district) => (
                   <MenuItem value={district.id} key={district.id}>
                     {district.name}
@@ -283,7 +285,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
                   }
                 }}
               >
-                <MenuItem value=''>Chọn phường</MenuItem>
+                <MenuItem>Chọn phường</MenuItem>
                 {wards.map((ward) => (
                   <MenuItem value={ward.id} key={ward.id}>
                     {ward.name}
@@ -487,7 +489,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
                           margin: "0 15px 10px 0",
                           border: "1px solid #ccc"
                         }}
-                        alt='Image Loation'
+                        alt='img Loation'
                       />
                     );
                   })}
@@ -510,10 +512,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
                     );
                   })} */}
               </Box>
-              <Button
-                onClick={handleOpenDialog}
-                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
-              >
+              <Button onClick={handleOpenDialog} style={{ marginTop: "15px" }} variant='contained'>
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>
@@ -612,7 +611,7 @@ export const LocationCreateCDMS = () => {
     <Box>
       {/* <Header /> */}
       <div className={classes["location-edit-container"]}>
-        <SideBarWard>
+        <SideBarDCMS>
           <Box className={classes["container-body"]}>
             <ButtonBack onClick={() => goBack()}>
               <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
@@ -641,7 +640,7 @@ export const LocationCreateCDMS = () => {
               </Alert>
             </Snackbar>
           </Box>
-        </SideBarWard>
+        </SideBarDCMS>
       </div>
     </Box>
   );

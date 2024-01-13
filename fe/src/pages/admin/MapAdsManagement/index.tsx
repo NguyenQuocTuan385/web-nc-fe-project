@@ -21,8 +21,8 @@ import PopoverHelper from "./components/PopoverHelper";
 import { Help } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { Property } from "models/property";
 import { User } from "models/user";
+import useIntercepts from "hooks/useIntercepts";
 
 enum ELocationCheckedSwitch {
   BOTH = 1,
@@ -70,14 +70,20 @@ const MapAdsManagementAdmin = () => {
     setOpenRandomLocationSidebar(false);
   };
 
+  const intercept = useIntercepts();
+
   useEffect(() => {
     const getAllLocations = async () => {
       if (!user?.property?.id) {
         return;
       }
-      const res = await LocationService.getLocationsByPropertyId(user?.property?.id, {
-        pageSize: 9999
-      });
+      const res = await LocationService.getLocationsByPropertyId(
+        user?.property?.id,
+        {
+          pageSize: 9999
+        },
+        intercept
+      );
 
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
@@ -87,7 +93,10 @@ const MapAdsManagementAdmin = () => {
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          const existsAdvertises = await LocationService.checkExistsAdvertises(location.id);
+          const existsAdvertises = await LocationService.checkExistsAdvertises(
+            location.id,
+            intercept
+          );
           location.existsAdvertises = existsAdvertises;
 
           const feature: Feature = {

@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
-import { EReportType } from "models/report";
+import { EReportType, Report } from "models/report";
 import { DateHelper } from "helpers/date";
 
 const ReportsManagement = () => {
@@ -95,7 +95,7 @@ const ReportsManagement = () => {
     setCurrentPage(1);
   }, [searchValue]);
 
-  const data = reportList.map((report: any, index: number) => {
+  const data = reportList.map((report: Report, index: number) => {
     return {
       ...report,
       stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
@@ -103,7 +103,10 @@ const ReportsManagement = () => {
       reportTypeName:
         report.reportTypeName === EReportType.ADVERTISE ? "Bảng quảng cáo" : "Điểm đặt quảng cáo",
       createdAt: DateHelper.formatDateToDDMMYYYY(report.createdAt),
-      address: report.address ? report.address : "Không có"
+      address:
+        report.reportTypeName === EReportType.LOCATION
+          ? report.address
+          : report.advertise?.location.address
     };
   });
 
@@ -112,7 +115,6 @@ const ReportsManagement = () => {
     "Loại báo cáo",
     "Email",
     "Tên",
-    "Điện thoại",
     "Địa chỉ",
     "Thời điểm gửi",
     "Tình trạng xử lý"
@@ -123,7 +125,6 @@ const ReportsManagement = () => {
     "id",
     "email",
     "fullName",
-    "phone",
     "address",
     "createdAt",
     "objectStatus"

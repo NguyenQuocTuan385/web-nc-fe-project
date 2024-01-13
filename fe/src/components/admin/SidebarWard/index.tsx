@@ -80,7 +80,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PersistentDrawerLeft({ children }: any) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const currentUser: User = useSelector(selectCurrentUser);
   const sideBarItemListData = [
     {
@@ -148,7 +148,12 @@ export default function PersistentDrawerLeft({ children }: any) {
               <MenuIcon />
             </IconButton>
             <Typography variant='h6' noWrap component='div' color={"black"}>
-              Cán Bộ {currentUser?.role.id === ERole.WARD ? "Phường" : "Quận"}
+              Cán Bộ{" "}
+              {currentUser?.role.id === ERole.WARD
+                ? "Phường"
+                : currentUser?.role.id === ERole.WARD
+                  ? "Quận"
+                  : "Sở Văn Hóa"}
             </Typography>
           </Box>
           <Header></Header>

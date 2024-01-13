@@ -224,17 +224,6 @@ export default function EditAdLocationLicenseDetail() {
               </Grid>
             </Box>
             <Box className={classes.boxMapContainer}>
-              <Box className={classes.boxTitle}>
-                <ParagraphBody fontWeight={"bold"}>VỊ TRÍ TRÊN BẢN ĐỒ</ParagraphBody>
-              </Box>
-              <Box className={classes.boxMap}>
-                <img
-                  src='https://meeymap.com/tin-tuc/wp-content/uploads/2023/06/0-20220914141738669.jpg'
-                  alt=''
-                  width={"100%"}
-                  height={"400px"}
-                />
-              </Box>
               <Box className={classes.editHistoryContainer}>
                 <Box className={classes.editInfo}>
                   <ParagraphBody className={classes.infoContent}>

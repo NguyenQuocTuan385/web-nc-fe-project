@@ -1,7 +1,7 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Pagination } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/Search";
+import SearchAppBar from "components/common/SearchDCMS";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { createSearchParams, useLocation, useNavigate, useResolvedPath } from "react-router-dom";
 import { useEffect, useState } from "react";

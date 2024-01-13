@@ -443,10 +443,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                     );
                   })}
               </Box>
-              <Button
-                onClick={handleOpenDialog}
-                style={{ backgroundColor: "var(--blue-200)", marginTop: "15px" }}
-              >
+              <Button onClick={handleOpenDialog} style={{ marginTop: "15px" }} variant='contained'>
                 Thay đổi ảnh
               </Button>
               <Dialog open={openDialog} onClose={handleCloseDialog}>

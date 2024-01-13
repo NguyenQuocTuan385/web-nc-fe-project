@@ -4,7 +4,6 @@ export enum EStorageKey {
 }
 
 export enum ERole {
-  GUEST = 1,
   WARD = 2,
   DISTRICT = 3,
   DEPARTMENT = 4
