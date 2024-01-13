@@ -27,6 +27,8 @@ import { DateHelper } from "helpers/date";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useIntercepts from "hooks/useIntercepts";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 interface FormData {
   name: string;
   avatar: string;
@@ -47,6 +49,7 @@ export default function CreateAccount() {
   const [selectedWard, setSelectedWard] = React.useState<Property | null>(null);
   const navigate = useNavigate();
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
   const getAllWard = async (id: Number) => {
     WardService.getAllWardBy(
       Number(id),
@@ -145,6 +148,7 @@ export default function CreateAccount() {
   };
 
   const createUser = async (data: UserRequest) => {
+    dispatch(loading(true));
     AuthenticationService.register(data)
       .then((res) => {
         handleAddSuccess();
@@ -152,6 +156,9 @@ export default function CreateAccount() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
   const SubmitHandler = async (data: any) => {

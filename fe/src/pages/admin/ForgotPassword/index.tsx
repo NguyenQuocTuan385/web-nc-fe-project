@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import MailService from "services/email";
 import { RequestOTP } from "models/email";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 interface FormData {
   email: string;
@@ -16,6 +18,7 @@ interface FormData {
 export default function ForgotPassword() {
   const navigate = useNavigate();
   const [warn, setWarn] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const schema = useMemo(() => {
     return yup.object().shape({
@@ -35,12 +38,16 @@ export default function ForgotPassword() {
     const FormSubmit: RequestOTP = {
       email: data.email
     };
+    dispatch(loading(true));
     MailService.sendOTPToEmail(FormSubmit)
       .then((res) => {
         navigate(`/admin/recover/code?email=${data.email}`);
       })
       .catch((err) => {
         setWarn(true);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 

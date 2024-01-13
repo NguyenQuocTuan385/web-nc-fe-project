@@ -28,6 +28,8 @@ import dayjs, { Dayjs } from "dayjs";
 import Userservice from "services/user";
 import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 interface PopupProps {
   openPopup: boolean;
@@ -62,6 +64,7 @@ const getSchema = () =>
 
 export default function Popup(props: PopupProps) {
   const { openPopup, setOpenPopup, user, onUpdated } = props;
+  const dispatch = useDispatch();
 
   const schema = useMemo(getSchema, []);
 
@@ -84,6 +87,7 @@ export default function Popup(props: PopupProps) {
     setAvatarPreview(URL.createObjectURL(files[0]));
   };
   const updateUser = async (id: number, data: UserRequest) => {
+    dispatch(loading(true));
     Userservice.updateUser(id, data, intercept)
       .then((res) => {
         setOpenPopup(false);
@@ -92,6 +96,9 @@ export default function Popup(props: PopupProps) {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 
@@ -109,6 +116,7 @@ export default function Popup(props: PopupProps) {
     });
   };
   const FormDataSubmitHandler = async (data: any) => {
+    dispatch(loading(true));
     const formSubmit: UserRequest = {
       name: data.name,
       email: data.email,
@@ -133,7 +141,11 @@ export default function Popup(props: PopupProps) {
       const uploadDataResult = await fetch(URL, {
         method: "POST",
         body: formData
-      }).then((res) => res.json());
+      })
+        .then((res) => res.json())
+        .finally(() => {
+          dispatch(loading(false));
+        });
       formSubmit.avatar = uploadDataResult.secure_url;
     }
     setAvatarPreview("");
