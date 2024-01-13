@@ -70,7 +70,9 @@ function ContractDetail() {
       {
         imageIcon: images.quantityIcon,
         title: "Số lượng",
-        content: `${contractData?.advertise.pillarQuantity} Trụ / Bảng`
+        content: `${
+          !!contractData?.advertise.pillarQuantity ? contractData.advertise.pillarQuantity : 0
+        } Trụ / Bảng`
       },
       {
         imageIcon: images.categoryIcon,

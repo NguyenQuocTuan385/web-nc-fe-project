@@ -50,7 +50,6 @@ const Login: React.FC = () => {
 
         if (userRole === ERole.DEPARTMENT) navigate(routes.admin.contracts.district);
         else if (userRole === ERole.DISTRICT) {
-          console.log("Yes district");
           navigate(routes.admin.locations.district);
         } else navigate(routes.admin.contracts.root);
       })

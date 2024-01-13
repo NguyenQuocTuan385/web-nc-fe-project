@@ -122,8 +122,6 @@ function App() {
               <Route path={routes.admin.statistic.dcmsDetail} Component={ReportDetailDCMS} />
             </Route>
 
-            <Route path={routes.admin.contracts.createFormWard} element={<ContractForm />} />
-
             <Route path={routes.admin.users.edit} Component={EditProfile} />
             <Route path={routes.admin.users.change_password} Component={ChangePassword} />
 
@@ -166,13 +164,6 @@ function App() {
               <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
             </Route>
 
-            {/* Reports */}
-            <Route path={routes.admin.reports.root} Component={ReportsManagement} />
-            <Route path={routes.admin.reports.edit} Component={ReportHandle} />
-            <Route path={routes.admin.reports.details} Component={ReportDetail} />
-            <Route path={routes.admin.statistic.dcms} Component={ReportStatistic} />
-            <Route path={routes.admin.statistic.dcmsDetail} Component={ReportDetail} />
-
             {/* Districts */}
             <Route element={<RequireAuth availableRoles={[ERole.DISTRICT]} />}>
               <Route path={routes.admin.contracts.district} Component={DistrictContractList} />
@@ -200,43 +191,6 @@ function App() {
               <Route path={routes.admin.reports.districtEdit} Component={ReportHandle} />
               <Route path={routes.admin.reports.districtDetails} Component={ReportDetail} />
             </Route>
-
-            {/* <Route
-              path={routes.admin.reviewEdit.location}
-              Component={EditAdLocationLicenseDetail}
-            />
-            <Route path={routes.admin.reviewEdit.advertise} Component={EditAdTableLicenseDetail} />
-            <Route path={routes.admin.reviewLisence.root} Component={AdLicense} />
-            <Route path={routes.admin.reviewLisence.detail} Component={AdLicenseDetail} /> */}
-            <Route path={routes.admin.properties.district} Component={DistrictManagement} />
-
-            {/* Locations Ward*/}
-
-            <Route path={routes.admin.locations.wardEdit} Component={LocationEdit} />
-
-            {/* Advertises */}
-
-            <Route path={routes.admin.advertises.details} Component={AdvertiseDetail} />
-            <Route path={routes.admin.advertises.edit} Component={AdvertiseEdit} />
-
-            {/* Advertises Ward*/}
-            <Route path={routes.admin.advertises.wardDetails} Component={AdvertiseDetail} />
-            <Route path={routes.admin.advertises.wardEdit} Component={AdvertiseEdit} />
-
-            {/* Reports Ward*/}
-
-            <Route path={routes.admin.reports.wardEdit} Component={ReportHandle} />
-            <Route path={routes.admin.reports.wardDetails} Component={ReportDetail} />
-
-            {/* Reports */}
-            <Route path={routes.admin.reports.root} Component={ReportsManagement} />
-            <Route path={routes.admin.reports.edit} Component={ReportHandle} />
-            <Route path={routes.admin.reports.details} Component={ReportDetail} />
-            <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
-            <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
-            <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
-            {/* <Route path={routes.admin.statistic.root} Component={ReportStatistic} />
-            <Route path={routes.admin.statistic.detail} Component={ReportDetail} /> */}
 
             {/* General */}
             <Route path={routes.admin.authentication.login} Component={Login} />

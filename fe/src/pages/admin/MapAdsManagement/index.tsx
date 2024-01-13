@@ -24,13 +24,16 @@ import { RootState } from "store";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
 
+interface MapAdsManagementAdminProps {
+  locationView?: Location;
+}
 enum ELocationCheckedSwitch {
   BOTH = 1,
   LOCATION_IS_PLANNING = 2,
   LOCATION_IS_NOT_PLANNING = 3,
   NOT_AT_ALL = 4
 }
-const MapAdsManagementAdmin = () => {
+const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<MapLibre | null>(null);
   const [lng, setLng] = useState<number | null>(null);
@@ -70,11 +73,27 @@ const MapAdsManagementAdmin = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
-      const res = await LocationService.getLocations({ pageSize: 9999 }, intercept);
+      let res;
+      if (user?.property?.id) {
+        res = await LocationService.getLocationsByPropertyId(
+          user.property.id,
+          {
+            pageSize: 9999
+          },
+          intercept
+        );
+      } else {
+        res = await LocationService.getLocations({ pageSize: 9999 }, intercept);
+      }
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
-        setLng(locations_temp[0].longitude);
-        setLat(locations_temp[0].latitude);
+        if (!!locationView) {
+          setLng(locationView.longitude);
+          setLat(locationView.latitude);
+        } else {
+          setLng(locations_temp[0].longitude);
+          setLat(locations_temp[0].latitude);
+        }
       }
 
       const locationsIsPlanningNoAdvertisesTemp: Feature[] = [];

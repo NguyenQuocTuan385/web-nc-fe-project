@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import Heading4 from "components/common/text/Heading4";
 import classes from "./styles.module.scss";
+import Heading4 from "components/common/text/Heading4";
 
-export const InfoAdvertise = ({ data }: any) => {
+export const InfoAdvertise = ({ data, title }: any) => {
   return (
     <Box>
-      <Heading4>Thông tin bảng quảng cáo</Heading4>
+      {!!title && <Heading4>Thông tin bảng quảng cáo</Heading4>}
       <Typography className={classes.text}>
         <span className={classes.title}>Loại bảng quảng cáo: </span>
         <span>{data.adsType}</span>

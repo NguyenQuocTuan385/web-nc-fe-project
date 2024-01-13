@@ -18,23 +18,12 @@
   }
 }
 
-.map-item {
-  width: 100%;
-  border-radius: 8px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-  }
-}
-
 .planning-text.active {
   color: #00ba00 !important;
 }
 
 .planning-text.inactive {
-  color: var(--blue-500) !important;
+  color: var(--red-error) !important;
 }
 
 span {

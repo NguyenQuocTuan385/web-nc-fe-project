@@ -7,7 +7,6 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  Pagination,
   TablePagination
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
@@ -27,14 +26,12 @@ import classes from "./styles.module.scss";
 import SideBarWard from "components/admin/SidebarWard";
 import TableTemplate from "components/common/TableTemplate";
 import InfoLocation from "./components/InfoLocation";
-import { Header } from "components/common/Header";
 import SearchAppBar from "components/common/Search";
 import SearchAppBarAdvertise from "components/common/SearchAdvertise";
 import AdvertiseService from "services/advertise";
 import { routes } from "routes/routes";
 import styled from "styled-components";
-import { LocationView } from "models/location";
-import { Contract } from "models/contract";
+import { Location } from "models/location";
 import ContractService from "services/contract";
 import { Advertise } from "models/advertise";
 import ParagraphBody from "components/common/text/ParagraphBody";
@@ -44,15 +41,11 @@ import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import { ERole } from "models/general";
 import SideBarDCMS from "components/admin/SidebarDCMS";
+import MapAdsManagementAdmin from "../MapAdsManagement";
+import Heading4 from "components/common/text/Heading4";
+import LocationService from "services/location";
 
 const ButtonBack = styled(Button)(() => ({
-  paddingLeft: "0 !important",
-  "&:hover": {
-    backgroundColor: "transparent !important"
-  }
-}));
-
-const IconButtonBack = styled(IconButton)(() => ({
   paddingLeft: "0 !important",
   "&:hover": {
     backgroundColor: "transparent !important"
@@ -66,7 +59,6 @@ const AdvertiseOfLocationManagement = () => {
   const isDistrict = currentUser.role.id === ERole.DISTRICT ? true : false;
   const { id } = useParams<{ id: string }>();
   const [advertiseList, setAdvertiseList] = useState([]);
-  const [infoContract, setInfoContract] = useState<Contract | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
@@ -83,6 +75,7 @@ const AdvertiseOfLocationManagement = () => {
 
   const [totalPage, setTotalPage] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
+  const [dataInfoLocation, setDataInfoLocation] = useState<Location | null>(null);
   const [rowsPerPage, setRowsPerPage] = useState(() => {
     const params = queryString.parse(locationHook.search);
     return params.rowsNum || 5;
@@ -92,12 +85,6 @@ const AdvertiseOfLocationManagement = () => {
     newPageValue: number
   ) => {
     setCurrentPage(newPageValue + 1);
-    // navigate({
-    //   pathname: match,
-    //   search: createSearchParams({
-    //     page: newPageValue.toString()
-    //   }).toString()
-    // });
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -268,19 +255,18 @@ const AdvertiseOfLocationManagement = () => {
     "objectStatus"
   ];
 
-  const dataInfoLocation: LocationView = advertiseList.map((ads: any, index: number) => {
-    return {
-      stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
-      id: ads.location.id,
-      address: ads.location.address,
-      adsForm: ads.location.adsForm.name,
-      planning: ads.location.planning,
-      locationType: ads.location.locationType.name,
-      latitude: ads.location.latitude,
-      longtitude: ads.location.longitude,
-      images: ads.location.images.length > 0 ? JSON.parse(ads.location.images) : []
+  useEffect(() => {
+    const getLocationById = () => {
+      LocationService.getLocationsById(Number(id), intercept)
+        .then((res) => {
+          setDataInfoLocation(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     };
-  })[0];
+    getLocationById();
+  }, []);
 
   const goBack = () => {
     if (isWard) {
@@ -299,61 +285,52 @@ const AdvertiseOfLocationManagement = () => {
         {currentUser.role.id === ERole.WARD || currentUser.role.id === ERole.DISTRICT ? (
           <SideBarWard>
             <Box className={classes["container-body"]}>
-              <ButtonBack onClick={() => goBack()}>
+              <ButtonBack onClick={() => goBack()} sx={{ width: "100px" }}>
                 <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
                 Trở về
               </ButtonBack>
+              <Box>
+                {!!dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}
+              </Box>
+              <Box className={classes["map-item"]}>
+                <MapAdsManagementAdmin />
+              </Box>
               {advertiseList.length > 0 && (
-                <Box className={classes["search-container"]}>
-                  <SearchAppBar onSearch={handleSearch} />
-                </Box>
-              )}
-              <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
-
-              {advertiseList.length > 0 && (
-                <Box className={classes["table-container"]}>
-                  <Box className={classes["table-container"]}>
-                    <TableTemplate
-                      data={data}
-                      customHeading={customHeading}
-                      customColumns={customColumns}
-                      isActionColumn={true}
-                      onViewDetailsClick={handleViewAdDetails}
-                      onEditClick={handleEditAdvertise}
-                      onAddClick={handleAddAdvertise}
-                    />
-
-                    <Box className={classes.pagination}>
-                      <TablePagination
-                        rowsPerPageOptions={[5, 10, 25, 100]}
-                        component='div'
-                        count={totalElements}
-                        page={Number(currentPage) - 1}
-                        onPageChange={handleChangePage}
-                        rowsPerPage={Number(rowsPerPage)}
-                        labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </Box>
-
-                    {/* <Box className={classes["pagination-custom"]}>
-                  <span>{`Hiển thị ${Math.min(
-                    Number(currentPage) * itemsPerPage,
-                    totalElements
-                  )} kết quả trên ${totalElements}`}</span>
-                  <Pagination
-                    count={totalPage}
-                    page={Number(currentPage)}
-                    onChange={handleChangePage}
-                  />
-                </Box> */}
+                <>
+                  <Box className={classes["search-container"]}>
+                    <SearchAppBar onSearch={handleSearch} />
                   </Box>
-                </Box>
+                  <Box className={classes["table-container"]}>
+                    <Box className={classes["table-container"]}>
+                      <TableTemplate
+                        data={data}
+                        customHeading={customHeading}
+                        customColumns={customColumns}
+                        isActionColumn={true}
+                        onViewDetailsClick={handleViewAdDetails}
+                        onEditClick={handleEditAdvertise}
+                        onAddClick={handleAddAdvertise}
+                      />
+
+                      <Box className={classes.pagination}>
+                        <TablePagination
+                          rowsPerPageOptions={[5, 10, 25, 100]}
+                          component='div'
+                          count={totalElements}
+                          page={Number(currentPage) - 1}
+                          onPageChange={handleChangePage}
+                          rowsPerPage={Number(rowsPerPage)}
+                          labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
               )}
+
               {(advertiseList.length === 0 || !advertiseList) && (
-                <ParagraphBody className={classes.noList}>
-                  Không có thông tin bảng quảng cáo
-                </ParagraphBody>
+                <Heading4 className={classes.noList}>Không có thông tin bảng quảng cáo</Heading4>
               )}
             </Box>
           </SideBarWard>
@@ -364,52 +341,42 @@ const AdvertiseOfLocationManagement = () => {
                 <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
                 Trở về
               </ButtonBack>
-              {advertiseList.length > 0 && (
-                <Box className={classes["search-container"]}>
-                  <SearchAppBarAdvertise onSearch={handleSearch} />
-                </Box>
-              )}
               <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
-
+              <Box className={classes["map-item"]}>
+                <MapAdsManagementAdmin />
+              </Box>
               {advertiseList.length > 0 && (
-                <Box className={classes["table-container"]}>
-                  <Box className={classes["table-container"]}>
-                    <TableTemplate
-                      data={data}
-                      customHeading={customHeading}
-                      customColumns={customColumns}
-                      isActionColumn={true}
-                      onViewDetailsClick={handleViewAdDetails}
-                      onEditClick={handleEditAdvertise}
-                      onDeleteClick={handleDeleteAdvertise}
-                    />
-
-                    <Box className={classes.pagination}>
-                      <TablePagination
-                        rowsPerPageOptions={[5, 10, 25, 100]}
-                        component='div'
-                        count={totalElements}
-                        page={Number(currentPage) - 1}
-                        onPageChange={handleChangePage}
-                        rowsPerPage={Number(rowsPerPage)}
-                        labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                      />
-                    </Box>
-
-                    {/* <Box className={classes["pagination-custom"]}>
-                  <span>{`Hiển thị ${Math.min(
-                    Number(currentPage) * itemsPerPage,
-                    totalElements
-                  )} kết quả trên ${totalElements}`}</span>
-                  <Pagination
-                    count={totalPage}
-                    page={Number(currentPage)}
-                    onChange={handleChangePage}
-                  />
-                </Box> */}
+                <>
+                  <Box className={classes["search-container"]}>
+                    <SearchAppBar onSearch={handleSearch} />
                   </Box>
-                </Box>
+                  <Box className={classes["table-container"]}>
+                    <Box className={classes["table-container"]}>
+                      <TableTemplate
+                        data={data}
+                        customHeading={customHeading}
+                        customColumns={customColumns}
+                        isActionColumn={true}
+                        onViewDetailsClick={handleViewAdDetails}
+                        onEditClick={handleEditAdvertise}
+                        onAddClick={handleAddAdvertise}
+                      />
+
+                      <Box className={classes.pagination}>
+                        <TablePagination
+                          rowsPerPageOptions={[5, 10, 25, 100]}
+                          component='div'
+                          count={totalElements}
+                          page={Number(currentPage) - 1}
+                          onPageChange={handleChangePage}
+                          rowsPerPage={Number(rowsPerPage)}
+                          labelRowsPerPage='Số dòng trên mỗi trang' // Thay đổi text ở đây
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </>
               )}
               {(advertiseList.length === 0 || !advertiseList) && (
                 <ParagraphBody className={classes.noList}>

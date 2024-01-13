@@ -12,7 +12,6 @@ $pacing-main: 15px;
 }
 
 .container-body {
-  // width: calc(100% - 300px);
   background-color: #fff;
   border-radius: 8px;
   padding: $pacing-main;
@@ -29,17 +28,22 @@ $pacing-main: 15px;
   border-radius: 8px;
 }
 
-.imageLarge {
-  width: 100%;
-  height: 400px;
+.boxImg {
+  width: 400px;
+  height: 300px;
+  .imageLarge {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .image.smallImage {
   width: 50%;
 }
 
-.imageMap {
-  width: 100%;
-  height: 350px;
-  border-radius: 8px;
+.boxAdsInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

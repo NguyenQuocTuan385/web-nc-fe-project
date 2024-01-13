@@ -1,11 +1,11 @@
 import classes from "./styles.module.scss";
 import { Box, Typography } from "@mui/material";
-import { LocationView } from "models/location";
+import { Location } from "models/location";
 import SlideShowImages from "components/common/SlideShowImages";
 import Heading3 from "components/common/text/Heading3";
 
 interface InfoLocationProps {
-  data: LocationView;
+  data: Location;
 }
 
 const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
@@ -13,8 +13,7 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
     <Box>
       <Box className={classes["info-container"]}>
         <Box className={classes["info-item"]}>
-          <SlideShowImages images={data.images} />
-          {/* <img src={data.images} alt='Điểm đặt quảng cáo' /> */}
+          <SlideShowImages images={JSON.parse(data.images)} />
         </Box>
         <Box sx={{ width: "50%" }}>
           <Heading3>Điểm đặt quảng cáo</Heading3>
@@ -24,16 +23,16 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
           </Typography>
           <Typography className={classes["inline-typo"]}>
             <span className={classes.title}>Loại vị trí: </span>
-            <span>{data.locationType}</span>
+            <span>{data.locationType.name}</span>
           </Typography>
           <Typography className={classes["inline-typo"]}>
-            <span className={classes.title}>Loại hình: </span>
-            <span>{data.adsForm}</span>
+            <span className={classes.title}>Loại hình thức: </span>
+            <span>{data.adsForm.name}</span>
           </Typography>
           <Typography className={classes["inline-typo"]}>
             <span className={classes.title}>Tọa độ: </span>
             <span>
-              [{data.latitude}, {data.longtitude}]
+              [{data.latitude}, {data.longitude}]
             </span>
           </Typography>
           <Typography
@@ -46,13 +45,6 @@ const InfoLocation: React.FC<InfoLocationProps> = ({ data }) => {
             {data.planning ? "đã quy hoạch" : "chưa quy hoạch"}
           </Typography>
         </Box>
-      </Box>
-
-      <Box className={classes["map-item"]}>
-        <img
-          src='https://baotayninh.vn/image/fckeditor/upload/2020/20200308/images/hoang%20mang%201.png'
-          alt='Map'
-        />
       </Box>
     </Box>
   );
