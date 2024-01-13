@@ -12,6 +12,8 @@ import { selectCurrentUser } from "reduxes/Auth";
 import Heading2 from "components/common/text/Heading2";
 import { ChangePasswordRequest } from "models/authentication";
 import { AuthenticationService } from "services/authentication";
+import { useDispatch } from "react-redux";
+import { loading } from "reduxes/Loading";
 
 const schema = yup.object().shape({
   oldPassword: yup
@@ -48,13 +50,14 @@ const ChangePassword: React.FC = () => {
   });
 
   const currentUser = useSelector(selectCurrentUser);
-
+  const dispatch = useDispatch();
   const onSubmit = async (data: FormData) => {
     const ChangePasswordRequest: ChangePasswordRequest = {
       email: currentUser?.email,
       oldPassword: data.oldPassword,
       newPassword: data.newPassword
     };
+    dispatch(loading(true));
     AuthenticationService.changePassword(ChangePasswordRequest)
       .then((res) => {
         setShowAlert(true);
@@ -68,6 +71,9 @@ const ChangePassword: React.FC = () => {
         setTimeout(() => {
           setShowAlertWrong(false);
         }, 3000);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 
