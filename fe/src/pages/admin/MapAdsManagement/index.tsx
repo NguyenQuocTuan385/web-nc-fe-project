@@ -74,17 +74,17 @@ const MapAdsManagementAdmin = () => {
 
   useEffect(() => {
     const getAllLocations = async () => {
-      if (!user?.property?.id) {
-        return;
+      let res;
+      if (user?.property?.id) {
+        res = await LocationService.getLocationsByPropertyId(
+          user.property.id,
+          {
+            pageSize: 9999
+          },
+          intercept
+        );
       }
-      const res = await LocationService.getLocationsByPropertyId(
-        user?.property?.id,
-        {
-          pageSize: 9999
-        },
-        intercept
-      );
-
+      res = await LocationService.getLocations({ pageSize: 9999 }, intercept);
       const locations_temp: Location[] = res.content;
       if (lng === null && lat === null && locations_temp.length > 0) {
         setLng(locations_temp[0].longitude);

@@ -12,7 +12,6 @@ import MailService from "services/email";
 import Userservice from "services/user";
 import { RequestOTP } from "models/email";
 import { RequestOTPUser } from "models/user";
-import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   email: string;
@@ -25,7 +24,6 @@ export default function VerifyOTP() {
   // get params email
   const searchParams = new URLSearchParams(location.search);
   const email = searchParams.get("email");
-  const intercept = useIntercepts();
 
   useEffect(() => {
     if (!email) {
@@ -67,7 +65,7 @@ export default function VerifyOTP() {
       email: email!!,
       otp: data.otp
     };
-    Userservice.checkOTP(FormSubmit, intercept)
+    Userservice.checkOTP(FormSubmit)
       .then((res) => {
         isValidOTP(res, FormSubmit);
       })

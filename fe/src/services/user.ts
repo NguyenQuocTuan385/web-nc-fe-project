@@ -1,5 +1,6 @@
 import { API } from "config/constant";
 import { GetUsers, UserRequest, RequestOTPUser } from "models/user";
+import api from "./configApi";
 
 export class Userservice {
   static async getUsers(data: GetUsers, api: any): Promise<any> {
@@ -42,7 +43,7 @@ export class Userservice {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async checkOTP(data: RequestOTPUser, api: any): Promise<any> {
+  static async checkOTP(data: RequestOTPUser): Promise<any> {
     return await api
       .post(`${API.USER.CHECK_OTP}`, data)
       .then((res: any) => {

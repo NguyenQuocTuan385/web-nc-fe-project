@@ -10,8 +10,7 @@ const useIntercepts = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (currentUser === null) return;
-    const requestIntercept = api.interceptors.request.use(
+    api.interceptors.request.use(
       (request) => {
         if (!request.headers.Authorization) {
           request.headers.Authorization = `Bearer ${accessToken}`;
@@ -22,7 +21,7 @@ const useIntercepts = () => {
       (error) => Promise.reject(error)
     );
 
-    const responseIntercept = api.interceptors.response.use(
+    api.interceptors.response.use(
       (response) => {
         return response;
       },
@@ -44,11 +43,6 @@ const useIntercepts = () => {
         return Promise.reject(error);
       }
     );
-
-    return () => {
-      api.interceptors.request.eject(requestIntercept);
-      api.interceptors.response.eject(responseIntercept);
-    };
   }, [accessToken]);
 
   return api;

@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import Userservice from "services/user";
 import { AuthenticationService } from "services/authentication";
 import { ResetPasswordRequest } from "models/authentication";
-import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   email: string;
@@ -26,13 +25,12 @@ export default function ResetPassword() {
   const searchParams = new URLSearchParams(location.search);
   const email = searchParams.get("email");
   const otp = searchParams.get("code");
-  const intercept = useIntercepts();
 
   useEffect(() => {
     if (!email || !otp) {
       navigate("/admin/login");
     } else {
-      Userservice.checkOTP({ email: email, otp: otp }, intercept).then((res) => {
+      Userservice.checkOTP({ email: email, otp: otp }).then((res) => {
         if (res != 2) {
           navigate("/admin/login");
         }

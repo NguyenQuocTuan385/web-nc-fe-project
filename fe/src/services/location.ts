@@ -8,8 +8,8 @@ import {
 } from "models/location";
 
 export class LocationService {
-  static async getLocations(data: GetLocations, api: any): Promise<any> {
-    return await api
+  static async getLocations(data: GetLocations, apii: any): Promise<any> {
+    return await apii
       .get(`${API.LOCATION.DEFAULT}`, { params: data })
       .then((res: any) => {
         return Promise.resolve(res.data);

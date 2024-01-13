@@ -53,7 +53,6 @@ import EditProfile from "pages/admin/EditProfile";
 import ChangePassword from "pages/admin/ChangePassword";
 import { DistrictDashBoard } from "pages/admin/DistrictDashboard";
 import { ReportDetailDCMS } from "pages/admin/ReportStatistic/components/ReportDetail";
-import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
 import { DCMSDashBoard } from "pages/admin/DCMSDashboard";
 import { AdvertiseCreate } from "pages/admin/AdvertiseCreate";
 
@@ -65,7 +64,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={routes.client} Component={MapAdsManagement} />
-          <Route path={routes.adminMap} Component={MapAdsManagementAdmin} />
           <Route element={<PersistLogin />}>
             {/* DEPARTMENT */}
             <Route element={<RequireAuth availableRoles={[ERole.DEPARTMENT]} />}>

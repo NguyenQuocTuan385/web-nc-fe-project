@@ -9,14 +9,12 @@ import { useForm } from "react-hook-form";
 import MailService from "services/email";
 import { RequestOTP } from "models/email";
 import { useNavigate } from "react-router-dom";
-import useIntercepts from "hooks/useIntercepts";
 
 interface FormData {
   email: string;
 }
 export default function ForgotPassword() {
   const navigate = useNavigate();
-  const intercept = useIntercepts();
   const [warn, setWarn] = React.useState<boolean>(false);
 
   const schema = useMemo(() => {
@@ -37,7 +35,7 @@ export default function ForgotPassword() {
     const FormSubmit: RequestOTP = {
       email: data.email
     };
-    MailService.sendOTPToEmail(FormSubmit, intercept)
+    MailService.sendOTPToEmail(FormSubmit)
       .then((res) => {
         navigate(`/admin/recover/code?email=${data.email}`);
       })

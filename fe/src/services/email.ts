@@ -1,5 +1,6 @@
 import { API } from "config/constant";
 import { EmailRequest, RequestOTP } from "models/email";
+import api from "./configApi";
 
 export class MailService {
   static async sendTextEmail(emailTextRequest: EmailRequest, api: any): Promise<any> {
@@ -24,7 +25,7 @@ export class MailService {
       });
   }
 
-  static async sendOTPToEmail(email: RequestOTP, api: any): Promise<any> {
+  static async sendOTPToEmail(email: RequestOTP): Promise<any> {
     return await api
       .post(`${API.EMAIL.SEND_OTP_TO_EMAIL}`, email)
       .then((res: any) => {
