@@ -55,6 +55,7 @@ import ChangePassword from "pages/admin/ChangePassword";
 import { DistrictDashBoard } from "pages/admin/DistrictDashboard";
 import { ReportDetailDCMS } from "pages/admin/ReportStatistic/components/ReportDetail";
 import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
+import { AdvertiseCreate } from "pages/admin/AdvertiseCreate";
 
 function App() {
   injectStore(store);
@@ -88,8 +89,14 @@ function App() {
               <Route path={routes.admin.locations.dcmsCreate} Component={LocationCreateCDMS} />
               <Route
                 path={routes.admin.locations.dcmsDetail}
-                Component={AdvertisesOfLocationManagementDCMS}
+                Component={AdvertisesOfLocationManagement}
               />
+
+              {/* ADVERTISE */}
+              <Route path={routes.admin.advertises.dcms} Component={AdvertiseDetail} />
+              <Route path={routes.admin.advertises.dcmsEdit} Component={AdvertiseEdit} />
+              <Route path={routes.admin.advertises.dcmsCreate} Component={AdvertiseCreate} />
+              <Route path={routes.admin.contracts.detailDcms} Component={ContractDetail} />
 
               {/* REVIEW LOCATION, ADVERTISE */}
 
@@ -102,13 +109,20 @@ function App() {
                 Component={EditAdTableLicenseDetail}
               />
 
+              {/* DANH MỤC QUẢN LÝ */}
+              <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
+              <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
+              <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
+
+              {/* PROPERTY  */}
+              <Route path={routes.admin.properties.district} Component={DistrictManagement} />
+              <Route path={routes.admin.properties.ward} Component={WardManagement} />
+
               {/* REPORT */}
               <Route path={routes.admin.statistic.dcms} Component={ReportStatistic} />
               <Route path={routes.admin.statistic.dcmsDetail} Component={ReportDetailDCMS} />
             </Route>
 
-            <Route path={routes.admin.properties.district} Component={DistrictManagement} />
-            <Route path={routes.admin.properties.ward} Component={WardManagement} />
             <Route path={routes.admin.contracts.createFormWard} element={<ContractForm />} />
 
             <Route path={routes.admin.users.edit} Component={EditProfile} />
@@ -157,9 +171,6 @@ function App() {
             <Route path={routes.admin.reports.root} Component={ReportsManagement} />
             <Route path={routes.admin.reports.edit} Component={ReportHandle} />
             <Route path={routes.admin.reports.details} Component={ReportDetail} />
-            <Route path={routes.admin.reportForm.root} Component={ReportFormManagement} />
-            <Route path={routes.admin.advertisesForm.root} Component={AdvertiseFormManagement} />
-            <Route path={routes.admin.advertiseType.root} Component={AdvertiseTypeManagement} />
             <Route path={routes.admin.statistic.dcms} Component={ReportStatistic} />
             <Route path={routes.admin.statistic.dcmsDetail} Component={ReportDetail} />
 
