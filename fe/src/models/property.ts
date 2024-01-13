@@ -22,3 +22,9 @@ export interface PropertyRequest {
   name: string;
   code: string;
 }
+
+export interface PropertyCreateRequest {
+  propertyParentId?: number;
+  name: string;
+  code: string;
+}

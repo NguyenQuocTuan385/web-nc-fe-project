@@ -116,6 +116,16 @@ export class LocationService {
         return Promise.reject(e?.response?.data);
       });
   }
+  static async deleteLocationById(id: number, api: any): Promise<any> {
+    return await api
+      .delete(`${API.LOCATION.DELETE_LOCATION.replace(":id", `${id}`)}`)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default LocationService;

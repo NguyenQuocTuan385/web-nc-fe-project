@@ -57,7 +57,6 @@ import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
 import { DCMSDashBoard } from "pages/admin/DCMSDashboard";
 import { AdvertiseCreate } from "pages/admin/AdvertiseCreate";
 
-
 function App() {
   injectStore(store);
 

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SidebarDCMS from "components/admin/SidebarDCMS";
 import classes from "./styles.module.scss";
-import SearchAppBar from "components/common/SearchDCMS";
+import SearchAppBar from "pages/admin/DistrictManagement/components/SearchDistrict";
 import TableTemplateDCMS from "components/common/TableTemplateDCMS";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";

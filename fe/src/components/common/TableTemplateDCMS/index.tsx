@@ -14,6 +14,7 @@ import {
   faEdit,
   faEye,
   faRectangleAd,
+  faSquarePlus,
   faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -164,7 +165,7 @@ function TableTemplateDCMS({
                       size='medium'
                       onClick={() => handleAddClick(row.id)}
                     >
-                      <FontAwesomeIcon icon={faTrash} color='var(--red-error)' />
+                      <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
                     </IconButton>
                   )}
                   {onDeleteClick && (

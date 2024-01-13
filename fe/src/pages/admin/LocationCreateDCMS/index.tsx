@@ -91,14 +91,9 @@ const ButtonSubmit = styled(Button)(() => ({
 interface FormCreateLocationProps {
   locationTypes: LocationType[];
   adsForms: AdvertiseForm[];
-  createLocationEditRequest: (isSuccess: boolean) => void;
 }
 
-const MyForm: React.FC<FormCreateLocationProps> = ({
-  locationTypes,
-  adsForms,
-  createLocationCreateRequest
-}: any) => {
+const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms }: any) => {
   const {
     handleSubmit,
     control,
@@ -118,6 +113,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
   const [selectedDistrict, setSelectedDistrict] = useState<Property | null>(null);
   const [selectedWard, setSelectedWard] = useState<Property | null>(null);
   const [selectedWardId, setSelectedWardId] = useState<number | null>(null);
+
   const navigate = useNavigate();
 
   const handleOpenDialog = () => {
@@ -128,18 +124,12 @@ const MyForm: React.FC<FormCreateLocationProps> = ({
     setOpenDialog(false);
   };
 
-  const handleEmitSuccessState = (isSuccess: boolean) => {
-    createLocationCreateRequest(isSuccess);
-  };
-
   const createLocation = async (locationCreateRequest: LocationCreateRequest) => {
     LocationService.createLocation(locationCreateRequest)
       .then((res) => {
-        handleEmitSuccessState(true);
         navigate(`${routes.admin.locations.dcms}`);
       })
       .catch((err) => {
-        handleEmitSuccessState(false);
         console.log(err);
       });
   };
@@ -620,11 +610,7 @@ export const LocationCreateCDMS = () => {
 
             <Box className={classes["info-edit-container"]}>
               <Heading2>Thông tin điểm đặt quảng cáo</Heading2>
-              <MyForm
-                locationTypes={locationTypes}
-                adsForms={adsForms}
-                createLocationEditRequest={handleGetSuccessState}
-              />
+              <MyForm locationTypes={locationTypes} adsForms={adsForms} />
             </Box>
 
             <Snackbar
