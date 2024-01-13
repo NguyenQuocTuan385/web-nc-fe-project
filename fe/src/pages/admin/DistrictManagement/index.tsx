@@ -90,13 +90,14 @@ export default function DistrictManagement() {
     return {
       stt: index + 1,
       id: district.id,
+      city: "Thành phố Hồ Chí Minh",
       name: district.name,
       code: district.code
     };
   });
 
-  const customHeading = ["STT", "ID", "Mã quận", "Tên quận"];
-  const customColumns = ["stt", "id", "code", "name"];
+  const customHeading = ["STT", "Tên quận", "Thành phố"];
+  const customColumns = ["stt", "name", "city"];
 
   const handleViewWard = (idProperty: number) => {
     navigate(`${routes.admin.properties.ward.replace(":id", idProperty.toString())}`);

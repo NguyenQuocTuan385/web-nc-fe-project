@@ -102,12 +102,14 @@ export default function WardManagement() {
       stt: index + 1,
       id: district.id,
       name: district.name,
+      district: district.propertyParent.name,
+      city: "Thành phố Hồ Chí Minh",
       code: district.code
     };
   });
 
-  const customHeading = ["STT", "ID", "Mã phường", "Tên phường"];
-  const customColumns = ["stt", "id", "code", "name"];
+  const customHeading = ["STT", "Tên phường", "Thuộc Quận", "Thành phố"];
+  const customColumns = ["stt", "name", "district", "city"];
 
   const handleEditProperty = (idProperty: number) => {
     setWardId(idProperty);
