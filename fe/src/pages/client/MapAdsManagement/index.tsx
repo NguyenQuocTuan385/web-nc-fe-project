@@ -12,7 +12,6 @@ import { Location, RandomLocation } from "models/location";
 import PopoverHover from "./components/PopoverHover";
 import LocationSidebar from "./components/LocationSidebar";
 import RandomLocationSidebar from "./components/RandomLocationSidebar";
-import LocationService from "services/location";
 import { Box, Button, IconButton, Switch } from "@mui/material";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import { EReportStatus, EReportType, Report } from "models/report";
@@ -22,7 +21,6 @@ import { createPortal } from "react-dom";
 import PopoverHelper from "./components/PopoverHelper";
 import { Help } from "@mui/icons-material";
 import ReportIcon from "@mui/icons-material/Report";
-import useIntercepts from "hooks/useIntercepts";
 import LocationClientService from "services/locationClient";
 import ReportClientService from "services/reportClient";
 
@@ -77,8 +75,6 @@ const MapAdsManagement = () => {
     setOpenRandomLocationSidebar(false);
   };
 
-  const intercepts = useIntercepts();
-
   useEffect(() => {
     const getAllLocations = async () => {
       const res = await LocationClientService.getLocations({ pageSize: 9999 });
@@ -116,7 +112,7 @@ const MapAdsManagement = () => {
           //   }
           // }
 
-          const existsAdvertises = await LocationService.checkExistsAdvertises(location.id);
+          const existsAdvertises = await LocationClientService.checkExistsAdvertises(location.id);
           location.existsAdvertises = existsAdvertises;
 
           const feature: Feature = {
@@ -155,14 +151,11 @@ const MapAdsManagement = () => {
     const getAllReportsTypeLocation = async () => {
       const email = localStorage.getItem("guest_email");
       if (email) {
-        ReportClientService.getReports(
-          {
-            reportTypeName: EReportType.LOCATION,
-            pageSize: 999,
-            email: email
-          },
-          intercepts
-        )
+        ReportClientService.getReports({
+          reportTypeName: EReportType.LOCATION,
+          pageSize: 999,
+          email: email
+        })
           .then((res) => {
             res.content.forEach((report: Report) => {
               let reportStatus: string;

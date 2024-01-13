@@ -19,13 +19,13 @@ import * as yup from "yup";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
 import UploadImage from "components/common/UploadImage";
 import InputWysiwyg from "components/common/InputWysiwyg";
-import ReportFormService from "services/reportForm";
 import { ReportForm } from "models/reportForm";
 import InputSelect from "components/common/InputSelect";
 import { EReportType, ReportCreateRequest } from "models/report";
 import { RandomLocation } from "models/location";
 import SnackbarAlert, { AlertType } from "components/common/SnackbarAlert";
 import ReportClientService from "services/reportClient";
+import ReportFormClientService from "services/reportFormClient";
 
 export const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -162,7 +162,7 @@ export default function ReportFormPopup({
   }
 
   useEffect(() => {
-    ReportFormService.getAllReportForm({ pageSize: 999 })
+    ReportFormClientService.getAllReportForm({ pageSize: 999 })
       .then((res) => {
         setReportForms(res.content);
       })

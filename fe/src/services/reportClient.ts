@@ -3,7 +3,7 @@ import api from "./configApi";
 import { GetReports, ReportCreateRequest } from "models/report";
 
 export class ReportClientService {
-  static async getReports(data: GetReports, api?: any): Promise<any> {
+  static async getReports(data: GetReports): Promise<any> {
     return await api
       .get(`${API.REPORT_CLIENT.DEFAULT}`, { params: data })
       .then((res: any) => {

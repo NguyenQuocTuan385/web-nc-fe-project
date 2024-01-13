@@ -10,9 +10,9 @@ import { Advertise } from "models/advertise";
 import Heading4 from "components/common/text/Heading4";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { useEffect, useState } from "react";
-import ContractService from "services/contract";
 import { Contract } from "models/contract";
 import { DateHelper } from "helpers/date";
+import ContractClientService from "services/contractClient";
 
 const AdvertisePopup = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -30,13 +30,12 @@ interface AdvertisePopupProps {
 }
 export default function AdvertiseInfoPopup({ onClose, open, advertise }: AdvertisePopupProps) {
   const [contract, setContract] = useState<Contract | null>(null);
+
   useEffect(() => {
     const getContracts = async () => {
-      ContractService.getContractsByAdvertise(advertise.id, { pageSize: 999 })
+      ContractClientService.findContractLicensingByAdvertiseId(advertise.id, { pageSize: 999 })
         .then((res) => {
-          const contractsTemp: Contract[] = res.content;
-          const filteredContracts = contractsTemp.filter((item: Contract) => item.status === 1);
-          filteredContracts.forEach((item: Contract) => setContract(item));
+          setContract(res);
         })
         .catch((err) => {});
     };

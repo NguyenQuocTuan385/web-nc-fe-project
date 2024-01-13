@@ -24,13 +24,13 @@ export class ContractService {
         return Promise.reject(e?.response?.data);
       });
   }
-  static async getContractsByAdvertise(id: number, data: GetContract): Promise<any> {
+  static async getContractsByAdvertise(id: number, data: GetContract, api: any): Promise<any> {
     return await api
       .get(`${API.CONTRACT.BY_ADVERTISE_ID.replace(":id", `${id}`)}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

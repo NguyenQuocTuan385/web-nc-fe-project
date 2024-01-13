@@ -81,24 +81,24 @@ export class LocationService {
       });
   }
 
-  static async checkExistsAdvertises(locationId: number): Promise<any> {
+  static async checkExistsAdvertises(locationId: number, api: any): Promise<any> {
     return await api
       .get(`${API.LOCATION.EXISTS_ADVERTISES.replace(":id", `${locationId}`)}`)
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }
 
-  static async getLocationsByPropertyId(id: number, data: GetLocations): Promise<any> {
+  static async getLocationsByPropertyId(id: number, data: GetLocations, api: any): Promise<any> {
     return await api
       .get(`${API.LOCATION.GET_BY_PROPERTY_ID.replace(":id", `${id}`)}`, { params: data })
-      .then((res) => {
+      .then((res: any) => {
         return Promise.resolve(res.data);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         return Promise.reject(e?.response?.data);
       });
   }

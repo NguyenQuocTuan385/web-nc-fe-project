@@ -46,7 +46,7 @@ export const API = {
     GETBYPROPERTY_PARENT_ID: "/api/properties/contracts"
   },
   CONTRACT_CLIENT: {
-    BY_ADVERTISE_ID_ONE: "/api/advertises-client/:id/contracts"
+    BY_ADVERTISE_ID_ONE: "/api/contracts-client/advertises/:id"
   },
   DISTRICT: {
     DEFAULT: "/api/properties",
@@ -83,6 +83,9 @@ export const API = {
   REPORT_FORM: {
     DEFAULT: "/api/report-forms",
     DELETE: "/api/report-forms/:id"
+  },
+  REPORT_FORM_CLIENT: {
+    DEFAULT: "/api/report-forms-client"
   },
   ADVERTISE_FORM: {
     DEFAULT: "/api/advertise-forms",

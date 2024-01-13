@@ -1,11 +1,10 @@
-import { Error, InfoOutlined } from "@mui/icons-material";
-import { Box, Button, IconButton } from "@mui/material";
+import { InfoOutlined } from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
 import { useState } from "react";
 import classes from "./styles.module.scss";
 import AdvertiseInfoPopup from "../AdvertiseInfoPopup";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { Advertise } from "models/advertise";
-import ParagraphSmall from "components/common/text/ParagraphSmall";
 
 interface AdvertiseInfoProps {
   advertise: Advertise;
