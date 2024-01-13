@@ -7,7 +7,8 @@ import {
   TableRow,
   TableCell,
   Paper,
-  IconButton
+  IconButton,
+  Tooltip
 } from "@mui/material";
 import {
   faEdit,
@@ -98,7 +99,7 @@ function TableTemplate({
                 align='left'
                 className={`${classes["table-cell"]} ${
                   heading === "STT" ? classes["small-heading"] : ""
-                }`}
+                } ${heading === "Địa chỉ" ? classes["large-heading"] : ""}`}
               >
                 {heading}
               </TableCell>
@@ -128,7 +129,7 @@ function TableTemplate({
                               ? `${classes["active"]}`
                               : `${classes["inactive"]} }`
                             : ""
-                        }`}
+                        }${column === "address" ? `${classes["cell-limit-text"]}` : ""}`}
                       >
                         {column === "objectStatus" ? row[column].name : row[column]}
                       </TableCell>
@@ -139,45 +140,55 @@ function TableTemplate({
                 {isActionColumn && (
                   <TableCell align='left' className={classes["cell-actions"]}>
                     {onViewAdsClick && (
-                      <IconButton
-                        aria-label='view-ads-list'
-                        size='medium'
-                        onClick={() => handleViewAdsClick(row.id)}
-                      >
-                        <FontAwesomeIcon icon={faRectangleAd} color='var(--blue-500)' />
-                      </IconButton>
+                      <Tooltip title='Danh sách bảng QC'>
+                        <IconButton
+                          aria-label='view-ads-list'
+                          size='medium'
+                          onClick={() => handleViewAdsClick(row.id)}
+                        >
+                          <FontAwesomeIcon icon={faRectangleAd} color='var(--blue-500)' />
+                        </IconButton>
+                      </Tooltip>
                     )}
                     {onViewDetailsClick && (
-                      <IconButton
-                        aria-label='view-detail'
-                        size='medium'
-                        onClick={() => handleViewDetailsClick(row.id)}
-                      >
-                        <FontAwesomeIcon icon={faEye} color='var(--blue-700)' />
-                      </IconButton>
+                      <Tooltip title='Chi tiết'>
+                        <IconButton
+                          aria-label='view-detail'
+                          size='medium'
+                          onClick={() => handleViewDetailsClick(row.id)}
+                        >
+                          <FontAwesomeIcon icon={faEye} color='var(--blue-700)' />
+                        </IconButton>
+                      </Tooltip>
                     )}
-                    <IconButton
-                      aria-label='edit'
-                      size='medium'
-                      onClick={() => {
-                        handleEditClick(row.id);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faEdit} color='#FFA500' />
-                    </IconButton>
-                    {onAddClick && row.statusContract !== 1 && (
+                    <Tooltip title='Chỉnh sửa'>
                       <IconButton
-                        aria-label='add'
+                        aria-label='edit'
                         size='medium'
-                        onClick={() => handleAddClick(row.id)}
+                        onClick={() => {
+                          handleEditClick(row.id);
+                        }}
                       >
-                        <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                        <FontAwesomeIcon icon={faEdit} color='#FFA500' />
                       </IconButton>
+                    </Tooltip>
+                    {onAddClick && row.statusContract !== 1 && (
+                      <Tooltip title='Tạo hợp đồng'>
+                        <IconButton
+                          aria-label='add'
+                          size='medium'
+                          onClick={() => handleAddClick(row.id)}
+                        >
+                          <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
+                        </IconButton>
+                      </Tooltip>
                     )}
                     {onDeleteClick && (
-                      <IconButton size='medium' onClick={() => handleDeleteClick(row.id)}>
-                        <FontAwesomeIcon icon={faTrash} style={{ color: "var(--red-error)" }} />
-                      </IconButton>
+                      <Tooltip title='Xóa'>
+                        <IconButton size='medium' onClick={() => handleDeleteClick(row.id)}>
+                          <FontAwesomeIcon icon={faTrash} style={{ color: "var(--red-error)" }} />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </TableCell>
                 )}

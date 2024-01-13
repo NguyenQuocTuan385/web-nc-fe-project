@@ -1,23 +1,22 @@
-.customTextField{
-  & input{
+.customTextField {
+  & input {
     height: 10px;
     width: 300px;
-
   }
 
-  & fieldset{
+  & fieldset {
     border-radius: 40px;
     border-color: var(--blue-500);
   }
 }
-.boxContainer{
+.boxContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.boxTabPanel{
+.boxTabPanel {
   width: 100%;
   background-color: white;
   display: flex;
@@ -25,5 +24,24 @@
   margin-top: 10px;
   gap: 20px;
   padding: 10px;
+}
 
+.boxSearch {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+@media screen and (max-width: 1400px) {
+  .customTextField {
+    & input {
+      height: 10px;
+      width: 150px;
+    }
+
+    & fieldset {
+      border-radius: 40px;
+      border-color: var(--blue-500);
+    }
+  }
 }
