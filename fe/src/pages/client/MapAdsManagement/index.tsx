@@ -170,6 +170,7 @@ const MapAdsManagement = () => {
               reportStatus = "Đã xử lý";
             }
             const reportLocation: RandomLocation = {
+              id: report.id,
               address: report.address as string,
               longitude: report.longitude as number,
               latitude: report.latitude as number,
@@ -544,8 +545,9 @@ const MapAdsManagement = () => {
           if (features.length > 0) {
             closeAdsSidebar();
             setOpenRandomLocationSidebar(true);
-            const { longitude, address, latitude } = features[0].properties;
+            const { longitude, address, latitude, id } = features[0].properties;
             const randomLocationTemp: RandomLocation = {
+              id: id,
               address: address,
               longitude: longitude,
               latitude: latitude

@@ -28,8 +28,9 @@ interface ReportInfoPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   locationId?: number;
+  reportId?: number;
 }
-const ReportInfoPopup = ({ setOpen, open, locationId }: ReportInfoPopupProps) => {
+const ReportInfoPopup = ({ setOpen, open, locationId, reportId }: ReportInfoPopupProps) => {
   const onClose = () => {
     setOpen(false);
     setReportShow(null);
@@ -39,21 +40,33 @@ const ReportInfoPopup = ({ setOpen, open, locationId }: ReportInfoPopupProps) =>
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<Report | null>(null);
 
+  console.log(reports);
   useEffect(() => {
     const getReportsUser = async () => {
       const email = localStorage.getItem("guest_email");
       if (email) {
-        ReportClientService.getReports({ pageSize: 999, email: email, locationId: locationId })
-          .then((res) => {
-            setReports(res.content);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        if (reportId) {
+          ReportClientService.getReportById(reportId)
+            .then((res) => {
+              const reportTemp: Report[] = [res];
+              setReports(reportTemp);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          ReportClientService.getReports({ pageSize: 999, email: email, locationId: locationId })
+            .then((res) => {
+              setReports(res.content);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       }
     };
     getReportsUser();
-  }, [locationId]);
+  }, [locationId, reportId]);
   return (
     <ReportDialog onClose={onClose} aria-labelledby='customized-dialog-title' open={open}>
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
@@ -102,6 +115,7 @@ const ReportInfoPopup = ({ setOpen, open, locationId }: ReportInfoPopupProps) =>
             </TableHead>
             <TableBody>
               {!!reports &&
+                reports.length > 0 &&
                 reports.map((item, index) => (
                   <TableRow key={index} className={classes.rowTable}>
                     <TableCell component='th' scope='row'>

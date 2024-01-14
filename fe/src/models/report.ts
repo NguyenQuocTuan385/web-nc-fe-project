@@ -9,7 +9,7 @@ export interface ReportForm {
 }
 
 export interface Report {
-  id: string;
+  id: number;
   fullName: string;
   email: string;
   guestEmail: string;
@@ -69,6 +69,7 @@ export interface ReportCreateRequest {
   latitude?: number;
   advertiseId?: number;
   userId?: number;
+  propertyId?: number;
 }
 
 export enum EStatusGetReports {
