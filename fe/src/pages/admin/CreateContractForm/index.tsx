@@ -29,13 +29,11 @@ function ContractForm() {
       <SideBarWard />
       <Box style={{ marginLeft: "320px" }}>
         <AdDetails
-          address={advertise?.location.address}
           adType={advertise?.adsType.name}
           width={advertise?.width}
           height={advertise?.height}
           quantity={Number(advertise?.pillarQuantity)}
-          adForm={advertise?.location.adsForm.name}
-          locationType={advertise?.location.locationType.name}
+          location={advertise?.location}
         />
         <ContractDetailForm contractId={Number(id)} />
       </Box>

@@ -38,3 +38,26 @@ img {
 .text-inactive {
   color: rgb(241, 35, 35) !important;
 }
+
+.map-item {
+  width: 100%;
+  height: 600px;
+  border: 1px solid var(--gray-30);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.image-list {
+  display: flex;
+  gap: 20px;
+
+  .image-item {
+    height: 180px;
+    width: 300px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

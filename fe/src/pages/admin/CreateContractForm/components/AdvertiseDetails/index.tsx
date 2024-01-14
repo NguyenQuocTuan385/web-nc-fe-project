@@ -8,15 +8,15 @@ import classes from "./style.module.scss";
 
 import clsx from "clsx";
 import FormTopTab from "../FormTopTab";
+import { Location } from "models/location";
+import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
 
 interface advertiseDetailProp {
   adType?: string;
-  address?: string;
   width?: number;
   height?: number;
   quantity?: number;
-  adForm?: string;
-  locationType?: string;
+  location?: Location;
 }
 
 function AdDetails(adDetail: advertiseDetailProp) {
@@ -32,7 +32,7 @@ function AdDetails(adDetail: advertiseDetailProp) {
           <Heading6 id='general' fontSize={"20px"} fontWeight={500}>
             {adDetail.adType}
           </Heading6>
-          <Heading6 fontWeight={50}>{adDetail.address}</Heading6>
+          <Heading6 fontWeight={50}>{adDetail.location?.address}</Heading6>
         </Box>
         <Divider className={classes.divider} variant='middle' />
         <Box className={classes.detailGroup}>
@@ -64,7 +64,7 @@ function AdDetails(adDetail: advertiseDetailProp) {
                 Hình thức
               </Heading6>
             </div>
-            <Heading6 fontWeight={800}>{adDetail.adForm}</Heading6>
+            <Heading6 fontWeight={800}>{adDetail.location?.adsForm.name}</Heading6>
           </Box>
           <Box className={classes.detailItem}>
             <div>
@@ -73,14 +73,19 @@ function AdDetails(adDetail: advertiseDetailProp) {
                 Phân loại
               </Heading6>
             </div>
-            <Heading6 fontWeight={800}>{adDetail.locationType}</Heading6>
+            <Heading6 fontWeight={800}>{adDetail.location?.locationType.name}</Heading6>
           </Box>
         </Box>
         <Divider className={classes.divider} variant='middle' />
 
-        <Box className={classes.detailGroup}>
-          <Heading6 id='mapLocation'>Vị trí đặt bảng quảng cáo trên bản đồ</Heading6>
-        </Box>
+        {adDetail.location && (
+          <Box className={classes.detailGroup}>
+            <Heading6 id='mapLocation'>Vị trí đặt bảng quảng cáo trên bản đồ</Heading6>
+            <Box className={classes["map-item"]}>
+              <MapAdsManagementAdmin locationView={adDetail.location} />
+            </Box>
+          </Box>
+        )}
       </Box>
     </Card>
   );

@@ -11,6 +11,7 @@ import ShowContractImage from "./Components/ContractImageShow";
 import ContractDetailStickyFooter from "./Components/ContractDetailStickyFooter";
 import { useParams } from "react-router-dom";
 import useIntercepts from "hooks/useIntercepts";
+import MapAdsManagementAdmin from "../MapAdsManagement";
 
 interface dataListObjectItem {
   imageIcon: any;
@@ -100,6 +101,16 @@ function ContractDetail() {
 
           <Divider className={classes.divider} variant='middle' />
           <DetailCard heading='Thông tin chi tiết bảng quảng cáo' data={advertiseDataList} />
+
+          {contractData?.advertise.location && (
+            <Box className={classes.detailGroup}>
+              <Divider className={classes.divider} variant='middle' />
+              <Heading6 id='mapLocation'>Vị trí đặt bảng quảng cáo trên bản đồ</Heading6>
+              <Box className={classes["map-item"]}>
+                <MapAdsManagementAdmin locationView={contractData?.advertise.location} />
+              </Box>
+            </Box>
+          )}
 
           <Divider className={classes.divider} variant='middle' />
           <DetailCard heading='Thông tin về công ty' data={companyDataList} />

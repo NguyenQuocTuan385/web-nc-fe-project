@@ -13,6 +13,7 @@ import Editor from "components/common/Editor/EditWithQuill";
 import { routes } from "routes/routes";
 import SideBarDCMS from "components/admin/SidebarDCMS";
 import useIntercepts from "hooks/useIntercepts";
+import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -81,20 +82,22 @@ export const ReportDetailDCMS = () => {
               <Box>
                 <Heading3>Hình ảnh báo cáo</Heading3>
                 <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
-                  {dataReportDetail &&
-                    JSON.parse(dataReportDetail.images).length > 0 &&
-                    JSON.parse(dataReportDetail.images).map((image: string) => {
-                      return (
-                        <img
-                          width={"48%"}
-                          height={"250px"}
-                          className={classes["image"]}
-                          src={image}
-                          alt='Hình ảnh bảng QC'
-                          style={{ border: "1px solid #ccc" }}
-                        />
-                      );
-                    })}
+                  {dataReportDetail && JSON.parse(dataReportDetail.images).length > 0 && (
+                    <Box className={classes["image-list"]}>
+                      {JSON.parse(dataReportDetail.images).map((image: string) => {
+                        return (
+                          <div className={classes["image-item"]}>
+                            <img
+                              className={classes["image"]}
+                              src={image}
+                              alt='Hình ảnh bảng QC'
+                              style={{ border: "1px solid #ccc" }}
+                            />
+                          </div>
+                        );
+                      })}
+                    </Box>
+                  )}
                   {/* <img
                   width={"48%"}
                   height={"250px"}
@@ -168,6 +171,12 @@ export const ReportDetailDCMS = () => {
                     content={dataReportDetail?.reply || "Chưa có thông tin phản hồi"}
                   />
                 </Box>
+              </Box>
+            )}
+
+            {dataReportDetail && (
+              <Box className={classes["map-item"]}>
+                <MapAdsManagementAdmin reportView={dataReportDetail} />
               </Box>
             )}
           </Box>
