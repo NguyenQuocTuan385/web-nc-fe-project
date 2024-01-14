@@ -120,20 +120,33 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
     createAdvertiseEditRequest(isSuccess);
   };
 
+  const userCurrent: User = useSelector(selectCurrentUser);
   const createAdvertiseEdit = async (
     advertiseId: number,
     advertiseEditRequest: AdvertiseEditRequest
   ) => {
     dispatch(loading(true));
-    AdvertiseEditService.createAdvertiseEditRequest(locationId, advertiseEditRequest, intercept)
-      .then((res) => {
-        handleEmitSuccessState(true);
-      })
-      .catch((err) => {
-        handleEmitSuccessState(false);
-        console.log(err);
-      })
-      .finally(() => dispatch(loading(false)));
+    if (userCurrent.role.id === ERole.DEPARTMENT) {
+      AdvertiseEditService.editAdvertiseRequest(advertiseId, advertiseEditRequest, intercept)
+        .then((res) => {
+          handleEmitSuccessState(true);
+        })
+        .catch((err) => {
+          handleEmitSuccessState(false);
+          console.log(err);
+        })
+        .finally(() => dispatch(loading(false)));
+    } else {
+      AdvertiseEditService.createAdvertiseEditRequest(advertiseId, advertiseEditRequest, intercept)
+        .then((res) => {
+          handleEmitSuccessState(true);
+        })
+        .catch((err) => {
+          handleEmitSuccessState(false);
+          console.log(err);
+        })
+        .finally(() => dispatch(loading(false)));
+    }
   };
 
   const submitHandler = async (data: any) => {
@@ -175,7 +188,7 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
       locationId: locationId
     };
 
-    createAdvertiseEdit(locationId, dataSubmit);
+    createAdvertiseEdit(advertiseId, dataSubmit);
   };
 
   return (
@@ -451,7 +464,9 @@ const MyForm: React.FC<FormEditAdvertiseProps> = ({
         />
       </Box>
 
-      <ButtonSubmit type='submit'> Gửi</ButtonSubmit>
+      <ButtonSubmit type='submit'>
+        {currentUser.role.id === ERole.DEPARTMENT ? "Cập nhật" : "Gửi"}
+      </ButtonSubmit>
     </form>
   );
 };

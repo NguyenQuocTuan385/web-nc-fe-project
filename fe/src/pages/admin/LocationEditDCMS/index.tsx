@@ -20,7 +20,6 @@ import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 
 import classes from "./styles.module.scss";
-import SideBarWard from "components/admin/SidebarWard";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
@@ -32,7 +31,6 @@ import AdvertiseFormService from "services/advertiseForm";
 import { LocationEditByCDMSRequest, LocationType } from "models/location";
 import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
-import userDetails from "userDetails.json";
 import Heading2 from "components/common/text/Heading2";
 import useIntercepts from "hooks/useIntercepts";
 import { useSelector } from "react-redux";
@@ -84,6 +82,7 @@ interface FormEditLocationProps {
   adsForms: AdvertiseForm[];
   createLocationEditRequest: (isSuccess: boolean) => void;
   locationId: number;
+  property: number;
   intercept: AxiosInstance;
 }
 
@@ -93,6 +92,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   adsForms,
   createLocationEditRequest,
   locationId,
+  property,
   intercept
 }: any) => {
   const {
@@ -106,8 +106,6 @@ const MyForm: React.FC<FormEditLocationProps> = ({
   });
 
   const currentUser: User = useSelector(selectCurrentUser);
-  console.log(data);
-  console.log(currentUser);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [originalImages, setOriginalImages] = useState(JSON.parse(data.images));
@@ -130,8 +128,6 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     locationEditRequest: LocationEditByCDMSRequest,
     intercept: AxiosInstance
   ) => {
-    console.log(locationId + "-------------------------- ");
-    console.log(locationEditRequest);
     LocationEditService.updateLocationByCDMS(locationId, locationEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -177,10 +173,9 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     const dataSubmit = {
       ...formSubmit,
       imageUrls: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
-      propertyId: data.property.id,
+      propertyId: property.id,
       userId: currentUser.id
     };
-    console.log(dataSubmit);
     createLocationEdit(locationId, dataSubmit, intercept);
   };
 
@@ -502,6 +497,7 @@ export const LocationEditCDMS = () => {
     const getLocationById = async () => {
       LocationService.getLocationsById(Number(id), intercept)
         .then((res) => {
+          console.log(res.property.id + "------------------sdfsdfsdf-------- ");
           setLocationData(res);
         })
         .catch((e) => {
@@ -561,6 +557,7 @@ export const LocationEditCDMS = () => {
                   adsForms={adsForms}
                   createLocationEditRequest={handleGetSuccessState}
                   locationId={Number(id)}
+                  property={locationData}
                   intercept={intercept}
                 />
               </Box>
@@ -575,7 +572,7 @@ export const LocationEditCDMS = () => {
                 severity={isCreateSuccess ? "success" : "error"}
                 onClose={() => setIsCreateSuccess(null)}
               >
-                {isCreateSuccess ? "Yêu cầu chỉnh sửa thành công" : "Yêu cầu chỉnh sửa thất bại"}
+                {isCreateSuccess ? "Cập nhật chỉnh sửa thành công" : "Cập nhật chỉnh sửa thất bại"}
               </Alert>
             </Snackbar>
           </Box>
