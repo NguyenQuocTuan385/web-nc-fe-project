@@ -37,12 +37,13 @@ import { AdvertiseForm } from "models/advertise";
 import Heading2 from "components/common/text/Heading2";
 import useIntercepts from "hooks/useIntercepts";
 import { User } from "models/user";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import WardService from "services/ward";
 import DistrictService from "services/district";
 import { Property } from "models/property";
 import MapAdsManagementAdmin from "../MapAdsManagement";
+import { loading } from "reduxes/Loading";
 
 interface FormData {
   propertyId: number;
@@ -107,6 +108,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, in
   });
 
   const currentUser: User = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
   const [openDialog, setOpenDialog] = useState(false);
   const [originalImages, setOriginalImages] = useState([]);
@@ -133,11 +135,14 @@ const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, in
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 
   const submitHandler = async (data: any) => {
-    console.log(data);
+    dispatch(loading(true));
     const files = data.imageUrls;
     const formSubmit: FormData = {
       ...data,
