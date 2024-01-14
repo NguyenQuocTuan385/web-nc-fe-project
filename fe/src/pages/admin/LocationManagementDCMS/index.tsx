@@ -132,6 +132,7 @@ const LocationManagementDCMS = () => {
       })
       .catch((e) => {
         console.log(e);
+        setOpenDeleteDialog(false);
       });
   };
 
