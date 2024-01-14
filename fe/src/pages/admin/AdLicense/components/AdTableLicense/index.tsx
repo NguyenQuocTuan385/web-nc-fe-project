@@ -155,12 +155,18 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
     setData(row);
     setOpenAccept(true);
   };
+  const deleteContractHandle = (id: number) => {
+    ContractService.deleteContracts(id, intercept)
+      .then((res) => {})
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const confirmCancel = async () => {
     setOpenCancel(false);
-    await updateContractById(data!!).then(() => {
-      setUpdate(true);
-    });
+    await deleteContractHandle(data!!.id);
+    setUpdate(true);
   };
   const handleClickCancel = (event: React.MouseEvent, row: Contract) => {
     event.stopPropagation();
