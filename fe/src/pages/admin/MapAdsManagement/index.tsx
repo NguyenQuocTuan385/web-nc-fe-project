@@ -26,7 +26,9 @@ import useIntercepts from "hooks/useIntercepts";
 import { UseFormReset } from "react-hook-form";
 import { EReportStatus, EReportType, EStatusGetReports, Report } from "models/report";
 import ReportService from "services/report";
-
+import PropertyService from "services/property";
+import { AddressHelper } from "helpers/address";
+import SnackbarAlert, { AlertType } from "components/common/SnackbarAlert";
 interface MapAdsManagementAdminProps {
   locationView?: Location;
   reset?: UseFormReset<any>;
@@ -34,9 +36,13 @@ interface MapAdsManagementAdminProps {
 }
 enum ELocationCheckedSwitch {
   BOTH = 1,
-  LOCATION_IS_PLANNING = 2,
-  LOCATION_IS_NOT_PLANNING = 3,
-  NOT_AT_ALL = 4
+  LOCATION_IS_PLANNING_AND_LOCATION_IS_NOT_PLANNING = 2,
+  LOCATION_IS_PLANNING_AND_REPORT_LOCATION = 3,
+  LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION = 4,
+  LOCATION_IS_PLANNING = 5,
+  LOCATION_IS_NOT_PLANNING = 6,
+  REPORT_LOCATION = 7,
+  NOT_AT_ALL = 8
 }
 const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManagementAdminProps) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -59,12 +65,15 @@ const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManage
   let locationsIsPlanningHasAdvertises = useRef<Feature[]>([]);
   let locationsIsNotPlanningNoAdvertises = useRef<Feature[]>([]);
   let locationsIsNotPlanningHasAdvertises = useRef<Feature[]>([]);
+  let reportLocations = useRef<Feature[]>([]);
   let clusters = useRef<Feature[]>([]);
   const [locationCheckedSwitch, setLocationCheckedSwitch] = useState<ELocationCheckedSwitch>(
     ELocationCheckedSwitch.BOTH
   );
-
+  const [openSnackbarAlert, setOpenSnackbarAlert] = useState(false);
+  const [alertContent, setAlertContent] = useState<string>();
   const user: User | null = useSelector((state: RootState) => state.auth.currentUser);
+  const [alertType, setAlertType] = useState<AlertType>();
 
   const closeAdsSidebar = () => {
     setOpenLocationSidebar(false);
@@ -639,11 +648,31 @@ const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManage
                 latitude: lat
               };
               if (reset) {
-                reset({
-                  address: place_name_vi,
-                  longitude: lng,
-                  latitude: lat
-                });
+                const infoAddress = AddressHelper.getWardDistrict(place_name_vi);
+                if (infoAddress) {
+                  PropertyService.findPropertyByWardDistrictAddress(
+                    {
+                      ward: infoAddress.ward,
+                      district: infoAddress.district
+                    },
+                    intercept
+                  )
+                    .then((res) => {
+                      reset({
+                        address: place_name_vi,
+                        longitude: lng,
+                        latitude: lat,
+                        propertyId: res.id
+                      });
+                    })
+                    .catch((e) => {
+                      setOpenSnackbarAlert(true);
+                      setAlertContent(
+                        "Chúng tôi hiện không quản lý khu vực này, vui lòng chọn khu vực khác!!!"
+                      );
+                      setAlertType(AlertType.Error);
+                    });
+                }
               }
               setRandomLocationData(randomLocationTemp);
             } else {
@@ -655,11 +684,32 @@ const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManage
                 latitude: coordinates[1]
               };
               if (reset) {
-                reset({
-                  address: place_name_vi,
-                  longitude: coordinates[0],
-                  latitude: coordinates[1]
-                });
+                const infoAddress = AddressHelper.getWardDistrict(place_name_vi);
+                if (infoAddress) {
+                  PropertyService.findPropertyByWardDistrictAddress(
+                    {
+                      ward: infoAddress.ward,
+                      district: infoAddress.district
+                    },
+                    intercept
+                  )
+                    .then((res) => {
+                      console.log(res);
+                      reset({
+                        address: place_name_vi,
+                        longitude: coordinates[0],
+                        latitude: coordinates[1],
+                        propertyId: res.id
+                      });
+                    })
+                    .catch((e) => {
+                      setOpenSnackbarAlert(true);
+                      setAlertContent(
+                        "Chúng tôi hiện không quản lý khu vực này, vui lòng chọn khu vực khác!!!"
+                      );
+                      setAlertType(AlertType.Error);
+                    });
+                }
               }
               setRandomLocationData(randomLocationTemp);
               marker.current = new MapLibreGL.Marker().setLngLat(coordinates).addTo(map);
@@ -788,6 +838,12 @@ const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManage
         randomLocation={randomLocation}
       />
       <PopoverHelper anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <SnackbarAlert
+        open={openSnackbarAlert}
+        setOpen={setOpenSnackbarAlert}
+        type={alertType}
+        content={alertContent}
+      />
     </Box>
   );
 };

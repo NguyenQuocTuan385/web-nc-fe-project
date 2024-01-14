@@ -177,11 +177,9 @@ const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, in
     const dataSubmit = {
       ...formSubmit,
       image: savedImageUrls.length > 0 ? savedImageUrls : formSubmit.imageUrls[0],
-      propertyId: selectedWard?.id ? selectedWard.id : currentUser.property.id,
+      propertyId: formSubmit.propertyId,
       userId: currentUser.id
     };
-
-    console.log(dataSubmit);
 
     createLocation(dataSubmit);
   };

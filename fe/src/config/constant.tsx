@@ -56,6 +56,12 @@ export const API = {
     GET_BY_PARENT_ID: "/api/properties/:id",
     ALL: "/api/properties/all"
   },
+  PROPERTY: {
+    FIND_PROPERTY_BY_WARD_AND_DISTRICT: "/api/properties/findByWardAndDistrict"
+  },
+  PROPERTY_CLIENT: {
+    FIND_PROPERTY_BY_WARD_AND_DISTRICT: "/api/properties-client/findByWardAndDistrict"
+  },
   WARD: {
     DEFAULT: "/api/properties/:propertyParentId",
     DELETE: "/api/properties/:id",
@@ -79,7 +85,8 @@ export const API = {
   },
   REPORT_CLIENT: {
     DEFAULT: "/api/reports-client",
-    CREATE: "/api/reports-client"
+    CREATE: "/api/reports-client",
+    DETAILS: "/api/reports-client/:id"
   },
   REPORT_FORM: {
     DEFAULT: "/api/report-forms",

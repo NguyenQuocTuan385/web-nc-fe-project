@@ -24,6 +24,17 @@ export class ReportClientService {
         return Promise.reject(e?.response?.data);
       });
   }
+
+  static async getReportById(reportId: number): Promise<any> {
+    return await api
+      .get(`${API.REPORT_CLIENT.DETAILS.replace(":id", `${reportId}`)}`)
+      .then((res: any) => {
+        return Promise.resolve(res.data);
+      })
+      .catch((e: any) => {
+        return Promise.reject(e?.response?.data);
+      });
+  }
 }
 
 export default ReportClientService;

@@ -15,6 +15,8 @@ export interface GetProperties {
   search?: string;
   pageSize?: number;
   current?: number;
+  ward?: string;
+  district?: string;
 }
 
 export interface PropertyRequest {

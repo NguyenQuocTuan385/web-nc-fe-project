@@ -3,6 +3,7 @@ import { Property } from "./property";
 import { User } from "./user";
 
 export interface RandomLocation {
+  id?: number;
   address: string;
   longitude: number;
   latitude: number;

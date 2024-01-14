@@ -28,6 +28,8 @@ import ReportClientService from "services/reportClient";
 import ReportFormClientService from "services/reportFormClient";
 import { useDispatch } from "react-redux";
 import { loading } from "reduxes/Loading";
+import { AddressHelper } from "helpers/address";
+import PropertyClientService from "services/propertyClient";
 
 export const ReportDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -142,6 +144,27 @@ export default function ReportFormPopup({
         ...reportCreate,
         advertiseId: advertiseId
       };
+      dispatch(loading(true));
+      ReportClientService.createReport(reportCreate)
+        .then((res) => {
+          if (!email) {
+            localStorage.setItem("guest_email", formSubmit.email);
+          }
+          setOpenSnackbarAlert(true);
+          setAlertContent("Đăng báo cáo thành công");
+          setAlertType(AlertType.Success);
+          onClose();
+          window.location.reload();
+        })
+        .catch((err) => {
+          setOpenSnackbarAlert(true);
+          setAlertContent("Đăng báo cáo thất bại");
+          setAlertType(AlertType.Error);
+          console.log(err);
+        })
+        .finally(() => {
+          dispatch(loading(false));
+        });
     } else {
       reportCreate = {
         ...reportCreate,
@@ -149,29 +172,49 @@ export default function ReportFormPopup({
         latitude: randomLocation?.latitude,
         longitude: randomLocation?.longitude
       };
+      const infoAddress = AddressHelper.getWardDistrict(randomLocation?.address as string);
+      dispatch(loading(true));
+      PropertyClientService.findPropertyByWardDistrictAddress({
+        ward: infoAddress?.ward,
+        district: infoAddress?.district
+      })
+        .then((res) => {
+          reportCreate = {
+            ...reportCreate,
+            propertyId: res.id
+          };
+          ReportClientService.createReport(reportCreate)
+            .then((res) => {
+              if (!email) {
+                localStorage.setItem("guest_email", formSubmit.email);
+              }
+              setOpenSnackbarAlert(true);
+              setAlertContent("Đăng báo cáo thành công");
+              setAlertType(AlertType.Success);
+              onClose();
+              window.location.reload();
+            })
+            .catch((err) => {
+              setOpenSnackbarAlert(true);
+              setAlertContent("Đăng báo cáo thất bại");
+              setAlertType(AlertType.Error);
+              console.log(err);
+            })
+            .finally(() => {
+              dispatch(loading(true));
+            });
+        })
+        .catch((err) => {
+          setOpenSnackbarAlert(true);
+          setAlertContent(
+            "Đăng báo cáo thất bại, chúng tôi hiện không quản lý khu vực này, vui lòng chọn khu vực khác!!!"
+          );
+          setAlertType(AlertType.Error);
+        })
+        .finally(() => {
+          dispatch(loading(false));
+        });
     }
-
-    dispatch(loading(true));
-    ReportClientService.createReport(reportCreate)
-      .then((res) => {
-        if (!email) {
-          localStorage.setItem("guest_email", formSubmit.email);
-        }
-        setOpenSnackbarAlert(true);
-        setAlertContent("Đăng báo cáo thành công");
-        setAlertType(AlertType.Success);
-        onClose();
-      })
-      .catch((err) => {
-        setOpenSnackbarAlert(true);
-        setAlertContent("Đăng báo cáo thất bại");
-        setAlertType(AlertType.Error);
-        console.log(err);
-      })
-      .finally(() => {
-        window.location.reload();
-        dispatch(loading(false));
-      });
   };
 
   function onChange() {
