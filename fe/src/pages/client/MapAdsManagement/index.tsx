@@ -148,6 +148,53 @@ const MapAdsManagement = () => {
     getAllLocations();
   }, []);
 
+  const changeHandleReportLocation = (check: boolean) => {
+    const currentMap = map.current;
+    if (!currentMap) return;
+    if (check === false) {
+      currentMap.setLayoutProperty(
+        "unclustered_location_is_planning_no_advertises",
+        "text-field",
+        ""
+      );
+      currentMap.setLayoutProperty(
+        "unclustered_location_is_planning_has_advertises",
+        "text-field",
+        ""
+      );
+      currentMap.setLayoutProperty(
+        "unclustered_location_is_not_planning_has_advertises",
+        "text-field",
+        ""
+      );
+      currentMap.setLayoutProperty(
+        "unclustered_location_is_not_planning_no_advertises",
+        "text-field",
+        ""
+      );
+      return;
+    }
+
+    currentMap.setLayoutProperty("unclustered_location_is_planning_no_advertises", "text-field", [
+      "get",
+      "reportStatus"
+    ]);
+    currentMap.setLayoutProperty("unclustered_location_is_planning_has_advertises", "text-field", [
+      "get",
+      "reportStatus"
+    ]);
+    currentMap.setLayoutProperty(
+      "unclustered_location_is_not_planning_has_advertises",
+      "text-field",
+      ["get", "reportStatus"]
+    );
+    currentMap.setLayoutProperty(
+      "unclustered_location_is_not_planning_no_advertises",
+      "text-field",
+      ["get", "reportStatus"]
+    );
+  };
+
   useEffect(() => {
     const getAllReportsTypeLocation = async () => {
       const email = localStorage.getItem("guest_email");
@@ -196,17 +243,6 @@ const MapAdsManagement = () => {
     };
     getAllReportsTypeLocation();
   }, [reportLocations]);
-
-  const handleClickSwitchLocationEvent = (propertyName: string) => {
-    const currentMap = map.current;
-    if (!currentMap) return;
-    const visibility = currentMap.getLayoutProperty(propertyName, "visibility");
-    if (!visibility || visibility === "visible") {
-      currentMap.setLayoutProperty(propertyName, "visibility", "none");
-    } else {
-      currentMap.setLayoutProperty(propertyName, "visibility", "visible");
-    }
-  };
 
   const changeSourceDataLocation = (locationCheckedChange: ELocationCheckedSwitch) => {
     if (locationCheckedChange === ELocationCheckedSwitch.BOTH) {
@@ -701,15 +737,6 @@ const MapAdsManagement = () => {
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
                   }
                 }
-
-                handleClickSwitchLocationEvent("unclustered_location_is_planning_no_advertises");
-                handleClickSwitchLocationEvent("unclustered_location_is_planning_has_advertises");
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_planning_no_advertises_text"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_planning_has_advertises_text"
-                );
               }}
             />
             <ParagraphSmall>Điểm đặt QC đã quy hoạch</ParagraphSmall>
@@ -770,19 +797,6 @@ const MapAdsManagement = () => {
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
                   }
                 }
-
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_has_advertises"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_no_advertises"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_has_advertises_text"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_no_advertises_text"
-                );
               }}
             />
             <ParagraphSmall>Điểm đặt QC chưa quy hoạch</ParagraphSmall>
@@ -791,6 +805,7 @@ const MapAdsManagement = () => {
             <Switch
               defaultChecked
               onChange={(e: any) => {
+                changeHandleReportLocation(e.target.checked);
                 if (e.target.checked === true) {
                   if (
                     locationCheckedSwitch ===
@@ -819,6 +834,7 @@ const MapAdsManagement = () => {
                     changeSourceDataLocation(
                       ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING_AND_REPORT_LOCATION
                     );
+                    changeHandleReportLocation(true);
                   }
                 } else {
                   if (locationCheckedSwitch === ELocationCheckedSwitch.REPORT_LOCATION) {
@@ -845,13 +861,6 @@ const MapAdsManagement = () => {
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
                   }
                 }
-
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_has_advertises"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_no_advertises"
-                );
               }}
             />
             <ParagraphSmall>Địa điểm báo cáo</ParagraphSmall>

@@ -25,7 +25,6 @@ export interface Report {
   longitude?: number;
   latitude?: number;
   createdAt: Date;
-  updatedAt: Date;
 }
 
 export enum EReportType {
@@ -49,6 +48,7 @@ export interface GetReports {
   current?: number;
   reportTypeName?: EReportType;
   status?: EStatusGetReports;
+  adminPropertyId?: number;
 }
 
 export interface ReportEditRequest {

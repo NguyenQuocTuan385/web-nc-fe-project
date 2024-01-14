@@ -40,7 +40,6 @@ const ReportInfoPopup = ({ setOpen, open, locationId, reportId }: ReportInfoPopu
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<Report | null>(null);
 
-  console.log(reports);
   useEffect(() => {
     const getReportsUser = async () => {
       const email = localStorage.getItem("guest_email");
