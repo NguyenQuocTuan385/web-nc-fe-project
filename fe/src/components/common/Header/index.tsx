@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
 import { AuthenticationService } from "services/authentication";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import Heading5 from "../text/Heading5";
+import ParagraphBody from "../text/ParagraphBody";
+import ParagraphSmall from "../text/ParagraphSmall";
 
 const BoxAvatar = styled(Button)(() => ({
   display: "flex",
@@ -26,13 +29,25 @@ const MenuWrapper = styled("div")(() => ({
 const MenuAvatar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const [anchorProfile, setAnchorProfile] = useState<null | HTMLElement>(null);
+  const openProfile = Boolean(anchorProfile);
+  const [anchorNotifications, setAnchorNotifications] = useState<null | HTMLElement>(null);
+  const openNotifications = Boolean(anchorNotifications);
+
+  const handleOpenProfileMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorProfile(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+
+  const handleOpenNotificationsMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorNotifications(event.currentTarget);
+  };
+
+  const handleCloseProfileMenu = () => {
+    setAnchorProfile(null);
+  };
+
+  const handleCloseNotificationsMenu = () => {
+    setAnchorNotifications(null);
   };
 
   const updateProfileHandler = () => {
@@ -40,7 +55,7 @@ const MenuAvatar = () => {
   };
 
   const handleLogout = () => {
-    setAnchorEl(null);
+    setAnchorProfile(null);
 
     AuthenticationService.logout().then(() => {
       dispatch(logOut());
@@ -51,9 +66,38 @@ const MenuAvatar = () => {
 
   const currentUser: User = useSelector(selectCurrentUser);
 
-  const handleShowNotifications = () => {
-    console.log("show notifications");
-  };
+  const notificationsList = [
+    {
+      id: 1,
+      createdAt: "2 phút",
+      sender: "Sở văn hóa",
+      avatarUrl: "https://i.pravatar.cc/1000",
+      imageUrl:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmq1k95wJA5bP_jYuAeEomw-NanJEBmTULTA&usqp=CAU",
+      typeNotification: "license-update-advertise",
+      typeStatusNotification: "accepted"
+    },
+    {
+      id: 2,
+      createdAt: "1 tiếng",
+      sender: "Sở văn hóa",
+      avatarUrl: "https://i.pravatar.cc/1000",
+      imageUrl:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmq1k95wJA5bP_jYuAeEomw-NanJEBmTULTA&usqp=CAU",
+      typeNotification: "license-update-advertise",
+      typeStatusNotification: "accepted"
+    },
+    {
+      id: 3,
+      createdAt: "1 phút",
+      sender: "Sở văn hóa",
+      avatarUrl: "https://i.pravatar.cc/1000",
+      imageUrl:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmq1k95wJA5bP_jYuAeEomw-NanJEBmTULTA&usqp=CAU",
+      typeNotification: "license-update-advertise",
+      typeStatusNotification: "accepted"
+    }
+  ];
 
   return (
     <MenuWrapper>
@@ -62,7 +106,10 @@ const MenuAvatar = () => {
           color='primary'
           sx={{ cursor: "pointer" }}
           badgeContent={0}
-          onClick={handleShowNotifications}
+          onClick={handleOpenNotificationsMenu}
+          aria-controls={openNotifications ? "notifications-menu" : undefined}
+          aria-haspopup='true'
+          aria-expanded={openNotifications ? "true" : undefined}
           showZero
           style={{ margin: "10px 15px 0 0" }}
         >
@@ -70,10 +117,10 @@ const MenuAvatar = () => {
         </Badge>
       </Tooltip>
       <BoxAvatar
-        onClick={handleClick}
-        aria-controls={open ? "basic-menu" : undefined}
+        onClick={handleOpenProfileMenu}
+        aria-controls={openProfile ? "basic-menu" : undefined}
         aria-haspopup='true'
-        aria-expanded={open ? "true" : undefined}
+        aria-expanded={openProfile ? "true" : undefined}
       >
         <Avatar alt={currentUser?.name} src={currentUser?.avatar} />
         <Typography pl={"10px"}>{currentUser?.name}</Typography>
@@ -81,15 +128,53 @@ const MenuAvatar = () => {
 
       <Menu
         id='basic-menu'
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        anchorEl={anchorProfile}
+        open={openProfile}
+        onClose={handleCloseProfileMenu}
         MenuListProps={{
           "aria-labelledby": "basic-button"
         }}
       >
         <MenuItem onClick={updateProfileHandler}>Thôn tin tài khoản</MenuItem>
         <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+      </Menu>
+
+      <Menu
+        id='notifications-menu'
+        className={classes.notificationsMenu}
+        anchorEl={anchorNotifications}
+        open={openNotifications}
+        onClose={handleCloseNotificationsMenu}
+        component='div'
+        sx={{ paddingBottom: "0" }}
+      >
+        <Box sx={{ borderBottom: "1px solid #ccc", padding: "0 8px 8px 8px", overflow: "hidden" }}>
+          <Heading5>Thông báo</Heading5>
+        </Box>
+        {notificationsList &&
+          notificationsList.length > 0 &&
+          notificationsList.map((notification: any, index: number) => (
+            <MenuItem sx={{ width: "100%" }}>
+              <Avatar alt='Avatar' src={notification.avatarUrl} sx={{ width: 56, height: 56 }} />
+              <Box sx={{ width: "300px", marginLeft: "10px" }}>
+                <ParagraphBody
+                  style={{
+                    width: "100%",
+                    wordWrap: "break-word",
+                    whiteSpace: "normal"
+                  }}
+                >
+                  <span style={{ fontWeight: 600 }}>{notification.sender} đã gửi:</span> Bảng quảng
+                  cáo của bạn đã cập nhật thành công
+                </ParagraphBody>
+                <ParagraphSmall style={{ color: "#888" }}>{notification.createdAt}</ParagraphSmall>
+              </Box>
+
+              <Box sx={{ width: "80px" }}>
+                <img src={notification.imageUrl} className={classes.imageMenu} />
+              </Box>
+            </MenuItem>
+          ))}
       </Menu>
     </MenuWrapper>
   );
