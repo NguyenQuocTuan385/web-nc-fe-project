@@ -96,10 +96,18 @@ const ReportsManagement = () => {
   }, [searchValue]);
 
   const data = reportList.map((report: Report, index: number) => {
+    let statusName;
+    if (report.status === 1) {
+      statusName = "Chờ xử lý";
+    } else if (report.status === 2) {
+      statusName = "Đang xử lí";
+    } else {
+      statusName = "Đã xử lí";
+    }
     return {
       ...report,
       stt: (Number(currentPage) - 1) * Number(rowsPerPage) + index + 1,
-      objectStatus: { value: report.status, name: report.status ? "Đã xử lí" : "Chưa xử lí" },
+      objectStatus: { value: report.status, name: statusName },
       reportTypeName:
         report.reportTypeName === EReportType.ADVERTISE ? "Bảng quảng cáo" : "Điểm đặt quảng cáo",
       createdAt: DateHelper.formatDateToDDMMYYYY(report.createdAt),

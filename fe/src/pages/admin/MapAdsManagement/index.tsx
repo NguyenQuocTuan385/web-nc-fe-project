@@ -114,60 +114,94 @@ const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManage
       const locationsIsNotPlanningNoAdvertisesTemp: Feature[] = [];
       const locationsIsNotPlanningHasAdvertisesTemp: Feature[] = [];
 
-      await Promise.all(
-        locations_temp.map(async (location: Location) => {
-          ReportService.getReports(
-            {
-              locationId: location.id,
-              pageSize: 999,
-              status: EStatusGetReports.EXCEPT_SUCCESS
-            },
-            intercept
-          )
-            .then(async (res) => {
-              if (res.content.length > 0) {
-                const report: Report = res.content[res.content.length - 1];
-                let reportStatus: string;
-                if (report.status === EReportStatus.NEW) {
-                  reportStatus = "Chưa xử lý";
-                } else if (report.status === EReportStatus.PROCESSING) {
-                  reportStatus = "Đang xử lý";
+      if (user?.property?.id) {
+        await Promise.all(
+          locations_temp.map(async (location: Location) => {
+            ReportService.getReports(
+              {
+                locationId: location.id,
+                pageSize: 999,
+                status: EStatusGetReports.EXCEPT_SUCCESS
+              },
+              intercept
+            )
+              .then(async (res) => {
+                if (res.content.length > 0) {
+                  const report: Report = res.content[res.content.length - 1];
+                  let reportStatus: string;
+                  if (report.status === EReportStatus.NEW) {
+                    reportStatus = "Chưa xử lý";
+                  } else if (report.status === EReportStatus.PROCESSING) {
+                    reportStatus = "Đang xử lý";
+                  } else {
+                    reportStatus = "Đã xử lý";
+                  }
+                  location.reportStatus = reportStatus;
+                }
+                const existsAdvertises = await LocationService.checkExistsAdvertises(
+                  location.id,
+                  intercept
+                );
+                location.existsAdvertises = existsAdvertises;
+
+                const feature: Feature = {
+                  type: "Feature",
+                  geometry: {
+                    type: "Point",
+                    coordinates: [location.longitude, location.latitude]
+                  },
+                  properties: {
+                    ...location,
+                    isAdvertiseLocation: true
+                  }
+                };
+
+                if (location.planning) {
+                  existsAdvertises
+                    ? locationsIsPlanningHasAdvertisesTemp.push(feature)
+                    : locationsIsPlanningNoAdvertisesTemp.push(feature);
                 } else {
-                  reportStatus = "Đã xử lý";
+                  existsAdvertises
+                    ? locationsIsNotPlanningHasAdvertisesTemp.push(feature)
+                    : locationsIsNotPlanningNoAdvertisesTemp.push(feature);
                 }
-                location.reportStatus = reportStatus;
-              }
-              const existsAdvertises = await LocationService.checkExistsAdvertises(
-                location.id,
-                intercept
-              );
-              location.existsAdvertises = existsAdvertises;
+              })
+              .catch((error) => {});
+          })
+        );
+      } else {
+        await Promise.all(
+          locations_temp.map(async (location: Location) => {
+            const existsAdvertises = await LocationService.checkExistsAdvertises(
+              location.id,
+              intercept
+            );
+            location.existsAdvertises = existsAdvertises;
 
-              const feature: Feature = {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [location.longitude, location.latitude]
-                },
-                properties: {
-                  ...location,
-                  isAdvertiseLocation: true
-                }
-              };
-
-              if (location.planning) {
-                existsAdvertises
-                  ? locationsIsPlanningHasAdvertisesTemp.push(feature)
-                  : locationsIsPlanningNoAdvertisesTemp.push(feature);
-              } else {
-                existsAdvertises
-                  ? locationsIsNotPlanningHasAdvertisesTemp.push(feature)
-                  : locationsIsNotPlanningNoAdvertisesTemp.push(feature);
+            const feature: Feature = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [location.longitude, location.latitude]
+              },
+              properties: {
+                ...location,
+                isAdvertiseLocation: true
               }
-            })
-            .catch((error) => {});
-        })
-      );
+            };
+
+            if (location.planning) {
+              existsAdvertises
+                ? locationsIsPlanningHasAdvertisesTemp.push(feature)
+                : locationsIsPlanningNoAdvertisesTemp.push(feature);
+            } else {
+              existsAdvertises
+                ? locationsIsNotPlanningHasAdvertisesTemp.push(feature)
+                : locationsIsNotPlanningNoAdvertisesTemp.push(feature);
+            }
+          })
+        );
+      }
       locationsIsPlanningNoAdvertises.current = locationsIsPlanningNoAdvertisesTemp;
       locationsIsPlanningHasAdvertises.current = locationsIsPlanningHasAdvertisesTemp;
       locationsIsNotPlanningNoAdvertises.current = locationsIsNotPlanningNoAdvertisesTemp;
