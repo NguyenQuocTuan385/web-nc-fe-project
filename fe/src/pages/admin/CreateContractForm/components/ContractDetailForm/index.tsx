@@ -95,7 +95,7 @@ function ContractDetailForm(propsData: PropsData) {
     ContractService.createContract(newContract, intercept)
       .then((res) => {
         setCreateLoading(false);
-        navigate(-1);
+        navigate(-2);
       })
       .catch((e) => {
         setCreateLoading(false);
@@ -104,7 +104,7 @@ function ContractDetailForm(propsData: PropsData) {
   };
 
   const handleCancel = () => {
-    navigate(-1);
+    navigate(-2);
   };
 
   return (
