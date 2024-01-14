@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Button, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import classes from "./styles.module.scss";
 import styled from "styled-components";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { User } from "models/user";
 import { useNavigate } from "react-router-dom";
 import { routes } from "routes/routes";
 import { AuthenticationService } from "services/authentication";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const BoxAvatar = styled(Button)(() => ({
   display: "flex",
@@ -50,8 +51,24 @@ const MenuAvatar = () => {
 
   const currentUser: User = useSelector(selectCurrentUser);
 
+  const handleShowNotifications = () => {
+    console.log("show notifications");
+  };
+
   return (
     <MenuWrapper>
+      <Tooltip title='Thông báo'>
+        <Badge
+          color='primary'
+          sx={{ cursor: "pointer" }}
+          badgeContent={0}
+          onClick={handleShowNotifications}
+          showZero
+          style={{ margin: "10px 15px 0 0" }}
+        >
+          <NotificationsIcon style={{ color: "#686868", fontSize: "27px" }} />
+        </Badge>
+      </Tooltip>
       <BoxAvatar
         onClick={handleClick}
         aria-controls={open ? "basic-menu" : undefined}
