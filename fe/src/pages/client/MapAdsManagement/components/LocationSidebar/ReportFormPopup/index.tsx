@@ -169,6 +169,7 @@ export default function ReportFormPopup({
         console.log(err);
       })
       .finally(() => {
+        window.location.reload();
         dispatch(loading(false));
       });
   };
