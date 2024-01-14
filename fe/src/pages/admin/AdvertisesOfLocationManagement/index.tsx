@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   TablePagination
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
@@ -27,7 +26,6 @@ import SideBarWard from "components/admin/SidebarWard";
 import TableTemplate from "components/common/TableTemplate";
 import InfoLocation from "./components/InfoLocation";
 import SearchAppBar from "components/common/Search";
-import SearchAppBarAdvertise from "components/common/SearchAdvertise";
 import AdvertiseService from "services/advertise";
 import { routes } from "routes/routes";
 import styled from "styled-components";
@@ -36,7 +34,7 @@ import ContractService from "services/contract";
 import { Advertise } from "models/advertise";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import useIntercepts from "hooks/useIntercepts";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import { ERole } from "models/general";
@@ -44,6 +42,7 @@ import SideBarDCMS from "components/admin/SidebarDCMS";
 import MapAdsManagementAdmin from "../MapAdsManagement";
 import Heading4 from "components/common/text/Heading4";
 import LocationService from "services/location";
+import Loading, { loading } from "reduxes/Loading";
 
 const ButtonBack = styled(Button)(() => ({
   paddingLeft: "0 !important",
@@ -63,6 +62,7 @@ const AdvertiseOfLocationManagement = () => {
   const locationHook = useLocation();
   const match = useResolvedPath("").pathname;
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const closeDeleteDialogHandle = () => {
     setOpenDeleteDialog(false);
@@ -95,6 +95,7 @@ const AdvertiseOfLocationManagement = () => {
 
   useEffect(() => {
     (async () => {
+      dispatch(loading(true));
       try {
         const res = await AdvertiseService.getAdvertisesByLocationId(
           Number(id),
@@ -156,6 +157,8 @@ const AdvertiseOfLocationManagement = () => {
             page: currentPage.toString()
           }).toString()
         });
+      } finally {
+        dispatch(loading(false));
       }
     })();
   }, [currentPage, searchValue, rowsPerPage]);
@@ -206,6 +209,8 @@ const AdvertiseOfLocationManagement = () => {
   };
 
   const deleteAdvertise = (idAdvertise: number) => {
+    dispatch(loading(true));
+
     AdvertiseService.deleteAdvertiseById(idAdvertise, intercept)
       .then((res) => {
         const updatedAdvertises = advertiseList.filter((ads: any) => ads.id !== idAdvertise);
@@ -214,6 +219,9 @@ const AdvertiseOfLocationManagement = () => {
       })
       .catch((e) => {
         console.log(e);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 
@@ -257,12 +265,16 @@ const AdvertiseOfLocationManagement = () => {
 
   useEffect(() => {
     const getLocationById = () => {
+      dispatch(loading(true));
       LocationService.getLocationsById(Number(id), intercept)
         .then((res) => {
           setDataInfoLocation(res);
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getLocationById();

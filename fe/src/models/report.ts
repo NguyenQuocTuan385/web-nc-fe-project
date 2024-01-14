@@ -25,6 +25,7 @@ export interface Report {
   longitude?: number;
   latitude?: number;
   createdAt: Date;
+  updatedAt: Date;
 }
 
 export enum EReportType {

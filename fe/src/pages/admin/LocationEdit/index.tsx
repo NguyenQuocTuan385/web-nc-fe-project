@@ -34,13 +34,14 @@ import LocationEditService from "services/locationEdit";
 import Heading2 from "components/common/text/Heading2";
 import Editor from "components/common/Editor/EditWithQuill";
 import useIntercepts from "hooks/useIntercepts";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { User } from "models/user";
 import MapAdsManagementAdmin from "../MapAdsManagement";
 import Heading3 from "components/common/text/Heading3";
 import Heading4 from "components/common/text/Heading4";
+import Loading, { loading } from "reduxes/Loading";
 
 interface FormData {
   propertyId: number;
@@ -123,11 +124,14 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     createLocationEditRequest(isSuccess);
   };
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
 
   const createLocationEdit = async (
     locationId: number,
     locationEditRequest: LocationEditRequest
   ) => {
+    dispatch(loading(true));
+
     LocationEditService.createLocationEditRequest(locationId, locationEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -135,6 +139,9 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       .catch((err) => {
         handleEmitSuccessState(false);
         console.log(err);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 
@@ -525,15 +532,21 @@ export const LocationEdit = () => {
   const [adsForms, setAdsForms] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getLocationById = async () => {
+      dispatch(loading(true));
+
       LocationService.getLocationsById(Number(id), intercept)
         .then((res) => {
           setLocationData(res);
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getLocationById();
@@ -541,12 +554,17 @@ export const LocationEdit = () => {
 
   useEffect(() => {
     const getAllLocationTypes = async () => {
+      dispatch(loading(true));
+
       LocationTypeService.getAllLocationTypes({ pageSize: 999 }, intercept)
         .then((res) => {
           setLocationTypes(res.content);
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getAllLocationTypes();
@@ -554,12 +572,17 @@ export const LocationEdit = () => {
 
   useEffect(() => {
     const getAllAdsForms = async () => {
+      dispatch(loading(true));
+
       AdvertiseFormService.getAllAdvertiseForm({ pageSize: 999 }, intercept)
         .then((res) => {
           setAdsForms(res.content);
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getAllAdsForms();

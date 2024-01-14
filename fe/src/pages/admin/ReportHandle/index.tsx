@@ -27,12 +27,13 @@ import MailService from "services/email";
 import { EmailRequest } from "models/email";
 import Heading3 from "components/common/text/Heading3";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { DateHelper } from "../../../helpers/date";
 import useIntercepts from "hooks/useIntercepts";
 import MapAdsManagementAdmin from "../MapAdsManagement";
+import Loading, { loading } from "reduxes/Loading";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -65,23 +66,15 @@ export const ReportHandle = () => {
   const [handleStatus, setHandleStatus] = useState(EReportStatus.NEW);
   const [isUpdateSuccess, setIsUpdateSuccess] = useState<boolean | null>(null);
 
-  const formatDateToString = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const seconds = date.getSeconds().toString().padStart(2, "0");
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
-
   const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
   const currentUser = useSelector(selectCurrentUser);
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getReportById = async () => {
+      dispatch(loading(true));
+
       ReportService.getReportById(Number(id), intercept)
         .then((res) => {
           setDataReportDetail(res);
@@ -89,6 +82,9 @@ export const ReportHandle = () => {
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getReportById();
@@ -177,6 +173,7 @@ export const ReportHandle = () => {
         body: handleReportHtml
       };
 
+      dispatch(loading(true));
       MailService.sendHtmlEmail(data, intercept)
         .then((res) => {
           setIsUpdateSuccess(true);
@@ -185,6 +182,9 @@ export const ReportHandle = () => {
         .catch((err) => {
           setIsUpdateSuccess(false);
           console.log(err);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     }
   };
@@ -195,12 +195,16 @@ export const ReportHandle = () => {
       reply: replyText.length > 0 ? replyText : dataReportDetail && dataReportDetail.reply
     };
 
+    dispatch(loading(true));
     ReportService.updateReport(Number(id), updateData, intercept)
       .then((res) => {
         handleSendEmail();
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 

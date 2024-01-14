@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, TablePagination } from "@mui/material";
 import { useNavigate, useLocation, useResolvedPath, createSearchParams } from "react-router-dom";
 import queryString from "query-string";
+import { useDispatch } from "react-redux";
 
 import classes from "./styles.module.scss";
 
@@ -14,6 +15,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
+import { loading } from "reduxes/Loading";
 
 const LocationManagement = () => {
   const navigate = useNavigate();
@@ -55,9 +57,12 @@ const LocationManagement = () => {
   };
 
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getAllLocations = async () => {
+      dispatch(loading(true));
+
       LocationService.getLocationsWithPropertyAndParent(
         {
           propertyId: [currentUser.property.id],
@@ -84,6 +89,9 @@ const LocationManagement = () => {
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getAllLocations();
