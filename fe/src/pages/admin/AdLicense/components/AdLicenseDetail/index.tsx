@@ -12,6 +12,9 @@ import ContractDetailStickyFooter from "./Components/ContractDetailStickyFooter"
 import { useParams } from "react-router-dom";
 import useIntercepts from "hooks/useIntercepts";
 import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
+import SideBarDCMS from "components/admin/SidebarDCMS";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 interface dataListObjectItem {
   imageIcon: any;
   title: string;
@@ -25,6 +28,7 @@ function AdLicenseDetail() {
   const [companyDataList, setCompanyDataList] = useState<dataListObjectItem[]>([]);
   const [advertiseDataList, setAdvertiseDataList] = useState<dataListObjectItem[]>([]);
   const intercept = useIntercepts();
+  const navigate = useNavigate();
 
   useEffect(() => {
     ContractService.getContractById(Number(id), intercept)
@@ -89,9 +93,13 @@ function AdLicenseDetail() {
 
   return (
     <div>
-      <SideBarWard>
+      <SideBarDCMS>
         <Card className={classes.rightComponent}>
           <Box className={classes.detailGroup}>
+            <Box className={classes.backPage} onClick={() => navigate(-1)}>
+              <ArrowBackIcon className={classes.iconBack} />
+              Trở về
+            </Box>
             <Heading6 id='general' fontSize={"20px"} fontWeight={500}>
               {contractData?.advertise.adsType.name}
             </Heading6>
@@ -123,7 +131,7 @@ function AdLicenseDetail() {
             contract={contractData!!}
           />
         </Card>
-      </SideBarWard>
+      </SideBarDCMS>
     </div>
   );
 }
