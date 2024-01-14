@@ -309,6 +309,37 @@ const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManage
       );
     } else if (locationCheckedChange === ELocationCheckedSwitch.REPORT_LOCATION) {
       clusters.current = reportLocations.current;
+      const locationsIsPlanningHasAdvertisesReport =
+        locationsIsPlanningHasAdvertises.current.filter((location) => {
+          if (location?.properties?.reportStatus) {
+            return location;
+          }
+        });
+      const locationsIsPlanningNoAdvertisesReport = locationsIsPlanningNoAdvertises.current.filter(
+        (location) => {
+          if (location?.properties?.reportStatus) {
+            return location;
+          }
+        }
+      );
+      const locationsIsNotPlanningHasAdvertisesReport =
+        locationsIsNotPlanningHasAdvertises.current.filter((location) => {
+          if (location?.properties?.reportStatus) {
+            return location;
+          }
+        });
+      const locationsIsNotPlanningNoAdvertisesReport =
+        locationsIsNotPlanningNoAdvertises.current.filter((location) => {
+          if (location?.properties?.reportStatus) {
+            return location;
+          }
+        });
+      clusters.current = locationsIsPlanningHasAdvertisesReport.concat(
+        locationsIsNotPlanningHasAdvertisesReport,
+        locationsIsNotPlanningHasAdvertisesReport,
+        locationsIsNotPlanningNoAdvertisesReport,
+        reportLocations.current
+      );
     } else {
       clusters.current = [];
     }

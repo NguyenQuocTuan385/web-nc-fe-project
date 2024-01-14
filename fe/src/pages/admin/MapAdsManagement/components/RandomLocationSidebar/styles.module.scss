@@ -27,3 +27,13 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.errorIc {
+  color: var(--red-error) !important;
+}
+
+.errorBtn {
+  background-color: var(--red-error) !important;
+  margin-left: 20px !important;
+  width: 150px;
+}

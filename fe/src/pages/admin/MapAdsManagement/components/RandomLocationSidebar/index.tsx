@@ -1,10 +1,12 @@
-import { Box, Drawer, IconButton } from "@mui/material";
+import { Box, Button, Drawer, IconButton } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfomation";
 import ParagraphBody from "components/common/text/ParagraphBody";
 import { RandomLocation } from "models/location";
-
+import ReportIcon from "@mui/icons-material/Report";
+import ReportInfoPopup from "../ReportListPopup";
+import { useState } from "react";
 interface LocalAddressPopoverProps {
   isOpen: boolean;
   closeSidebar: () => void;
@@ -16,6 +18,7 @@ const RandomLocationSidebar = ({
   closeSidebar,
   randomLocation
 }: LocalAddressPopoverProps) => {
+  const [openReportInfoPopup, setOpenReportInfoPopup] = useState<boolean>(false);
   return (
     <Drawer
       variant='persistent'
@@ -37,6 +40,18 @@ const RandomLocationSidebar = ({
           </IconButton>
         </Box>
         <Box className={classes.boxContainer}>
+          {randomLocation?.id && (
+            <Button
+              variant='contained'
+              color='error'
+              size='small'
+              className={classes.errorBtn}
+              startIcon={<ReportIcon />}
+              onClick={() => setOpenReportInfoPopup(true)}
+            >
+              Xem báo cáo
+            </Button>
+          )}
           <AdvertiseInfo />
           <Box className={classes.boxWrapped}>
             <ParagraphBody fontWeight={"bold"} colorName='--green-500'>
@@ -46,6 +61,13 @@ const RandomLocationSidebar = ({
           </Box>
         </Box>
       </Box>
+      {randomLocation?.id && (
+        <ReportInfoPopup
+          open={openReportInfoPopup}
+          setOpen={setOpenReportInfoPopup}
+          reportId={randomLocation.id}
+        />
+      )}
     </Drawer>
   );
 };

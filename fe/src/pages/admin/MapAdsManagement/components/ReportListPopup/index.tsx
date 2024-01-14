@@ -27,9 +27,10 @@ import useIntercepts from "hooks/useIntercepts";
 interface ReportInfoPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  locationId: number;
+  locationId?: number;
+  reportId?: number;
 }
-const ReportInfoPopup = ({ setOpen, open, locationId }: ReportInfoPopupProps) => {
+const ReportInfoPopup = ({ setOpen, open, locationId, reportId }: ReportInfoPopupProps) => {
   const onClose = () => {
     setOpen(false);
     setReportShow(null);
@@ -41,19 +42,30 @@ const ReportInfoPopup = ({ setOpen, open, locationId }: ReportInfoPopupProps) =>
   const intercept = useIntercepts();
   useEffect(() => {
     const getReportsUser = async () => {
-      ReportService.getReports(
-        { pageSize: 999, locationId: locationId, status: EStatusGetReports.ALL },
-        intercept
-      )
-        .then((res) => {
-          setReports(res.content);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (reportId) {
+        ReportService.getReportById(reportId, intercept)
+          .then((res) => {
+            const reportTemp: Report[] = [res];
+            setReports(reportTemp);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        ReportService.getReports(
+          { pageSize: 999, locationId: locationId, status: EStatusGetReports.ALL },
+          intercept
+        )
+          .then((res) => {
+            setReports(res.content);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     };
     getReportsUser();
-  }, [locationId, intercept]);
+  }, [locationId, intercept, reportId]);
   return (
     <ReportDialog onClose={onClose} aria-labelledby='customized-dialog-title' open={open}>
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
