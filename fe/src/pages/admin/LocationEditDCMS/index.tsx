@@ -181,7 +181,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       propertyId: property.id,
       userId: currentUser.id
     };
-    createLocationEdit(Number(2), dataSubmit, intercept);
+    createLocationEdit(locationId, dataSubmit, intercept);
   };
 
   return (
