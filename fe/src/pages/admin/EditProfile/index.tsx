@@ -16,19 +16,20 @@ import { selectCurrentUser } from "reduxes/Auth";
 import useIntercepts from "hooks/useIntercepts";
 import { DateHelper } from "helpers/date";
 import { date } from "yup";
+import dayjs, { Dayjs } from "dayjs";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Họ tên là bắt buộc"),
   email: yup.string().email("Email không hợp lệ").required("Email là bắt buộc"),
   phone: yup.string().required("Số điện thoại là bắt buộc"),
-  birthDay: yup.date().required("Ngày sinh là bắt buộc")
+  birthday: yup.date().required("Ngày sinh là bắt buộc")
 });
 
 interface FormData {
   fullName: string;
   email: string;
   phone: string;
-  birthDay: string;
+  birthday: Dayjs;
   image: string;
 }
 
@@ -45,17 +46,18 @@ const EditProfile: React.FC = () => {
 
   const intercept = useIntercepts();
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: any) => {
     const UserRequest: UserRequest = {
       name: data.fullName,
       email: data.email,
-      birthday: DateHelper.convertStringToDate(data.birthDay),
+      birthday: DateHelper.convertStringToDate(data.birthday),
       password: userInfo.password,
       avatar: avatarPreview,
       phone: data.phone,
       roleId: currentUser.role.id,
-      propertyId: currentUser.property.id
+      propertyId: currentUser?.property?.id
     };
+
     Userservice.updateUser(currentUser.id, UserRequest, intercept)
       .then((res) => {
         console.log(res);
@@ -83,7 +85,7 @@ const EditProfile: React.FC = () => {
       setValue("fullName", res.name);
       setValue("email", res.email);
       setValue("phone", res.phone);
-      // setValue("birthDay", res.birthday);
+      setValue("birthday", dayjs(res.birthday));
       setAvatarPreview(res.avatar);
       setUserInfo(res);
     };
@@ -91,6 +93,8 @@ const EditProfile: React.FC = () => {
   }, []);
 
   const currentUser: User = useSelector(selectCurrentUser);
+
+  console.log(userInfo.birthday);
 
   return (
     <Box className={classes.boxContainer}>
@@ -172,6 +176,31 @@ const EditProfile: React.FC = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <Box className={classes.title}>Ngày sinh</Box>
+                      <Controller
+                        control={control}
+                        defaultValue={dayjs(userInfo.birthday)}
+                        name='birthday'
+                        aria-invalid={errors.birthday ? "true" : "false"}
+                        rules={{ required: true }}
+                        render={({ field: { ref, ...field }, fieldState: { invalid, error } }) => (
+                          <>
+                            <DateTimePicker
+                              inputRef={ref}
+                              className={classes.datePickField}
+                              {...field}
+                              views={["year", "month", "day"]} // chỉ hiển thị chế độ xem ngày, tháng, và năm
+                              format='DD/MM/YYYY'
+                              slotProps={{
+                                textField: {
+                                  required: true,
+                                  error: invalid
+                                }
+                              }}
+                            />
+                            <div className={classes.errorText}>{error?.message}</div>
+                          </>
+                        )}
+                      />
                     </Grid>
                   </Grid>
                 </Grid>

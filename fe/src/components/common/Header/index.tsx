@@ -71,8 +71,8 @@ const MenuAvatar = () => {
           "aria-labelledby": "basic-button"
         }}
       >
-        <MenuItem onClick={updateProfileHandler}>Profile</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={updateProfileHandler}>Thôn tin tài khoản</MenuItem>
+        <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
       </Menu>
     </MenuWrapper>
   );
