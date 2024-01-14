@@ -240,13 +240,13 @@ export default function EditAdLocationLicenseDetail() {
                   <Box>
                     <ParagraphBody className={classes.infoContent}>
                       Lí do chỉnh sửa:&nbsp;
-                      <Editor
-                        placeholder=''
-                        isAllowedType={false}
-                        content={
-                          locationDetail?.locationEdit?.content || "Không có nội dung báo cáo"
-                        }
-                      />
+                      {locationDetail?.locationEdit?.content && (
+                        <Editor
+                          placeholder=''
+                          isAllowedType={false}
+                          content={locationDetail?.locationEdit?.content}
+                        />
+                      )}
                     </ParagraphBody>
                     <Box></Box>
                   </Box>
