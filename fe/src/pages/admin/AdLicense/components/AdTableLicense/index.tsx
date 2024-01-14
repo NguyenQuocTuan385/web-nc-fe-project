@@ -182,8 +182,12 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
           <TableHead className={classes.tableHeading}>
             <TableRow>
               <TableCell className={classes.headerTable}>ID</TableCell>
-              <TableCell align='left' className={classes.headerTable}>
-                Điểm đặt đặt quảng cáo
+              <TableCell
+                align='left'
+                className={classes.headerTable}
+                sx={{ minWidth: "250px", maxWidth: "250px" }}
+              >
+                Điểm đặt quảng cáo
               </TableCell>
               <TableCell align='left' className={classes.headerTable}>
                 Thông tin công ty
@@ -205,7 +209,11 @@ export default function AdTableLicense({ district, ward, fieldSearch }: FilterPr
                 <TableCell component='th' scope='row'>
                   {row.id}
                 </TableCell>
-                <TableCell align='left' className={classes.dataTable}>
+                <TableCell
+                  align='left'
+                  sx={{ minWidth: "250px", maxWidth: "250px" }}
+                  className={classes.dataTable}
+                >
                   <div className={classes.textOverflow}> {row.advertise.location.address}</div>
                 </TableCell>
                 <TableCell align='left' className={classes.dataTable}>

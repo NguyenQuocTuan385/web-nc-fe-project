@@ -1,41 +1,42 @@
-.boxContainer{
+.boxContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.tableContainer{
+.tableContainer {
+  border-radius: 8px;
   width: 100%;
 }
 
-.sizeTable{
+.sizeTable {
   max-height: 50px;
 }
 
-.headerTable{
+.headerTable {
   font-weight: bold;
   padding: 5px;
   color: #fff !important;
 }
 
-.rowTable{
-  &:last-child, &:last-child th{
+.rowTable {
+  &:last-child,
+  &:last-child th {
     border: 0;
   }
 }
 
-.dataTable{
+.dataTable {
   padding-top: 10px;
 }
-.pagination
-{
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 10px;
 }
 
-.dataIcon{
+.dataIcon {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -44,9 +45,8 @@
 .pagination {
   width: 100%;
   background-color: white;
-
 }
 
-.table-head{
+.table-head {
   background-color: var(--blue-500);
 }

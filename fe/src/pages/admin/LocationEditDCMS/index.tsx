@@ -33,12 +33,13 @@ import { AdvertiseForm } from "models/advertise";
 import LocationEditService from "services/locationEdit";
 import Heading2 from "components/common/text/Heading2";
 import useIntercepts from "hooks/useIntercepts";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { User } from "models/user";
 import { selectCurrentUser } from "reduxes/Auth";
 import { AxiosInstance } from "axios";
 import SideBarDCMS from "components/admin/SidebarDCMS";
 import MapAdsManagementAdmin from "../MapAdsManagement";
+import { loading } from "reduxes/Loading";
 
 interface FormData {
   propertyId: number;
@@ -123,11 +124,15 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     createLocationEditRequest(isSuccess);
   };
 
+  const dispatch = useDispatch();
+
   const createLocationEdit = async (
     locationId: number,
     locationEditRequest: LocationEditByCDMSRequest,
     intercept: AxiosInstance
   ) => {
+    dispatch(loading(true));
+
     LocationEditService.updateLocationByCDMS(locationId, locationEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
@@ -136,6 +141,9 @@ const MyForm: React.FC<FormEditLocationProps> = ({
       .catch((err) => {
         handleEmitSuccessState(false);
         console.log(err);
+      })
+      .finally(() => {
+        dispatch(loading(false));
       });
   };
 
@@ -493,9 +501,12 @@ export const LocationEditCDMS = () => {
   const [adsForms, setAdsForms] = useState([]);
   const [isCreateSuccess, setIsCreateSuccess] = useState<boolean | null>(null);
   const intercept: AxiosInstance = useIntercepts();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getLocationById = async () => {
+      dispatch(loading(true));
+
       LocationService.getLocationsById(Number(id), intercept)
         .then((res) => {
           console.log(res.property.id + "------------------sdfsdfsdf-------- ");
@@ -503,6 +514,9 @@ export const LocationEditCDMS = () => {
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getLocationById();

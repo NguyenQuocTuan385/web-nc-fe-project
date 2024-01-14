@@ -1,14 +1,17 @@
 .boxContainer {
+  border-radius: 8px !important;
   display: flex;
   flex-direction: column;
 }
 
 .tableContainer {
+  margin: 0 15x;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 8px;
 }
 
 .tableHeading {

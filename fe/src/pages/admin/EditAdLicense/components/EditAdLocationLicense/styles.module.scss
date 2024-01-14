@@ -1,9 +1,11 @@
 .boxContainer {
   display: flex;
   flex-direction: column;
+  border-radius: 8px;
 }
 
 .tableContainer {
+  border-radius: 8px;
   margin-top: 20px;
   display: flex;
   flex-direction: column;

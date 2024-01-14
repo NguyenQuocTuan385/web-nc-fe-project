@@ -1,6 +1,5 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import classes from "./styles.module.scss";
-import { Header } from "components/common/Header";
 import SideBarWard from "components/admin/SidebarWard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
@@ -13,12 +12,13 @@ import ReportService from "services/report";
 import Heading3 from "components/common/text/Heading3";
 import Editor from "components/common/Editor/EditWithQuill";
 import { routes } from "routes/routes";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { DateHelper } from "helpers/date";
 import useIntercepts from "hooks/useIntercepts";
 import MapAdsManagementAdmin from "../MapAdsManagement";
+import { loading } from "reduxes/Loading";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -40,14 +40,22 @@ export const ReportDetail = () => {
   const [dataReportDetail, setDataReportDetail] = useState<Report | null>(null);
   const currentUser = useSelector(selectCurrentUser);
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const getReportById = async () => {
+      dispatch(loading(true));
+
       ReportService.getReportById(Number(id), intercept)
         .then((res) => {
+          console.log(res);
           setDataReportDetail(res);
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getReportById();

@@ -188,9 +188,12 @@ export default function EditAdLocationLicenseDetail() {
                 <ParagraphBody fontWeight={"bold"}>SAU KHI THAY ĐỔI</ParagraphBody>
               </Box>
               <Grid container spacing={3}>
-                <Grid item xs={6}>
-                  <SlideShowImages images={imagesLocationEdit} />
-                </Grid>
+                {imagesLocationEdit && imagesLocationEdit.length > 0 && (
+                  <Grid item xs={6}>
+                    <SlideShowImages images={imagesLocationEdit} />
+                  </Grid>
+                )}
+
                 <Grid item xs={6}>
                   <Heading3>Điểm đặt quảng cáo</Heading3>
 
@@ -230,8 +233,8 @@ export default function EditAdLocationLicenseDetail() {
                   <ParagraphBody className={classes.infoContent}>
                     Thời điểm chỉnh sửa:&nbsp;
                     <span>
-                      {locationDetail?.locationEdit?.createdAt &&
-                        DateHelper.formatDateToDDMMYYYY(locationDetail?.locationEdit?.createdAt)}
+                      {locationDetail?.locationEdit?.updatedAt &&
+                        DateHelper.formatDateToDDMMYYYY(locationDetail?.locationEdit?.updatedAt)}
                     </span>
                   </ParagraphBody>
                   <Box>

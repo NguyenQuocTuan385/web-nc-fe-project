@@ -1,7 +1,7 @@
 .customTextField {
   & input {
     height: 10px;
-    width: 100%;
+    width: 250px;
   }
 
   & fieldset {
@@ -11,6 +11,7 @@
   max-width: 400px;
 }
 .boxContainer {
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   background-color: white;

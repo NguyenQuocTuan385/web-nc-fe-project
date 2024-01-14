@@ -10,12 +10,13 @@ import SearchAppBar from "components/common/Search";
 import classes from "./styles.module.scss";
 import ReportService from "services/report";
 import { routes } from "routes/routes";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
 import { EReportType, Report } from "models/report";
 import { DateHelper } from "helpers/date";
+import { loading } from "reduxes/Loading";
 
 const ReportsManagement = () => {
   const navigate = useNavigate();
@@ -58,8 +59,11 @@ const ReportsManagement = () => {
   };
 
   const intercept = useIntercepts();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const getAllReports = async () => {
+      dispatch(loading(true));
       ReportService.getReportsWithPropertyAndParent(
         {
           propertyId: [currentUser.property.id],
@@ -86,6 +90,9 @@ const ReportsManagement = () => {
         })
         .catch((e) => {
           console.log(e);
+        })
+        .finally(() => {
+          dispatch(loading(false));
         });
     };
     getAllReports();
