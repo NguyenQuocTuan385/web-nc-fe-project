@@ -14,7 +14,7 @@ import LocationSidebar from "./components/LocationSidebar";
 import RandomLocationSidebar from "./components/RandomLocationSidebar";
 import { Box, Button, IconButton, Switch } from "@mui/material";
 import ParagraphSmall from "components/common/text/ParagraphSmall";
-import { EReportStatus, EReportType, Report } from "models/report";
+import { EReportStatus, EReportType, EStatusGetReports, Report } from "models/report";
 import ReportInfoPopup from "./components/ReportListPopup";
 import ReactDOM from "react-dom/client";
 import { createPortal } from "react-dom";

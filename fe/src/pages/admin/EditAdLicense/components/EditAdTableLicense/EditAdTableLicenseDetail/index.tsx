@@ -173,7 +173,7 @@ export default function EditAdTableLicenseDetail() {
                     Số lượng:&nbsp;
                     {renderCurrent(
                       advertise?.pillarQuantity?.toString()!!,
-                      advertise?.advertiseEdit?.pillarQuantity.toString()!!
+                      advertise?.advertiseEdit?.pillarQuantity?.toString()!!
                     )}{" "}
                     {" trụ/bảng"}
                   </ParagraphBody>

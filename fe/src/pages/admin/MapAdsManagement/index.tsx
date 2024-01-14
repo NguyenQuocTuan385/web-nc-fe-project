@@ -24,7 +24,8 @@ import { RootState } from "store";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
 import { UseFormReset } from "react-hook-form";
-import { EReportType, Report } from "models/report";
+import { EReportStatus, EReportType, EStatusGetReports, Report } from "models/report";
+import ReportService from "services/report";
 
 interface MapAdsManagementAdminProps {
   locationView?: Location;
@@ -115,33 +116,56 @@ const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManage
 
       await Promise.all(
         locations_temp.map(async (location: Location) => {
-          const existsAdvertises = await LocationService.checkExistsAdvertises(
-            location.id,
-            intercept
-          );
-          location.existsAdvertises = existsAdvertises;
-
-          const feature: Feature = {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [location.longitude, location.latitude]
+          ReportService.getReports(
+            {
+              locationId: location.id,
+              pageSize: 999,
+              status: EStatusGetReports.EXCEPT_SUCCESS
             },
-            properties: {
-              ...location,
-              isAdvertiseLocation: true
-            }
-          };
+            intercept
+          )
+            .then(async (res) => {
+              if (res.content.length > 0) {
+                const report: Report = res.content[res.content.length - 1];
+                let reportStatus: string;
+                if (report.status === EReportStatus.NEW) {
+                  reportStatus = "Chưa xử lý";
+                } else if (report.status === EReportStatus.PROCESSING) {
+                  reportStatus = "Đang xử lý";
+                } else {
+                  reportStatus = "Đã xử lý";
+                }
+                location.reportStatus = reportStatus;
+              }
+              const existsAdvertises = await LocationService.checkExistsAdvertises(
+                location.id,
+                intercept
+              );
+              location.existsAdvertises = existsAdvertises;
 
-          if (location.planning) {
-            existsAdvertises
-              ? locationsIsPlanningHasAdvertisesTemp.push(feature)
-              : locationsIsPlanningNoAdvertisesTemp.push(feature);
-          } else {
-            existsAdvertises
-              ? locationsIsNotPlanningHasAdvertisesTemp.push(feature)
-              : locationsIsNotPlanningNoAdvertisesTemp.push(feature);
-          }
+              const feature: Feature = {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [location.longitude, location.latitude]
+                },
+                properties: {
+                  ...location,
+                  isAdvertiseLocation: true
+                }
+              };
+
+              if (location.planning) {
+                existsAdvertises
+                  ? locationsIsPlanningHasAdvertisesTemp.push(feature)
+                  : locationsIsPlanningNoAdvertisesTemp.push(feature);
+              } else {
+                existsAdvertises
+                  ? locationsIsNotPlanningHasAdvertisesTemp.push(feature)
+                  : locationsIsNotPlanningNoAdvertisesTemp.push(feature);
+              }
+            })
+            .catch((error) => {});
         })
       );
       locationsIsPlanningNoAdvertises.current = locationsIsPlanningNoAdvertisesTemp;

@@ -11,23 +11,23 @@ import {
   TableRow
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { ReportDialog } from "../LocationSidebar/ReportFormPopup";
 import CloseIcon from "@mui/icons-material/Close";
 import Paper from "@mui/material/Paper";
 import classes from "./styles.module.scss";
-import { EReportStatus, EReportType, Report } from "models/report";
+import { EReportStatus, EReportType, EStatusGetReports, Report } from "models/report";
 import { Error } from "@mui/icons-material";
 import Heading4 from "components/common/text/Heading4";
 import { DateHelper } from "helpers/date";
-import ReportViewPopup from "./ReportViewPopup";
+import ReportViewPopup, { ReportDialog } from "./ReportViewPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
-import ReportClientService from "services/reportClient";
+import ReportService from "services/report";
+import useIntercepts from "hooks/useIntercepts";
 
 interface ReportInfoPopupProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  locationId?: number;
+  locationId: number;
 }
 const ReportInfoPopup = ({ setOpen, open, locationId }: ReportInfoPopupProps) => {
   const onClose = () => {
@@ -38,22 +38,22 @@ const ReportInfoPopup = ({ setOpen, open, locationId }: ReportInfoPopupProps) =>
   const [reports, setReports] = useState<Report[]>([]);
   const [openReportPopup, setOpenReportPopup] = useState<boolean>(false);
   const [reportShow, setReportShow] = useState<Report | null>(null);
-
+  const intercept = useIntercepts();
   useEffect(() => {
     const getReportsUser = async () => {
-      const email = localStorage.getItem("guest_email");
-      if (email) {
-        ReportClientService.getReports({ pageSize: 999, email: email, locationId: locationId })
-          .then((res) => {
-            setReports(res.content);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+      ReportService.getReports(
+        { pageSize: 999, locationId: locationId, status: EStatusGetReports.ALL },
+        intercept
+      )
+        .then((res) => {
+          setReports(res.content);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
     getReportsUser();
-  }, [locationId]);
+  }, [locationId, intercept]);
   return (
     <ReportDialog onClose={onClose} aria-labelledby='customized-dialog-title' open={open}>
       <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>

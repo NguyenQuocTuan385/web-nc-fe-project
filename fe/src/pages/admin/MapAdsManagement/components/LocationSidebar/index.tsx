@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton } from "@mui/material";
+import { Box, Button, Drawer, IconButton } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfo";
@@ -10,6 +10,8 @@ import ImagesSlider from "components/common/ImagesSlider";
 import Heading3 from "components/common/text/Heading3";
 import images from "config/images";
 import useIntercepts from "hooks/useIntercepts";
+import ReportInfoPopup from "../ReportListPopup";
+import ReportIcon from "@mui/icons-material/Report";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -21,6 +23,8 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
   const [advertises, setAdvertises] = useState<Advertise[]>([]);
   const [imagesLocation, setImagesLocation] = useState<string[]>([]);
   const intercept = useIntercepts();
+  const [openReportInfoPopup, setOpenReportInfoPopup] = useState<boolean>(false);
+
   useEffect(() => {
     const getAllAdvertises = async () => {
       if (!location) return;
@@ -57,6 +61,16 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
           </IconButton>
         </Box>
         {!!imagesLocation && <ImagesSlider images={imagesLocation} />}
+        <Button
+          variant='contained'
+          color='error'
+          size='small'
+          className={classes.errorBtn}
+          startIcon={<ReportIcon />}
+          onClick={() => setOpenReportInfoPopup(true)}
+        >
+          Xem báo cáo
+        </Button>
         {advertises.length > 0 ? (
           <Box className={classes.adsContainer}>
             {advertises.map((item) => (
@@ -68,6 +82,13 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
             <img src={images.emptyIcon} alt='empty icon' className={classes.imgEmpty} />
             <Heading3>Không có bảng quảng cáo nào</Heading3>
           </Box>
+        )}
+        {location && (
+          <ReportInfoPopup
+            open={openReportInfoPopup}
+            setOpen={setOpenReportInfoPopup}
+            locationId={location.id}
+          />
         )}
       </Box>
     </Drawer>

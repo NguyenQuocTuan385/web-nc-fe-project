@@ -131,6 +131,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     LocationEditService.updateLocationByCDMS(locationId, locationEditRequest, intercept)
       .then((res) => {
         handleEmitSuccessState(true);
+        window.location.reload();
       })
       .catch((err) => {
         handleEmitSuccessState(false);

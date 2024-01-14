@@ -300,6 +300,7 @@ export default function Popup(props: PopupProps) {
                                 className={classes.datePickField}
                                 {...field}
                                 views={["year", "month", "day"]} // chỉ hiển thị chế độ xem ngày, tháng, và năm
+                                format='DD/MM/YYYY' // định dạng ngày tháng năm
                                 slotProps={{
                                   textField: {
                                     required: true,

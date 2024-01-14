@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton } from "@mui/material";
+import { Box, Button, Drawer, IconButton } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 import classes from "./styles.module.scss";
 import AdvertiseInfo from "./AdvertiseInfo";
@@ -9,8 +9,8 @@ import ImagesSlider from "components/common/ImagesSlider";
 import Heading3 from "components/common/text/Heading3";
 import images from "config/images";
 import AdvertiseClientService from "services/advertiseClient";
-import { useDispatch } from "react-redux";
-import { loading } from "reduxes/Loading";
+import ReportIcon from "@mui/icons-material/Report";
+import ReportInfoPopup from "../ReportListPopup";
 
 interface LocalAddressPopoverProps {
   isOpen: boolean;
@@ -21,6 +21,7 @@ interface LocalAddressPopoverProps {
 const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopoverProps) => {
   const [advertises, setAdvertises] = useState<Advertise[]>([]);
   const [imagesLocation, setImagesLocation] = useState<string[]>([]);
+  const [openReportInfoPopup, setOpenReportInfoPopup] = useState<boolean>(false);
 
   useEffect(() => {
     const getAllAdvertises = async () => {
@@ -45,7 +46,18 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
             <ChevronLeft fontSize='large' />
           </IconButton>
         </Box>
+
         {!!imagesLocation && <ImagesSlider images={imagesLocation} />}
+        <Button
+          variant='contained'
+          color='error'
+          size='small'
+          className={classes.errorBtn}
+          startIcon={<ReportIcon />}
+          onClick={() => setOpenReportInfoPopup(true)}
+        >
+          Xem báo cáo
+        </Button>
         {advertises.length > 0 ? (
           <Box className={classes.adsContainer}>
             {advertises.map((item) => (
@@ -59,6 +71,13 @@ const LocationSidebar = ({ isOpen, closeSidebar, location }: LocalAddressPopover
           </Box>
         )}
       </Box>
+      {location && (
+        <ReportInfoPopup
+          open={openReportInfoPopup}
+          setOpen={setOpenReportInfoPopup}
+          locationId={location.id}
+        />
+      )}
     </Drawer>
   );
 };

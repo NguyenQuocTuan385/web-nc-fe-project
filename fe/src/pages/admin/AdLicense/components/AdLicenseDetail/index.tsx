@@ -1,244 +1,139 @@
-import Box from "@mui/material/Box";
-import React from "react";
-import classes from "./styles.module.scss";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate, useLocation } from "react-router-dom";
-import ParagraphBody from "components/common/text/ParagraphBody";
-import Heading3 from "components/common/text/Heading3";
-import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
-import SidebarDCMS from "components/admin/SidebarDCMS";
-import { Contract, EContractStatus } from "models/contract";
+import SideBarWard from "components/admin/SidebarWard";
+import React, { useEffect, useState } from "react";
+import DetailCard from "./Components/ContractDetailCard";
+import images from "config/images";
 import ContractService from "services/contract";
-import { useEffect } from "react";
-import AdvertiseService from "services/advertise";
+import { Contract } from "models/contract";
+import { Box, Card, Divider } from "@mui/material";
+import classes from "./styles.module.scss";
+import Heading6 from "components/common/text/Heading6";
+import ShowContractImage from "./Components/ContractImageShow";
+import ContractDetailStickyFooter from "./Components/ContractDetailStickyFooter";
+import { useParams } from "react-router-dom";
 import useIntercepts from "hooks/useIntercepts";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
-import { useDispatch } from "react-redux";
-import { loading } from "reduxes/Loading";
+import MapAdsManagementAdmin from "pages/admin/MapAdsManagement";
+import SideBarDCMS from "components/admin/SidebarDCMS";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
+interface dataListObjectItem {
+  imageIcon: any;
+  title: string;
+  content: string;
+}
 
-export default function AdLicenseDetail() {
-  const navigate = useNavigate();
-  const location = useLocation();
+function AdLicenseDetail() {
+  const { id } = useParams<{ id: string }>();
 
-  const constractId = location.pathname.split("/").pop();
-  const [state, setState] = React.useState<Contract | null>(null);
+  const [contractData, setContractData] = useState<Contract>();
+  const [companyDataList, setCompanyDataList] = useState<dataListObjectItem[]>([]);
+  const [advertiseDataList, setAdvertiseDataList] = useState<dataListObjectItem[]>([]);
   const intercept = useIntercepts();
-  const [openAccept, setOpenAccept] = React.useState(false);
-  const [openCancel, setOpenCancel] = React.useState(false);
-  const dispatch = useDispatch();
-  const handleClose = () => {
-    setOpenAccept(false);
-    setOpenCancel(false);
-  };
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const getContractById = async () => {
-      dispatch(loading(true));
-      ContractService.getContractById(Number(constractId), intercept)
-        .then((res) => {
-          setState(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => dispatch(loading(false)));
-    };
-    getContractById();
-  }, [constractId]);
-  const startAt = new Date(state?.startAt ?? "").toLocaleDateString("en-GB");
-
-  const endAt = new Date(state?.endAt ?? "").toLocaleDateString("en-GB");
-
-  const updateAdvertisesById = async (row: Contract) => {
-    AdvertiseService.updateAdvertiseLicense(
-      row.advertise.id,
-      {
-        licensing: true
-      },
-      intercept
-    )
+    ContractService.getContractById(Number(id), intercept)
       .then((res) => {
-        console.log(res);
+        setContractData(res);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const updateContractById = async (row: Contract) => {
-    ContractService.updateContractById(
-      row.id,
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {});
+  }, []);
+
+  useEffect(() => {
+    setCompanyDataList([
       {
-        status: EContractStatus.licensed
+        imageIcon: images.companyName,
+        title: "Tên công ty",
+        content: String(contractData?.companyName)
       },
-      intercept
-    )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const confirmAccept = async () => {
-    await updateAdvertisesById(state!!);
-    await updateContractById(state!!);
-    navigate(-1);
-  };
-  const handleClickAccept = () => {
-    setOpenAccept(true);
-  };
-  const confirmCancel = async () => {
-    await updateContractById(state!!);
-    navigate(-1);
-  };
-  const handleClickCancel = () => {
-    setOpenCancel(true);
-  };
+      {
+        imageIcon: images.compamyEmail,
+        title: "Email",
+        content: String(contractData?.companyEmail)
+      },
+      {
+        imageIcon: images.companyPhone,
+        title: "Số điện thoại",
+        content: String(contractData?.companyPhone)
+      },
+      {
+        imageIcon: images.companyAddress,
+        title: "Địa chỉ",
+        content: String(contractData?.companyAddress)
+      }
+    ]);
+
+    setAdvertiseDataList([
+      {
+        imageIcon: images.sizeIcon,
+        title: "Kích thước",
+        content: `${contractData?.advertise.width}m x ${contractData?.advertise.height}m`
+      },
+      {
+        imageIcon: images.quantityIcon,
+        title: "Số lượng",
+        content: `${
+          !!contractData?.advertise.pillarQuantity ? contractData.advertise.pillarQuantity : 0
+        } Trụ / Bảng`
+      },
+      {
+        imageIcon: images.categoryIcon,
+        title: "Hình thức",
+        content: String(contractData?.advertise.location.adsForm.name)
+      },
+      {
+        imageIcon: images.sortIcon,
+        title: "Phân loại",
+        content: String(contractData?.advertise.location.locationType.name)
+      }
+    ]);
+  }, [contractData]);
+
   return (
-    <Box className={classes.boxContainer}>
-      <SidebarDCMS>
-        <Box className={classes.boxContent}>
-          <Box className={classes.backPage} onClick={() => navigate(-1)}>
-            <ArrowBackIcon className={classes.iconBack} />
-            Trở về
-          </Box>
-          <Box className={classes.boxContentDetail}>
-            <Box className={classes.imageInfoContainer}>
-              <Box className={classes.imageContainer}>
-                <img src={state?.advertise.images} alt='' className={classes.image} />
-              </Box>
-              <Box className={classes.infoContainer}>
-                <Grid container spacing={2} columns={16}>
-                  <Grid item xs={8}>
-                    <Box className={classes.infoTable}>
-                      <Heading3>Thông tin bảng</Heading3>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        {state?.advertise.adsType.name}
-                      </ParagraphBody>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        {state?.advertise.location.address}
-                      </ParagraphBody>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        Kích thước:&nbsp;
-                        <span>
-                          {state?.advertise.width} x {state?.advertise.height}
-                        </span>
-                      </ParagraphBody>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        Hình thức:&nbsp;
-                        <span>{state?.advertise.location.adsForm.name}</span>
-                      </ParagraphBody>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        Phân loại:&nbsp;
-                        <span>{state?.advertise.location.locationType.name}</span>
-                      </ParagraphBody>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Box className={classes.infoCompany}>
-                      <Heading3>Thông tin công ty</Heading3>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        Tên công ty:&nbsp;
-                        <span>{state?.companyName}</span>
-                      </ParagraphBody>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        Email:&nbsp;
-                        <span>{state?.companyEmail}</span>
-                      </ParagraphBody>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        Số điện thoại:&nbsp;
-                        <span>{state?.companyPhone}</span>
-                      </ParagraphBody>
-                      <ParagraphBody colorName='--gray-60' className={classes.infoContent}>
-                        Địa chỉ:&nbsp;
-                        <span>{state?.companyAddress}</span>
-                      </ParagraphBody>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
+    <div>
+      <SideBarDCMS>
+        <Card className={classes.rightComponent}>
+          <Box className={classes.detailGroup}>
+            <Box className={classes.backPage} onClick={() => navigate(-1)}>
+              <ArrowBackIcon className={classes.iconBack} />
+              Trở về
             </Box>
-            <Box className={classes.editInfo}>
-              <ParagraphBody className={classes.infoContent}>
-                Bắt đầu hợp đồng:&nbsp;
-                <span>{startAt}</span>
-              </ParagraphBody>
-              <Box>
-                <ParagraphBody className={classes.infoContent}>
-                  Kết thúc hợp đồng:&nbsp;
-                  <span>{endAt}</span>
-                </ParagraphBody>
-                <Box></Box>
-              </Box>
-            </Box>
-            <Divider variant='middle' />
+            <Heading6 id='general' fontSize={"20px"} fontWeight={500}>
+              {contractData?.advertise.adsType.name}
+            </Heading6>
+            <Heading6 fontWeight={50}>{contractData?.advertise.location.address}</Heading6>
           </Box>
-        </Box>
-        <Box className={classes.editHistoryContainer}>
-          <Box className={classes.actionButtons}>
-            <Button
-              onClick={() => handleClickAccept()}
-              className={classes.approveButton}
-              variant='contained'
-              color='primary'
-            >
-              Duyệt
-            </Button>
-            <Button
-              onClick={() => handleClickCancel()}
-              className={classes.skipButton}
-              variant='contained'
-              color='error'
-            >
-              Bỏ qua
-            </Button>
-          </Box>
-        </Box>
-      </SidebarDCMS>
-      <Dialog
-        open={openAccept}
-        onClose={handleClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='alert-dialog-title'>Cấp phép quảng cáo</DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            Bạn muốn cấp phép quảng cáo này ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Hủy</Button>
-          <Button onClick={confirmAccept} autoFocus>
-            Xác nhận
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      <Dialog
-        open={openCancel}
-        onClose={handleClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='alert-dialog-title'>Hủy cấp phép quảng cáo</DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            Bạn muốn hủy cấp phép quảng cáo này ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Hủy</Button>
-          <Button onClick={confirmCancel} autoFocus>
-            Xác nhận
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+          <Divider className={classes.divider} variant='middle' />
+          <DetailCard heading='Thông tin chi tiết bảng quảng cáo' data={advertiseDataList} />
+
+          {contractData?.advertise.location && (
+            <Box className={classes.detailGroup}>
+              <Divider className={classes.divider} variant='middle' />
+              <Heading6 id='mapLocation'>Vị trí đặt bảng quảng cáo trên bản đồ</Heading6>
+              <Box className={classes["map-item"]}>
+                <MapAdsManagementAdmin locationView={contractData?.advertise.location} />
+              </Box>
+            </Box>
+          )}
+
+          <Divider className={classes.divider} variant='middle' />
+          <DetailCard heading='Thông tin về công ty' data={companyDataList} />
+
+          <Divider className={classes.divider} variant='middle' />
+          <ShowContractImage imageSrc={String(contractData?.images)} />
+          <ContractDetailStickyFooter
+            startDate={contractData?.startAt}
+            endDate={contractData?.endAt}
+            status={contractData?.status}
+            contract={contractData!!}
+          />
+        </Card>
+      </SideBarDCMS>
+    </div>
   );
 }
+
+export default AdLicenseDetail;
