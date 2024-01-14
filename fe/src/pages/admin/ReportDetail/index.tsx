@@ -18,6 +18,7 @@ import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { DateHelper } from "helpers/date";
 import useIntercepts from "hooks/useIntercepts";
+import MapAdsManagementAdmin from "../MapAdsManagement";
 
 const BoxFlex = styled(Box)(() => ({
   display: "flex",
@@ -25,13 +26,6 @@ const BoxFlex = styled(Box)(() => ({
 }));
 
 const ButtonBack = styled(Button)(() => ({
-  paddingLeft: "0 !important",
-  "&:hover": {
-    backgroundColor: "transparent !important"
-  }
-}));
-
-const IconButtonBack = styled(IconButton)(() => ({
   paddingLeft: "0 !important",
   "&:hover": {
     backgroundColor: "transparent !important"
@@ -57,7 +51,7 @@ export const ReportDetail = () => {
         });
     };
     getReportById();
-  }, []);
+  }, [id, intercept]);
 
   const goBack = () => {
     currentUser.role.id === ERole.WARD
@@ -79,28 +73,22 @@ export const ReportDetail = () => {
               <Box>
                 <Heading3>Hình ảnh báo cáo</Heading3>
                 <BoxFlex justifyContent={"space-between"} flexWrap={"wrap"} mt={"15px"}>
-                  {dataReportDetail &&
-                    JSON.parse(dataReportDetail.images).length > 0 &&
-                    JSON.parse(dataReportDetail.images).map((image: string) => {
-                      return (
-                        <img
-                          width={"48%"}
-                          height={"250px"}
-                          className={classes["image"]}
-                          src={image}
-                          alt='Hình ảnh bảng QC'
-                          style={{ border: "1px solid #ccc" }}
-                        />
-                      );
-                    })}
-                  {/* <img
-                  width={"48%"}
-                  height={"250px"}
-                  className={classes["image"]}
-                  src={dataReportDetail.images}
-                  alt='Hình ảnh bảng QC'
-                  style={{ border: "1px solid #ccc" }}
-                /> */}
+                  {dataReportDetail && JSON.parse(dataReportDetail.images).length > 0 && (
+                    <Box className={classes["image-list"]}>
+                      {JSON.parse(dataReportDetail.images).map((image: string) => {
+                        return (
+                          <div className={classes["image-item"]}>
+                            <img
+                              className={classes["image"]}
+                              src={image}
+                              alt='Hình ảnh bảng QC'
+                              style={{ border: "1px solid #ccc" }}
+                            />
+                          </div>
+                        );
+                      })}
+                    </Box>
+                  )}
                 </BoxFlex>
               </Box>
             )}
@@ -174,6 +162,11 @@ export const ReportDetail = () => {
                     />
                   </Box>
                 </Box>
+                {dataReportDetail && (
+                  <Box className={classes["map-item"]}>
+                    <MapAdsManagementAdmin reportView={dataReportDetail} />
+                  </Box>
+                )}
               </>
             )}
           </Box>

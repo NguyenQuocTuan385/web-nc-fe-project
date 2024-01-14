@@ -38,6 +38,9 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { User } from "models/user";
+import MapAdsManagementAdmin from "../MapAdsManagement";
+import Heading3 from "components/common/text/Heading3";
+import Heading4 from "components/common/text/Heading4";
 
 interface FormData {
   propertyId: number;
@@ -96,7 +99,8 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     handleSubmit,
     control,
     formState: { errors },
-    register
+    register,
+    reset
   } = useForm<FormData>({
     resolver: yupResolver(schema)
   });
@@ -180,7 +184,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     <form onSubmit={handleSubmit(submitHandler)}>
       {/* Khu vực */}
       <Box className={classes["input-container"]}>
-        <label>Khu vực:</label>
+        <Heading4 colorName='--gray-60'>Khu vực:</Heading4>
         <div className={classes["input-error-container"]}>
           <TextField
             required
@@ -198,7 +202,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
       {/* Địa chỉ */}
       <Box className={classes["input-container"]}>
-        <label>Địa chỉ:</label>
+        <Heading4 colorName='--gray-60'>Địa chỉ:</Heading4>
         <Controller
           control={control}
           name='address'
@@ -223,7 +227,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
       {/* Tọa độ */}
       <Box className={classes["input-container"]}>
-        <label>Tọa độ:</label>
+        <Heading4 colorName='--gray-60'>Tọa độ:</Heading4>
         <Box className={classes["coordinates-container"]}>
           <Box className={classes["input-small"]}>
             <Controller
@@ -278,7 +282,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
       {/* Loại vị trí */}
       <Box className={classes["input-container"]}>
-        <label>Loại vị trí:</label>
+        <Heading4 colorName='--gray-60'>Loại vị trí:</Heading4>
         <Controller
           control={control}
           name='locationTypeId'
@@ -312,7 +316,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
       {/* Hình thức quảng cáo */}
       <Box className={classes["input-container"]}>
-        <label>Hình thức quảng cáo:</label>
+        <Heading4 colorName='--gray-60'>Hình thức quảng cáo:</Heading4>
         <Controller
           control={control}
           name='advertiseFormId'
@@ -346,7 +350,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
       {/* Quy hoạch */}
       <Box className={classes["input-container"]}>
-        <label>Quy hoạch:</label>
+        <Heading4 colorName='--gray-60'>Quy hoạch:</Heading4>
         <Controller
           control={control}
           name='planning'
@@ -376,7 +380,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
       {/* Lí do chỉnh sửa */}
       <Box className={classes["input-container"]}>
-        <label>Lí do chỉnh sửa:</label>
+        <Heading4 colorName='--gray-60'>Lí do chỉnh sửa:</Heading4>
         <Controller
           control={control}
           name='content'
@@ -400,7 +404,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
 
       {/* Hình ảnh */}
       <Box className={classes["input-container"]}>
-        <label>Hình ảnh:</label>
+        <Heading4 colorName='--gray-60'>Hình ảnh:</Heading4>
         <Controller
           control={control}
           name='imageUrls'
@@ -415,6 +419,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                         src={image}
                         width={"200px"}
                         height={"150px"}
+                        key={index}
                         style={{
                           borderRadius: "8px",
                           margin: "0 15px 10px 0",
@@ -430,6 +435,7 @@ const MyForm: React.FC<FormEditLocationProps> = ({
                   JSON.parse(data.images).map((image: string, index: number) => {
                     return (
                       <img
+                        key={index}
                         src={image}
                         width={"200px"}
                         height={"150px"}
@@ -491,8 +497,14 @@ const MyForm: React.FC<FormEditLocationProps> = ({
           )}
         />
       </Box>
-
-      <ButtonSubmit type='submit'>Gửi</ButtonSubmit>
+      <Box className={classes["map-container-button"]}>
+        <Box className={classes["map-item"]}>
+          <MapAdsManagementAdmin locationView={data} reset={reset} />
+        </Box>
+        <ButtonSubmit sx={{ width: "200px" }} type='submit'>
+          Gửi
+        </ButtonSubmit>
+      </Box>
     </form>
   );
 };
@@ -529,7 +541,7 @@ export const LocationEdit = () => {
 
   useEffect(() => {
     const getAllLocationTypes = async () => {
-      LocationTypeService.getAllLocationTypes({}, intercept)
+      LocationTypeService.getAllLocationTypes({ pageSize: 999 }, intercept)
         .then((res) => {
           setLocationTypes(res.content);
         })
@@ -542,7 +554,7 @@ export const LocationEdit = () => {
 
   useEffect(() => {
     const getAllAdsForms = async () => {
-      AdvertiseFormService.getAllAdvertiseForm({}, intercept)
+      AdvertiseFormService.getAllAdvertiseForm({ pageSize: 999 }, intercept)
         .then((res) => {
           setAdsForms(res.content);
         })

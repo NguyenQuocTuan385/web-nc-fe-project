@@ -23,9 +23,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { User } from "models/user";
 import useIntercepts from "hooks/useIntercepts";
+import { UseFormReset } from "react-hook-form";
+import { EReportType, Report } from "models/report";
 
 interface MapAdsManagementAdminProps {
   locationView?: Location;
+  reset?: UseFormReset<any>;
+  reportView?: Report;
 }
 enum ELocationCheckedSwitch {
   BOTH = 1,
@@ -33,14 +37,13 @@ enum ELocationCheckedSwitch {
   LOCATION_IS_NOT_PLANNING = 3,
   NOT_AT_ALL = 4
 }
-const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => {
+const MapAdsManagementAdmin = ({ locationView, reset, reportView }: MapAdsManagementAdminProps) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<MapLibre | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [lat, setLat] = useState<number | null>(null);
   const [zoom] = useState<number>(locationView ? 17 : 14);
   const [API_KEY] = useState<string>(process.env.REACT_APP_API_KEY_MAPTILER as string);
-  console.log(locationView);
   const [openLocationSidebar, setOpenLocationSidebar] = useState<boolean>(false);
   const [location, setLocationData] = useState<Location | null>(null);
   const [randomLocation, setRandomLocationData] = useState<RandomLocation | null>(null);
@@ -91,6 +94,14 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
         if (!!locationView) {
           setLng(locationView.longitude);
           setLat(locationView.latitude);
+        } else if (reportView) {
+          if (reportView.reportTypeName === EReportType.LOCATION) {
+            setLng(reportView.longitude as number);
+            setLat(reportView.latitude as number);
+          } else if (reportView.reportTypeName === EReportType.ADVERTISE) {
+            setLng(reportView.advertise?.location.longitude as number);
+            setLat(reportView.advertise?.location.latitude as number);
+          }
         } else {
           setLng(locations_temp[0].longitude);
           setLat(locations_temp[0].latitude);
@@ -145,17 +156,6 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
     locationsIsNotPlanningHasAdvertises,
     locationsIsNotPlanningNoAdvertises
   ]);
-
-  const handleClickSwitchLocationEvent = (propertyName: string) => {
-    const currentMap = map.current;
-    if (!currentMap) return;
-    const visibility = currentMap.getLayoutProperty(propertyName, "visibility");
-    if (!visibility || visibility === "visible") {
-      currentMap.setLayoutProperty(propertyName, "visibility", "none");
-    } else {
-      currentMap.setLayoutProperty(propertyName, "visibility", "visible");
-    }
-  };
 
   const changeSourceDataLocation = (locationCheckedChange: ELocationCheckedSwitch) => {
     if (locationCheckedChange === ELocationCheckedSwitch.BOTH) {
@@ -451,18 +451,119 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
             }
           );
           loadLocationLayerFunction("location_view");
+        } else if (reportView) {
+          let reportFeature: Feature;
+          if (reportView.reportTypeName === EReportType.LOCATION) {
+            const randomLocationReport: RandomLocation = {
+              address: reportView.address as string,
+              longitude: reportView.longitude as number,
+              latitude: reportView.latitude as number
+            };
+            reportFeature = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [reportView.longitude as number, reportView.latitude as number]
+              },
+              properties: randomLocationReport
+            };
+            map.current.addSource("report_view", {
+              type: "geojson",
+              data: reportFeature
+            });
+            map.current.loadImage(
+              "https://i.ibb.co/XDTztCq/icons8-location-48.png",
+              (error, image) => {
+                if (error) throw error;
+                if (!map.current) return;
+                map.current.addImage("marker_report_view", image as HTMLImageElement);
+                map.current.addLayer({
+                  id: "report_view",
+                  type: "symbol",
+                  source: "report_view",
+                  layout: {
+                    "icon-image": "marker_report_view"
+                  }
+                });
+              }
+            );
+            map.current.on("mouseenter", "report_view", (e) => {
+              if (map.current) map.current.getCanvas().style.cursor = "pointer";
+            });
+            map.current.on("mouseleave", "report_view", () => {
+              if (map.current) map.current.getCanvas().style.cursor = "";
+            });
+
+            map.current.on("click", "report_view", (e) => {
+              const map = e.target;
+              const features: MapGeoJSONFeature[] = map.queryRenderedFeatures(e.point, {
+                layers: ["report_view"]
+              });
+              if (features.length > 0) {
+                closeAdsSidebar();
+                setOpenRandomLocationSidebar(true);
+                const { longitude, address, latitude } = features[0].properties;
+                const randomLocationTemp: RandomLocation = {
+                  address: address,
+                  longitude: longitude,
+                  latitude: latitude
+                };
+                setRandomLocationData(randomLocationTemp);
+              }
+            });
+          } else if (reportView.reportTypeName === EReportType.ADVERTISE) {
+            reportFeature = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [
+                  reportView.advertise?.location.longitude as number,
+                  reportView.advertise?.location.latitude as number
+                ]
+              },
+              properties: reportView.advertise?.location as Location
+            };
+            map.current.addSource("report_view", {
+              type: "geojson",
+              data: reportFeature
+            });
+            map.current.loadImage(
+              "https://i.ibb.co/XDTztCq/icons8-location-48.png",
+              (error, image) => {
+                if (error) throw error;
+                if (!map.current) return;
+                map.current.addImage("marker_report_view", image as HTMLImageElement);
+                map.current.addLayer({
+                  id: "report_view",
+                  type: "symbol",
+                  source: "report_view",
+                  layout: {
+                    "icon-image": "marker_report_view"
+                  }
+                });
+              }
+            );
+            loadLocationLayerFunction("report_view");
+          }
         }
         map.current.on("click", async (e) => {
           const map = e.target;
-          const features = map.queryRenderedFeatures(e.point, {
-            layers: [
-              "unclustered_location_is_not_planning_has_advertises",
-              "unclustered_location_is_not_planning_no_advertises",
-              "unclustered_location_is_planning_no_advertises",
-              "unclustered_location_is_planning_has_advertises",
-              "location_view",
-              "clusters"
-            ]
+          const layersQuery: string[] = [
+            "unclustered_location_is_not_planning_has_advertises",
+            "unclustered_location_is_not_planning_no_advertises",
+            "unclustered_location_is_planning_has_advertises",
+            "unclustered_location_is_planning_no_advertises",
+            "clusters",
+            "cluster-count"
+          ];
+          if (map.getLayer("report_view")) {
+            layersQuery.push("report_view");
+          }
+          if (map.getLayer("location_view")) {
+            layersQuery.push("location_view");
+          }
+          const features: any = map.queryRenderedFeatures(e.point, {
+            layers: layersQuery
           });
           if (features.length > 0) {
             return;
@@ -479,6 +580,13 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
                 longitude: lng,
                 latitude: lat
               };
+              if (reset) {
+                reset({
+                  address: place_name_vi,
+                  longitude: lng,
+                  latitude: lat
+                });
+              }
               setRandomLocationData(randomLocationTemp);
             } else {
               const { place_name_vi } = results.features[0];
@@ -488,6 +596,13 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
                 longitude: coordinates[0],
                 latitude: coordinates[1]
               };
+              if (reset) {
+                reset({
+                  address: place_name_vi,
+                  longitude: coordinates[0],
+                  latitude: coordinates[1]
+                });
+              }
               setRandomLocationData(randomLocationTemp);
               marker.current = new MapLibreGL.Marker().setLngLat(coordinates).addTo(map);
             }
@@ -522,7 +637,23 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
   return (
     <Box className={classes.mapWrap}>
       <Box className={classes.geocoding}>
-        <GeocodingControl apiKey={API_KEY} language={"vi"} mapController={mapController} />
+        <GeocodingControl
+          apiKey={API_KEY}
+          language={"vi"}
+          mapController={mapController}
+          placeholder='Tìm kiếm địa điểm'
+          noResultsMessage='Xin lỗi, chúng tôi không tìm thấy địa điểm bạn cần tìm kiếm'
+          onResponse={(detail: any) => {
+            if (!detail) return;
+            if (reset) {
+              reset({
+                address: detail.featureCollection.features[0].place_name_vi,
+                longitude: detail.featureCollection.features[0].center[0],
+                latitude: detail.featureCollection.features[0].center[1]
+              });
+            }
+          }}
+        />
       </Box>
       <Box ref={mapContainer} className={classes.map}></Box>
       <Box className={classes.botNavbar}>
@@ -557,15 +688,6 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_NOT_PLANNING);
                   }
                 }
-
-                handleClickSwitchLocationEvent("unclustered_location_is_planning_no_advertises");
-                handleClickSwitchLocationEvent("unclustered_location_is_planning_has_advertises");
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_planning_no_advertises_text"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_planning_has_advertises_text"
-                );
               }}
             />
             <ParagraphSmall>Điểm đặt QC đã quy hoạch</ParagraphSmall>
@@ -591,19 +713,6 @@ const MapAdsManagementAdmin = ({ locationView }: MapAdsManagementAdminProps) => 
                     changeSourceDataLocation(ELocationCheckedSwitch.LOCATION_IS_PLANNING);
                   }
                 }
-
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_has_advertises"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_no_advertises"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_has_advertises_text"
-                );
-                handleClickSwitchLocationEvent(
-                  "unclustered_location_is_not_planning_no_advertises_text"
-                );
               }}
             />
             <ParagraphSmall>Điểm đặt QC chưa quy hoạch</ParagraphSmall>

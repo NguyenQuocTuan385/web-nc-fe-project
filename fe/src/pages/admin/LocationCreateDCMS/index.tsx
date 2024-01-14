@@ -42,6 +42,7 @@ import { selectCurrentUser } from "reduxes/Auth";
 import WardService from "services/ward";
 import DistrictService from "services/district";
 import { Property } from "models/property";
+import MapAdsManagementAdmin from "../MapAdsManagement";
 
 interface FormData {
   propertyId: number;
@@ -99,7 +100,8 @@ const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, in
     handleSubmit,
     control,
     formState: { errors },
-    register
+    register,
+    reset
   } = useForm<FormData>({
     resolver: yupResolver(schema)
   });
@@ -336,6 +338,8 @@ const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, in
                     id='outlined-required'
                     label='Vĩ độ'
                     type='number'
+                    InputLabelProps={{ shrink: true }}
+                    variant='outlined'
                     {...field}
                     {...register("latitude")}
                     fullWidth
@@ -360,6 +364,7 @@ const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, in
                     id='outlined-required'
                     label='Tung độ'
                     type='number'
+                    InputLabelProps={{ shrink: true }}
                     {...field}
                     {...register("longitude")}
                     fullWidth
@@ -558,7 +563,14 @@ const MyForm: React.FC<FormCreateLocationProps> = ({ locationTypes, adsForms, in
         />
       </Box>
 
-      <ButtonSubmit type='submit'>Tạo địa điểm</ButtonSubmit>
+      <Box className={classes["map-container-button"]}>
+        <Box className={classes["map-item"]}>
+          <MapAdsManagementAdmin reset={reset} />
+        </Box>
+        <ButtonSubmit sx={{ width: "200px" }} type='submit'>
+          Tạo địa điểm
+        </ButtonSubmit>
+      </Box>
     </form>
   );
 };

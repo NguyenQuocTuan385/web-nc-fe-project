@@ -624,7 +624,12 @@ const MapAdsManagement = () => {
   return (
     <Box>
       <Box className={classes.geocoding}>
-        <GeocodingControl apiKey={API_KEY} language={"vi"} mapController={mapController} />
+        <GeocodingControl
+          apiKey={API_KEY}
+          language={"vi"}
+          mapController={mapController}
+          placeholder='Tìm kiếm địa điểm'
+        />
       </Box>
       <Box ref={mapContainer} className={classes.map}></Box>
       <Box className={classes.botNavbar}>

@@ -40,6 +40,7 @@ import { User } from "models/user";
 import { selectCurrentUser } from "reduxes/Auth";
 import { AxiosInstance } from "axios";
 import SideBarDCMS from "components/admin/SidebarDCMS";
+import MapAdsManagementAdmin from "../MapAdsManagement";
 
 interface FormData {
   propertyId: number;
@@ -64,13 +65,6 @@ const schema: any = Yup.object().shape({
 });
 
 const ButtonBack = styled(Button)(() => ({
-  paddingLeft: "0 !important",
-  "&:hover": {
-    backgroundColor: "transparent !important"
-  }
-}));
-
-const IconButtonBack = styled(IconButton)(() => ({
   paddingLeft: "0 !important",
   "&:hover": {
     backgroundColor: "transparent !important"
@@ -105,7 +99,8 @@ const MyForm: React.FC<FormEditLocationProps> = ({
     handleSubmit,
     control,
     formState: { errors },
-    register
+    register,
+    reset
   } = useForm<FormData>({
     resolver: yupResolver(schema)
   });
@@ -477,7 +472,14 @@ const MyForm: React.FC<FormEditLocationProps> = ({
         />
       </Box>
 
-      <ButtonSubmit type='submit'>Cập nhật</ButtonSubmit>
+      <Box className={classes["map-container-button"]}>
+        <Box className={classes["map-item"]}>
+          <MapAdsManagementAdmin locationView={data} reset={reset} />
+        </Box>
+        <ButtonSubmit sx={{ width: "200px" }} type='submit'>
+          Cập nhật
+        </ButtonSubmit>
+      </Box>
     </form>
   );
 };

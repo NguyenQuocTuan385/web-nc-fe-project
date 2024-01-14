@@ -289,9 +289,7 @@ const AdvertiseOfLocationManagement = () => {
                 <FontAwesomeIcon icon={faArrowLeftLong} style={{ marginRight: "5px" }} />
                 Trở về
               </ButtonBack>
-              <Box>
-                {!!dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}
-              </Box>
+              <Box>{dataInfoLocation && <InfoLocation data={dataInfoLocation}></InfoLocation>}</Box>
               {dataInfoLocation && (
                 <Box className={classes["map-item"]}>
                   <MapAdsManagementAdmin locationView={dataInfoLocation} />
@@ -353,14 +351,15 @@ const AdvertiseOfLocationManagement = () => {
                 <>
                   <Box className={classes["search-container"]}>
                     <SearchAppBar onSearch={handleSearch} />
-                    <IconButton
-                      aria-label='add'
+                    <Button
+                      variant='contained'
+                      color='primary'
                       size='small'
+                      startIcon={<FontAwesomeIcon icon={faSquarePlus} color='white' />}
                       onClick={() => handleAddAdvertise(Number(id))}
                     >
-                      <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
                       Thêm mới
-                    </IconButton>
+                    </Button>
                   </Box>
                   <Box className={classes["table-container"]}>
                     <Box className={classes["table-container"]}>
@@ -395,14 +394,15 @@ const AdvertiseOfLocationManagement = () => {
                   <ParagraphBody className={classes.noList}>
                     Không có thông tin bảng quảng cáo
                   </ParagraphBody>
-                  <IconButton
-                    aria-label='add'
-                    size='medium'
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    size='small'
+                    startIcon={<FontAwesomeIcon icon={faSquarePlus} color='white' />}
                     onClick={() => handleAddAdvertise(Number(id))}
                   >
-                    <FontAwesomeIcon icon={faSquarePlus} color='var(--blue-600)' />
                     Thêm mới
-                  </IconButton>
+                  </Button>
                 </>
               )}
             </Box>

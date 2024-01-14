@@ -32,6 +32,7 @@ import { selectCurrentUser } from "reduxes/Auth";
 import { ERole } from "models/general";
 import { DateHelper } from "../../../helpers/date";
 import useIntercepts from "hooks/useIntercepts";
+import MapAdsManagementAdmin from "../MapAdsManagement";
 
 const ButtonSubmit = styled(Button)(
   () => `
@@ -302,13 +303,7 @@ export const ReportHandle = () => {
                           (imageUrl: string, index: number) => {
                             return (
                               <div className={classes["image-item"]}>
-                                <img
-                                  src={imageUrl}
-                                  width={"100%"}
-                                  key={imageUrl + index}
-                                  height={"100%"}
-                                  alt='Hình ảnh báo cáo'
-                                />
+                                <img src={imageUrl} key={index} alt='Hình ảnh báo cáo' />
                               </div>
                             );
                           }
@@ -377,6 +372,11 @@ export const ReportHandle = () => {
               </Box>
             </Box>
 
+            {dataReportDetail && (
+              <Box className={classes["map-item"]}>
+                <MapAdsManagementAdmin reportView={dataReportDetail} />
+              </Box>
+            )}
             <ButtonSubmit type='button' onClick={handleSubmit}>
               Gửi
             </ButtonSubmit>

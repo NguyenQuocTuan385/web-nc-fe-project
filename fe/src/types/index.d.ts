@@ -6,3 +6,4 @@ declare module "yup";
 declare module "react-swipeable-views-utils";
 declare module "quill-image-resize-module-react";
 declare module "react-swipeable-views";
+declare module "react-toastify";
