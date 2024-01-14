@@ -26,7 +26,7 @@ export interface UserRequest {
   password?: string;
   phone: string;
   roleId: number;
-  propertyId: number;
+  propertyId?: number;
 }
 
 export interface RequestOTPUser {
