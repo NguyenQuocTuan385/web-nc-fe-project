@@ -29,10 +29,12 @@ export default function EditAdTableLicenseDetail() {
   const intercept = useIntercepts();
   const [openAccept, setOpenAccept] = React.useState(false);
   const [openCancel, setOpenCancel] = React.useState(false);
+
   const handleClose = () => {
     setOpenAccept(false);
     setOpenCancel(false);
   };
+
   useEffect(() => {
     const getAdvertiseById = async () => {
       AdvertiseService.getAdvertisesById(Number(advertiseId), intercept)
@@ -79,6 +81,7 @@ export default function EditAdTableLicenseDetail() {
         console.log(err);
       });
   };
+
   const confirmAccept = async () => {
     const updateAdvertise = async () => {
       await AdvertiseService.updateAdvertise(

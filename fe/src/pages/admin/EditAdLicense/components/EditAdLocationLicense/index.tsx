@@ -24,6 +24,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+
 interface FilterProps {
   district?: string;
   ward?: string;
@@ -122,6 +123,7 @@ export default function EditAdLocationLicense({ district, ward, fieldSearch }: F
         console.log(err);
       });
   };
+
   const confirmAccept = async () => {
     const updateLocation = async () => {
       await LocationService.updateLocationsById(
