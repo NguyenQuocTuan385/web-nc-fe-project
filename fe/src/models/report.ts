@@ -47,6 +47,7 @@ export interface GetReports {
   pageSize?: number;
   current?: number;
   reportTypeName?: EReportType;
+  status?: EStatusGetReports;
 }
 
 export interface ReportEditRequest {
@@ -68,4 +69,9 @@ export interface ReportCreateRequest {
   latitude?: number;
   advertiseId?: number;
   userId?: number;
+}
+
+export enum EStatusGetReports {
+  ALL = 1,
+  EXCEPT_SUCCESS = 2
 }

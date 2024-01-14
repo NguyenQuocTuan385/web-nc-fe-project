@@ -1,0 +1,46 @@
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.errorIc {
+  color: var(--red-error) !important;
+}
+[class~="MuiDialog-paper"] {
+  max-width: 1200px !important;
+}
+
+.sizeTable {
+  min-width: 700px;
+}
+
+.headerTable {
+  font-weight: bold !important;
+  padding: 10px !important;
+  color: white !important;
+}
+
+.dataTable {
+  padding: 10px !important;
+  font-weight: normal !important;
+}
+
+.blue {
+  color: var(--blue-500);
+  font-weight: bold;
+}
+
+.green {
+  color: var(--green-600);
+  font-weight: bold;
+}
+
+.red {
+  color: var(--red-error);
+  font-weight: bold;
+}
+
+.tableHead {
+  background-color: var(--blue-500);
+}
